@@ -1,0 +1,14 @@
+# .phase — AI Development Tool Chain Zustandsdatei
+# Automatisch vom Orchestrator gepflegt. Nicht manuell editieren.
+# Kopiere dieses Template nach projects/<projektname>/.phase beim Start.
+
+project: [projektname]
+current-phase: INIT
+previous-phase: —
+phase-started: YYYY-MM-DD
+sprint: 0
+last-agent: —
+last-artifact: —
+
+# Phasen-History (wird vom Orchestrator gepflegt)
+history: []

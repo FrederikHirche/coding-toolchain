@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Development Tool Chain — API &amp; Protokoll-Dokumentation</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --bg:        #0f1117;
+      --surface:   #1a1d27;
+      --border:    #2e3248;
+      --accent:    #6c8fff;
+      --accent2:   #a78bfa;
+      --accent3:   #34d399;
+      --accent4:   #f59e0b;
+      --text:      #e2e8f0;
+      --text-muted:#7c87a6;
+      --code-bg:   #13151f;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+    }
+    header {
+      background: linear-gradient(135deg, #1a1d27 0%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 2.5rem 3rem;
+    }
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--accent3), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.4rem;
+    }
+    header p { color: var(--text-muted); font-size: 0.95rem; }
+    nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 3rem;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+    }
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 0.9rem 1.2rem;
+      font-size: 0.875rem;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    nav a:hover, nav a.active {
+      color: var(--accent3);
+      border-bottom-color: var(--accent3);
+    }
+    main { max-width: 1200px; margin: 0 auto; padding: 2.5rem 3rem; }
+    section { margin-bottom: 4rem; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .section-number {
+      width: 2rem; height: 2rem;
+      background: linear-gradient(135deg, var(--accent3), var(--accent));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 700; color: white; flex-shrink: 0;
+    }
+    h2 { font-size: 1.3rem; font-weight: 600; }
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+      padding-left: 3rem;
+    }
+    .diagram-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      overflow-x: auto;
+    }
+    .diagram-card .mermaid {
+      display: flex;
+      justify-content: center;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .legend-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%; flex-shrink: 0;
+    }
+    .endpoint-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-top: 1.5rem;
+    }
+    .endpoint-table th {
+      background: var(--code-bg);
+      color: var(--text-muted);
+      text-align: left;
+      padding: 0.6rem 1rem;
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border);
+    }
+    .endpoint-table td {
+      padding: 0.7rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .endpoint-table tr:last-child td { border-bottom: none; }
+    .method {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .GET    { background: #0d3a2a; color: #34d399; }
+    .POST   { background: #1a2a40; color: #6c8fff; }
+    .PUT    { background: #2d2a00; color: #f59e0b; }
+    .DELETE { background: #3a0d0d; color: #f87171; }
+    .PATCH  { background: #2a1a30; color: #a78bfa; }
+    .code {
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.9rem 1.2rem;
+      font-size: 0.8rem;
+      color: var(--accent3);
+      overflow-x: auto;
+      margin-top: 1rem;
+    }
+    .info-box {
+      background: #1a2040;
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+    .info-box strong { color: var(--text); display: block; margin-bottom: 0.25rem; }
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 3rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>API &amp; Protokoll-Dokumentation</h1>
+  <p>AI Development Tool Chain · Agenten-Kommunikation, Protokolle &amp; Schnittstellen · 2026-06-18</p>
+</header>
+
+<nav>
+  <a href="#slash-commands" class="active">Slash Commands</a>
+  <a href="#handoff">Handoff-Protokoll</a>
+  <a href="#gate">Gate-Protokoll</a>
+  <a href="#artifact">Artefakt-API</a>
+  <a href="#phase">Phase-State-API</a>
+  <a href="#hooks">Git Hooks</a>
+</nav>
+
+<main>
+
+  <div class="info-box" style="margin-top:2rem">
+    <strong>Über diese Dokumentation</strong>
+    Die Tool Chain ist eine agentische Architektur ohne klassische REST-APIs. Die "APIs" sind Kommunikationsprotokolle zwischen Agenten: Slash Commands als Aktivierungsschnittstelle, strukturierte Artefakt-Formate als Datenaustausch, und das Handoff-Protokoll als Inter-Agenten-Übergabe.
+  </div>
+
+  <!-- 1: SLASH COMMANDS -->
+  <section id="slash-commands">
+    <div class="section-header">
+      <div class="section-number">1</div>
+      <h2>Slash Command Architektur</h2>
+    </div>
+    <p class="section-desc">
+      Commands sind Markdown-Dateien unter <code>.claude/commands/</code>. Claude Code liest und interpretiert
+      sie als Systemanweisungen für den jeweiligen Agenten. Jeder Command entspricht einer Agenten-Aktivierung.
+    </p>
+    <div class="diagram-card">
+      <div class="mermaid">
+graph LR
+    subgraph User["Benutzer"]
+        CMD["Slash Command\n/sprint myproject 1"]
+    end
+
+    subgraph CC["Claude Code Runtime"]
+        LOADER["Command Loader\n.claude/commands/*.md"]
+        CLAUDE["Claude Context\n+ CLAUDE.md auto-load"]
+    end
+
+    subgraph TC["Tool Chain"]
+        ORCH["ORCH\norchestrator.md"]
+        AGENTS["Agenten-Def.\n_base + agent-specific"]
+        TMPL["Templates\n+ Protokolle"]
+    end
+
+    subgraph OUT["Output"]
+        ART["Artefakte\n.md Dateien"]
+        PHASE[".phase\nState Update"]
+        INDEX["INDEX.md\nUpdates"]
+    end
+
+    CMD --> LOADER
+    LOADER --> CLAUDE
+    CLAUDE --> ORCH
+    ORCH --> AGENTS
+    ORCH --> TMPL
+    AGENTS --> ART
+    AGENTS --> PHASE
+    AGENTS --> INDEX
+
+    style User fill:#1a2040,stroke:#6c8fff
+    style CC fill:#1e2d2a,stroke:#34d399
+    style TC fill:#2a1e2d,stroke:#a78bfa
+    style OUT fill:#2d2a1e,stroke:#f59e0b
+      </div>
+    </div>
+
+    <table class="endpoint-table" style="margin-top:1.5rem">
+      <thead>
+        <tr>
+          <th>Command</th>
+          <th>Typ</th>
+          <th>Agent</th>
+          <th>Primäres Artefakt</th>
+          <th>Vorbedingung</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>/status [projekt]</code></td>
+          <td><span style="color:var(--accent3)">READ</span></td>
+          <td>ORCH</td>
+          <td>— (nur Ausgabe)</td>
+          <td>Projektordner existiert</td>
+        </tr>
+        <tr>
+          <td><code>/sprint [projekt] [nr]</code></td>
+          <td><span style="color:var(--accent4)">ORCHESTRATE</span></td>
+          <td>ORCH</td>
+          <td>Alle Sprint-Artefakte</td>
+          <td>SB-001 vorhanden</td>
+        </tr>
+        <tr>
+          <td><code>/kickoff</code></td>
+          <td><span style="color:var(--accent)">WRITE</span></td>
+          <td>PM</td>
+          <td>SB-NNN</td>
+          <td>Kein aktives Projekt</td>
+        </tr>
+        <tr>
+          <td><code>/ba</code></td>
+          <td><span style="color:var(--accent)">WRITE</span></td>
+          <td>BA</td>
+          <td>REQ-NNN, US-NNN</td>
+          <td>SB-NNN APPROVED</td>
+        </tr>
+        <tr>
+          <td><code>/architect</code></td>
+          <td><span style="color:var(--accent)">WRITE</span></td>
+          <td>AR</td>
+          <td>ADR-NNN, STRUCTURE.md</td>
+          <td>REQ-NNN APPROVED</td>
+        </tr>
+        <tr>
+          <td><code>/ux</code></td>
+          <td><span style="color:var(--accent)">WRITE</span></td>
+          <td>UX</td>
+          <td>UX-NNN</td>
+          <td>ADR-001 APPROVED</td>
+        </tr>
+        <tr>
+          <td><code>/refine</code></td>
+          <td><span style="color:var(--accent)">WRITE</span></td>
+          <td>BA+FE+BE</td>
+          <td>SP-NNN</td>
+          <td>UX-NNN APPROVED</td>
+        </tr>
+        <tr>
+          <td><code>/implement</code></td>
+          <td><span style="color:var(--accent)">WRITE</span></td>
+          <td>FE, BE</td>
+          <td>Code + API-Kontrakt</td>
+          <td>SP-NNN APPROVED</td>
+        </tr>
+        <tr>
+          <td><code>/test-plan</code></td>
+          <td><span style="color:var(--accent)">WRITE</span></td>
+          <td>QA</td>
+          <td>TP-NNN</td>
+          <td>SP-NNN APPROVED</td>
+        </tr>
+        <tr>
+          <td><code>/test-run</code></td>
+          <td><span style="color:var(--accent)">WRITE</span></td>
+          <td>QA</td>
+          <td>TR-NNN, BUG-NNN</td>
+          <td>TP-NNN APPROVED</td>
+        </tr>
+        <tr>
+          <td><code>/review</code></td>
+          <td><span style="color:var(--accent)">WRITE</span></td>
+          <td>RV</td>
+          <td>RV-NNN</td>
+          <td>TR-NNN vorhanden</td>
+        </tr>
+        <tr>
+          <td><code>/manual</code></td>
+          <td><span style="color:var(--accent)">WRITE</span></td>
+          <td>MW</td>
+          <td>DOC-NNN, RN-NNN</td>
+          <td>RV-NNN APPROVED</td>
+        </tr>
+        <tr>
+          <td><code>/hotfix [bug]</code></td>
+          <td><span style="color:var(--accent4)">ORCHESTRATE</span></td>
+          <td>ORCH+BE+QA+RV</td>
+          <td>BUG+TR+RV</td>
+          <td>Produktionsfehler</td>
+        </tr>
+        <tr>
+          <td><code>/spike [frage]</code></td>
+          <td><span style="color:var(--accent4)">ORCHESTRATE</span></td>
+          <td>ORCH+AR</td>
+          <td>SRP-NNN</td>
+          <td>Technische Frage</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 2: HANDOFF-PROTOKOLL -->
+  <section id="handoff">
+    <div class="section-header">
+      <div class="section-number">2</div>
+      <h2>Handoff-Protokoll (Inter-Agenten-Übergabe)</h2>
+    </div>
+    <p class="section-desc">
+      Jede Agenten-Session endet mit einem standardisierten Handoff-Block am Ende des Artefakts.
+      Der empfangende Agent liest diesen Block als ersten Schritt seiner Aktivierung.
+    </p>
+    <div class="diagram-card">
+      <div class="mermaid">
+sequenceDiagram
+    participant BA as BA-Agent
+    participant ART as Artefakt (REQ-001)
+    participant GATE as Gate-Protokoll
+    participant AR as AR-Agent
+
+    BA->>ART: Schreibt REQ-001.md (Status: DRAFT)
+    BA->>ART: Fügt Handoff-Block ein
+    BA->>ART: Setzt Status: APPROVED
+    Note over ART: ## Übergabe an AR-Agent<br/>Datum: 2026-06-18<br/>Von: BA | An: AR<br/>Nächster Command: /architect<br/>Artefakte: REQ-001, US-001..US-012<br/>Kritisch: Auth-Scope angepasst
+
+    AR->>GATE: Prüft Gate-Kriterien
+    GATE-->>AR: ✅ REQ-001 APPROVED<br/>✅ Mindestens 5 US<br/>✅ Alle AC vorhanden
+
+    AR->>ART: Liest Handoff-Block
+    AR->>AR: Übernimmt offene Fragen
+    AR->>AR: Erstellt ADR-001, STRUCTURE.md
+      </div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div> Handoff-Block: Pflichtfeld am Ende jedes Artefakts</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#6c8fff"></div> Gate-Check: Automatisch vor jeder Agenten-Aktivierung</div>
+      </div>
+    </div>
+
+    <div class="code">
+## Übergabe an [Ziel-Agent]
+
+| Feld              | Wert                                    |
+|-------------------|-----------------------------------------|
+| **Datum**         | YYYY-MM-DD                              |
+| **Von**           | [KÜRZEL] — [Phase]                      |
+| **An**            | [KÜRZEL] — [Phase]                      |
+| **Nächster Cmd**  | /[command]                              |
+
+### Erzeugte Artefakte
+| ID | Datei | Status |
+|----|-------|--------|
+| REQ-001 | requirements/REQ-001-auth.md | APPROVED |
+
+### Kritische Informationen für den Folge-Agenten
+- [Was der nächste Agent unbedingt wissen muss]
+
+### Offene Fragen / Vererbte Unklarheiten
+- [ ] [Frage, die noch ungeklärt ist]
+
+### Explizit NICHT in dieser Phase
+- [Was bewusst zurückgestellt wurde]</div>
+  </section>
+
+  <!-- 3: GATE-PROTOKOLL -->
+  <section id="gate">
+    <div class="section-header">
+      <div class="section-number">3</div>
+      <h2>Gate-Protokoll (Qualitätssicherung)</h2>
+    </div>
+    <p class="section-desc">
+      Vor jedem Phasenübergang prüft der Orchestrator definierte Gate-Kriterien.
+      Schweregrade bestimmen ob der Workflow blockiert, warnt oder weiterläuft.
+    </p>
+    <div class="two-col">
+      <div class="diagram-card">
+        <div class="mermaid">
+flowchart TD
+    CHECK["Gate Check\nPhase N → N+1"]
+    B["BLOCKER\ngefunden?"]
+    M["MAJOR\ngefunden?"]
+    Mi["MINOR\ngefunden?"]
+    BLOCK["❌ BLOCKED\nKein Fortschritt\nbis Behebung"]
+    WARN["⚠️ WARNING\nFortschritt möglich\nDokumentation nötig"]
+    OK["✅ PASS\nÜbergang genehmigt"]
+    NOTE["📝 NOTED\nFortschritt\noptimierungswürdig"]
+
+    CHECK --> B
+    B -->|Ja| BLOCK
+    B -->|Nein| M
+    M -->|Ja| WARN
+    M -->|Nein| Mi
+    Mi -->|Ja| NOTE
+    Mi -->|Nein| OK
+
+    style BLOCK fill:#3a0d0d,stroke:#f87171
+    style WARN fill:#2d2a00,stroke:#f59e0b
+    style OK fill:#0d3a2a,stroke:#34d399
+    style NOTE fill:#1a1e30,stroke:#6c8fff
+        </div>
+      </div>
+      <div class="diagram-card">
+        <div class="mermaid">
+sequenceDiagram
+    participant ORCH as Orchestrator
+    participant CHECK as Gate-Check
+    participant LOG as INDEX.md
+
+    ORCH->>CHECK: prüfe_gate(phase, projekt)
+    CHECK->>CHECK: file-exists REQ-001.md?
+    CHECK->>CHECK: status-field == "APPROVED"?
+    CHECK->>CHECK: count(US-NNN) >= 3?
+    CHECK->>CHECK: cross-ref ADR-001?
+
+    alt BLOCKER
+        CHECK-->>ORCH: ❌ BLOCKED: REQ nicht APPROVED
+        ORCH->>LOG: Protokolliere Gate-Failure
+    else APPROVED
+        CHECK-->>ORCH: ✅ PASS — alle 4 Kriterien erfüllt
+        ORCH->>LOG: Protokolliere Gate-Pass
+        ORCH->>ORCH: Aktiviere nächsten Agenten
+    end
+        </div>
+      </div>
+    </div>
+
+    <table class="endpoint-table" style="margin-top:1.5rem">
+      <thead>
+        <tr>
+          <th>Prüfmethode</th>
+          <th>Beschreibung</th>
+          <th>Beispiel</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>file-exists</code></td>
+          <td>Datei muss vorhanden sein</td>
+          <td><code>REQ-001.md exists</code></td>
+        </tr>
+        <tr>
+          <td><code>status-field</code></td>
+          <td>YAML-Frontmatter Status-Wert</td>
+          <td><code>status: APPROVED</code></td>
+        </tr>
+        <tr>
+          <td><code>count-min</code></td>
+          <td>Mindestanzahl Artefakte</td>
+          <td><code>US-*.md count >= 3</code></td>
+        </tr>
+        <tr>
+          <td><code>cross-ref</code></td>
+          <td>Verweis auf anderes Artefakt</td>
+          <td><code>ADR-001 referenced in REQ</code></td>
+        </tr>
+        <tr>
+          <td><code>command-exit-0</code></td>
+          <td>Shell-Command erfolgreich</td>
+          <td><code>npm test exits 0</code></td>
+        </tr>
+        <tr>
+          <td><code>self-assertion</code></td>
+          <td>Agent erklärt Kriterium erfüllt</td>
+          <td><code>All acceptance criteria defined</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 4: ARTEFAKT-API -->
+  <section id="artifact">
+    <div class="section-header">
+      <div class="section-number">4</div>
+      <h2>Artefakt-Format (Daten-API zwischen Agenten)</h2>
+    </div>
+    <p class="section-desc">
+      Artefakte sind Markdown-Dateien mit YAML-Frontmatter. Das Frontmatter bildet den "API-Header",
+      der von Orchestrator und Gate-Protokoll maschinell ausgewertet wird.
+    </p>
+    <div class="diagram-card">
+      <div class="mermaid">
+classDiagram
+    class Artefakt {
+        +String id
+        +String title
+        +String version
+        +Status status
+        +String author_agent
+        +Date date
+        +String project
+        +validate() bool
+        +transition(Status) void
+    }
+
+    class Status {
+        &lt;&lt;enumeration&gt;&gt;
+        DRAFT
+        REVIEW
+        APPROVED
+        ACTIVE
+        SUPERSEDED
+        ARCHIVED
+    }
+
+    class StakeholderBrief {
+        +String prefix = "SB"
+        +String vision
+        +String[] stakeholders
+        +String[] goals
+        +MoSCoW priorities
+    }
+
+    class Requirements {
+        +String prefix = "REQ"
+        +FuncReq[] functional
+        +NFR[] non_functional
+        +String[] edge_cases
+    }
+
+    class UserStory {
+        +String prefix = "US"
+        +String als_user
+        +String moechte_ich
+        +String damit_ich
+        +AcceptanceCriteria[] ac
+        +String dod
+    }
+
+    class ADR {
+        +String prefix = "ADR"
+        +String context
+        +String decision
+        +String[] alternatives
+        +String[] consequences
+        +bool reversible
+    }
+
+    class ReviewReport {
+        +String prefix = "RV"
+        +Dimension[] dimensions
+        +Finding[] blockers
+        +MergeDecision decision
+    }
+
+    Artefakt --> Status
+    StakeholderBrief --|> Artefakt
+    Requirements --|> Artefakt
+    UserStory --|> Artefakt
+    ADR --|> Artefakt
+    ReviewReport --|> Artefakt
+      </div>
+    </div>
+
+    <div class="code">
+---
+id: REQ-001
+title: Authentifizierung — [Projektname]
+version: 1.2
+status: APPROVED                    ← Maschinell ausgewertet vom Gate-Protokoll
+author-agent: BA (Business Analyst)
+date: 2026-06-18
+project: mein-projekt
+supersedes: ~                       ← Verweis wenn Artefakt ersetzt wird
+artifacts-ref:                      ← Cross-references für Gate-Check
+  - SB-001
+  - US-001
+  - US-002
+---
+
+# REQ-001: Authentifizierung
+
+[Artefakt-Inhalt gemäß Template...]
+
+## Übergabe an AR-Agent        ← Handoff-Block immer am Ende
+...</div>
+  </section>
+
+  <!-- 5: PHASE STATE API -->
+  <section id="phase">
+    <div class="section-header">
+      <div class="section-number">5</div>
+      <h2>Phase State API (.phase-Datei)</h2>
+    </div>
+    <p class="section-desc">
+      Jedes Projekt hat eine <code>.phase</code>-Datei als YAML. Sie ist das "Single Source of Truth"
+      für den aktuellen Projektzustand — wird vom Orchestrator geschrieben und gelesen.
+    </p>
+    <div class="two-col">
+      <div class="diagram-card">
+        <div class="mermaid">
+sequenceDiagram
+    participant USER as Nutzer
+    participant ORCH as Orchestrator
+    participant PHASE as .phase-Datei
+    participant AGENT as Aktiver Agent
+
+    USER->>ORCH: /status mein-projekt
+    ORCH->>PHASE: lese .phase
+    PHASE-->>ORCH: {phase: TESTING, sprint: 2}
+    ORCH->>ORCH: analysiere Gate-Status
+    ORCH-->>USER: 📊 Status-Report
+
+    USER->>ORCH: /test-run
+    ORCH->>PHASE: prüfe phase == TESTING?
+    PHASE-->>ORCH: ✅ korrekte Phase
+    ORCH->>AGENT: aktiviere QA-Agent
+    AGENT->>PHASE: update: {last_activity: today}
+    AGENT-->>ORCH: Übergabe-Block
+    ORCH->>PHASE: update: {phase: REVIEW}
+        </div>
+      </div>
+      <div>
+        <div class="code">
+# Datei: projects/mein-projekt/.phase
+# Verwaltet ausschließlich vom Orchestrator
+
+project: mein-projekt
+version: 2       # Sprint-Nummer
+current_phase: TESTING
+started: 2026-06-01
+last_activity: 2026-06-18
+
+phases_completed:
+  - DISCOVERY
+  - REQUIREMENTS
+  - ARCHITECTURE
+  - UX
+  - REFINEMENT
+  - IMPLEMENTATION
+
+gates:
+  DISCOVERY:
+    status: PASSED
+    date: 2026-06-03
+    artifacts: [SB-001]
+  REQUIREMENTS:
+    status: PASSED
+    date: 2026-06-05
+    artifacts: [REQ-001, US-001, US-002, US-003]
+  # ... weitere Gates
+
+agents_active: [QA]
+blockers: []
+decisions_count: 7    # Einträge in DECISIONS.md</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6: GIT HOOKS -->
+  <section id="hooks">
+    <div class="section-header">
+      <div class="section-number">6</div>
+      <h2>Git Hook Schnittstellen</h2>
+    </div>
+    <p class="section-desc">
+      Git Hooks automatisieren Qualitätssicherung direkt im Commit-Flow.
+      Pre-commit blockiert bei Verletzungen, post-commit warnt nur.
+    </p>
+    <div class="diagram-card">
+      <div class="mermaid">
+sequenceDiagram
+    participant DEV as Entwickler
+    participant GIT as Git
+    participant PRE as pre-commit Hook
+    participant POST as post-commit Hook
+    participant CI as CI/CD (optional)
+
+    DEV->>GIT: git commit -m "feat: ..."
+
+    GIT->>PRE: trigger pre-commit
+    PRE->>PRE: 1. Lint prüfen (.toolchain-config)
+    PRE->>PRE: 2. Datei-Header vorhanden?
+    PRE->>PRE: 3. Secret-Scan (regex)
+    PRE->>PRE: 4. TODO-Format korrekt?
+
+    alt Verletzung gefunden
+        PRE-->>GIT: exit 1 (BLOCKIERT)
+        GIT-->>DEV: ❌ Commit abgelehnt + Fehlermeldung
+    else Alles OK
+        PRE-->>GIT: exit 0
+        GIT->>GIT: Commit durchgeführt
+        GIT->>POST: trigger post-commit
+        POST->>POST: INDEX.md aktuell?
+        alt INDEX veraltet
+            POST-->>DEV: ⚠️ WARNUNG: INDEX.md updaten
+        end
+        GIT->>CI: push → CI Pipeline
+    end
+      </div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#f87171"></div> pre-commit: Blockierend — verhindert Commit bei Verletzung</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div> post-commit: Warnend — Commit bereits durch, nur Hinweis</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div> CI/CD: Optional, projektspezifisch konfiguriert</div>
+      </div>
+    </div>
+
+    <table class="endpoint-table" style="margin-top:1.5rem">
+      <thead>
+        <tr>
+          <th>Hook</th>
+          <th>Prüfung</th>
+          <th>Bei Verletzung</th>
+          <th>Konfiguration</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>pre-commit</td>
+          <td>Lint-Tool (aus <code>.toolchain-config</code>)</td>
+          <td>exit 1 (Commit blockiert)</td>
+          <td><code>.toolchain-config.lint_command</code></td>
+        </tr>
+        <tr>
+          <td>pre-commit</td>
+          <td>Datei-Header (erste Zeile Kommentar)</td>
+          <td>exit 1 mit Dateiliste</td>
+          <td>Hartcodiert in Hook</td>
+        </tr>
+        <tr>
+          <td>pre-commit</td>
+          <td>Secret-Scan (password, api_key, token…)</td>
+          <td>exit 1 mit Fund-Info</td>
+          <td>Regex-Liste im Hook</td>
+        </tr>
+        <tr>
+          <td>pre-commit</td>
+          <td>TODO-Format <code>// TODO(KÜRZEL): ...</code></td>
+          <td>exit 1 mit Beispiel</td>
+          <td>Erlaubte Kürzel im Hook</td>
+        </tr>
+        <tr>
+          <td>post-commit</td>
+          <td>INDEX.md in geänderten Verzeichnissen</td>
+          <td>Warnung (exit 0)</td>
+          <td>Hardcoded Ausnahmeliste</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer>
+  AI Development Tool Chain · API &amp; Protokoll-Dokumentation · Version 1.0 · 2026-06-18
+</footer>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    themeVariables: {
+      primaryColor: '#1e2340',
+      primaryTextColor: '#e2e8f0',
+      primaryBorderColor: '#34d399',
+      lineColor: '#7c87a6',
+      secondaryColor: '#1a1d27',
+      tertiaryColor: '#2e3248',
+      background: '#0f1117',
+      mainBkg: '#1a1d27',
+      nodeBorder: '#34d399',
+      clusterBkg: '#1a2040',
+      titleColor: '#e2e8f0',
+      edgeLabelBackground: '#1a1d27',
+      fontFamily: 'Segoe UI, system-ui, sans-serif',
+      fontSize: '13px',
+      sequenceNumberColor: '#e2e8f0',
+      actorBkg: '#1e2340',
+      actorBorder: '#6c8fff',
+      actorTextColor: '#e2e8f0',
+      actorLineColor: '#7c87a6',
+      signalColor: '#7c87a6',
+      signalTextColor: '#e2e8f0',
+      labelBoxBkgColor: '#1a1d27',
+      labelBoxBorderColor: '#2e3248',
+      labelTextColor: '#e2e8f0',
+      noteBkgColor: '#1a2040',
+      noteBorderColor: '#6c8fff',
+      noteTextColor: '#e2e8f0'
+    }
+  });
+
+  document.querySelectorAll('nav a').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelectorAll('nav a').forEach(x => x.classList.remove('active'));
+      a.classList.add('active');
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  const sections = document.querySelectorAll('section[id]');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        const active = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3 });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

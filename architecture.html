@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Development Tool Chain — Architektur</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --bg:        #0f1117;
+      --surface:   #1a1d27;
+      --border:    #2e3248;
+      --accent:    #6c8fff;
+      --accent2:   #a78bfa;
+      --accent3:   #34d399;
+      --text:      #e2e8f0;
+      --text-muted:#7c87a6;
+      --warn:      #f59e0b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+    }
+    header {
+      background: linear-gradient(135deg, #1a1d27 0%, #0f1117 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 2.5rem 3rem;
+    }
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.4rem;
+    }
+    header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 3rem;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+    }
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 0.9rem 1.2rem;
+      font-size: 0.875rem;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    nav a:hover, nav a.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    main { max-width: 1200px; margin: 0 auto; padding: 2.5rem 3rem; }
+    section {
+      margin-bottom: 4rem;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .section-number {
+      width: 2rem; height: 2rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 700; color: white; flex-shrink: 0;
+    }
+    h2 { font-size: 1.3rem; font-weight: 600; color: var(--text); }
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+      padding-left: 3rem;
+    }
+    .diagram-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      overflow-x: auto;
+    }
+    .diagram-card .mermaid {
+      display: flex;
+      justify-content: center;
+    }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .legend-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .badge-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .badge {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+    }
+    .badge-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+    .badge-value {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .badge-value span {
+      color: var(--accent);
+    }
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 3rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>AI Development Tool Chain — Architektur</h1>
+  <p>Technologieneutrale, agentische Entwicklungs-Tool-Chain · Version 1.0 · 2026-06-18</p>
+</header>
+
+<nav>
+  <a href="#schichten" class="active">Drei-Schichten-Modell</a>
+  <a href="#agenten">Agenten-Workflow</a>
+  <a href="#zustaende">Phasen-Zustandsmaschine</a>
+  <a href="#artefakte">Artefakt-Fluss</a>
+  <a href="#szenarien">Workflow-Szenarien</a>
+</nav>
+
+<main>
+
+  <!-- METRIKEN -->
+  <div class="badge-grid" style="margin-top:2rem">
+    <div class="badge">
+      <div class="badge-label">Architekturschichten</div>
+      <div class="badge-value"><span>3</span> Schichten</div>
+    </div>
+    <div class="badge">
+      <div class="badge-label">Agenten-Rollen</div>
+      <div class="badge-value"><span>10</span> Rollen</div>
+    </div>
+    <div class="badge">
+      <div class="badge-label">Slash Commands</div>
+      <div class="badge-value"><span>14</span> Commands</div>
+    </div>
+    <div class="badge">
+      <div class="badge-label">Workflow-Szenarien</div>
+      <div class="badge-value"><span>3</span> Workflows</div>
+    </div>
+    <div class="badge">
+      <div class="badge-label">Artefakt-Typen</div>
+      <div class="badge-value"><span>12</span> Typen</div>
+    </div>
+    <div class="badge">
+      <div class="badge-label">Prozess-Phasen</div>
+      <div class="badge-value"><span>9</span> Phasen</div>
+    </div>
+  </div>
+
+  <!-- 1: DREI-SCHICHTEN -->
+  <section id="schichten">
+    <div class="section-header">
+      <div class="section-number">1</div>
+      <h2>Drei-Schichten-Modell</h2>
+    </div>
+    <p class="section-desc">
+      Die Tool Chain ist in drei klar getrennte Schichten gegliedert: Die Meta-Schicht definiert die Regeln,
+      die Orchestrierungsschicht steuert den Ablauf, die Projektschicht enthält die konkreten Artefakte.
+    </p>
+    <div class="diagram-card">
+      <div class="mermaid">
+graph TB
+    subgraph L1["  Schicht 1 — Meta  (toolchain/)  "]
+        direction LR
+        A1["_base-agent.md\nBasis-Regeln"]
+        A2["10 Agenten-Def.\nPM BA AR UX FE BE QA RV MW ORCH"]
+        A3["10 Artefakt-Templates\nSB REQ US ADR UX SP TP RV DOC DEBT"]
+        A4["3 Protokolle\nHandoff · Gate · Lifecycle"]
+        A5["Git Hooks\npre-commit · post-commit"]
+    end
+
+    subgraph L2["  Schicht 2 — Orchestrierung  (.claude/commands/ + toolchain/workflows/)  "]
+        direction LR
+        B1["4 Meta-Commands\n/status /sprint /hotfix /spike"]
+        B2["10 Phasen-Commands\n/kickoff ... /manual"]
+        B3["3 Workflows\nFull Sprint · Hotfix · Spike"]
+    end
+
+    subgraph L3["  Schicht 3 — Projekt  (projects/name/)  "]
+        direction LR
+        C1["Artefakte\nSB · REQ · US · ADR · UX · SP · TP · RV · DOC · DEBT"]
+        C2["DECISIONS.md"]
+        C3[".phase\nZustandsdatei"]
+        C4["REGISTRY.md\nProjekt-Übersicht"]
+    end
+
+    L1 -->|"definiert Regeln für"| L2
+    L2 -->|"produziert und verwaltet"| L3
+
+    style L1 fill:#1e2340,stroke:#6c8fff,stroke-width:2px,color:#e2e8f0
+    style L2 fill:#1e2d2a,stroke:#34d399,stroke-width:2px,color:#e2e8f0
+    style L3 fill:#2a1e2d,stroke:#a78bfa,stroke-width:2px,color:#e2e8f0
+      </div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#6c8fff"></div> Meta-Schicht: Zeitlos, technologieunabhängig</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div> Orchestrierung: Sequenzierung und Gate-Logik</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div> Projekt: Konkrete, versionierte Artefakte</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2: AGENTEN-WORKFLOW -->
+  <section id="agenten">
+    <div class="section-header">
+      <div class="section-number">2</div>
+      <h2>Agenten-Aktivierungsreihenfolge</h2>
+    </div>
+    <p class="section-desc">
+      Jeder Agent erhält definierte Eingabe-Artefakte, produziert definierte Ausgabe-Artefakte
+      und übergibt über ein standardisiertes Handoff-Protokoll. FE und BE können parallel arbeiten.
+    </p>
+    <div class="diagram-card">
+      <div class="mermaid">
+flowchart LR
+    ORCH(["ORCH\nOrchestrator"]):::meta
+
+    PM["PM\nProduct\nManager"]:::agent
+    BA["BA\nBusiness\nAnalyst"]:::agent
+    AR["AR\nSoftware\nArchitect"]:::agent
+    UX["UX\nUX\nDesigner"]:::agent
+    BE["BE\nBackend\nDev"]:::agent
+    FE["FE\nFrontend\nDev"]:::agent
+    QA["QA\nQA\nEngineer"]:::agent
+    RV["RV\nCode\nReviewer"]:::agent
+    MW["MW\nManual\nWriter"]:::agent
+
+    ORCH -->|"/kickoff"| PM
+    PM -->|"SB-NNN"| BA
+    BA -->|"REQ+US"| AR
+    AR -->|"ADRs"| UX
+    AR -->|"ADRs\nSTRUCTURE.md"| BE
+    UX -->|"UX-NNN"| FE
+    BE -->|"API-Kontrakt"| FE
+    FE -->|"Code+Tests"| QA
+    BE -->|"Code+Tests"| QA
+    QA -->|"TP+TR"| RV
+    RV -->|"RV-NNN\nAPPROVED"| MW
+    MW -->|"DOC-NNN\nRN-NNN"| ORCH
+
+    classDef meta fill:#1a2a4a,stroke:#6c8fff,stroke-width:2px,color:#e2e8f0,rx:20
+    classDef agent fill:#1e2340,stroke:#2e3248,stroke-width:1px,color:#e2e8f0
+      </div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#6c8fff"></div> Orchestrator: kennt Gesamtzustand, keine fachliche Rolle</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div> Parallelisierung: FE und BE können gleichzeitig arbeiten</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div> Jede Verbindung überträgt spezifische Artefakte</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3: ZUSTANDSMASCHINE -->
+  <section id="zustaende">
+    <div class="section-header">
+      <div class="section-number">3</div>
+      <h2>Phasen-Zustandsmaschine</h2>
+    </div>
+    <p class="section-desc">
+      Jedes Projekt befindet sich in genau einem Zustand. Der Orchestrator pflegt die .phase-Datei
+      und prüft bei jedem Übergang die Gate-Kriterien. Rollbacks sind explizit modelliert.
+    </p>
+    <div class="diagram-card">
+      <div class="mermaid">
+stateDiagram-v2
+    direction TB
+    [*] --> INIT
+
+    INIT --> DISCOVERY : /kickoff
+    DISCOVERY --> REQUIREMENTS : Gate 1 ✅
+    REQUIREMENTS --> ARCHITECTURE : Gate 2 ✅
+    ARCHITECTURE --> UX : Gate 3 ✅
+    UX --> REFINEMENT : Gate 4 ✅
+    REFINEMENT --> IMPLEMENTATION : Gate 5 ✅
+    IMPLEMENTATION --> TESTING : Gate 6 ✅
+    TESTING --> REVIEW : Gate 7 ✅
+    REVIEW --> DOCUMENTATION : Gate 8 ✅
+    DOCUMENTATION --> DONE : Merge
+    DONE --> REFINEMENT : Nächster Sprint
+
+    REVIEW --> IMPLEMENTATION : REQUEST CHANGES
+    REVIEW --> DISCOVERY : REJECTED (Scope)
+    TESTING --> IMPLEMENTATION : BLOCKER Bug
+    ARCHITECTURE --> REQUIREMENTS : Unmachbare Req.
+
+    state DONE {
+        [*] --> Sprint_Abschluss
+        Sprint_Abschluss --> Registry_Update
+        Registry_Update --> [*]
+    }
+
+    note right of IMPLEMENTATION
+        FE und BE
+        parallel möglich
+    end note
+      </div>
+    </div>
+  </section>
+
+  <!-- 4: ARTEFAKT-FLUSS -->
+  <section id="artefakte">
+    <div class="section-header">
+      <div class="section-number">4</div>
+      <h2>Artefakt-Fluss</h2>
+    </div>
+    <p class="section-desc">
+      Artefakte bilden die Kommunikationsstruktur zwischen Agenten. Jedes Artefakt hat einen
+      definierten Präfix, eine Version und einen Statuswert. Kein Artefakt wird gelöscht.
+    </p>
+    <div class="diagram-card">
+      <div class="mermaid">
+flowchart TD
+    SB["📋 SB-NNN\nStakeholder Brief"]
+    REQ["📄 REQ-NNN\nRequirements"]
+    US["📝 US-NNN\nUser Stories"]
+    ADR["🏗 ADR-NNN\nArchitektur-Entscheidungen"]
+    UX["🎨 UX-NNN\nUX-Specs"]
+    SP["📅 SP-NNN\nSprint Backlog"]
+    CODE["💻 Code\n+ API-Kontrakt"]
+    TP["🧪 TP-NNN\nTestplan"]
+    TR["📊 TR-NNN\nTestergebnis"]
+    RV["✅ RV-NNN\nReview-Bericht"]
+    DOC["📖 DOC-NNN\nFeature-Guide"]
+    RN["📰 RN-NNN\nRelease Notes"]
+    DEBT["⚠️ DEBT-NNN\nTechn. Schulden"]
+    DEC["🗒 DECISIONS.md\nEntscheidungsprotokoll"]
+
+    SB --> REQ
+    SB --> US
+    SB --> DEC
+    REQ --> ADR
+    US --> ADR
+    US --> SP
+    ADR --> UX
+    ADR --> SP
+    ADR --> DEC
+    UX --> SP
+    SP --> CODE
+    CODE --> TP
+    TP --> TR
+    TR --> RV
+    RV --> DOC
+    RV --> RN
+    RV --> DEBT
+    DOC --> DEC
+
+    style SB fill:#1a3040,stroke:#6c8fff
+    style REQ fill:#1a3040,stroke:#6c8fff
+    style US fill:#1a3040,stroke:#6c8fff
+    style ADR fill:#1e3030,stroke:#34d399
+    style UX fill:#1e3030,stroke:#34d399
+    style SP fill:#1e3030,stroke:#34d399
+    style CODE fill:#2a1e30,stroke:#a78bfa
+    style TP fill:#2a1e30,stroke:#a78bfa
+    style TR fill:#2a1e30,stroke:#a78bfa
+    style RV fill:#301e1a,stroke:#f59e0b
+    style DOC fill:#301e1a,stroke:#f59e0b
+    style RN fill:#301e1a,stroke:#f59e0b
+    style DEBT fill:#1e1e1e,stroke:#4a4a4a
+    style DEC fill:#1e1e2e,stroke:#6c8fff,stroke-dasharray:5 5
+      </div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#6c8fff"></div> Discovery + Requirements (PM, BA)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div> Architektur + UX + Planung (AR, UX)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div> Implementierung + Test (FE, BE, QA)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div> Review + Dokumentation (RV, MW)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#6c8fff;opacity:0.5"></div> DECISIONS.md: wird von allen Agenten befüllt</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5: WORKFLOW-SZENARIEN -->
+  <section id="szenarien">
+    <div class="section-header">
+      <div class="section-number">5</div>
+      <h2>Workflow-Szenarien im Vergleich</h2>
+    </div>
+    <p class="section-desc">
+      Drei Workflows für unterschiedliche Szenarien: Der Full Sprint ist der Standardweg,
+      Hotfix überspringt Discovery und Architektur, Spike endet im Report ohne Implementierung.
+    </p>
+    <div class="diagram-card">
+      <div class="mermaid">
+flowchart LR
+    subgraph FS["Full Sprint  (/sprint)"]
+        direction TB
+        fs1["Discovery"]-->fs2["Requirements"]-->fs3["Architecture"]-->fs4["UX"]
+        fs4-->fs5["Refinement"]-->fs6["Implementation"]-->fs7["Testing"]-->fs8["Review"]-->fs9["Docs"]
+    end
+
+    subgraph HF["Hotfix  (/hotfix)"]
+        direction TB
+        hf1["Bug Analysis"]-->hf2["Implementation"]-->hf3["Smoke Test"]-->hf4["Review"]
+    end
+
+    subgraph SP["Spike  (/spike)"]
+        direction TB
+        sp1["Spike Brief"]-->sp2["Research"]-->sp3["Spike Report\nSRP-NNN"]
+    end
+
+    style FS fill:#1a2040,stroke:#6c8fff,stroke-width:2px,color:#e2e8f0
+    style HF fill:#2a1a1a,stroke:#f87171,stroke-width:2px,color:#e2e8f0
+    style SP fill:#1a2a1a,stroke:#34d399,stroke-width:2px,color:#e2e8f0
+      </div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#6c8fff"></div> Full Sprint: 9 Phasen, vollständiger Artefakt-Satz</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f87171"></div> Hotfix: 4 Phasen, minimaler Artefakt-Footprint (BUG+TR+RV)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div> Spike: 3 Phasen, endet im SRP-NNN Report — kein produktiver Code</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  AI Development Tool Chain · Version 1.0 · 2026-06-18 · Technologieneutral &amp; agentisch
+</footer>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    themeVariables: {
+      primaryColor: '#1e2340',
+      primaryTextColor: '#e2e8f0',
+      primaryBorderColor: '#6c8fff',
+      lineColor: '#7c87a6',
+      secondaryColor: '#1a1d27',
+      tertiaryColor: '#2e3248',
+      background: '#0f1117',
+      mainBkg: '#1a1d27',
+      nodeBorder: '#6c8fff',
+      clusterBkg: '#1a2040',
+      titleColor: '#e2e8f0',
+      edgeLabelBackground: '#1a1d27',
+      fontFamily: 'Segoe UI, system-ui, sans-serif',
+      fontSize: '13px'
+    }
+  });
+
+  // Smooth scroll für Navigation
+  document.querySelectorAll('nav a').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelectorAll('nav a').forEach(x => x.classList.remove('active'));
+      a.classList.add('active');
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // Aktive Nav beim Scrollen
+  const sections = document.querySelectorAll('section[id]');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        const active = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3 });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

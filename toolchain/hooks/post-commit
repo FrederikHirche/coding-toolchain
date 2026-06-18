@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# post-commit — AI Development Tool Chain
+# Wird nach jedem Commit ausgeführt. Hinweis-Ausgaben, keine Fehlerbeendigung.
+#
+# Aktionen:
+#   1. Prüft ob INDEX.md-Dateien aktualisiert werden sollten
+#   2. Gibt Erinnerung an Artefakt-Pflege aus
+
+set -e
+
+echo "📋 Tool Chain post-commit..."
+
+# Prüfe ob Code-Dateien geändert wurden ohne INDEX.md-Update
+CHANGED_DIRS=$(git diff HEAD~1 --name-only 2>/dev/null | xargs -I {} dirname {} | sort -u)
+
+for DIR in $CHANGED_DIRS; do
+  if [ -d "$DIR" ] && [ -f "$DIR/INDEX.md" ]; then
+    if git diff HEAD~1 --name-only | grep -q "^$DIR/" && \
+       ! git diff HEAD~1 --name-only | grep -q "^$DIR/INDEX.md$"; then
+      echo "  ⚠️  INDEX.md in '$DIR' wurde nicht aktualisiert."
+      echo "     Denke daran, neue/geänderte Dateien in INDEX.md einzutragen."
+    fi
+  fi
+done
+
+echo "✅ post-commit abgeschlossen."

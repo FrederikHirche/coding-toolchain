@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+# pre-commit — AI Development Tool Chain
+# Führt automatisierte Qualitätschecks vor jedem Commit durch.
+#
+# Aktivierte Checks:
+#   1. Lint (projektspezifisch, aus STRUCTURE.md)
+#   2. Kommentierungs-Mindeststandard (Datei-Header vorhanden)
+#   3. Keine Secrets/Credentials im Diff
+#   4. TODO-Marker-Format korrekt
+#
+# Installation: bash toolchain/hooks/setup-hooks.sh
+
+set -e
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM)
+
+echo "🔍 Tool Chain pre-commit checks..."
+
+# ─────────────────────────────────────
+# CHECK 1: Lint (falls Lint-Befehl konfiguriert)
+# ─────────────────────────────────────
+if [ -f "$REPO_ROOT/.toolchain-config" ]; then
+  LINT_CMD=$(grep "^lint=" "$REPO_ROOT/.toolchain-config" | cut -d'=' -f2-)
+  if [ -n "$LINT_CMD" ]; then
+    echo "  ✓ Lint: $LINT_CMD"
+    eval "$LINT_CMD" || {
+      echo "  ❌ Lint fehlgeschlagen. Commit abgebrochen."
+      exit 1
+    }
+  fi
+fi
+
+# ─────────────────────────────────────
+# CHECK 2: Datei-Header vorhanden (Code-Dateien)
+# ─────────────────────────────────────
+MISSING_HEADERS=()
+CODE_EXTENSIONS="ts|tsx|js|jsx|py|go|java|cs|rs|rb|php"
+
+for FILE in $STAGED_FILES; do
+  if echo "$FILE" | grep -qE "\.(${CODE_EXTENSIONS})$"; then
+    # Prüft ob die erste Zeile einen Kommentar enthält (Header)
+    FIRST_LINE=$(git show ":$FILE" 2>/dev/null | head -1)
+    if ! echo "$FIRST_LINE" | grep -qE "^(//|#|/\*|\"|'\"\"\")" ; then
+      MISSING_HEADERS+=("$FILE")
+    fi
+  fi
+done
+
+if [ ${#MISSING_HEADERS[@]} -gt 0 ]; then
+  echo "  ⚠️  Fehlende Datei-Header in:"
+  for F in "${MISSING_HEADERS[@]}"; do
+    echo "     - $F"
+  done
+  echo "  Hinweis: Jede Code-Datei muss mit einem Kommentar-Block beginnen."
+  echo "  Standard: toolchain/agents/CLAUDE.md → 'Code-Kommentierung'"
+  # Warning, kein Abort (um Produktivität nicht zu blockieren)
+fi
+
+# ─────────────────────────────────────
+# CHECK 3: Keine Secrets/Credentials
+# ─────────────────────────────────────
+SECRET_PATTERNS=(
+  "password\s*=\s*['\"][^'\"]{4,}"
+  "secret\s*=\s*['\"][^'\"]{8,}"
+  "api[_-]?key\s*=\s*['\"][^'\"]{8,}"
+  "private[_-]?key\s*=\s*['\"][^'\"]{8,}"
+  "BEGIN (RSA|EC|DSA|OPENSSH) PRIVATE KEY"
+  "ghp_[A-Za-z0-9]{36}"
+  "sk-[A-Za-z0-9]{40,}"
+)
+
+for FILE in $STAGED_FILES; do
+  for PATTERN in "${SECRET_PATTERNS[@]}"; do
+    if git show ":$FILE" 2>/dev/null | grep -iEq "$PATTERN"; then
+      echo "  ❌ Mögliches Secret in: $FILE (Pattern: $PATTERN)"
+      echo "  Commit abgebrochen. Secrets gehören in Umgebungsvariablen, nicht in den Code."
+      exit 1
+    fi
+  done
+done
+
+# ─────────────────────────────────────
+# CHECK 4: TODO-Marker-Format
+# ─────────────────────────────────────
+# Erlaubt: // TODO(PM|BA|AR|UX|FE|BE|QA|RV): Beschreibung — YYYY-MM-DD
+# Warnt bei: // TODO ohne Klammer (kein Verantwortlichen)
+ROLES="PM|BA|AR|UX|FE|BE|QA|RV"
+BAD_TODOS=()
+
+for FILE in $STAGED_FILES; do
+  if echo "$FILE" | grep -qE "\.(${CODE_EXTENSIONS})$"; then
+    if git show ":$FILE" 2>/dev/null | grep -iE "TODO" | grep -qvE "TODO\((${ROLES})\):"; then
+      BAD_TODOS+=("$FILE")
+    fi
+  fi
+done
+
+if [ ${#BAD_TODOS[@]} -gt 0 ]; then
+  echo "  ⚠️  Nicht-standardisierte TODO-Marker in:"
+  for F in "${BAD_TODOS[@]}"; do
+    echo "     - $F"
+  done
+  echo "  Standard: // TODO(KÜRZEL): Beschreibung — YYYY-MM-DD"
+fi
+
+echo "✅ pre-commit abgeschlossen."
+exit 0

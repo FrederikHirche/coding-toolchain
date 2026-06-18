@@ -1,0 +1,32 @@
+# /refine — Refinement / Sprint Planning
+
+Bereitet den Sprint Backlog vor: verfeinert User Stories, schätzt Aufwände und definiert Sprint-Ziele.
+
+## Verwendung
+
+```
+/refine [projektname] [sprint-nummer]
+```
+
+## Was passiert
+
+1. Liest alle APPROVED US-NNN und UX-NNN
+2. Verfeinert Stories: Subtasks, Schätzungen (Story Points oder T-Shirt-Sizes), Abhängigkeiten
+3. Erstellt Sprint-Backlog-Dokument (`projects/<projektname>/sprints/SPRINT-NNN.md`)
+4. Definiert Sprint-Ziel und Abnahmekriterien
+5. Identifiziert technische Voraussetzungen (was muss vor dem Sprint fertig sein?)
+6. Aktualisiert INDEX.md
+
+## Vorbedingungen
+
+- `UX-NNN` für Sprint-Stories vorhanden
+- `ADR-001` approved
+
+## Nächster Schritt
+
+Nach Abschluss: `/implement`
+
+---
+
+**Beteiligte Agenten:** BA, FE, BE (gemeinsames Refinement)
+**Output:** `SPRINT-NNN.md` Sprint Backlog

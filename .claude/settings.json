@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($env:PATH; \\(Get-Command git -ErrorAction SilentlyContinue\\)?.Source)",
+      "PowerShell($git = \"C:\\\\Users\\\\frede\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.8\\\\resources\\\\app\\\\git\\\\cmd\\\\git.exe\"; & $git remote -v; & $git status --short)",
+      "Read(//c/Users/frede/AppData/Local/GitHubDesktop/app-3.5.8/resources/app/git/cmd/**)",
+      "Read(//c/Users/frede/AppData/Local/GitHubDesktop/**)",
+      "PowerShell($gitPath = Get-ChildItem \"C:\\\\Users\\\\frede\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.12\\\\resources\\\\app\\\\git\\\\cmd\\\\git.exe\" -ErrorAction SilentlyContinue; $gitPath?.FullName)",
+      "PowerShell($env:PATH += \";C:\\\\Users\\\\frede\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.12\\\\resources\\\\app\\\\git\\\\cmd\"; git --version && git -C \"C:\\\\Users\\\\frede\\\\Claude\\\\Projects\\\\CodingTC\" remote -v && git -C \"C:\\\\Users\\\\frede\\\\Claude\\\\Projects\\\\CodingTC\" status --short)",
+      "PowerShell($env:PATH += \";C:\\\\Users\\\\frede\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.12\\\\resources\\\\app\\\\git\\\\cmd\"; gh auth status)",
+      "PowerShell($env:PATH += \";C:\\\\Users\\\\frede\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.12\\\\resources\\\\app\\\\git\\\\cmd\"; Set-Location \"C:\\\\Users\\\\frede\\\\Claude\\\\Projects\\\\CodingTC\"; gh repo create coding-toolchain --public --source=. --remote=origin --push --description \"AI Development Tool Chain — agentische Tool Chain von der Idee bis zum Release\")",
+      "PowerShell($env:PATH += \";C:\\\\Users\\\\frede\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.12\\\\resources\\\\app\\\\git\\\\cmd\"; Set-Location \"C:\\\\Users\\\\frede\\\\Claude\\\\Projects\\\\CodingTC\"; git add -A && git commit -m \"Initial commit: AI Development Tool Chain\")",
+      "PowerShell(Remove-Item \"C:\\\\Users\\\\frede\\\\Claude\\\\Projects\\\\CodingTC\\\\.git\\\\index.lock\" -Force; $env:PATH += \";C:\\\\Users\\\\frede\\\\AppData\\\\Local\\\\GitHubDesktop\\\\app-3.5.12\\\\resources\\\\app\\\\git\\\\cmd\"; Set-Location \"C:\\\\Users\\\\frede\\\\Claude\\\\Projects\\\\CodingTC\"; git add -A && git commit -m \"Initial commit: AI Development Tool Chain\")"
+    ]
+  }
+}

@@ -1,0 +1,96 @@
+# .toolchain.yml — AI Development Tool Chain Konfiguration
+#
+# VERWENDUNG:
+# Kopiere diese Datei in den Wurzelordner deines Projekts:
+#   cp toolchain-root/.toolchain.yml projects/<projektname>/.toolchain.yml
+#
+# Die meisten Felder werden automatisch vom Architect-Agent (ADR-001) befüllt.
+# Manuell zu setzen: toolchain-path und project.
+
+# ─────────────────────────────────────
+# Pflichtfelder
+# ─────────────────────────────────────
+
+project:
+  name: [projektname]               # Eindeutiger Projektname (kebab-case)
+  description: [Kurzbeschreibung]   # 1 Satz
+  created: YYYY-MM-DD
+  toolchain-version: 1.0
+
+# Pfad zur Tool Chain (relativ zum Projekt-Root oder absolut)
+toolchain-path: ../                 # Anpassen wenn Projekt außerhalb von projects/ liegt
+
+# ─────────────────────────────────────
+# Tech-Stack (vom Architect-Agent befüllt nach ADR-001)
+# ─────────────────────────────────────
+
+stack:
+  language: ~                       # z. B. typescript, python, go
+  runtime: ~                        # z. B. node, deno, cpython3.12
+  frontend: ~                       # z. B. react, vue, svelte, none
+  backend: ~                        # z. B. fastapi, express, gin, none
+  database: ~                       # z. B. postgresql, mongodb, sqlite, none
+  api-style: ~                      # z. B. rest, graphql, grpc
+  hosting: ~                        # z. B. docker, k8s, serverless, static
+
+# ─────────────────────────────────────
+# Befehle (vom Architect-Agent befüllt)
+# ─────────────────────────────────────
+
+commands:
+  install: ~                        # z. B. npm install
+  dev: ~                            # z. B. npm run dev
+  lint: ~                           # z. B. npm run lint
+  lint-fix: ~                       # z. B. npm run lint:fix
+  test: ~                           # z. B. npm test
+  test-watch: ~                     # z. B. npm run test:watch
+  test-e2e: ~                       # z. B. npx playwright test
+  coverage: ~                       # z. B. npm run coverage
+  build: ~                          # z. B. npm run build
+  migrate: ~                        # z. B. npx prisma migrate dev
+
+# ─────────────────────────────────────
+# Coding-Standards (vom Architect-Agent befüllt)
+# ─────────────────────────────────────
+
+standards:
+  indent: spaces-2                  # spaces-2 | spaces-4 | tabs
+  quotes: single                    # single | double
+  line-length: 100
+  strict-types: true
+  comment-language: de              # de | en
+
+# ─────────────────────────────────────
+# Artefakt-Konfiguration
+# ─────────────────────────────────────
+
+artifacts:
+  directory: .                      # Relativ zum Projektordner
+  prefix-pattern: "[A-Z]+-[0-9]+"  # Regex für Artefakt-IDs
+  next-ids:                         # Nächste freie Nummer pro Typ
+    SB: 1
+    REQ: 1
+    US: 1
+    ADR: 1
+    UX: 1
+    SP: 1
+    TP: 1
+    TR: 1
+    RV: 1
+    BUG: 1
+    DEBT: 1
+    SRP: 1
+
+# ─────────────────────────────────────
+# Hook-Konfiguration
+# ─────────────────────────────────────
+
+hooks:
+  pre-commit:
+    lint: true                      # Lint im pre-commit ausführen?
+    secret-scan: true               # Secret-Scan aktiv?
+    header-check: true              # Datei-Header-Check aktiv?
+    todo-format-check: true         # TODO-Format prüfen?
+
+  post-commit:
+    index-reminder: true            # INDEX.md-Update-Erinnerung?
