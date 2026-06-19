@@ -92,7 +92,7 @@ KOMPLEXE LOGIK:
 
 TODO-FORMAT:
   // TODO(KÜRZEL): Beschreibung — YYYY-MM-DD
-  Erlaubte Kürzel: PM BA AR UX FE BE QA RV
+  Erlaubte Kürzel: PM BA AR UX FE BE QA RV MW AC
 ```
 
 ---
@@ -112,6 +112,10 @@ TODO-FORMAT:
 | Review-Bericht | `RV` | pro Sprint ab 001 |
 | Bug | `BUG` | pro Projekt ab 001 |
 | Technische Schulden | `DEBT` | pro Projekt ab 001 |
+| Feature-Guide | `DOC` | pro Projekt ab 001 |
+| Release Notes | `RN` | pro Projekt ab 001 |
+| Sprint-Retrospektive | `RETRO` | pro Projekt ab 001 |
+| Process Change Proposal | `PC` | pro Projekt ab 001 |
 
 ---
 

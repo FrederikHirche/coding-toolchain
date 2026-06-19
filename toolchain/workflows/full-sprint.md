@@ -257,3 +257,4 @@ Nach erfolgreichem Merge:
 - [ ] Technische Schulden in `DEBT-NNN` dokumentiert
 - [ ] Abgelöste Artefakte auf `SUPERSEDED` gesetzt
 - [ ] Nächster Sprint: `/refine` vorbereiten
+- [ ] Optional: `/retro` — Sprint-Retrospektive mit AC-Agent durchführen

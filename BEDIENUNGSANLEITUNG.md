@@ -84,6 +84,11 @@ Phase 7 → /test-plan   QA Engineer        Testplan
           /test-run                        Testergebnisse
 Phase 8 → /review      Code Reviewer      Review-Bericht + Merge-Entscheidung
 Phase 9 → /manual      Manual Writer      Feature-Guides + Release Notes
+
+Optional (Post-Sprint):
+        → /retro       Agile Coach        Sprint-Retrospektive
+        → /health-check Agile Coach       Übergreifende Prozessanalyse (ab Sprint 4)
+        → /coach       Agile Coach        Ad-hoc Prozessberatung (jederzeit)
 ```
 
 ---
@@ -252,6 +257,30 @@ Ablauf: Bug-Analyse → Implementierung (nur betroffene Dateien) → Smoke-Test 
 
 **Voraussetzungen:** Der Fix ändert keine Architektur, ADR-001 bleibt gültig.
 
+### Prozess verbessern: `/retro`, `/health-check`, `/coach`
+
+Der **Agile Coach Agent (AC)** ist kein Pflicht-Bestandteil jedes Sprints — er wird explizit gerufen, wenn der Prozess selbst hinterfragt werden soll. Er beurteilt keine fachlichen Inhalte (kein Code-Review, kein Feature-Feedback), sondern ausschließlich das *Wie* der Zusammenarbeit.
+
+**Nach einem Sprint abgeschlossen:**
+```
+/retro mein-projekt 1
+```
+Der Agile Coach stellt 2–3 gezielte Einstiegsfragen zum Sprint-Erleben, liest danach alle Sprint-Artefakte und erstellt eine strukturierte Retrospektive (RETRO-NNN) mit Keep / Stop / Start. Bei Bedarf entsteht ein Process Change Proposal (PC-NNN) mit konkreten Dateiänderungen.
+
+**Nach 3+ Sprints — systemische Muster erkennen:**
+```
+/health-check mein-projekt
+```
+Sprint-übergreifende Analyse: Welche Probleme tauchen immer wieder auf? Welche Gates scheitern am häufigsten? Ergebnis: PC-NNN mit 3–7 priorisierten Verbesserungsvorschlägen, nach Impact/Aufwand sortiert.
+
+**Jederzeit bei Prozess-Widerstand:**
+```
+/coach mein-projekt "Reviews dauern immer dreimal so lang wie geplant"
+```
+Der Agile Coach diagnostiziert das konkrete Problem, liest gezielt die relevanten Artefakte und gibt sofortige, handlungsorientierte Empfehlung. Kein abgeschlossener Sprint nötig.
+
+---
+
 ### Technologiefrage klären: `/spike`
 
 Wenn vor einer Architekturentscheidung erst etwas ausprobiert werden muss:
@@ -284,6 +313,8 @@ Alle erzeugten Dateien folgen einer einheitlichen Benennung:
 | Release Notes | `RN-NNN` | `RN-001-sprint1.md` | MW |
 | Getting Started | `GS-NNN` | `GS-001.md` | MW |
 | Entscheidungsprotokoll | `DECISIONS.md` | `DECISIONS.md` | Alle Agenten |
+| Sprint-Retrospektive | `RETRO-NNN` | `RETRO-001-sprint1.md` | AC |
+| Process Change Proposal | `PC-NNN` | `PC-001-gate-reform.md` | AC |
 
 ### Artefakt-Status
 
@@ -344,11 +375,11 @@ commands:
 Coding Tool Chain/
 ├── CLAUDE.md                    ← Einstiegspunkt (automatisch von Claude Code geladen)
 ├── .toolchain.yml               ← Config-Template
-├── .claude/commands/            ← 13 Slash Commands
+├── .claude/commands/            ← 17 Slash Commands (incl. /retro, /health-check, /coach)
 ├── architecture.html            ← Architektur-Übersicht mit Mermaid-Diagrammen
 ├── api_documentation.html       ← Protokoll- & Schnittstellen-Dokumentation
 ├── toolchain/
-│   ├── agents/                  ← 10 Agenten-Definitionen (incl. MW)
+│   ├── agents/                  ← 11 Agenten-Definitionen (incl. MW, AC)
 │   ├── workflows/               ← Full Sprint (9 Phasen), Hotfix, Spike
 │   ├── protocols/               ← Handoff, Gate, Lifecycle
 │   ├── templates/               ← 10 Artefakt-Templates (incl. DECISIONS.md)
@@ -420,6 +451,9 @@ Ja — sie ist bewusst technologieneutral. Der Architect-Agent entscheidet beim 
 | `/test-run` | Phase 7b: Tests ausführen |
 | `/review` | Phase 8: Code Review |
 | `/manual` | Phase 9: Nutzer-Dokumentation |
+| `/retro [projekt] [nr]` | Post-Sprint: Retrospektive (AC) |
+| `/health-check [projekt]` | Post-Sprint: Übergreifende Prozessanalyse (AC, ab Sprint 4) |
+| `/coach [projekt] [problem]` | Ad-hoc: Sofortige Prozessberatung (AC, jederzeit) |
 
 ---
 
@@ -435,4 +469,4 @@ Ja — sie ist bewusst technologieneutral. Der Architect-Agent entscheidet beim 
 
 ---
 
-*Letzte Aktualisierung: 2026-06-18 — Tool Chain v1.1 (+ MW, DECISIONS.md, Phase 9)*
+*Letzte Aktualisierung: 2026-06-19 — Tool Chain v1.2 (+ AC: /retro, /health-check, /coach)*
