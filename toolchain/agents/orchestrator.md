@@ -132,11 +132,13 @@ history:
 
 ```
 INIT → DISCOVERY → REQUIREMENTS → ARCHITECTURE → UX → REFINEMENT →
-IMPLEMENTATION → TESTING → REVIEW → DONE
+IMPLEMENTATION → TESTING → REVIEW → DOCUMENTATION → RELEASE → RELEASED
 
 Für Hotfix-Workflow:
 INIT → HOTFIX-ANALYSIS → HOTFIX-IMPLEMENTATION → HOTFIX-TESTING → HOTFIX-REVIEW → DONE
 ```
+
+`DONE` (Legacy) = Sprint dokumentiert, aber vor Phase-10-Einführung abgeschlossen — gilt als `RELEASED`.
 
 ## Eskalationsregeln
 

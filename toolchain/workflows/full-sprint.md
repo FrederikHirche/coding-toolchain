@@ -232,6 +232,46 @@ Der Standard-Workflow für einen vollständigen Entwicklungssprint — von Disco
 
 ---
 
+## Phase 10: Release
+
+**Befehl:** Automatisch nach Gate 9 durch ORCH (kein eigener Slash Command)  
+**Agent:** ORCH  
+**Ergebnis:** Release-Tag, aktualisiertes `.phase`
+
+Diese Phase führt den Code-Merge gemäß der im Projekt festgelegten Branching-Strategie durch.
+Die Strategie ist verbindlich in `ADR-NNN-branching-strategy.md` dokumentiert — ORCH entscheidet
+nichts Strategisches, sondern führt das vereinbarte Protokoll aus.
+
+### Gate 10 → RELEASED
+
+| Kriterium | Prüfung | Schwere |
+|---|---|---|
+| Branching-Strategie in ADR vorhanden | `ADR-NNN-branching-strategy.md` status `APPROVED` | BLOCKER |
+| Merge-Ziel-Branch korrekt | Gemäß ADR: main / develop / release/x.y | BLOCKER |
+| Git-Tag gesetzt | `vSPRINT-N` oder semver gemäß ADR | BLOCKER |
+| `REGISTRY.md` aktualisiert | Sprint als RELEASED markiert | MAJOR |
+| Release Notes verlinkt | `RN-NNN` in REGISTRY-Eintrag | MAJOR |
+| `.phase` auf `RELEASED` gesetzt | Header prüfen | MAJOR |
+
+### Release-Checkliste (ORCH führt aus)
+
+```
+1. git checkout <merge-target-branch>       # gemäß ADR
+2. git merge --no-ff feature/<sprint>       # kein Fast-Forward für History
+3. git tag -a v<sprint> -m "Sprint N: <sprint-ziel>"
+4. git push origin <merge-target-branch> --tags
+5. .phase auf RELEASED setzen
+6. REGISTRY.md: Sprint-Status auf RELEASED + Datum
+```
+
+**Hinweis:** Cherry-Picking (selektive Commit-Übernahme) ist eine Ausnahme-Operation
+und erfordert explizite Nutzeranweisung mit Begründung — kein automatischer Schritt.
+
+**Bei PASS:** Sprint vollständig abgeschlossen (`RELEASED`)  
+**Bei FAIL (kein ADR):** Hard-Stop → `/architect` zur Branching-Entscheidung
+
+---
+
 ## Rollback-Regeln
 
 | Gate-Fehlschlag | Rollback-Ziel | Wer wird aktiviert |
@@ -251,10 +291,11 @@ Der Standard-Workflow für einen vollständigen Entwicklungssprint — von Disco
 
 ## Sprint-Abschluss-Checkliste
 
-Nach erfolgreichem Merge:
-- [ ] `.phase` auf `DONE` gesetzt
-- [ ] `REGISTRY.md` aktualisiert (Sprint als abgeschlossen)
+Nach erfolgreichem Release (Phase 10):
+- [ ] `.phase` auf `RELEASED` gesetzt
+- [ ] `REGISTRY.md` aktualisiert (Sprint als RELEASED markiert)
 - [ ] Technische Schulden in `DEBT-NNN` dokumentiert
 - [ ] Abgelöste Artefakte auf `SUPERSEDED` gesetzt
+- [ ] Release-Tag in Git gesetzt und gepusht
 - [ ] Nächster Sprint: `/refine` vorbereiten
 - [ ] Optional: `/retro` — Sprint-Retrospektive mit AC-Agent durchführen

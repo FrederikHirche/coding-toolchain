@@ -2,7 +2,7 @@
 
 Formale Verträge und Standards, die alle Agenten verbindlich einhalten.
 
-Letzte Aktualisierung: 2026-06-18
+Letzte Aktualisierung: 2026-06-19
 
 ## Inhalt
 
@@ -11,6 +11,7 @@ Letzte Aktualisierung: 2026-06-18
 | `handoff-protocol.md` | PROTO-HANDOFF | Standard-Format für Übergaben zwischen Agenten |
 | `gate-protocol.md` | PROTO-GATE | Qualitäts-Gate-Schweregrade, -Ausgabe und -Entscheidungslogik |
 | `artifact-lifecycle.md` | PROTO-LIFECYCLE | Artefakt-Statusübergänge, Versionierung, Archivierung |
+| `SECURITY-GUIDELINES.md` | PROTO-SECURITY | Vertrauensstufen, Umgang mit externen Inhalten und Agenten |
 
 ## Hierarchie
 

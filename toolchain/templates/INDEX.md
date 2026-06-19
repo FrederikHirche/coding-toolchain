@@ -21,6 +21,7 @@ Letzte Aktualisierung: 2026-06-18
 | `decisions.md` | `DECISIONS.md` | ORCH | Alle Phasen (fortlaufend) |
 | `retrospective.md` | `RETRO-NNN` | AC | Post-Sprint (optional) |
 | `process-change.md` | `PC-NNN` | AC | Post-Sprint (optional) |
+| `branching-strategy.md` | `ADR-NNN` | AR | Architecture (einmalig pro Projekt) |
 
 ## Verwendung
 

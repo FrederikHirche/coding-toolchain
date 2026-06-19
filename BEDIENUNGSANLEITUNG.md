@@ -84,6 +84,7 @@ Phase 7 → /test-plan   QA Engineer        Testplan
           /test-run                        Testergebnisse
 Phase 8 → /review      Code Reviewer      Review-Bericht + Merge-Entscheidung
 Phase 9 → /manual      Manual Writer      Feature-Guides + Release Notes
+Phase 10→ (ORCH)       Orchestrator       Release: merge, tag, push (kein eigener Command)
 
 Optional (Post-Sprint):
         → /retro       Agile Coach        Sprint-Retrospektive
@@ -281,6 +282,23 @@ Der Agile Coach diagnostiziert das konkrete Problem, liest gezielt die relevante
 
 ---
 
+### Externe Inhalte sicher integrieren
+
+Kein Agent prüft externe Inhalte (StackOverflow, GitHub-Snippets, externe Skills) auf
+Prompt-Injection oder Schadcode — das ist technisch nicht zuverlässig lösbar. Stattdessen
+gibt es klare Vertrauensstufen und Handlungsregeln:
+
+| Vertrauensstufe | Quelltyp | Behandlung |
+|---|---|---|
+| TRUSTED | Eigene Repositories | Direkte Integration |
+| REVIEW | Bekannte Open-Source-Projekte | Code-Review durch RV-Agent |
+| CAUTION | StackOverflow, Tutorials, LLM-Code | Manuell verstehen, nicht blind einfügen |
+| REJECT | Unbekannte Quellen, unbekannte Agenten | Nicht ohne explizite Nutzerfreigabe |
+
+Vollständige Regeln: `toolchain/protocols/SECURITY-GUIDELINES.md`
+
+---
+
 ### Technologiefrage klären: `/spike`
 
 Wenn vor einer Architekturentscheidung erst etwas ausprobiert werden muss:
@@ -314,7 +332,8 @@ Alle erzeugten Dateien folgen einer einheitlichen Benennung:
 | Getting Started | `GS-NNN` | `GS-001.md` | MW |
 | Entscheidungsprotokoll | `DECISIONS.md` | `DECISIONS.md` | Alle Agenten |
 | Sprint-Retrospektive | `RETRO-NNN` | `RETRO-001-sprint1.md` | AC |
-| Process Change Proposal | `PC-NNN` | `PC-001-gate-reform.md` | AC |
+| Metriken-Report | `METRICS-NNN` | `METRICS-001-q2.md` | AC |
+| Impediment-Eintrag | `IMPD-NNN` | `IMPD-001-tsc-fehlt.md` | AC |
 
 ### Artefakt-Status
 
@@ -451,9 +470,10 @@ Ja — sie ist bewusst technologieneutral. Der Architect-Agent entscheidet beim 
 | `/test-run` | Phase 7b: Tests ausführen |
 | `/review` | Phase 8: Code Review |
 | `/manual` | Phase 9: Nutzer-Dokumentation |
-| `/retro [projekt] [nr]` | Post-Sprint: Retrospektive (AC) |
-| `/health-check [projekt]` | Post-Sprint: Übergreifende Prozessanalyse (AC, ab Sprint 4) |
-| `/coach [projekt] [problem]` | Ad-hoc: Sofortige Prozessberatung (AC, jederzeit) |
+| `/retro [projekt] [nr]` | Post-Sprint: Retrospektive (AC) → `RETRO-NNN` |
+| `/health-check [projekt]` | Post-Sprint: Metriken-Analyse (AC, ab Sprint 3) → `METRICS-NNN` |
+| `/coach [projekt] "[problem]"` | Ad-hoc: Sofortige Prozessberatung (AC, jederzeit) → `IMPD-NNN` |
+| `/agile-coach retro\|metrics\|impediment` | Umbrella-Command für alle AC-Modi |
 
 ---
 
@@ -469,4 +489,4 @@ Ja — sie ist bewusst technologieneutral. Der Architect-Agent entscheidet beim 
 
 ---
 
-*Letzte Aktualisierung: 2026-06-19 — Tool Chain v1.2 (+ AC: /retro, /health-check, /coach)*
+*Letzte Aktualisierung: 2026-06-19 — Tool Chain v1.2 (AC implementiert: /retro, /health-check, /coach, /agile-coach — RETRO-NNN, METRICS-NNN, IMPD-NNN)*
