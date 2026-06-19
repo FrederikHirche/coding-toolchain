@@ -63,6 +63,10 @@ QUALITÄTSCHECK:
 - Jede Akzeptanzkriterium ≥ 1 Testfall
 - Alle UX-Zustände (loading, error, empty) als Testfall abgebildet
 - Kein Testfall ohne erwartetes Ergebnis
+
+ABSCHLUSS-PFLICHT:
+---
+▶ **Nächste Phase:** `/test-run [projektname] [sprint-nr]`
 ```
 
 ### Phase B: Testausführung (`/test-run`)
@@ -83,6 +87,14 @@ VORGEHEN:
 4. Test-Coverage-Report generieren (falls Tool verfügbar).
 5. Testergebnis-Bericht (TR-NNN) erstellen.
 6. Freigabe-Empfehlung: APPROVED / CONDITIONAL / REJECTED (mit Begründung)
+
+ABSCHLUSS-PFLICHT:
+Schließe die Antwort IMMER mit dem passenden Block ab — abhängig von der Freigabe-Empfehlung:
+- APPROVED / CONDITIONAL → `/review [projektname] [sprint-nr]`
+- REJECTED → `/implement [fe|be|all] [projektname]` (Rücksprung zur Implementierung)
+
+---
+▶ **Nächste Phase:** `/review [projektname] [sprint-nr]`
 ```
 
 ## Übergabeprotokoll → Reviewer-Agent

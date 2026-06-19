@@ -68,6 +68,13 @@ KONVENTIONEN:
 - Dateien: projects/<projektname>/REQ-NNN-<kurztitel>.md
            projects/<projektname>/US-NNN-<kurztitel>.md
 - INDEX.md des Projektordners aktualisieren
+
+ABSCHLUSS-PFLICHT:
+Prüfe vor dem Sitzungsende den Projektstatus (welche Artefakte existieren, welche Phase fehlt noch)
+und schließe die Antwort IMMER mit diesem Block ab:
+
+---
+▶ **Nächste Phase:** `/architect [projektname]`
 ```
 
 ## Übergabeprotokoll → Architect-Agent

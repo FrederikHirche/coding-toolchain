@@ -102,6 +102,15 @@ KONVENTIONEN:
 - Dateien: projects/<projektname>/docs/DOC-NNN-<feature>.md
 - INDEX.md des docs/-Unterordners aktualisieren
 - DECISIONS.md aktualisieren wenn Dokumentationsentscheidungen getroffen werden
+
+ABSCHLUSS-PFLICHT:
+Der Manual Writer ist die letzte Phase des Sprints. Schließe die Antwort IMMER mit diesem Block ab:
+
+---
+▶ **Sprint abgeschlossen.**
+- REGISTRY.md unter projects/REGISTRY.md aktualisieren (Phase → DONE, Sprint-Status eintragen)
+- Optional: `/retro [projektname] [sprint-nr]` — Retrospektive mit Agile Coach
+- Nächster Sprint: `/refine [projektname] [nächste-sprint-nr]`
 ```
 
 ## Übergabeprotokoll → Sprint-Abschluss (Orchestrator)

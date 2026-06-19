@@ -82,7 +82,8 @@ Alle Agenten erben die Basisregeln aus `toolchain/agents/_base-agent.md`.
 |---------|-------------|
 | `/retro [projekt] [nr]` | Sprint-Retrospektive — Keep/Stop/Start, Prozessanalyse |
 | `/health-check [projekt]` | Übergreifende Analyse nach 3+ Sprints |
-| `/coach [projekt]` | Ad-hoc Prozessberatung bei spürbarem Widerstand |
+| `/coach [projekt]` | Ad-hoc Prozessberatung wenn Problem bereits bekannt |
+| `/impediment [projekt]` | Interview-geführte Impediment-Erkennung bei unbenannter Friction |
 
 ---
 
@@ -140,6 +141,7 @@ TODO-FORMAT:
 | Getting Started | `GS-NNN` | `GS-001.md` |
 | Entscheidungsprotokoll | `DECISIONS.md` | `DECISIONS.md` (pro Projekt) |
 | Sprint-Retrospektive | `RETRO-NNN` | `RETRO-001-sprint-1.md` |
+| Impediment | `IMPD-NNN` | `IMPD-001-handoff-luecke.md` |
 | Process Change Proposal | `PC-NNN` | `PC-001-gate-reform.md` |
 
 NNN = dreistellig, sequenziell pro Projekt.
@@ -175,6 +177,38 @@ Kein Agent schließt eine Session ohne diesen Block ab.
 Kein Template und kein Agent setzt eine Technologie voraus. Technologieentscheidungen
 werden projektspezifisch in `ADR-001-tech-stack.md` festgehalten und sind ab APPROVED
 für alle nachfolgenden Agenten verbindlich.
+
+---
+
+## Pflege-Pflichten (Tool Chain)
+
+Diese Regeln gelten immer dann, wenn Claude Änderungen an der Tool Chain selbst vornimmt
+(Commands, Agenten, Templates, Protokolle) — nicht bei projektspezifischen Artefakten.
+
+### Summary-Dateien aktuell halten
+
+Drei konsolidierte Dateien fassen die Tool Chain für NotebookLM-Analyse zusammen.
+**Bei jeder Änderung an Command-, Agenten- oder Template-Dateien muss die zugehörige
+Summary-Datei mitaktualisiert werden.**
+
+| Geänderte Datei liegt in | → Summary aktualisieren |
+|--------------------------|------------------------|
+| `.claude/commands/` | `.claude/commands/commands_summary.md` |
+| `toolchain/agents/` | `toolchain/agents/agents_summary.md` |
+| `toolchain/templates/` | `toolchain/templates/templates_summary.md` |
+
+### RELEASENOTES.md pflegen
+
+`RELEASENOTES.md` im Projekt-Root dokumentiert alle strukturellen Änderungen der Tool Chain.
+
+**Bei jeder Änderung an Commands, Agenten, Templates oder Protokollen:**
+1. Neue Version anlegen (Format: `v1.x — YYYY-MM-DD`) oder bestehende Tagesversion ergänzen
+2. Unter `### Neu`, `### Geändert` oder `### Behoben` eintragen
+3. Betroffene Dateien explizit nennen
+4. Auswirkung in einem Satz beschreiben
+
+**Versionierung:** Minor-Version (1.x) für jede inhaltliche Änderung. Major-Version (x.0)
+nur bei grundlegender Umstrukturierung der Tool Chain.
 
 ---
 
@@ -214,3 +248,7 @@ cp .toolchain.yml projects/<projektname>/.toolchain.yml
 | Architektur-Übersicht | `architecture.html` |
 | API &amp; Protokoll-Dokumentation | `api_documentation.html` |
 | Entscheidungsprotokoll-Template | `toolchain/templates/decisions.md` |
+| Tool-Chain-Änderungsprotokoll | `RELEASENOTES.md` |
+| Commands-Übersicht (konsolidiert) | `.claude/commands/commands_summary.md` |
+| Agenten-Übersicht (konsolidiert) | `toolchain/agents/agents_summary.md` |
+| Templates-Übersicht (konsolidiert) | `toolchain/templates/templates_summary.md` |

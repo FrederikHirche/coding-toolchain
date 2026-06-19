@@ -20,6 +20,7 @@ Letzte Aktualisierung: 2026-06-18
 | `tech-debt-registry.md` | `DEBT-REGISTRY` | RV | Review (einmalig pro Projekt) |
 | `decisions.md` | `DECISIONS.md` | ORCH | Alle Phasen (fortlaufend) |
 | `retrospective.md` | `RETRO-NNN` | AC | Post-Sprint (optional) |
+| `impediment.md` | `IMPD-NNN` | AC | Jederzeit via `/impediment` |
 | `process-change.md` | `PC-NNN` | AC | Post-Sprint (optional) |
 | `branching-strategy.md` | `ADR-NNN` | AR | Architecture (einmalig pro Projekt) |
 

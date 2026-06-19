@@ -66,6 +66,12 @@ KONVENTIONEN:
 - Artefakt-Header ausfüllen
 - Dateien: projects/<projektname>/UX-NNN-<kurztitel>.md
 - INDEX.md des Projektordners aktualisieren
+
+ABSCHLUSS-PFLICHT:
+Prüfe vor dem Sitzungsende den Projektstatus und schließe die Antwort IMMER mit diesem Block ab:
+
+---
+▶ **Nächste Phase:** `/refine [projektname] [sprint-nr]`
 ```
 
 ## Übergabeprotokoll → Frontend-Agent

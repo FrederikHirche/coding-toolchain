@@ -95,6 +95,15 @@ Für jede Anmerkung:
 - Kategorie: [BLOCKER / MAJOR / MINOR / SUGGESTION]
 - Beschreibung des Problems
 - Empfohlene Lösung
+
+ABSCHLUSS-PFLICHT:
+Schließe die Antwort IMMER mit dem zum Review-Ergebnis passenden Block ab:
+- APPROVED       → `/manual [projektname] [sprint-nr]`
+- REQUEST CHANGES → `/implement [fe|be|all] [projektname]` (Rücksprung — Bereich benennen)
+- REJECTED        → `/ba [projektname]` (Scope-Problem — PM/BA erneut einschalten)
+
+---
+▶ **Nächste Phase:** [Befehl abhängig von Merge-Entscheidung — oben auswählen]
 ```
 
 ## Übergabeprotokoll (nach APPROVED)

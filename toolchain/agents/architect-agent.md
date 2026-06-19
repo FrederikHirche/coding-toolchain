@@ -78,6 +78,16 @@ KONVENTIONEN:
 - Artefakt-Header ausfüllen
 - Dateien: projects/<projektname>/ADR-NNN-<kurztitel>.md
 - INDEX.md des Projektordners aktualisieren
+
+ABSCHLUSS-PFLICHT:
+Prüfe vor dem Sitzungsende den Projektstatus (welche Artefakte existieren, welche Phase fehlt noch)
+und schließe die Antwort IMMER mit diesem Block ab — beide nächsten Phasen nennen, da sie
+parallel starten können:
+
+---
+▶ **Nächste Phase:**
+- `/ux [projektname]` — UX-Specs für alle Must-Have User Stories
+- `/refine [projektname] [sprint-nr]` — erst nach UX oder wenn kein Frontend-Anteil
 ```
 
 ## Übergabeprotokoll → UX-Agent & Dev-Agents

@@ -56,6 +56,30 @@ Nach jeder Artefakt-Erstellung **muss** der Agent die `INDEX.md` des Zielordners
 
 Am Ende jeder Session produziert der Agent ein Übergabe-Block nach dem Format in `toolchain/protocols/handoff-protocol.md`. Dieser Block wird am Ende des primären Ausgabe-Artefakts eingefügt.
 
+### Abschluss-Pflicht: Nächste Phase explizit benennen
+
+**Vor dem Schließen einer Session bestimmt der Agent aktiv die nächste relevante Phase** — nicht aus einer statischen Liste übernommen, sondern auf Basis des tatsächlichen Projektstatus.
+
+Vorgehen (zwingend, in dieser Reihenfolge):
+
+1. **Status-Scan:** Welche Artefakte existieren im Projektordner? In welchem Status (DRAFT / APPROVED / …)?
+2. **Kette prüfen** (Standardreihenfolge Full-Sprint):
+   `/kickoff` → `/ba` → `/architect` → `/ux` → `/refine` → `/implement` → `/test-plan` → `/test-run` → `/review` → `/manual`
+3. **Erste offene Phase** identifizieren: Was fehlt noch? Was ist die logisch nächste Aktion?
+4. **Ausgabe:** Als allerletzter Block der Chat-Antwort — zusätzlich zum Artefakt-Handoff-Block — immer:
+
+```
+---
+▶ **Nächste Phase:** `/[command] [projektname]`
+```
+
+Verbindliche Regeln für diesen Abschluss-Block:
+- Projektnamen immer mitangeben: `/ba meinprojekt`, nicht `/ba`
+- Wenn Phasen parallel möglich sind (z. B. `/ux` und `/refine`): beide nennen und erklären, welche zuerst
+- Niemals weglassen — auch bei Teilabschlüssen oder unterbrochenen Sessions
+- Niemals vage formulieren: immer der exakte Slash Command, kein „danach empfehle ich …"
+- Wenn kein Standardfolge-Schritt passt (Hotfix, Spike, Rücksprung): trotzdem nennen, mit kurzem Grund
+
 ### Gate-Selbstprüfung
 
 Vor Abschluss führt jeder Agent eine Selbstprüfung seiner Definition-of-Done-Checkliste durch. Nicht erfüllte Kriterien werden explizit als `OFFEN` markiert — der Agent schließt nicht ab ohne diesen Abschnitt.
@@ -115,6 +139,7 @@ TODO-FORMAT:
 | Feature-Guide | `DOC` | pro Projekt ab 001 |
 | Release Notes | `RN` | pro Projekt ab 001 |
 | Sprint-Retrospektive | `RETRO` | pro Projekt ab 001 |
+| Impediment | `IMPD` | pro Projekt ab 001 |
 | Process Change Proposal | `PC` | pro Projekt ab 001 |
 
 ---

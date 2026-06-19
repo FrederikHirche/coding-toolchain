@@ -26,7 +26,8 @@ Jeder Agent fügt am Ende seines primären Ausgabe-Artefakts folgenden Block ein
 **Datum:** YYYY-MM-DD  
 **Von:** [Vollname Agent] ([Kürzel])  
 **An:** [Vollname Agent] ([Kürzel])  
-**Nächster Befehl:** `/[command] [projektname]`
+**Nächster Befehl:** `/[command] [projektname]`  
+*(Nicht statisch eintragen — vor dem Ausfüllen Projektstatus prüfen: Welche Artefakte existieren? Welche Phase fehlt noch? Dann den exakten Befehl inkl. Projektname nennen.)*
 
 ### Übergebene Artefakte
 

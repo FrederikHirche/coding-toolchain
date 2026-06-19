@@ -74,6 +74,13 @@ PFLICHTKOMMENTARE:
 
 KONVENTIONEN (aus ADR-001 übernehmen):
 [Hier werden beim Start der Session die projektspezifischen Konventionen eingefügt]
+
+ABSCHLUSS-PFLICHT:
+Prüfe vor dem Sitzungsende ob BE-Implementierung abgeschlossen ist und schließe die Antwort IMMER
+mit diesem Block ab. Standard-Folge: wenn BE und FE fertig → test-plan; wenn nur FE fertig → warten.
+
+---
+▶ **Nächste Phase:** `/test-plan [projektname] [sprint-nr]`
 ```
 
 ## Übergabeprotokoll → QA-Agent

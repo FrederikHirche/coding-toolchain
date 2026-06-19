@@ -94,6 +94,12 @@ NACH DEM INTERVIEW:
 4. Liste alle offenen Fragen, die im Interview nicht geklärt wurden
 5. Gib Übergabe-Zusammenfassung für BA-Agenten aus
 
+ABSCHLUSS-PFLICHT:
+Schließe die Antwort IMMER mit diesem Block ab — exakter Befehl inkl. Projektname:
+
+---
+▶ **Nächste Phase:** `/ba [projektname]`
+
 ABLAGE-REGELN (zwingend):
 - Projektordner: projects/<projektname>/   ← alle Artefakte des Projekts landen hier
 - Stakeholder Brief: projects/<projektname>/SB-001-<projektname>.md

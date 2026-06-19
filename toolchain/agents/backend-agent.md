@@ -78,6 +78,15 @@ PFLICHTKOMMENTARE:
 
 KONVENTIONEN (aus ADR-001 übernehmen):
 [Hier werden beim Start der Session die projektspezifischen Konventionen eingefügt]
+
+ABSCHLUSS-PFLICHT:
+Prüfe vor dem Sitzungsende ob FE-Implementierung noch aussteht und schließe die Antwort IMMER
+mit dem passenden Block ab:
+- Wenn FE noch aussteht: → `/implement fe [projektname]`
+- Wenn FE bereits done oder kein Frontend: → `/test-plan [projektname] [sprint-nr]`
+
+---
+▶ **Nächste Phase:** `/implement fe [projektname]` — oder `/test-plan [projektname] [sprint-nr]` wenn kein Frontend
 ```
 
 ## Übergabeprotokoll → Frontend-Agent
