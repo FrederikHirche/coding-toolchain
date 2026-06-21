@@ -18,7 +18,7 @@ Alle Agenten erben die Basisregeln aus `_base-agent.md`. Diese Basisregeln defin
 - die Gate-Selbstprüfung (Definition-of-Done-Checkliste vor Abschluss)
 - das Rückfragen-Protokoll (offene Fragen strukturiert auflisten statt raten)
 
-Kein Agent setzt eine Technologie voraus — alle Entscheidungen werden in `ADR-001-tech-stack.md`
+Kein Agent setzt eine Technologie voraus — alle Entscheidungen werden in `ADR-000001-tech-stack.md`
 dokumentiert und sind ab APPROVED verbindlich für alle nachfolgenden Agenten.
 
 ---
@@ -40,7 +40,7 @@ Agent als nächstes aktiv wird.
   Aktiviert jeden Agenten, prüft Gates, stoppt bei BLOCKER und wartet auf Nutzer-Entscheidung.
 
 **Eskalationslogik:** BLOCKER → Stop. MAJOR → Warnung + Nutzer-Bestätigung. MINOR → als TODO
-in nächste Phase übernehmen. ADR-001 fehlt bei Implementierung → Hard-Stop zu `/architect`.
+in nächste Phase übernehmen. ADR-000001 fehlt bei Implementierung → Hard-Stop zu `/architect`.
 
 ---
 
@@ -49,7 +49,7 @@ in nächste Phase übernehmen. ADR-001 fehlt bei Implementierung → Hard-Stop z
 **Datei:** `pm-agent.md`  
 **Kürzel:** PM  
 **Aktiviert durch:** `/kickoff`  
-**Primäres Artefakt:** `SB-NNN` (Stakeholder Brief)
+**Primäres Artefakt:** `SB-NNNNNN` (Stakeholder Brief)
 
 Der PM-Agent ist der erste Kontaktpunkt der Tool Chain. Er führt Stakeholder-Interviews durch
 und übersetzt Geschäftsziele in strukturierte Anforderungsdokumente.
@@ -69,7 +69,7 @@ Top-3-Risiken benennen, alle offenen Fragen protokollieren.
 **Datei:** `ba-agent.md`  
 **Kürzel:** BA  
 **Aktiviert durch:** `/ba`, `/refine`  
-**Primäre Artefakte:** `REQ-NNN` (Requirements), `US-NNN` (User Stories)
+**Primäre Artefakte:** `REQ-NNNNNN` (Requirements), `US-NNNNNN` (User Stories)
 
 Der BA-Agent übersetzt den Stakeholder Brief in entwicklungsfähige Anforderungen. Er ist die
 Brücke zwischen fachlicher Vision und technischer Umsetzung.
@@ -91,12 +91,12 @@ Priorisierungsreihenfolge weiter.
 **Datei:** `architect-agent.md`  
 **Kürzel:** AR  
 **Aktiviert durch:** `/architect`, `/spike`  
-**Primäre Artefakte:** `ADR-NNN` (Architecture Decision Records), `STRUCTURE.md`
+**Primäre Artefakte:** `ADR-NNNNNN` (Architecture Decision Records), `STRUCTURE.md`
 
 Der Architect-Agent definiert die technische Grundlage. Alle seine Entscheidungen werden
 als ADRs dokumentiert — mit Begründung und explizit genannten verworfenen Alternativen.
 
-**Kernaufgaben:** Tech-Stack-Entscheidung (ADR-001) treffen, weitere ADRs für jede wesentliche
+**Kernaufgaben:** Tech-Stack-Entscheidung (ADR-000001) treffen, weitere ADRs für jede wesentliche
 Einzelentscheidung schreiben (Faustregel: wenn die Alternative ernsthaft diskutiert wurde →
 ADR schreiben), Systemdesign als ASCII- oder Mermaid-Diagramm, Projektstruktur (STRUCTURE.md).
 
@@ -113,7 +113,7 @@ Projektstruktur weiter.
 **Datei:** `ux-agent.md`  
 **Kürzel:** UX  
 **Aktiviert durch:** `/ux`  
-**Primäres Artefakt:** `UX-NNN` (UX-Spec)
+**Primäres Artefakt:** `UX-NNNNNN` (UX-Spec)
 
 Der UX-Agent gestaltet die Nutzererfahrung auf Basis der User Stories und technischen
 Constraints. Er produziert UX-Specs, die dem Frontend-Agenten als verbindliche Grundlage
@@ -139,7 +139,7 @@ Accessibility-Level weiter.
 **Output:** Komponenten-Code + Unit-Tests
 
 Der Frontend-Agent implementiert die Benutzeroberfläche nach UX-Spec und den festgelegten
-Technologien aus ADR-001. Er arbeitet Bottom-Up: atomare Elemente zuerst, dann Moleküle,
+Technologien aus ADR-000001. Er arbeitet Bottom-Up: atomare Elemente zuerst, dann Moleküle,
 dann Seiten.
 
 **Kernaufgaben:** Für jede Komponente: Datei-Header (Artefakt-Referenz), vollständige
@@ -147,7 +147,7 @@ Typisierung (kein `any`), DocStrings für alle öffentlichen Funktionen, alle UI
 implementieren, Accessibility-Attribute (aria-*, role, tabIndex), Unit-Tests mit
 Happy Path + Error Case.
 
-**Pflichtkommentare im Code:** `// Implementiert: [US-NNN]` und `// Verwendet: [ADR-NNN]`
+**Pflichtkommentare im Code:** `// Implementiert: [US-NNNNNN]` und `// Verwendet: [ADR-NNNNNN]`
 
 **Übergabe an:** QA-Agent — gibt implementierte Stories, Komponenten-Übersicht, bekannte
 Einschränkungen und Test-Coverage-Stand weiter.
@@ -171,7 +171,7 @@ Business Logic (Services, Use Cases) → API-Layer (Controller, Resolver, Handle
 **Sicherheits-Checkliste (für jede Funktion):** Input-Validierung, parametrisierte Queries
 (SQL-Injection-Schutz), Auth-Check für geschützte Endpoints, keine Secrets in Logs.
 
-**Pflichtkommentare:** `// Implementiert: [US-NNN]`, `// Sicherheitshinweis: [...]`
+**Pflichtkommentare:** `// Implementiert: [US-NNNNNN]`, `// Sicherheitshinweis: [...]`
 
 **Übergabe an:** FE-Agent (API-Kontrakt) und QA-Agent (implementierte Stories, Migrationen,
 Umgebungsvariablen für Tests).
@@ -183,7 +183,7 @@ Umgebungsvariablen für Tests).
 **Datei:** `qa-agent.md`  
 **Kürzel:** QA  
 **Aktiviert durch:** `/test-plan`, `/test-run`  
-**Primäre Artefakte:** `TP-NNN`, `TR-NNN`, `BUG-NNN` — alle in `projects/<name>/testing/`
+**Primäre Artefakte:** `TP-NNNNNN`, `TR-NNNNNN`, `BUG-NNNNNN` — alle in `projects/<name>/testing/`
 
 Der QA-Agent sichert die Qualität auf zwei Ebenen: Testplan erstellen (Phase A) und
 Tests ausführen (Phase B).
@@ -196,7 +196,7 @@ Priorisierung in P0 (blocker), P1 (kritisch), P2 (normal). Enthält Playwright E
 **Phase B — Testausführung:** Unit → Integration → E2E (Playwright) ausführen.
 Playwright-spezifisch: `playwright.config.ts` prüfen, `npx playwright test --reporter=html`
 ausführen, HTML-Report nach `projects/<name>/testing/playwright-report/` ablegen.
-Fehler als BUG-NNN erfassen (inkl. Screenshot- und Trace-Pfad), Coverage-Report generieren,
+Fehler als BUG-NNNNNN erfassen (inkl. Screenshot- und Trace-Pfad), Coverage-Report generieren,
 Freigabe-Empfehlung (APPROVED / CONDITIONAL / REJECTED) dokumentieren.
 
 **Übergabe an:** Code Reviewer — gibt Testplan, Ergebnisse, Coverage, offene Bugs,
@@ -209,13 +209,13 @@ Playwright-Report-Pfad und Freigabe-Empfehlung weiter.
 **Datei:** `reviewer-agent.md`  
 **Kürzel:** RV  
 **Aktiviert durch:** `/review`  
-**Primäres Artefakt:** `RV-NNN` (in `projects/<name>/reviews/`)
+**Primäres Artefakt:** `RV-NNNNNN` (in `projects/<name>/reviews/`)
 
 Der Reviewer-Agent führt eine **zweistufige Abnahme** durch: erst Nutzerabnahme (Phase A),
 dann technisches Code Review (Phase B).
 
 **Phase A — Nutzerabnahme (2 Schritte):**
-1. Test-Guide erstellen: Nutzerfreundliche, nummerierte Schritte pro Feature aus US-NNN und TP-NNN.
+1. Test-Guide erstellen: Nutzerfreundliche, nummerierte Schritte pro Feature aus US-NNNNNN und TP-NNNNNN.
    Kein Tech-Jargon. Pausiert nach Präsentation — Nutzer testet eigenständig.
 2. Nutzer-Interview: Strukturierte Befragung pro Feature (funktioniert? unerwartetes Verhalten?
    UX-Eindruck? Änderungswünsche?). Ergibt Befund: ACCEPTED / CONDITIONAL / REJECTED.
@@ -230,7 +230,7 @@ dann technisches Code Review (Phase B).
 
 **Gesamtentscheidung** kombiniert Nutzer-Befund + technischen Review.
 REJECTED durch Nutzer überstimmt technisch APPROVED.
-Technische Schulden als DEBT-NNN in `projects/<name>/retros/` erfasst.
+Technische Schulden als DEBT-NNNNNN in `projects/<name>/retros/` erfasst.
 
 ---
 
@@ -239,7 +239,7 @@ Technische Schulden als DEBT-NNN in `projects/<name>/retros/` erfasst.
 **Datei:** `manual-writer-agent.md`  
 **Kürzel:** MW  
 **Aktiviert durch:** `/manual`  
-**Primäre Artefakte:** `DOC-NNN` (Feature-Guide), `RN-NNN` (Release Notes), `GS-001` (Getting Started)
+**Primäre Artefakte:** `DOC-NNNNNN` (Feature-Guide), `RN-NNNNNN` (Release Notes), `GS-000001` (Getting Started)
 
 Der Manual Writer schreibt ausschließlich für menschliche Endnutzer — nicht für Entwickler.
 Er tritt als letzte Phase eines Sprints in Aktion, nach erfolgreichem Code Review.
@@ -260,7 +260,7 @@ neuen Features, Getting-Started-Guide beim ersten Sprint. Screenshot-Platzhalter
 **Datei:** `agile-coach-agent.md`  
 **Kürzel:** AC  
 **Aktiviert durch:** `/retro`, `/health-check`, `/coach`, `/impediment`  
-**Primäre Artefakte:** `RETRO-NNN`, `IMPD-NNN`, `PC-NNN`
+**Primäre Artefakte:** `RETRO-NNNNNN`, `IMPD-NNNNNN`, `PC-NNNNNN`
 
 Der Agile Coach ist der einzige Agent, der den **Prozess selbst** hinterfragt — nicht die
 Inhalte. Er hat keine fachliche Meinung, analysiert aber wie die Tool Chain arbeitet.
@@ -274,7 +274,7 @@ Inhalte. Er hat keine fachliche Meinung, analysiert aber wie die Tool Chain arbe
   handlungsorientierte Empfehlung mit Dateireferenz.
 - `/impediment`: Nutzer spürt Friction, kann sie aber noch nicht benennen. Führt
   5–6-Fragen-Interview durch (Symptom → Frequenz → Auswirkung → Umgehungen → Ziel),
-  dann Diagnose und Impediment-Dokument (IMPD-NNN).
+  dann Diagnose und Impediment-Dokument (IMPD-NNNNNN).
 
 **Haltung:** Kein Dogmatismus — Prozesse dienen Menschen, nicht umgekehrt. Die beste
 Verbesserung ist die, die tatsächlich umgesetzt wird.

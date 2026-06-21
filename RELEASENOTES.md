@@ -1,11 +1,24 @@
 # Release Notes — AI Development Tool Chain
 
 Änderungsprotokoll der Tool Chain selbst (nicht projektspezifischer Artefakte).  
-Projektspezifische Release Notes werden als `RN-NNN` in `projects/<name>/docs/` abgelegt.
+Projektspezifische Release Notes werden als `RN-NNNNNN` in `projects/<name>/docs/` abgelegt.
 
 **Pflege-Regel:** Jede strukturelle Änderung an Commands, Agenten, Templates oder Protokollen
 wird hier als neuer Eintrag dokumentiert — mit Datum, beteiligten Dateien und Auswirkung.
 Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain-Änderungen.
+
+---
+
+## v1.3 — 2026-06-21
+
+### Geändert
+
+**Artefakt-Nomenklatur: NNN → NNNNNN (drei → sechs Stellen)**
+- Alle Artefakt-IDs und Dateinamen-Platzhalter verwenden ab sofort sechs Stellen: `NNNNNN`
+- Beispiele: `SB-000001-projektname.md`, `US-000042-login.md`, `ADR-000001-tech-stack.md`
+- `NNN = sechsstellig, sequenziell pro Projekt` (war: dreistellig)
+- 58 Dateien aktualisiert: alle Agenten, Templates, Commands, Protokolle, Summary-Dateien
+- Betroffen: gesamte `toolchain/`, `.claude/commands/`, `CLAUDE.md`
 
 ---
 
@@ -24,7 +37,7 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 - Drei Phasen statt einer: (1) Test-Guide erstellen & präsentieren, (2) Nutzer-Interview,
   (3) technisches Code Review
 - Phase 1: RV-Agent erstellt nutzerfreundlichen Test-Guide (klare Schritte, kein Jargon)
-  aus US-NNN und TP-NNN — pausiert danach und wartet auf Nutzer
+  aus US-NNNNNN und TP-NNNNNN — pausiert danach und wartet auf Nutzer
 - Phase 2: Strukturiertes Interview zu jedem Feature — Befund: ACCEPTED / CONDITIONAL / REJECTED
 - Phase 3: Technisches Review unverändert (6 Dimensionen)
 - Gesamtentscheidung kombiniert Nutzer-Befund und technischen Review —
@@ -53,7 +66,7 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 - Neuer Slash Command für den Agile Coach (AC)
 - Unterschied zu `/coach`: Kein formuliertes Problem nötig — AC führt strukturiertes
   5–6-Fragen-Interview durch (Symptom → Frequenz → Auswirkung → Umgehungen → Ziel)
-- Neues Artefakt `IMPD-NNN` mit eigenem Template (`toolchain/templates/impediment.md`)
+- Neues Artefakt `IMPD-NNNNNN` mit eigenem Template (`toolchain/templates/impediment.md`)
 - Betroffen: `.claude/commands/impediment.md` (neu), `toolchain/agents/agile-coach-agent.md`,
   `toolchain/templates/impediment.md` (neu), `CLAUDE.md`, `toolchain/templates/INDEX.md`,
   `toolchain/agents/_base-agent.md`

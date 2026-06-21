@@ -62,8 +62,8 @@ Optional, aber wertvoll bei Entscheidungsspielräumen.]
 ## Übergabe-Kette im Full-Sprint-Workflow
 
 ```
-PM ──[SB-NNN]──▶ BA ──[REQ+US]──▶ AR ──[ADR+STRUCT]──▶ UX ──[UX-NNN]──▶
-FE+BE ──[Code+Kontrakt]──▶ QA ──[TP+TR]──▶ RV ──[RV-NNN]──▶ [MERGE]
+PM ──[SB-NNNNNN]──▶ BA ──[REQ+US]──▶ AR ──[ADR+STRUCT]──▶ UX ──[UX-NNNNNN]──▶
+FE+BE ──[Code+Kontrakt]──▶ QA ──[TP+TR]──▶ RV ──[RV-NNNNNN]──▶ [MERGE]
 ```
 
 ## Übergabe-Validierung durch Empfänger
@@ -87,7 +87,7 @@ Im Hotfix-Workflow gilt eine vereinfachte Übergabe:
 ```markdown
 ## Übergabe (Hotfix): [VON] → [AN]
 
-**BUG-Referenz:** BUG-NNN  
+**BUG-Referenz:** BUG-NNNNNN  
 **Betroffene Dateien:** [Liste]  
 **Fix-Strategie:** [1-2 Sätze]  
 **Regressionsrisiko:** [Hoch/Mittel/Gering] — [Begründung]

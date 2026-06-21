@@ -25,9 +25,9 @@ Der Backend-Agent implementiert die serverseitige Logik, Datenschicht und APIs. 
 
 | Quelle | Format | Beschreibung |
 |--------|--------|-------------|
-| BA-Agent | `US-NNN`, `REQ-NNN` | Fachliche Anforderungen, Akzeptanzkriterien |
+| BA-Agent | `US-NNNNNN`, `REQ-NNNNNN` | Fachliche Anforderungen, Akzeptanzkriterien |
 | Architect-Agent | ADRs, `STRUCTURE.md` | Tech-Stack, DB-Schema-Strategie, Auth-Konzept |
-| PM-Agent | `SB-NNN` | Sicherheits- und Compliance-Anforderungen |
+| PM-Agent | `SB-NNNNNN` | Sicherheits- und Compliance-Anforderungen |
 
 ## Outputs
 
@@ -49,8 +49,8 @@ DEINE AUFGABE:
 Implementiere die Backend-Logik, APIs und Datenschicht gemäß Requirements und ADRs.
 
 VORGEHEN — API-FIRST:
-1. Lese ADR-001 (Tech-Stack) und STRUCTURE.md.
-2. Lese REQ-NNN und US-NNN für den aktuellen Sprint.
+1. Lese ADR-000001 (Tech-Stack) und STRUCTURE.md.
+2. Lese REQ-NNNNNN und US-NNNNNN für den aktuellen Sprint.
 3. ZUERST: API-Kontrakt erstellen (OpenAPI-YAML / GraphQL-Schema / ...).
    Keinen Code schreiben, bevor der Kontrakt definiert ist.
 4. Dann: Implementierung schichtenweise:
@@ -72,11 +72,11 @@ SICHERHEITS-CHECKLISTE (vor Abschluss jeder Funktion prüfen):
 - Sensible Daten: Niemals in Logs, Responses nur was nötig ist
 
 PFLICHTKOMMENTARE:
-// Implementiert: [US-NNN] — [Kurztitel]
+// Implementiert: [US-NNNNNN] — [Kurztitel]
 // Sicherheitshinweis: [wenn sicherheitsrelevante Logik]
 // Performance: [wenn bewusste Optimierung oder bekannte Schwachstelle]
 
-KONVENTIONEN (aus ADR-001 übernehmen):
+KONVENTIONEN (aus ADR-000001 übernehmen):
 [Hier werden beim Start der Session die projektspezifischen Konventionen eingefügt]
 
 ABSCHLUSS-PFLICHT:
@@ -107,7 +107,7 @@ mit dem passenden Block ab:
 ```markdown
 ## Übergabe an QA-Agent
 
-- Implementierte Stories: [Liste US-NNN]
+- Implementierte Stories: [Liste US-NNNNNN]
 - API-Kontrakt: [Pfad]
 - DB-Migrationen: [Liste der Migrationen]
 - Bekannte Einschränkungen: [Was ist bewusst nicht implementiert?]

@@ -16,21 +16,21 @@ Aktiviert den **Agile Coach Agent (AC)** für eine strukturierte Sprint-Retrospe
    - `.phase` (Phasendauern, Blockaden)
    - `DECISIONS.md` (Entscheidungshistorie)
    - `INDEX.md` (Gate-Ergebnisse)
-   - Alle `RV-NNN`, `TR-NNN`, `BUG-NNN`, `SP-NNN` des Sprints
+   - Alle `RV-NNNNNN`, `TR-NNNNNN`, `BUG-NNNNNN`, `SP-NNNNNN` des Sprints
 3. Analysiert den Sprint in 5 Dimensionen:
    - Prozess-Fluss (Phasen, Gates)
    - Artefakt-Qualität
    - Agenten-Performance & Übergaben
    - Entscheidungsqualität
    - Nutzer-Perspektive
-4. Erstellt RETRO-NNN mit Keep / Stop / Start
-5. Erstellt PC-NNN wenn strukturelle Tool-Chain-Änderung empfohlen wird
+4. Erstellt RETRO-NNNNNN mit Keep / Stop / Start
+5. Erstellt PC-NNNNNN wenn strukturelle Tool-Chain-Änderung empfohlen wird
 6. Aktualisiert INDEX.md
 
 ## Vorbedingungen
 
 - Sprint abgeschlossen (`.phase` auf `DONE`)
-- Mindestens `RV-NNN` und `TR-NNN` vorhanden
+- Mindestens `RV-NNNNNN` und `TR-NNNNNN` vorhanden
 
 ## Ergebnis
 
@@ -41,7 +41,7 @@ Aktiviert den **Agile Coach Agent (AC)** für eine strukturierte Sprint-Retrospe
 ---
 
 **Agent:** AC (Agile Coach)
-**Input:** `.phase`, `DECISIONS.md`, `RV-NNN`, `TR-NNN`, `BUG-NNN`, `SP-NNN`
-**Output:** `RETRO-NNN`, ggf. `PC-NNN`
+**Input:** `.phase`, `DECISIONS.md`, `RV-NNNNNN`, `TR-NNNNNN`, `BUG-NNNNNN`, `SP-NNNNNN`
+**Output:** `RETRO-NNNNNN`, ggf. `PC-NNNNNN`
 **Template:** `toolchain/templates/retrospective.md`
 **Agent-Definition:** `toolchain/agents/agile-coach-agent.md`

@@ -1,5 +1,5 @@
 ---
-id: RETRO-NNN
+id: RETRO-NNNNNN
 title: Sprint-Retrospektive — Sprint N — [Projekttitel]
 version: 1.0
 status: DRAFT
@@ -7,14 +7,14 @@ author-agent: AC (Agile Coach)
 date: YYYY-MM-DD
 project: [projektname]
 sprint: N
-based-on: [.phase, RV-NNN, TR-NNN, SP-NNN]
+based-on: [.phase, RV-NNNNNN, TR-NNNNNN, SP-NNNNNN]
 supersedes: —
 superseded-by: —
 ---
 
 # Sprint-Retrospektive: Sprint N — [Projekttitel]
 
-> **Ablage:** `projects/[projektname]/RETRO-NNN-sprint-N.md`
+> **Ablage:** `projects/[projektname]/RETRO-NNNNNN-sprint-N.md`
 
 ---
 
@@ -68,16 +68,16 @@ superseded-by: —
 
 | Artefakt | Qualitätsbewertung | Überarbeitungen | Auffälligkeit |
 |---|---|---|---|
-| SB-NNN | Gut / Mittel / Lückenhaft | N | [Was fehlte?] |
-| REQ-NNN | | | |
-| US-NNN | | | |
-| ADR-NNN | | | |
-| UX-NNN | | | |
-| SP-NNN | | | |
-| TP-NNN | | | |
-| TR-NNN | | | |
-| RV-NNN | | | |
-| DOC-NNN | | | |
+| SB-NNNNNN | Gut / Mittel / Lückenhaft | N | [Was fehlte?] |
+| REQ-NNNNNN | | | |
+| US-NNNNNN | | | |
+| ADR-NNNNNN | | | |
+| UX-NNNNNN | | | |
+| SP-NNNNNN | | | |
+| TP-NNNNNN | | | |
+| TR-NNNNNN | | | |
+| RV-NNNNNN | | | |
+| DOC-NNNNNN | | | |
 
 **Wiederholt lückenhafte Artefaktbereiche:**
 - [Bereich 1: Was fehlt strukturell?]
@@ -107,10 +107,10 @@ superseded-by: —
 ## 4. Entscheidungsqualität
 
 **Entscheidungen die sich als richtig erwiesen haben:**
-- [DEC-NNN: Begründung warum gut]
+- [DEC-NNNNNN: Begründung warum gut]
 
 **Entscheidungen die überarbeitet oder bereut wurden:**
-- [DEC-NNN: Was war das Problem? Was hätten wir anders entschieden?]
+- [DEC-NNNNNN: Was war das Problem? Was hätten wir anders entschieden?]
 
 **Entscheidungen die zu spät getroffen wurden:**
 - [Was hat geblockt, weil eine Entscheidung fehlte?]
@@ -183,11 +183,11 @@ superseded-by: —
 
 | PC-ID | Titel | Priorität | Status |
 |---|---|---|---|
-| PC-NNN | [Titel] | Hoch / Mittel / Gering | EMPFOHLEN |
+| PC-NNNNNN | [Titel] | Hoch / Mittel / Gering | EMPFOHLEN |
 
-*(Vollständige PC-NNN Dokumente liegen unter `projects/<projektname>/PC-NNN-*.md`)*
+*(Vollständige PC-NNNNNN Dokumente liegen unter `projects/<projektname>/PC-NNNNNN-*.md`)*
 
 ---
 
 *Erstellt von: AC-Agent | Datum: YYYY-MM-DD | Sprint: N*
-*Ablage: projects/[projektname]/RETRO-NNN-sprint-N.md*
+*Ablage: projects/[projektname]/RETRO-NNNNNN-sprint-N.md*

@@ -58,11 +58,11 @@ Jede Version-Erhöhung erhöht die Version im YAML-Header und fügt einen Eintra
 Wenn ein Artefakt durch eine neue Version ersetzt wird:
 
 ```markdown
-# Im ALTEN Artefakt (z. B. ADR-001):
-superseded-by: ADR-001-v2
+# Im ALTEN Artefakt (z. B. ADR-000001):
+superseded-by: ADR-000001-v2
 
 # Ganz oben im Dokument einfügen:
-> ⚠️ SUPERSEDED by ADR-001-v2 (2026-07-15) — Grund: Tech-Stack-Anpassung
+> ⚠️ SUPERSEDED by ADR-000001-v2 (2026-07-15) — Grund: Tech-Stack-Anpassung
 ```
 
 Das alte Artefakt wird auf Status `SUPERSEDED` gesetzt und **nicht** gelöscht.
@@ -94,10 +94,10 @@ Letzte Aktualisierung: YYYY-MM-DD | Phase: [Aktuelle Phase]
 
 | Datei | ID | Version | Status | Agent | Beschreibung |
 |-------|-----|---------|--------|-------|-------------|
-| `SB-001.md` | SB-001 | 1.0 | APPROVED | PM | Stakeholder Brief |
-| `REQ-001.md` | REQ-001 | 1.1 | APPROVED | BA | Requirements |
-| `ADR-001.md` | ADR-001 | 1.0 | APPROVED | AR | Tech Stack |
-| `US-001.md` | US-001 | 1.0 | APPROVED | BA | Login |
+| `SB-000001.md` | SB-000001 | 1.0 | APPROVED | PM | Stakeholder Brief |
+| `REQ-000001.md` | REQ-000001 | 1.1 | APPROVED | BA | Requirements |
+| `ADR-000001.md` | ADR-000001 | 1.0 | APPROVED | AR | Tech Stack |
+| `US-000001.md` | US-000001 | 1.0 | APPROVED | BA | Login |
 
 ## Gate-History
 
@@ -109,13 +109,13 @@ Letzte Aktualisierung: YYYY-MM-DD | Phase: [Aktuelle Phase]
 
 | Datei | ID | Status | Warten auf |
 |-------|-----|--------|-----------|
-| `ADR-002.md` | ADR-002 | DRAFT | AR-Freigabe |
+| `ADR-000002.md` | ADR-000002 | DRAFT | AR-Freigabe |
 
 ## Archiv
 
 | Datei | ID | Status | Archiviert |
 |-------|-----|--------|-----------|
-| `SB-001-v0.md` | SB-001-v0 | ARCHIVED | 2026-06-17 |
+| `SB-000001-v0.md` | SB-000001-v0 | ARCHIVED | 2026-06-17 |
 ```
 
 ## Referenz-Integrität

@@ -13,7 +13,7 @@ Der Architect-Agent definiert die technische Grundlage des Projekts. Er trifft T
 
 ## Kernverantwortlichkeiten
 
-- Tech-Stack-Entscheidung (`ADR-001`) auf Basis von Requirements und Constraints
+- Tech-Stack-Entscheidung (`ADR-000001`) auf Basis von Requirements und Constraints
 - Systemarchitektur entwerfen (Komponenten, Schnittstellen, Datenflusse)
 - ADRs für alle wesentlichen Architekturentscheidungen erstellen
 - Sicherheits- und Skalierungskonzept definieren
@@ -24,17 +24,17 @@ Der Architect-Agent definiert die technische Grundlage des Projekts. Er trifft T
 
 | Quelle | Format | Beschreibung |
 |--------|--------|-------------|
-| BA-Agent | `REQ-NNN`, `US-NNN` | Funktionale + nicht-funktionale Anforderungen |
-| PM-Agent | `SB-NNN` | Constraints, Stakeholder-Erwartungen |
+| BA-Agent | `REQ-NNNNNN`, `US-NNNNNN` | Funktionale + nicht-funktionale Anforderungen |
+| PM-Agent | `SB-NNNNNN` | Constraints, Stakeholder-Erwartungen |
 | Bestandssysteme | beliebig | Integrations-Constraints, vorhandene Infra |
 
 ## Outputs
 
 | Artefakt | Präfix | Template |
 |----------|--------|---------|
-| Tech-Stack-ADR | `ADR-001` | `toolchain/templates/architecture-decision.md` |
-| Weitere ADRs | `ADR-NNN` | `toolchain/templates/architecture-decision.md` |
-| System-Design-Dokument | (Teil von ADR-001 oder separates Dok) | — |
+| Tech-Stack-ADR | `ADR-000001` | `toolchain/templates/architecture-decision.md` |
+| Weitere ADRs | `ADR-NNNNNN` | `toolchain/templates/architecture-decision.md` |
+| System-Design-Dokument | (Teil von ADR-000001 oder separates Dok) | — |
 | Projektstruktur-Vorlage | `STRUCTURE.md` | — |
 
 ## System-Prompt-Template
@@ -58,7 +58,7 @@ VORGEHEN:
    - Hosting/Deployment-Modell
    - Authentifizierung/Autorisierung
    - Observability (Logging, Monitoring, Tracing)
-3. Erstelle ADR-001 für den Tech-Stack mit dem Template toolchain/templates/architecture-decision.md.
+3. Erstelle ADR-000001 für den Tech-Stack mit dem Template toolchain/templates/architecture-decision.md.
 4. Erstelle je einen weiteren ADR für jede wesentliche Einzelentscheidung
    (Faustregel: wenn die Alternative ernsthaft diskutiert wurde → ADR schreiben).
 5. Zeichne das Systemdesign als ASCII-Diagramm oder Mermaid-Diagram im System-Design-Dok.
@@ -72,11 +72,11 @@ PRINZIPIEN:
 QUALITÄTSCHECK:
 - Keine verwaiste Anforderung: Jede nicht-funktionale Anforderung aus REQ muss in
   mindestens einem ADR adressiert sein.
-- ADR-001 muss den vollständigen Tech-Stack abdecken.
+- ADR-000001 muss den vollständigen Tech-Stack abdecken.
 
 KONVENTIONEN:
 - Artefakt-Header ausfüllen
-- Dateien: projects/<projektname>/ADR-NNN-<kurztitel>.md
+- Dateien: projects/<projektname>/ADR-NNNNNN-<kurztitel>.md
 - INDEX.md des Projektordners aktualisieren
 
 ABSCHLUSS-PFLICHT:
@@ -101,7 +101,7 @@ parallel starten können:
 
 ## Übergabe an Dev-Agents
 
-- ADR-001: [Pfad — verbindlicher Tech-Stack]
+- ADR-000001: [Pfad — verbindlicher Tech-Stack]
 - Alle ADRs: [Liste]
 - STRUCTURE.md: [Pfad — verbindliche Projektstruktur]
 - Coding-Standards: [Inline in STRUCTURE.md oder separates DOC]
@@ -109,7 +109,7 @@ parallel starten können:
 
 ## Qualitätskriterien (Definition of Done)
 
-- [ ] ADR-001 (Tech-Stack) vollständig und approved
+- [ ] ADR-000001 (Tech-Stack) vollständig und approved
 - [ ] Jede wesentliche Architekturentscheidung hat einen ADR
 - [ ] Jeder ADR dokumentiert Alternativen und Ablehnungsgründe
 - [ ] Systemdesign-Diagramm vorhanden

@@ -20,7 +20,7 @@ Kein abgeschlossener Sprint nötig — jederzeit aufrufbar bei konkretem Prozess
    - Spezifische Agenten-Dateien (wenn Rollen-Problem)
 3. Stellt Diagnose: Was ist die eigentliche Ursache?
 4. Gibt konkrete, handlungsorientierte Empfehlung mit Dateireferenz
-5. Erstellt PC-NNN wenn die Empfehlung eine Tool-Chain-Änderung bedeutet
+5. Erstellt PC-NNNNNN wenn die Empfehlung eine Tool-Chain-Änderung bedeutet
 
 ## Typische Anwendungsfälle
 
@@ -40,6 +40,6 @@ Kein abgeschlossener Sprint nötig — jederzeit aufrufbar bei konkretem Prozess
 
 **Agent:** AC (Agile Coach)
 **Input:** Nutzer-Beschreibung + situativ relevante Projektartefakte
-**Output:** Handlungsempfehlung (Text), ggf. `PC-NNN`
+**Output:** Handlungsempfehlung (Text), ggf. `PC-NNNNNN`
 **Template:** `toolchain/templates/process-change.md` (nur wenn PC nötig)
 **Agent-Definition:** `toolchain/agents/agile-coach-agent.md`

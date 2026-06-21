@@ -21,17 +21,17 @@ Einträge werden NIE gelöscht — nur auf `RESOLVED` gesetzt.
 
 | ID | Titel | Priorität | Kategorie | Sprint | Agent | Status |
 |----|-------|----------|----------|--------|-------|--------|
-| DEBT-001 | [Kurztitel] | Hoch | [Kategorie] | 1 | FE | OFFEN |
+| DEBT-000001 | [Kurztitel] | Hoch | [Kategorie] | 1 | FE | OFFEN |
 
 ---
 
 ## Schulden-Detail
 
-### DEBT-001: [Kurztitel]
+### DEBT-000001: [Kurztitel]
 
 **Priorität:** Hoch | Mittel | Gering  
 **Kategorie:** Architektur | Performance | Sicherheit | Tests | Wartbarkeit | Dokumentation  
-**Erkannt in:** Sprint NNN | Review RV-NNN  
+**Erkannt in:** Sprint NNNNNN | Review RV-NNNNNN  
 **Agent:** [Kürzel]  
 **Datum:** YYYY-MM-DD
 
@@ -40,7 +40,7 @@ Einträge werden NIE gelöscht — nur auf `RESOLVED` gesetzt.
 
 **Ursache:**  
 [Warum wurde die Schuld bewusst eingegangen?
-z. B. "Zeitdruck Sprint 1", "PoC-Code, der produktiv gegangen ist", "TODO aus ADR-003"]
+z. B. "Zeitdruck Sprint 1", "PoC-Code, der produktiv gegangen ist", "TODO aus ADR-000003"]
 
 **Auswirkung:**  
 [Was passiert, wenn die Schuld nicht behoben wird?
@@ -55,11 +55,11 @@ z. B. "Skaliert nicht über 1000 gleichzeitige Nutzer", "Erhöhte Fehlerrate bei
 **Aufwandsschätzung:** [S / M / L / XL]
 
 **Abhängigkeiten:**  
-- Muss vor DEBT-NNN behoben werden
-- Wird durch US-NNN automatisch adressiert
+- Muss vor DEBT-NNNNNN behoben werden
+- Wird durch US-NNNNNN automatisch adressiert
 
 **Status:** OFFEN | IN BEARBEITUNG | RESOLVED  
-**Resolved in:** Sprint NNN (wenn behoben)
+**Resolved in:** Sprint NNNNNN (wenn behoben)
 
 ---
 
@@ -88,9 +88,9 @@ z. B. "Skaliert nicht über 1000 gleichzeitige Nutzer", "Erhöhte Fehlerrate bei
 
 Top-3 Schulden die als nächstes angegangen werden sollten:
 
-1. **DEBT-NNN** — [Begründung: z. B. Sicherheitsrisiko, blockiert US-NNN]
-2. **DEBT-NNN** — [Begründung]
-3. **DEBT-NNN** — [Begründung]
+1. **DEBT-NNNNNN** — [Begründung: z. B. Sicherheitsrisiko, blockiert US-NNNNNN]
+2. **DEBT-NNNNNN** — [Begründung]
+3. **DEBT-NNNNNN** — [Begründung]
 
 ---
 

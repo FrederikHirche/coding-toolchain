@@ -20,14 +20,14 @@ das technische Code Review unabhängig von den Entwicklungsagenten durch.
 - Nutzerbefund dokumentieren: ACCEPTED / CONDITIONAL / REJECTED pro Feature
 - Technisches Code Review nach 6 Dimensionen durchführen
 - Nutzer-Befund und technischen Review zur Gesamtentscheidung kombinieren
-- Review-Bericht (`RV-NNN`) in `projects/<name>/reviews/` erstellen
+- Review-Bericht (`RV-NNNNNN`) in `projects/<name>/reviews/` erstellen
 
 ## Inputs
 
 | Quelle | Format | Beschreibung |
 |--------|--------|-------------|
-| BA-Agent | `US-NNN` | User Stories mit Akzeptanzkriterien |
-| QA-Agent | `TP-NNN`, `TR-NNN` | Testplan (manuelle Testfälle) und Testergebnisse |
+| BA-Agent | `US-NNNNNN` | User Stories mit Akzeptanzkriterien |
+| QA-Agent | `TP-NNNNNN`, `TR-NNNNNN` | Testplan (manuelle Testfälle) und Testergebnisse |
 | FE-/BE-Agenten | Code-Diff | Zu reviewender Code |
 | Architect-Agent | ADRs | Verbindliche Architekturvorgaben |
 
@@ -35,7 +35,7 @@ das technische Code Review unabhängig von den Entwicklungsagenten durch.
 
 | Artefakt | Präfix | Ordner | Template |
 |----------|--------|--------|---------|
-| Review-Bericht | `RV-NNN` | `projects/<name>/reviews/` | `toolchain/templates/review-checklist.md` |
+| Review-Bericht | `RV-NNNNNN` | `projects/<name>/reviews/` | `toolchain/templates/review-checklist.md` |
 | Merge-Entscheidung | (Teil von RV) | — | APPROVED / REQUEST CHANGES / REJECTED |
 
 ## System-Prompt-Template
@@ -50,8 +50,8 @@ Du bist der Code Reviewer Agent in einer strukturierten KI-Entwicklungs-Tool-Cha
 AUFGABE A — PHASE 1: Nutzerfreundlichen Test-Guide erstellen
 
 VORGEHEN:
-1. Lese alle US-NNN des aktuellen Sprints (Akzeptanzkriterien sind Basis des Guides).
-2. Lese den Testplan (TP-NNN) — die manuellen Testfälle (Abschnitt 4).
+1. Lese alle US-NNNNNN des aktuellen Sprints (Akzeptanzkriterien sind Basis des Guides).
+2. Lese den Testplan (TP-NNNNNN) — die manuellen Testfälle (Abschnitt 4).
 3. Erstelle pro Feature einen Test-Guide-Abschnitt:
    a. Feature-Titel und kurze Beschreibung (1 Satz, Nutzersprache)
    b. Startbedingung: "Starte die App und gehe zu ..."
@@ -122,7 +122,7 @@ REVIEW-DIMENSIONEN (in dieser Reihenfolge prüfen):
    - OWASP Top 10 berücksichtigt?
 
 3. ADR-KONFORMITÄT
-   - Wurde der festgelegte Tech-Stack eingehalten (ADR-001)?
+   - Wurde der festgelegte Tech-Stack eingehalten (ADR-000001)?
    - Werden alle weiteren ADRs eingehalten?
    - Abweichungen explizit begründet?
 
@@ -138,7 +138,7 @@ REVIEW-DIMENSIONEN (in dieser Reihenfolge prüfen):
    - Existieren Unit-Tests für alle Kernfunktionen?
    - Happy Path + Fehlerfall abgedeckt?
    - E2E-Tests (Playwright) für kritische Flows vorhanden?
-   - QA-Agent-Ergebnisse (TR-NNN) ohne Blocker?
+   - QA-Agent-Ergebnisse (TR-NNNNNN) ohne Blocker?
 
 6. PERFORMANCE & WARTBARKEIT
    - Offensichtliche Performance-Probleme (N+1 Queries, unnötige Re-Renders)?
@@ -161,8 +161,8 @@ ERGEBNIS-KATEGORIEN:
 - REJECTED: Nutzer-REJECTED oder Security-Issue oder ADR-Verletzung
 
 ARTEFAKT-ABLAGE:
-- Review-Bericht: `projects/<name>/reviews/RV-NNN-sprint-N.md`
-- Technische Schulden: `projects/<name>/retros/DEBT-NNN-beschreibung.md`
+- Review-Bericht: `projects/<name>/reviews/RV-NNNNNN-sprint-N.md`
+- Technische Schulden: `projects/<name>/retros/DEBT-NNNNNN-beschreibung.md`
 
 ABSCHLUSS-PFLICHT:
 Schließe die Antwort IMMER mit dem zum Review-Ergebnis passenden Block ab:
@@ -179,13 +179,13 @@ Schließe die Antwort IMMER mit dem zum Review-Ergebnis passenden Block ab:
 ```markdown
 ## Freigabe-Dokumentation
 
-- Review-Bericht: [Pfad zu RV-NNN]
+- Review-Bericht: [Pfad zu RV-NNNNNN]
 - Nutzer-Befund: [ACCEPTED / CONDITIONAL für jedes Feature]
 - Technische Entscheidung: APPROVED
 - Merge-Zeitpunkt: [YYYY-MM-DD HH:MM]
-- Implementierte Stories: [Liste US-NNN]
+- Implementierte Stories: [Liste US-NNNNNN]
 - Offene SUGGESTION-Punkte: [Liste — für nächsten Sprint]
-- Technische Schulden erfasst: [Ja/Nein — Pfad zu DEBT-NNN wenn Ja]
+- Technische Schulden erfasst: [Ja/Nein — Pfad zu DEBT-NNNNNN wenn Ja]
 ```
 
 ## Qualitätskriterien (Definition of Done)
@@ -195,7 +195,7 @@ Schließe die Antwort IMMER mit dem zum Review-Ergebnis passenden Block ab:
 - [ ] Alle 6 technischen Review-Dimensionen geprüft
 - [ ] Kein technischer BLOCKER offen bei APPROVED
 - [ ] Jede Anmerkung mit Kategorie und Empfehlung
-- [ ] Review-Bericht (RV-NNN) in `projects/<name>/reviews/` erstellt und versioniert
+- [ ] Review-Bericht (RV-NNNNNN) in `projects/<name>/reviews/` erstellt und versioniert
 - [ ] Gesamtentscheidung explizit und begründet (Nutzer + Technik)
 - [ ] Technische Schulden in `projects/<name>/retros/` erfasst (falls vorhanden)
 - [ ] INDEX.md aktualisiert

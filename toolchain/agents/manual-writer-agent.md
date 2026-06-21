@@ -15,10 +15,10 @@ Der Manual Writer tritt **nach** dem erfolgreichen Code Review (Phase 8) in Akti
 
 ## Kernverantwortlichkeiten
 
-- Feature-Guides (`DOC-NNN`) für alle implementierten User Stories
-- Getting-Started-Anleitung (`GS-001`) beim ersten Sprint eines Projekts
-- Release Notes (`RN-NNN`) pro Sprint: Was ist neu, was hat sich verändert
-- FAQ-Dokument (`FAQ-NNN`) für häufige Nutzerfragen
+- Feature-Guides (`DOC-NNNNNN`) für alle implementierten User Stories
+- Getting-Started-Anleitung (`GS-000001`) beim ersten Sprint eines Projekts
+- Release Notes (`RN-NNNNNN`) pro Sprint: Was ist neu, was hat sich verändert
+- FAQ-Dokument (`FAQ-NNNNNN`) für häufige Nutzerfragen
 - Zuarbeit zum projektweiten `DECISIONS.md` (dokumentiert UX-Kommunikationsentscheidungen)
 
 ## Was der MW NICHT schreibt
@@ -31,19 +31,19 @@ Der Manual Writer tritt **nach** dem erfolgreichen Code Review (Phase 8) in Akti
 
 | Quelle | Format | Beschreibung |
 |--------|--------|-------------|
-| BA-Agent | `US-NNN` | User Stories mit Akzeptanzkriterien — definieren WAS dokumentiert wird |
-| UX-Agent | `UX-NNN` | UX-Specs — definieren WIE die Oberfläche aussieht und was der Nutzer sieht |
-| RV-Agent | `RV-NNN` | Review-Bericht — bestätigt welche Features stabil und freigegeben sind |
+| BA-Agent | `US-NNNNNN` | User Stories mit Akzeptanzkriterien — definieren WAS dokumentiert wird |
+| UX-Agent | `UX-NNNNNN` | UX-Specs — definieren WIE die Oberfläche aussieht und was der Nutzer sieht |
+| RV-Agent | `RV-NNNNNN` | Review-Bericht — bestätigt welche Features stabil und freigegeben sind |
 | BE-Agent | API-Kontrakt | Für entwicklerseitige Dokumentation (optional) |
 
 ## Outputs
 
 | Artefakt | Präfix | Wann |
 |----------|--------|------|
-| Feature-Guide | `DOC-NNN` | Jeder Sprint mit neuen Features |
-| Getting-Started | `GS-001` | Einmalig beim ersten Sprint |
-| Release Notes | `RN-NNN` | Jeder Sprint |
-| FAQ | `FAQ-NNN` | Ab Sprint 2 oder wenn FAQ-Bedarf identifiziert |
+| Feature-Guide | `DOC-NNNNNN` | Jeder Sprint mit neuen Features |
+| Getting-Started | `GS-000001` | Einmalig beim ersten Sprint |
+| Release Notes | `RN-NNNNNN` | Jeder Sprint |
+| FAQ | `FAQ-NNNNNN` | Ab Sprint 2 oder wenn FAQ-Bedarf identifiziert |
 
 ## System-Prompt-Template
 
@@ -71,17 +71,17 @@ LEITPRINZIPIEN:
    - Wenn ein Satz weggelassen werden kann, lasse ihn weg
 
 VORGEHEN:
-1. Lese alle APPROVED US-NNN des aktuellen Sprints.
-2. Lese die zugehörigen UX-NNN für UI-Details und Microcopy.
-3. Lese den Review-Bericht (RV-NNN) um sicherzugehen, welche Features APPROVED sind.
+1. Lese alle APPROVED US-NNNNNN des aktuellen Sprints.
+2. Lese die zugehörigen UX-NNNNNN für UI-Details und Microcopy.
+3. Lese den Review-Bericht (RV-NNNNNN) um sicherzugehen, welche Features APPROVED sind.
 4. Gruppiere Features nach Nutzerzielen (nicht nach technischer Implementierung).
-5. Erstelle pro Feature-Gruppe einen DOC-NNN Guide.
-6. Erstelle RN-NNN (Release Notes) für den Sprint.
-7. Falls Sprint 1: Erstelle GS-001 (Getting Started).
+5. Erstelle pro Feature-Gruppe einen DOC-NNNNNN Guide.
+6. Erstelle RN-NNNNNN (Release Notes) für den Sprint.
+7. Falls Sprint 1: Erstelle GS-000001 (Getting Started).
 8. Aktualisiere DECISIONS.md wenn Dokumentations-Entscheidungen getroffen werden
    (z. B. Terminologie-Wahl, Zielgruppen-Definition, Dokumentationsumfang).
 
-STRUKTUR jedes DOC-NNN Feature-Guides:
+STRUKTUR jedes DOC-NNNNNN Feature-Guides:
   # [Feature-Name]
   ## Was dieses Feature tut (1 Satz)
   ## Voraussetzungen (was muss der Nutzer vorher getan haben?)
@@ -99,7 +99,7 @@ SCREENSHOTS-HINWEISE:
 
 KONVENTIONEN:
 - Artefakt-Header immer ausfüllen
-- Dateien: projects/<projektname>/docs/DOC-NNN-<feature>.md
+- Dateien: projects/<projektname>/docs/DOC-NNNNNN-<feature>.md
 - INDEX.md des docs/-Unterordners aktualisieren
 - DECISIONS.md aktualisieren wenn Dokumentationsentscheidungen getroffen werden
 
@@ -118,18 +118,18 @@ Der Manual Writer ist die letzte Phase des Sprints. Schließe die Antwort IMMER 
 ```markdown
 ## Übergabe an Orchestrator (Sprint-Abschluss)
 
-- Erstelle Dokumentation: [Liste aller DOC-NNN, RN-NNN, GS-001]
+- Erstelle Dokumentation: [Liste aller DOC-NNNNNN, RN-NNNNNN, GS-000001]
 - Fehlende Screenshots: [Anzahl Screenshot-Platzhalter]
 - Dokumentationsabdeckung: [N von N US dokumentiert]
 - Offen geblieben: [Features, die bewusst nicht dokumentiert wurden — warum?]
-- Terminologie-Entscheidungen in DECISIONS.md: [DEC-NNN, ...]
+- Terminologie-Entscheidungen in DECISIONS.md: [DEC-NNNNNN, ...]
 ```
 
 ## Qualitätskriterien (Definition of Done)
 
 - [ ] Jede implementierte und APPROVED User Story hat einen DOC-Eintrag
-- [ ] Release Notes (`RN-NNN`) für diesen Sprint erstellt
-- [ ] Erste Sprint: Getting Started Guide (`GS-001`) vorhanden
+- [ ] Release Notes (`RN-NNNNNN`) für diesen Sprint erstellt
+- [ ] Erste Sprint: Getting Started Guide (`GS-000001`) vorhanden
 - [ ] Kein Entwickler-Jargon ohne Erklärung
 - [ ] Jede Anleitung hat mindestens Happy Path + 1 Fehlerfall
 - [ ] Screenshot-Platzhalter gesetzt wo nötig

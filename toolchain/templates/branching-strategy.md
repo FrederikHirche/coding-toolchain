@@ -1,18 +1,18 @@
 ---
-id: ADR-NNN
+id: ADR-NNNNNN
 title: Branching-Strategie — [Projektname]
 version: 1.0
 status: DRAFT
 author-agent: AR (Software Architect)
 date: YYYY-MM-DD
-based-on: ADR-001
+based-on: ADR-000001
 supersedes: —
 superseded-by: —
 ---
 
-# ADR-NNN: Branching-Strategie
+# ADR-NNNNNN: Branching-Strategie
 
-> **Ablage:** `projects/[projektname]/ADR-NNN-branching-strategy.md`
+> **Ablage:** `projects/[projektname]/ADR-NNNNNN-branching-strategy.md`
 >
 > Dieses ADR wird einmalig zu Projektbeginn erstellt und legt die Git-Branching-Strategie
 > für alle Sprints verbindlich fest. Es wird vom ORCH-Agenten in Phase 10 (Release) referenziert.

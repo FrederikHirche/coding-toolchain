@@ -48,13 +48,13 @@ PROJEKT: [Name]    PHASE: [Aktuelle Phase]
 ═══════════════════════════════════════
 
 ARTEFAKTE:
-  ✅ SB-001 (APPROVED) — Stakeholder Brief
-  ✅ REQ-001 (APPROVED) — Requirements
-  ⚠️  ADR-001 (DRAFT)   — Tech Stack — [GATE BLOCKIERT]
-  ⬜ UX-001 (fehlt)    — UX-Spec
+  ✅ SB-000001 (APPROVED) — Stakeholder Brief
+  ✅ REQ-000001 (APPROVED) — Requirements
+  ⚠️  ADR-000001 (DRAFT)   — Tech Stack — [GATE BLOCKIERT]
+  ⬜ UX-000001 (fehlt)    — UX-Spec
 
 GATE-ANALYSE Phase 3 → 4:
-  ❌ ADR-001 muss APPROVED sein
+  ❌ ADR-000001 muss APPROVED sein
   ❌ Systemdesign-Diagramm fehlt
 
 BLOCKER: 2
@@ -101,7 +101,7 @@ Der Orchestrator liest diese Dateien in dieser Reihenfolge:
 2. projects/<name>/INDEX.md         → Alle Artefakte + Status
 3. projects/<name>/REGISTRY-ENTRY.md → Projekt-Metadaten
 4. Jedes Artefakt im Status DRAFT   → Auf Vollständigkeit prüfen
-5. Jedes BUG-NNN im Status OFFEN   → Schweregrad ermitteln
+5. Jedes BUG-NNNNNN im Status OFFEN   → Schweregrad ermitteln
 ```
 
 ## .phase-Dateiformat
@@ -116,16 +116,16 @@ previous-phase: REQUIREMENTS      # Letzte abgeschlossene Phase
 phase-started: 2026-06-18
 sprint: 1
 last-agent: BA
-last-artifact: REQ-001
+last-artifact: REQ-000001
 
 # Phasen-History
 history:
   - phase: DISCOVERY
     completed: 2026-06-17
-    artifacts: [SB-001]
+    artifacts: [SB-000001]
   - phase: REQUIREMENTS
     completed: 2026-06-18
-    artifacts: [REQ-001, US-001, US-002, US-003]
+    artifacts: [REQ-000001, US-000001, US-000002, US-000003]
 ```
 
 ## Gültige Phasenwerte
@@ -146,7 +146,7 @@ INIT → HOTFIX-ANALYSIS → HOTFIX-IMPLEMENTATION → HOTFIX-TESTING → HOTFIX
 |---|---|
 | Gate-BLOCKER | Stop, Bericht, Nutzer-Entscheidung abwarten |
 | 2x gleiche Phase fehlgeschlagen | Rollback-Empfehlung zur vorherigen Phase |
-| ADR-001 fehlt bei Implementierungsversuch | Hard-Stop, Redirect zu `/architect` |
+| ADR-000001 fehlt bei Implementierungsversuch | Hard-Stop, Redirect zu `/architect` |
 | BLOCKER-Bug offen bei Review | Hard-Stop, Redirect zu `/implement` |
 | Rollback-Entscheidung nötig | PM + betroffenen Agenten benennen, Nutzer entscheidet |
 

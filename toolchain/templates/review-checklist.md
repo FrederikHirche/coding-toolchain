@@ -1,18 +1,18 @@
 ---
-id: RV-NNN
-title: Review [Projekttitel] Sprint NNN
+id: RV-NNNNNN
+title: Review [Projekttitel] Sprint NNNNNN
 version: 1.0
 status: DRAFT
 author-agent: RV (Code Reviewer)
 date: YYYY-MM-DD
-sprint: NNN
-reviewed-stories: US-NNN (kommagetrennte Liste)
-qa-report: TR-NNN
+sprint: NNNNNN
+reviewed-stories: US-NNNNNN (kommagetrennte Liste)
+qa-report: TR-NNNNNN
 supersedes: —
 superseded-by: —
 ---
 
-# Review: [Projekttitel] — Sprint NNN
+# Review: [Projekttitel] — Sprint NNNNNN
 
 ## Review-Übersicht
 
@@ -34,16 +34,16 @@ superseded-by: —
 
 *(Hier den präsentierten Test-Guide einfügen — dient als Nachweis was getestet wurde)*
 
-**Feature: [US-NNN — Titel]**
+**Feature: [US-NNNNNN — Titel]**
 1. [Schritt] → Erwartet: [Ergebnis]
 2. [Schritt] → Erwartet: [Ergebnis]
 3. ...
 
 ### Interview-Ergebnisse
 
-| Feature (US-NNN) | Funktioniert? | Nutzer-Befund | Anmerkungen aus Interview |
+| Feature (US-NNNNNN) | Funktioniert? | Nutzer-Befund | Anmerkungen aus Interview |
 |---|---|---|---|
-| US-NNN: [Titel] | Ja / Nein / Teilweise | ACCEPTED / CONDITIONAL / REJECTED | [Zitat oder Beschreibung] |
+| US-NNNNNN: [Titel] | Ja / Nein / Teilweise | ACCEPTED / CONDITIONAL / REJECTED | [Zitat oder Beschreibung] |
 
 ### Nutzerabnahme-Entscheidung
 
@@ -99,15 +99,15 @@ superseded-by: —
 
 | ADR | Eingehalten? | Anmerkungen |
 |---|---|---|
-| ADR-001 (Tech-Stack) | ✅ / ❌ | |
-| ADR-002 ([Titel]) | ✅ / ❌ | |
+| ADR-000001 (Tech-Stack) | ✅ / ❌ | |
+| ADR-000002 ([Titel]) | ✅ / ❌ | |
 | [Weitere ADRs] | | |
 
 **Abweichungen von ADRs:**
 
 | # | ADR | Abweichung | Begründung vorhanden? | Empfehlung |
 |---|---|---|---|---|
-| A-001 | ADR-NNN | [Beschreibung] | Ja / Nein | [Empfehlung] |
+| A-001 | ADR-NNNNNN | [Beschreibung] | Ja / Nein | [Empfehlung] |
 
 ---
 
@@ -138,7 +138,7 @@ superseded-by: —
 |---|---|---|
 | Unit-Tests für alle Kernfunktionen | ✅ / ❌ | |
 | Happy Path + Fehlerfall pro Kernfunktion | ✅ / ❌ | |
-| QA-Testergebnisse (TR-NNN) sauber | ✅ / ❌ | |
+| QA-Testergebnisse (TR-NNNNNN) sauber | ✅ / ❌ | |
 | Coverage-Ziel erreicht | ✅ / ❌ | [Actual %] |
 
 **Anmerkungen Testabdeckung:**
@@ -191,7 +191,7 @@ superseded-by: —
 
 | ID | Beschreibung | Priorität |
 |---|---|---|
-| DEBT-NNN | [Beschreibung — was wurde bewusst vereinfacht?] | [Hoch/Mittel/Gering] |
+| DEBT-NNNNNN | [Beschreibung — was wurde bewusst vereinfacht?] | [Hoch/Mittel/Gering] |
 
 ---
 

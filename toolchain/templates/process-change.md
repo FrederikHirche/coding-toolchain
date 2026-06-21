@@ -1,5 +1,5 @@
 ---
-id: PC-NNN
+id: PC-NNNNNN
 title: Process Change Proposal — [Kurztitel]
 version: 1.0
 status: DRAFT
@@ -7,14 +7,14 @@ author-agent: AC (Agile Coach)
 date: YYYY-MM-DD
 project: [projektname]
 sprint: N
-based-on: [RETRO-NNN]
+based-on: [RETRO-NNNNNN]
 supersedes: —
 superseded-by: —
 ---
 
 # Process Change Proposal: [Kurztitel]
 
-> **Ablage:** `projects/[projektname]/PC-NNN-[thema].md`
+> **Ablage:** `projects/[projektname]/PC-NNNNNN-[thema].md`
 > Ein PC-Dokument beschreibt eine empfohlene Änderung an der Tool Chain selbst —
 > nicht am Projekt-Inhalt. Änderungen werden erst nach Nutzer-Freigabe umgesetzt.
 
@@ -36,7 +36,7 @@ superseded-by: —
 
 ## Problem-Beschreibung
 
-[Ausführliche Beschreibung des Problems. Konkrete Beispiele aus dem Sprint, wo es aufgetreten ist. Verlinkung auf RETRO-NNN, RV-NNN oder andere Belege.]
+[Ausführliche Beschreibung des Problems. Konkrete Beispiele aus dem Sprint, wo es aufgetreten ist. Verlinkung auf RETRO-NNNNNN, RV-NNNNNN oder andere Belege.]
 
 **Beobachtet in:** Sprint N, [Datei/Phase]
 
@@ -113,7 +113,7 @@ superseded-by: —
 - [ ] Nutzer hat Änderung freigegeben
 - [ ] Betroffene Datei(en) aktualisiert
 - [ ] INDEX.md aktualisiert
-- [ ] Änderung in DECISIONS.md dokumentiert (DEC-NNN)
+- [ ] Änderung in DECISIONS.md dokumentiert (DEC-NNNNNN)
 - [ ] Änderung in nächstem Sprint erprobt
 - [ ] Status dieses PC-Dokuments auf ACTIVE gesetzt
 
@@ -123,11 +123,11 @@ superseded-by: —
 
 | Datum | Status | Kommentar |
 |---|---|---|
-| YYYY-MM-DD | DRAFT | Erstellt nach RETRO-NNN |
+| YYYY-MM-DD | DRAFT | Erstellt nach RETRO-NNNNNN |
 | YYYY-MM-DD | APPROVED | Freigegeben durch Nutzer |
 | YYYY-MM-DD | ACTIVE | Umgesetzt in `toolchain/agents/xxx.md` |
 
 ---
 
 *Erstellt von: AC-Agent | Datum: YYYY-MM-DD*
-*Ablage: projects/[projektname]/PC-NNN-[thema].md*
+*Ablage: projects/[projektname]/PC-NNNNNN-[thema].md*

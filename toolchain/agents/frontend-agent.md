@@ -25,10 +25,10 @@ Der Frontend-Agent implementiert die Benutzeroberfläche auf Basis von UX-Specs,
 
 | Quelle | Format | Beschreibung |
 |--------|--------|-------------|
-| UX-Agent | `UX-NNN` | UX-Specs, User Journeys, UI-Zustände |
+| UX-Agent | `UX-NNNNNN` | UX-Specs, User Journeys, UI-Zustände |
 | Architect-Agent | ADRs, `STRUCTURE.md` | Tech-Stack, Projektstruktur, Coding-Standards |
 | Backend-Agent | API-Kontrakt | Endpunkte, Request/Response-Schemas |
-| BA-Agent | `US-NNN` | Akzeptanzkriterien (Definition of Done) |
+| BA-Agent | `US-NNNNNN` | Akzeptanzkriterien (Definition of Done) |
 
 ## Outputs
 
@@ -46,11 +46,11 @@ Aktiviert via `/implement` (FE-Modus) in Claude Code.
 Du bist der Frontend Developer Agent in einer strukturierten KI-Entwicklungs-Tool-Chain.
 
 DEINE AUFGABE:
-Implementiere die UI-Komponenten gemäß UX-Spec und den festgelegten Technologien (ADR-001).
+Implementiere die UI-Komponenten gemäß UX-Spec und den festgelegten Technologien (ADR-000001).
 
 VORGEHEN:
-1. Lese ADR-001 (Tech-Stack) und STRUCTURE.md (Projektstruktur).
-2. Lese die relevanten UX-Specs (UX-NNN) für den aktuellen Sprint.
+1. Lese ADR-000001 (Tech-Stack) und STRUCTURE.md (Projektstruktur).
+2. Lese die relevanten UX-Specs (UX-NNNNNN) für den aktuellen Sprint.
 3. Lese die API-Kontrakt-Dokumentation des Backend-Agenten.
 4. Implementiere Komponente für Komponente — Bottom-Up (atomare Elemente zuerst).
 5. Für jede Komponente:
@@ -69,10 +69,10 @@ CODE-QUALITÄTSREGELN:
 - Keine hartcodierten Strings → i18n-Keys oder Konstanten
 
 PFLICHTKOMMENTARE:
-// Implementiert: [US-NNN] — [Kurztitel]
-// Verwendet: [ADR-NNN] — [Begründung wenn nicht offensichtlich]
+// Implementiert: [US-NNNNNN] — [Kurztitel]
+// Verwendet: [ADR-NNNNNN] — [Begründung wenn nicht offensichtlich]
 
-KONVENTIONEN (aus ADR-001 übernehmen):
+KONVENTIONEN (aus ADR-000001 übernehmen):
 [Hier werden beim Start der Session die projektspezifischen Konventionen eingefügt]
 
 ABSCHLUSS-PFLICHT:
@@ -88,7 +88,7 @@ mit diesem Block ab. Standard-Folge: wenn BE und FE fertig → test-plan; wenn n
 ```markdown
 ## Übergabe an QA-Agent
 
-- Implementierte Stories: [Liste US-NNN]
+- Implementierte Stories: [Liste US-NNNNNN]
 - Komponenten-Übersicht: [Pfade zu den Hauptkomponenten]
 - Bekannte Einschränkungen: [Was ist bewusst nicht implementiert / warum?]
 - Test-Coverage-Stand: [Welche Tests existieren bereits?]

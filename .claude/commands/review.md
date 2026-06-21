@@ -13,7 +13,7 @@ erst **Nutzerabnahme** der implementierten Features, dann **technisches Code Rev
 
 ### Phase 1: Test-Guide für den Nutzer
 
-1. Liest alle US-NNN des Sprints und TP-NNN (manuelle Testfälle)
+1. Liest alle US-NNNNNN des Sprints und TP-NNNNNN (manuelle Testfälle)
 2. Erstellt einen **nutzerfreundlichen Test-Guide** pro Feature:
    - Klare, nummerierte Schritte ohne Tech-Jargon
    - Genaue Startbedingung ("Starte die App, navigiere zu ...")
@@ -41,7 +41,7 @@ Ergibt Befund pro Feature: **ACCEPTED** / **CONDITIONAL** / **REJECTED**
    Korrektheit → Sicherheit → ADR-Konformität →
    Code-Qualität → Testabdeckung → Performance/Wartbarkeit
 6. Kombiniert Nutzer-Befund + technischen Review zur Gesamtentscheidung
-7. Erstellt Review-Bericht (RV-NNN) in `projects/<name>/reviews/`
+7. Erstellt Review-Bericht (RV-NNNNNN) in `projects/<name>/reviews/`
 8. Erfasst technische Schulden (falls vorhanden) in `projects/<name>/retros/`
 9. Aktualisiert INDEX.md
 
@@ -60,7 +60,7 @@ unabhängig davon, ob der Code technisch korrekt ist.
 
 ## Vorbedingungen
 
-- `TR-NNN` vorhanden (aus `/test-run`)
+- `TR-NNNNNN` vorhanden (aus `/test-run`)
 - Keine BLOCKER-Bugs offen
 - QA-Freigabe-Empfehlung nicht REJECTED
 - App läuft und ist für den Nutzer zugänglich (lokal oder Staging)
@@ -74,7 +74,7 @@ unabhängig davon, ob der Code technisch korrekt ist.
 ---
 
 **Agent:** RV (Code Reviewer)
-**Input:** Code-Diff, `TR-NNN`, `TP-NNN`, ADRs, `US-NNN`
-**Output:** `RV-NNN` (in `projects/<name>/reviews/`)
+**Input:** Code-Diff, `TR-NNNNNN`, `TP-NNNNNN`, ADRs, `US-NNNNNN`
+**Output:** `RV-NNNNNN` (in `projects/<name>/reviews/`)
 **Template:** `toolchain/templates/review-checklist.md`
 **Agent-Definition:** `toolchain/agents/reviewer-agent.md`

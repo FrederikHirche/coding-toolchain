@@ -25,14 +25,14 @@ Strukturierter Erkundungs-Workflow für technische Fragestellungen ohne Implemen
 ## Spike ≠ Sprint-Phase
 
 Ein Spike ist **kein Sprint** und **kein ADR**. Er ist eine zeitlich begrenzte Erkundung.
-Ein Spike-Ergebnis (`SRP-NNN`) fließt als Input in den nächsten `/architect`-Aufruf.
+Ein Spike-Ergebnis (`SRP-NNNNNN`) fließt als Input in den nächsten `/architect`-Aufruf.
 
 ## Phasen-Sequenz
 
 ```
 SPIKE-BRIEF
   [PM] — Fragestellung schärfen, Timebox festlegen, Erfolgskriterien definieren
-  Output: Spike-Brief (Teil von SRP-NNN, Abschnitt 1)
+  Output: Spike-Brief (Teil von SRP-NNNNNN, Abschnitt 1)
         ↓
 SPIKE-RESEARCH
   [AR] — Analyse, Recherche, ggf. minimales PoC
@@ -40,14 +40,14 @@ SPIKE-RESEARCH
         ↓
 SPIKE-REPORT
   [AR] — Ergebnisse zusammenfassen, Empfehlung aussprechen
-  Output: SRP-NNN (Spike Report)
+  Output: SRP-NNNNNN (Spike Report)
 ```
 
-## Spike Report Format (`SRP-NNN`)
+## Spike Report Format (`SRP-NNNNNN`)
 
 ```markdown
 ---
-id: SRP-NNN
+id: SRP-NNNNNN
 title: Spike: [Fragestellung]
 version: 1.0
 status: DRAFT
@@ -76,7 +76,7 @@ actual-time: [H]h
 [Was blieb ungeklärt?]
 
 ## 7. Nächster Schritt
-[ ] Empfehlung → ADR-NNN anlegen mit /architect
+[ ] Empfehlung → ADR-NNNNNN anlegen mit /architect
 [ ] Weitere Erkundung nötig → Neuer Spike
 [ ] Idee verwerfen → Begründung dokumentieren
 ```

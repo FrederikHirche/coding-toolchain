@@ -1,18 +1,18 @@
 ---
-id: SP-NNN
-title: Sprint NNN Backlog — [Projekttitel]
+id: SP-NNNNNN
+title: Sprint NNNNNN Backlog — [Projekttitel]
 version: 1.0
 status: DRAFT
 author-agent: BA (Business Analyst) + FE + BE
 date: YYYY-MM-DD
 project: [projektname]
-sprint: NNN
-based-on: REQ-NNN, UX-NNN
+sprint: NNNNNN
+based-on: REQ-NNNNNN, UX-NNNNNN
 supersedes: —
 superseded-by: —
 ---
 
-# Sprint NNN Backlog: [Projekttitel]
+# Sprint NNNNNN Backlog: [Projekttitel]
 
 ## Sprint-Ziel
 
@@ -41,8 +41,8 @@ superseded-by: —
 
 | US | Titel | Schätzung | Verantwortlich | Abhängigkeiten |
 |-----|-------|----------|---------------|----------------|
-| US-NNN | [Titel] | [SP / XS-XL] | FE/BE | — |
-| US-NNN | [Titel] | [SP / XS-XL] | BE | US-NNN |
+| US-NNNNNN | [Titel] | [SP / XS-XL] | FE/BE | — |
+| US-NNNNNN | [Titel] | [SP / XS-XL] | BE | US-NNNNNN |
 
 **Gesamt Commit:** [N] Story Points
 
@@ -50,13 +50,13 @@ superseded-by: —
 
 | US | Titel | Schätzung | Verantwortlich |
 |-----|-------|----------|---------------|
-| US-NNN | [Titel] | [SP] | FE |
+| US-NNNNNN | [Titel] | [SP] | FE |
 
 ---
 
 ## Subtasks
 
-### US-NNN: [Titel]
+### US-NNNNNN: [Titel]
 
 | # | Subtask | Verantwortlich | Schätzung | Status |
 |---|---------|---------------|----------|--------|
@@ -84,7 +84,7 @@ Was muss vor Sprint-Start fertig sein (außerhalb des Teams)?
 
 | DEBT-ID | Beschreibung | Priorität | Adressiert in diesem Sprint? |
 |---------|-------------|----------|------------------------------|
-| DEBT-NNN | [Beschreibung] | [Hoch/Mittel] | Ja / Nein |
+| DEBT-NNNNNN | [Beschreibung] | [Hoch/Mittel] | Ja / Nein |
 
 ---
 
@@ -120,7 +120,7 @@ Jede Commit-Story muss vor Sprint-Start erfüllt haben:
 
 | # | Aktion | Verantwortlich | Fällig |
 |---|--------|---------------|--------|
-| 1 | [Aktion] | [Kürzel] | Sprint NNN+1 |
+| 1 | [Aktion] | [Kürzel] | Sprint NNNNNN+1 |
 
 ---
 

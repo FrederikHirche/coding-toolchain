@@ -1,11 +1,11 @@
 ---
-id: UX-NNN
+id: UX-NNNNNN
 title: UX-Spec [Feature-Bereich]
 version: 1.0
 status: DRAFT
 author-agent: UX (UX Designer)
 date: YYYY-MM-DD
-based-on: US-NNN (kommagetrennte Liste)
+based-on: US-NNNNNN (kommagetrennte Liste)
 supersedes: —
 superseded-by: —
 ---
@@ -14,8 +14,8 @@ superseded-by: —
 
 ## 1. Scope
 
-**Abgedeckte User Stories:** US-NNN, US-NNN
-**Primäre Nutzungsgruppe:** [Aus SB-NNN]
+**Abgedeckte User Stories:** US-NNNNNN, US-NNNNNN
+**Primäre Nutzungsgruppe:** [Aus SB-NNNNNN]
 **Nutzungskontext:** [Desktop / Mobile / Both — primär / sekundär]
 
 ---

@@ -1,19 +1,19 @@
 ---
-id: IMPD-NNN
+id: IMPD-NNNNNN
 title: Impediment — [Kurztitel]
 version: 1.0
 status: DRAFT
 author-agent: AC (Agile Coach)
 date: YYYY-MM-DD
 project: [projektname]
-based-on: [Nutzer-Interview, ggf. RETRO-NNN oder PC-NNN]
+based-on: [Nutzer-Interview, ggf. RETRO-NNNNNN oder PC-NNNNNN]
 supersedes: —
 superseded-by: —
 ---
 
 # Impediment: [Kurztitel]
 
-> **Ablage:** `projects/[projektname]/IMPD-NNN-[thema].md`
+> **Ablage:** `projects/[projektname]/IMPD-NNNNNN-[thema].md`
 > Ein Impediment-Dokument erfasst ein konkretes Hindernis im Entwicklungsprozess,
 > das den Flow stört oder verlangsamt — identifiziert durch gezieltes Interview.
 
@@ -76,7 +76,7 @@ superseded-by: —
 
 **Nächster Schritt:**
 - [ ] Sofortmaßnahme umsetzen
-- [ ] Falls strukturelle Änderung nötig: `/coach [projektname]` aufrufen → PC-NNN erstellen
+- [ ] Falls strukturelle Änderung nötig: `/coach [projektname]` aufrufen → PC-NNNNNN erstellen
 - [ ] Impediment-Status auf RESOLVED setzen, wenn behoben
 
 ---
@@ -92,4 +92,4 @@ superseded-by: —
 ---
 
 *Erstellt von: AC-Agent | Datum: YYYY-MM-DD*
-*Ablage: projects/[projektname]/IMPD-NNN-[thema].md*
+*Ablage: projects/[projektname]/IMPD-NNNNNN-[thema].md*

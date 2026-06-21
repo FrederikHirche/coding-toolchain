@@ -65,16 +65,16 @@ Alle Agenten erben die Basisregeln aus `toolchain/agents/_base-agent.md`.
 
 | Command | Phase | Agent | Primäres Artefakt |
 |---------|-------|-------|-------------------|
-| `/kickoff` | Discovery | PM | `SB-NNN` |
-| `/ba` | Requirements | BA | `REQ-NNN`, `US-NNN` |
-| `/architect` | Architektur | AR | `ADR-NNN`, `STRUCTURE.md` |
-| `/ux` | UX Design | UX | `UX-NNN` |
-| `/refine` | Refinement | BA+FE+BE | `SP-NNN` |
+| `/kickoff` | Discovery | PM | `SB-NNNNNN` |
+| `/ba` | Requirements | BA | `REQ-NNNNNN`, `US-NNNNNN` |
+| `/architect` | Architektur | AR | `ADR-NNNNNN`, `STRUCTURE.md` |
+| `/ux` | UX Design | UX | `UX-NNNNNN` |
+| `/refine` | Refinement | BA+FE+BE | `SP-NNNNNN` |
 | `/implement` | Implementierung | FE, BE | Code + API-Kontrakt |
-| `/test-plan` | Testplan | QA | `TP-NNN` |
-| `/test-run` | Testausführung | QA | `TR-NNN` |
-| `/review` | Code Review | RV | `RV-NNN` |
-| `/manual` | Dokumentation | MW | `DOC-NNN`, `RN-NNN` |
+| `/test-plan` | Testplan | QA | `TP-NNNNNN` |
+| `/test-run` | Testausführung | QA | `TR-NNNNNN` |
+| `/review` | Code Review | RV | `RV-NNNNNN` |
+| `/manual` | Dokumentation | MW | `DOC-NNNNNN`, `RN-NNNNNN` |
 
 ### Post-Sprint Commands (optional, durch AC)
 
@@ -106,7 +106,7 @@ Details: `toolchain/workflows/`
 ```
 DATEI-HEADER:
   Beschreibung: [Modul-Zweck]
-  Artefakte:    [US-NNN; ADR-NNN]
+  Artefakte:    [US-NNNNNN; ADR-NNNNNN]
   Agent:        [FE|BE] — YYYY-MM-DD
 
 FUNKTION/METHODE:
@@ -115,7 +115,7 @@ FUNKTION/METHODE:
 
 KOMPLEXE LOGIK:
   Kommentar ÜBER dem Block: Warum, nicht Was
-  ADR-Verweis: // → ADR-005
+  ADR-Verweis: // → ADR-000005
 
 TODO-FORMAT:
   // TODO(KÜRZEL): Beschreibung — YYYY-MM-DD
@@ -126,25 +126,25 @@ TODO-FORMAT:
 
 | Typ | Präfix | Beispiel |
 |-----|--------|---------|
-| Stakeholder Brief | `SB-NNN` | `SB-001-projektname.md` |
-| Requirements | `REQ-NNN` | `REQ-001-auth.md` |
-| Architecture Decision Record | `ADR-NNN` | `ADR-001-tech-stack.md` |
-| User Story | `US-NNN` | `US-042-login.md` |
-| UX-Spec | `UX-NNN` | `UX-001-onboarding.md` |
-| Sprint Backlog | `SP-NNN` | `SP-001-sprint1.md` |
-| Testplan | `TP-NNN` | `TP-001-smoke.md` |
-| Review-Bericht | `RV-NNN` | `RV-001-sprint-1.md` |
-| Technische Schuld | `DEBT-NNN` | `DEBT-001-n+1-queries.md` |
-| Spike Report | `SRP-NNN` | `SRP-001-db-eval.md` |
-| Feature-Guide | `DOC-NNN` | `DOC-001-login.md` |
-| Release Notes | `RN-NNN` | `RN-001-sprint-1.md` |
-| Getting Started | `GS-NNN` | `GS-001.md` |
+| Stakeholder Brief | `SB-NNNNNN` | `SB-000001-projektname.md` |
+| Requirements | `REQ-NNNNNN` | `REQ-000001-auth.md` |
+| Architecture Decision Record | `ADR-NNNNNN` | `ADR-000001-tech-stack.md` |
+| User Story | `US-NNNNNN` | `US-000042-login.md` |
+| UX-Spec | `UX-NNNNNN` | `UX-000001-onboarding.md` |
+| Sprint Backlog | `SP-NNNNNN` | `SP-000001-sprint1.md` |
+| Testplan | `TP-NNNNNN` | `TP-000001-smoke.md` |
+| Review-Bericht | `RV-NNNNNN` | `RV-000001-sprint-1.md` |
+| Technische Schuld | `DEBT-NNNNNN` | `DEBT-000001-n+1-queries.md` |
+| Spike Report | `SRP-NNNNNN` | `SRP-000001-db-eval.md` |
+| Feature-Guide | `DOC-NNNNNN` | `DOC-000001-login.md` |
+| Release Notes | `RN-NNNNNN` | `RN-000001-sprint-1.md` |
+| Getting Started | `GS-NNNNNN` | `GS-000001.md` |
 | Entscheidungsprotokoll | `DECISIONS.md` | `DECISIONS.md` (pro Projekt) |
-| Sprint-Retrospektive | `RETRO-NNN` | `RETRO-001-sprint-1.md` |
-| Impediment | `IMPD-NNN` | `IMPD-001-handoff-luecke.md` |
-| Process Change Proposal | `PC-NNN` | `PC-001-gate-reform.md` |
+| Sprint-Retrospektive | `RETRO-NNNNNN` | `RETRO-000001-sprint-1.md` |
+| Impediment | `IMPD-NNNNNN` | `IMPD-000001-handoff-luecke.md` |
+| Process Change Proposal | `PC-NNNNNN` | `PC-000001-gate-reform.md` |
 
-NNN = dreistellig, sequenziell pro Projekt.
+NNNNNN = sechsstellig, sequenziell pro Projekt.
 
 ### Projektordner-Struktur
 
@@ -153,15 +153,15 @@ Jeder Artefakttyp hat einen definierten Unterordner:
 
 ```
 projects/<name>/
-  discovery/        SB-NNN, DECISIONS.md
-  requirements/     REQ-NNN, US-NNN
-  architecture/     ADR-NNN, STRUCTURE.md
-  ux/               UX-NNN
-  sprints/          SP-NNN
-  testing/          TP-NNN, TR-NNN, BUG-NNN, playwright-report/
-  reviews/          RV-NNN
-  docs/             DOC-NNN, RN-NNN, GS-NNN
-  retros/           RETRO-NNN, IMPD-NNN, PC-NNN, DEBT-NNN, SRP-NNN
+  discovery/        SB-NNNNNN, DECISIONS.md
+  requirements/     REQ-NNNNNN, US-NNNNNN
+  architecture/     ADR-NNNNNN, STRUCTURE.md
+  ux/               UX-NNNNNN
+  sprints/          SP-NNNNNN
+  testing/          TP-NNNNNN, TR-NNNNNN, BUG-NNNNNN, playwright-report/
+  reviews/          RV-NNNNNN
+  docs/             DOC-NNNNNN, RN-NNNNNN, GS-NNNNNN
+  retros/           RETRO-NNNNNN, IMPD-NNNNNN, PC-NNNNNN, DEBT-NNNNNN, SRP-NNNNNN
   INDEX.md
   .phase
   .toolchain.yml
@@ -176,7 +176,7 @@ in den zugehörigen Unterordner. Die `INDEX.md` im Projektroot verweist auf alle
 DRAFT → REVIEW → APPROVED → ACTIVE → SUPERSEDED | ARCHIVED
 
 - Artefakte werden NIE gelöscht
-- Ersetzt: [SUPERSEDED by ADR-007]
+- Ersetzt: [SUPERSEDED by ADR-000007]
 - Versionierung: v1.0, v1.1, v2.0 (Minor = Inhalt, Major = Struktur)
 ```
 
@@ -199,7 +199,7 @@ Kein Agent schließt eine Session ohne diesen Block ab.
 ### Technologie-Agnostizität
 
 Kein Template und kein Agent setzt eine Technologie voraus. Technologieentscheidungen
-werden projektspezifisch in `ADR-001-tech-stack.md` festgehalten und sind ab APPROVED
+werden projektspezifisch in `ADR-000001-tech-stack.md` festgehalten und sind ab APPROVED
 für alle nachfolgenden Agenten verbindlich.
 
 ---

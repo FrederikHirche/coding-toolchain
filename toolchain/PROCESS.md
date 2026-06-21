@@ -14,8 +14,8 @@ Detaillierter Ablauf der AI Development Tool Chain — von der Idee bis zum Merg
 │  /kickoff    ──▶  /ba         ──▶  /architect  ──▶  /ux      │
 │  [PM]             [BA]             [AR]             [UX]     │
 │                                                              │
-│  SB-NNN           REQ-NNN          ADR-NNN          UX-NNN   │
-│                   US-NNN           STRUCTURE.md              │
+│  SB-NNNNNN           REQ-NNNNNN          ADR-NNNNNN          UX-NNNNNN   │
+│                   US-NNNNNN           STRUCTURE.md              │
 └──────────────────────────────────────────────────────────────┘
 
 ┌──────────────────────────────────────────────────────────────┐
@@ -25,8 +25,8 @@ Detaillierter Ablauf der AI Development Tool Chain — von der Idee bis zum Merg
 │  /refine     ──▶  /implement  ──▶  /test-plan  ──▶  /review  │
 │  [BA+FE+BE]       [FE ∥ BE]        [QA]             [RV]    │
 │                                                              │
-│  SPRINT-NNN       Code + Tests     TP-NNN           RV-NNN   │
-│                   API-Kontrakt     TR-NNN                    │
+│  SPRINT-NNNNNN       Code + Tests     TP-NNNNNN           RV-NNNNNN   │
+│                   API-Kontrakt     TR-NNNNNN                    │
 └──────────────────────────────────────────────────────────────┘
 ```
 
@@ -40,13 +40,13 @@ Detaillierter Ablauf der AI Development Tool Chain — von der Idee bis zum Merg
 ### Ablauf
 
 1. Stakeholder-Interview strukturiert durchführen (3 Runden, max. 8 Fragen)
-2. Stakeholder Brief (`SB-001`) erstellen
+2. Stakeholder Brief (`SB-000001`) erstellen
 3. MoSCoW-Priorisierung der Features
 4. Übergabe an BA vorbereiten
 
 ### Gate-Kriterien (weiter zu Phase 2)
 
-- [ ] `SB-NNN` im Status `APPROVED`
+- [ ] `SB-NNNNNN` im Status `APPROVED`
 - [ ] Mindestens 3 Must-Have-Features definiert
 - [ ] Scope klar abgegrenzt (In/Out-of-Scope)
 - [ ] Erfolgskriterien messbar formuliert
@@ -64,7 +64,7 @@ Falls Stakeholder-Aussagen unklar oder widersprüchlich: Neues `/kickoff`-Meetin
 
 ### Ablauf
 
-1. SB-NNN vollständig lesen
+1. SB-NNNNNN vollständig lesen
 2. Funktionale und nicht-funktionale Anforderungen ableiten
 3. REQ-Dokument erstellen
 4. User Stories mit Given/When/Then schreiben
@@ -73,7 +73,7 @@ Falls Stakeholder-Aussagen unklar oder widersprüchlich: Neues `/kickoff`-Meetin
 
 ### Gate-Kriterien (weiter zu Phase 3)
 
-- [ ] `REQ-NNN` im Status `APPROVED`
+- [ ] `REQ-NNNNNN` im Status `APPROVED`
 - [ ] Alle Must-Have-Features haben min. 1 User Story
 - [ ] Jede US hat min. 3 Akzeptanzkriterien
 - [ ] Nicht-funktionale Anforderungen dokumentiert
@@ -81,7 +81,7 @@ Falls Stakeholder-Aussagen unklar oder widersprüchlich: Neues `/kickoff`-Meetin
 
 ### Rollback
 
-Fehlende Klarheit → Zurück zu PM für SB-Update (SB-NNN Version erhöhen).
+Fehlende Klarheit → Zurück zu PM für SB-Update (SB-NNNNNN Version erhöhen).
 
 ---
 
@@ -92,15 +92,15 @@ Fehlende Klarheit → Zurück zu PM für SB-Update (SB-NNN Version erhöhen).
 
 ### Ablauf
 
-1. REQ-NNN und alle US-NNN lesen
-2. Tech-Stack entscheiden → ADR-001 erstellen
+1. REQ-NNNNNN und alle US-NNNNNN lesen
+2. Tech-Stack entscheiden → ADR-000001 erstellen
 3. Weitere ADRs für wesentliche Einzelentscheidungen
 4. System-Design-Diagramm erstellen
 5. Projektstruktur in STRUCTURE.md definieren
 
 ### Gate-Kriterien (weiter zu Phase 4+5)
 
-- [ ] `ADR-001` im Status `APPROVED`
+- [ ] `ADR-000001` im Status `APPROVED`
 - [ ] Alle nicht-funktionalen Anforderungen in ADRs adressiert
 - [ ] `STRUCTURE.md` vorhanden
 - [ ] System-Design-Diagramm vorhanden
@@ -118,14 +118,14 @@ Konflikt zwischen Anforderungen und technischer Machbarkeit → Zurück zu BA/PM
 
 ### Ablauf
 
-1. Alle US-NNN und ADRs lesen
+1. Alle US-NNNNNN und ADRs lesen
 2. Primäre User Journeys identifizieren
-3. UX-Spec (UX-NNN) pro Feature-Bereich erstellen
+3. UX-Spec (UX-NNNNNN) pro Feature-Bereich erstellen
 4. UI-Zustände, Microcopy, Accessibility-Anforderungen dokumentieren
 
 ### Gate-Kriterien (weiter zu Phase 5)
 
-- [ ] `UX-NNN` für alle Sprint-1-Stories vorhanden
+- [ ] `UX-NNNNNN` für alle Sprint-1-Stories vorhanden
 - [ ] Alle UI-Zustände dokumentiert
 - [ ] Accessibility-Level festgelegt
 - [ ] Kein FE-Agent-blockierender offener Punkt
@@ -143,10 +143,10 @@ Phase 4 (UX) und Phase 5/6 (Refinement/BE) können parallelisiert werden. BE kan
 
 ### Ablauf
 
-1. Alle APPROVED US und UX-NNN lesen
+1. Alle APPROVED US und UX-NNNNNN lesen
 2. Stories verfeinern: Subtasks, Schätzungen, Abhängigkeiten klären
 3. Sprint-Ziel definieren
-4. Sprint-Backlog-Dokument (`SPRINT-NNN.md`) erstellen
+4. Sprint-Backlog-Dokument (`SPRINT-NNNNNN.md`) erstellen
 5. Technische Voraussetzungen identifizieren
 
 ### Gate-Kriterien (weiter zu Phase 6)
@@ -195,12 +195,12 @@ Phase 4 (UX) und Phase 5/6 (Refinement/BE) können parallelisiert werden. BE kan
 
 ### Ablauf
 
-1. Testplan (`TP-NNN`) aus US und UX-Specs erstellen
+1. Testplan (`TP-NNNNNN`) aus US und UX-Specs erstellen
 2. Fehlende automatisierte Tests ergänzen
 3. Automatisierte Tests ausführen
 4. Manuelle Tests nach Testplan
-5. Bugs erfassen (`BUG-NNN`)
-6. Testergebnis-Bericht (`TR-NNN`) erstellen
+5. Bugs erfassen (`BUG-NNNNNN`)
+6. Testergebnis-Bericht (`TR-NNNNNN`) erstellen
 7. Freigabe-Empfehlung aussprechen
 
 ### Gate-Kriterien (weiter zu Phase 8)
@@ -212,7 +212,7 @@ Phase 4 (UX) und Phase 5/6 (Refinement/BE) können parallelisiert werden. BE kan
 
 ### Rollback
 
-BLOCKER-Bug gefunden → Zurück zu Phase 6 (`/implement`). Bug in `BUG-NNN` dokumentieren und an verantwortlichen FE/BE-Agenten übergeben.
+BLOCKER-Bug gefunden → Zurück zu Phase 6 (`/implement`). Bug in `BUG-NNNNNN` dokumentieren und an verantwortlichen FE/BE-Agenten übergeben.
 
 ---
 
@@ -224,9 +224,9 @@ BLOCKER-Bug gefunden → Zurück zu Phase 6 (`/implement`). Bug in `BUG-NNN` dok
 ### Ablauf
 
 1. Code-Diff lesen
-2. TR-NNN und TP-NNN lesen
+2. TR-NNNNNN und TP-NNNNNN lesen
 3. Review in 6 Dimensionen durchführen
-4. RV-NNN erstellen
+4. RV-NNNNNN erstellen
 5. Merge-Entscheidung: APPROVED / REQUEST CHANGES / REJECTED
 
 ### Gate-Kriterien (Merge)
@@ -249,7 +249,7 @@ Nach erfolgreichem Merge:
 1. Retrospektive: Was lief gut? Was verbessern?
 2. `/refine` für nächsten Sprint aufrufen
 3. Artefakte aus vorherigem Sprint auf `ARCHIVED` setzen (falls abgelöst)
-4. Technische Schulden aus RV-NNN priorisieren
+4. Technische Schulden aus RV-NNNNNN priorisieren
 
 ---
 
@@ -270,12 +270,12 @@ Nach erfolgreichem Merge:
 ## Artefakt-Fluss
 
 ```
-SB-001 (PM)
-  └─▶ REQ-001 + US-001..N (BA)
-        └─▶ ADR-001..N + STRUCTURE.md (AR)
-              ├─▶ UX-001..N (UX)
+SB-000001 (PM)
+  └─▶ REQ-000001 + US-000001..N (BA)
+        └─▶ ADR-000001..N + STRUCTURE.md (AR)
+              ├─▶ UX-000001..N (UX)
               └─▶ API-Kontrakt (BE)
                     ├─▶ Code (FE + BE)
-                    └─▶ TP-001 + TR-001 (QA)
-                          └─▶ RV-001 (RV)
+                    └─▶ TP-000001 + TR-000001 (QA)
+                          └─▶ RV-000001 (RV)
 ```

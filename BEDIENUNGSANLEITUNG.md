@@ -102,7 +102,7 @@ Optional (Post-Sprint):
 
 **Was du tust:** Fragen beantworten. Ehrlich und konkret — vage Antworten führen zu vagen Anforderungen.
 
-**Ergebnis:** `projects/<name>/SB-001-<name>.md`
+**Ergebnis:** `projects/<name>/SB-000001-<name>.md`
 
 **Typische Fragen in dieser Phase:**
 - Was ist das Problem, das wir lösen?
@@ -120,7 +120,7 @@ Optional (Post-Sprint):
 
 **Was du tust:** User Stories gegenlesen. Akzeptanzkriterien prüfen — sind sie wirklich testbar? Stimmt die Priorisierung?
 
-**Ergebnis:** `REQ-001.md` + `US-001.md` bis `US-NNN.md`
+**Ergebnis:** `REQ-000001.md` + `US-000001.md` bis `US-NNNNNN.md`
 
 **Tipp:** Je genauer die User Stories, desto besser der Code später. Hier lohnt sich Zeit.
 
@@ -130,11 +130,11 @@ Optional (Post-Sprint):
 
 **Was passiert:** Claude analysiert Requirements und trifft begründete Technologieentscheidungen. Jede Entscheidung wird als Architecture Decision Record (ADR) dokumentiert — mit Alternativen und Ablehnungsgründen.
 
-**Was du tust:** ADR-001 (Tech-Stack) freigeben. Das ist die wichtigste Entscheidung des Projekts — sie ist bindend für alle nachfolgenden Phasen.
+**Was du tust:** ADR-000001 (Tech-Stack) freigeben. Das ist die wichtigste Entscheidung des Projekts — sie ist bindend für alle nachfolgenden Phasen.
 
-**Ergebnis:** `ADR-001-tech-stack.md` + weitere ADRs + `STRUCTURE.md`
+**Ergebnis:** `ADR-000001-tech-stack.md` + weitere ADRs + `STRUCTURE.md`
 
-**Achtung:** Erst nach ADR-001-Freigabe ist klar, welche Sprache, welches Framework, welche Datenbank genutzt wird. Frontend- und Backend-Agent halten sich strikt daran.
+**Achtung:** Erst nach ADR-000001-Freigabe ist klar, welche Sprache, welches Framework, welche Datenbank genutzt wird. Frontend- und Backend-Agent halten sich strikt daran.
 
 ---
 
@@ -144,7 +144,7 @@ Optional (Post-Sprint):
 
 **Was du tust:** UX-Specs auf Vollständigkeit prüfen. Stimmt die Journey? Sind Fehlerzustände beschrieben?
 
-**Ergebnis:** `UX-001.md` bis `UX-NNN.md` (eine pro Feature-Bereich)
+**Ergebnis:** `UX-000001.md` bis `UX-NNNNNN.md` (eine pro Feature-Bereich)
 
 **Hinweis:** Die UX-Spec ersetzt keine echten Wireframes, ist aber eine vollständige Implementierungsgrundlage für den Frontend-Agenten.
 
@@ -156,7 +156,7 @@ Optional (Post-Sprint):
 
 **Was du tust:** Sprint-Scope festlegen. Was soll in diesem Sprint fertig werden? Welche Stories verschieben wir?
 
-**Ergebnis:** `SP-001-sprint1.md` (Sprint Backlog)
+**Ergebnis:** `SP-000001-sprint1.md` (Sprint Backlog)
 
 ---
 
@@ -189,9 +189,9 @@ Claude erstellt einen manuellen Testplan aus den User Stories und Akzeptanzkrite
 ```
 /test-run mein-projekt 1
 ```
-Claude führt automatisierte Tests aus (Lint, Unit, Integration) und dokumentiert Ergebnisse. Gefundene Bugs werden als `BUG-NNN.md` erfasst.
+Claude führt automatisierte Tests aus (Lint, Unit, Integration) und dokumentiert Ergebnisse. Gefundene Bugs werden als `BUG-NNNNNN.md` erfasst.
 
-**Ergebnis:** `TP-001.md` + `TR-001.md`
+**Ergebnis:** `TP-000001.md` + `TR-000001.md`
 
 **Gate:** Keine BLOCKER-Bugs dürfen offen sein, bevor Phase 8 beginnt.
 
@@ -201,7 +201,7 @@ Claude führt automatisierte Tests aus (Lint, Unit, Integration) und dokumentier
 
 **Was passiert:** Claude übernimmt die Rolle des Code Reviewers — unabhängig von den Entwicklungsagenten. Review in 6 Dimensionen: Korrektheit, Sicherheit, ADR-Konformität, Code-Qualität, Testabdeckung, Performance.
 
-**Ergebnis:** `RV-001.md` mit einer von drei Entscheidungen:
+**Ergebnis:** `RV-000001.md` mit einer von drei Entscheidungen:
 
 | Entscheidung | Bedeutung | Nächster Schritt |
 |---|---|---|
@@ -218,9 +218,9 @@ Claude führt automatisierte Tests aus (Lint, Unit, Integration) und dokumentier
 **Was du tust:** Dokumentation gegenlesen. Ist sie verständlich für jemanden ohne technisches Wissen? Sind die richtigen Features abgedeckt?
 
 **Ergebnis:**
-- `DOC-NNN.md` — Feature-Guide pro Feature-Bereich
-- `RN-NNN.md` — Release Notes für diesen Sprint
-- `GS-001.md` — Getting-Started-Anleitung (nur beim ersten Sprint)
+- `DOC-NNNNNN.md` — Feature-Guide pro Feature-Bereich
+- `RN-NNNNNN.md` — Release Notes für diesen Sprint
+- `GS-000001.md` — Getting-Started-Anleitung (nur beim ersten Sprint)
 
 **Hinweis:** Screenshot-Platzhalter (`[SCREENSHOT: ...]`) werden gesetzt — du fügst später echte Screenshots ein.
 
@@ -256,7 +256,7 @@ Wenn ein Bug im Live-System sofort gefixt werden muss — ohne den normalen Spri
 
 Ablauf: Bug-Analyse → Implementierung (nur betroffene Dateien) → Smoke-Test → Review. Dauert typisch 2-4 Stunden statt 1-2 Wochen.
 
-**Voraussetzungen:** Der Fix ändert keine Architektur, ADR-001 bleibt gültig.
+**Voraussetzungen:** Der Fix ändert keine Architektur, ADR-000001 bleibt gültig.
 
 ### Prozess verbessern: `/retro`, `/health-check`, `/coach`
 
@@ -266,13 +266,13 @@ Der **Agile Coach Agent (AC)** ist kein Pflicht-Bestandteil jedes Sprints — er
 ```
 /retro mein-projekt 1
 ```
-Der Agile Coach stellt 2–3 gezielte Einstiegsfragen zum Sprint-Erleben, liest danach alle Sprint-Artefakte und erstellt eine strukturierte Retrospektive (RETRO-NNN) mit Keep / Stop / Start. Bei Bedarf entsteht ein Process Change Proposal (PC-NNN) mit konkreten Dateiänderungen.
+Der Agile Coach stellt 2–3 gezielte Einstiegsfragen zum Sprint-Erleben, liest danach alle Sprint-Artefakte und erstellt eine strukturierte Retrospektive (RETRO-NNNNNN) mit Keep / Stop / Start. Bei Bedarf entsteht ein Process Change Proposal (PC-NNNNNN) mit konkreten Dateiänderungen.
 
 **Nach 3+ Sprints — systemische Muster erkennen:**
 ```
 /health-check mein-projekt
 ```
-Sprint-übergreifende Analyse: Welche Probleme tauchen immer wieder auf? Welche Gates scheitern am häufigsten? Ergebnis: PC-NNN mit 3–7 priorisierten Verbesserungsvorschlägen, nach Impact/Aufwand sortiert.
+Sprint-übergreifende Analyse: Welche Probleme tauchen immer wieder auf? Welche Gates scheitern am häufigsten? Ergebnis: PC-NNNNNN mit 3–7 priorisierten Verbesserungsvorschlägen, nach Impact/Aufwand sortiert.
 
 **Jederzeit bei Prozess-Widerstand:**
 ```
@@ -307,7 +307,7 @@ Wenn vor einer Architekturentscheidung erst etwas ausprobiert werden muss:
 /spike mein-projekt "Welche Event-Streaming-Lösung passt zu unseren Anforderungen?"
 ```
 
-Ablauf: Fragestellung schärfen → Recherche + ggf. PoC → Spike Report (`SRP-NNN`). Ergebnis fließt in den nächsten `/architect`-Aufruf ein.
+Ablauf: Fragestellung schärfen → Recherche + ggf. PoC → Spike Report (`SRP-NNNNNN`). Ergebnis fließt in den nächsten `/architect`-Aufruf ein.
 
 ---
 
@@ -317,23 +317,23 @@ Alle erzeugten Dateien folgen einer einheitlichen Benennung:
 
 | Was | Kürzel | Beispiel | Erstellt von |
 |-----|--------|---------|-------------|
-| Stakeholder Brief | `SB-NNN` | `SB-001-shop.md` | PM |
-| Requirements | `REQ-NNN` | `REQ-001-auth.md` | BA |
-| User Story | `US-NNN` | `US-042-login.md` | BA |
-| Architekturentscheidung | `ADR-NNN` | `ADR-001-tech-stack.md` | AR |
-| UX-Spec | `UX-NNN` | `UX-001-onboarding.md` | UX |
-| Sprint Backlog | `SP-NNN` | `SP-001-sprint1.md` | BA+FE+BE |
-| Testplan | `TP-NNN` | `TP-001-smoke.md` | QA |
-| Testergebnis | `TR-NNN` | `TR-001-sprint1.md` | QA |
-| Review-Bericht | `RV-NNN` | `RV-001-sprint1.md` | RV |
-| Technische Schuld | `DEBT-NNN` | `DEBT-001-n+1.md` | RV |
-| Feature-Guide | `DOC-NNN` | `DOC-001-login.md` | MW |
-| Release Notes | `RN-NNN` | `RN-001-sprint1.md` | MW |
-| Getting Started | `GS-NNN` | `GS-001.md` | MW |
+| Stakeholder Brief | `SB-NNNNNN` | `SB-000001-shop.md` | PM |
+| Requirements | `REQ-NNNNNN` | `REQ-000001-auth.md` | BA |
+| User Story | `US-NNNNNN` | `US-000042-login.md` | BA |
+| Architekturentscheidung | `ADR-NNNNNN` | `ADR-000001-tech-stack.md` | AR |
+| UX-Spec | `UX-NNNNNN` | `UX-000001-onboarding.md` | UX |
+| Sprint Backlog | `SP-NNNNNN` | `SP-000001-sprint1.md` | BA+FE+BE |
+| Testplan | `TP-NNNNNN` | `TP-000001-smoke.md` | QA |
+| Testergebnis | `TR-NNNNNN` | `TR-000001-sprint1.md` | QA |
+| Review-Bericht | `RV-NNNNNN` | `RV-000001-sprint1.md` | RV |
+| Technische Schuld | `DEBT-NNNNNN` | `DEBT-000001-n+1.md` | RV |
+| Feature-Guide | `DOC-NNNNNN` | `DOC-000001-login.md` | MW |
+| Release Notes | `RN-NNNNNN` | `RN-000001-sprint1.md` | MW |
+| Getting Started | `GS-NNNNNN` | `GS-000001.md` | MW |
 | Entscheidungsprotokoll | `DECISIONS.md` | `DECISIONS.md` | Alle Agenten |
-| Sprint-Retrospektive | `RETRO-NNN` | `RETRO-001-sprint1.md` | AC |
-| Metriken-Report | `METRICS-NNN` | `METRICS-001-q2.md` | AC |
-| Impediment-Eintrag | `IMPD-NNN` | `IMPD-001-tsc-fehlt.md` | AC |
+| Sprint-Retrospektive | `RETRO-NNNNNN` | `RETRO-000001-sprint1.md` | AC |
+| Metriken-Report | `METRICS-NNNNNN` | `METRICS-001-q2.md` | AC |
+| Impediment-Eintrag | `IMPD-NNNNNN` | `IMPD-000001-tsc-fehlt.md` | AC |
 
 ### Artefakt-Status
 
@@ -362,7 +362,7 @@ Zwischen jeder Phase prüft der Orchestrator automatisch, ob die Grundvoraussetz
 | 🟡 MAJOR | Warnung — kann mit deiner Bestätigung übersprungen werden |
 | 🟢 MINOR | Hinweis — wird als TODO in die nächste Phase vererbt |
 
-**Beispiel:** Gate 2 → 3 (Requirements → Architecture) blockiert, wenn `REQ-001` noch im Status `DRAFT` ist. Claude zeigt dann genau, was fehlt und welcher Command aufgerufen werden soll.
+**Beispiel:** Gate 2 → 3 (Requirements → Architecture) blockiert, wenn `REQ-000001` noch im Status `DRAFT` ist. Claude zeigt dann genau, was fehlt und welcher Command aufgerufen werden soll.
 
 ---
 
@@ -432,11 +432,11 @@ Ja. Jedes Projekt hat einen eigenen Unterordner in `projects/` und eine eigene `
 
 **Was ist mit dem Tech-Stack? Kann ich den selbst vorgeben?**
 
-Ja. Du kannst dem Architect-Agenten beim `/architect`-Aufruf sagen welche Technologien du bevorzugst. Claude dokumentiert die Entscheidung dann in ADR-001 — mit Begründung. Oder du lässt Claude auf Basis der Requirements eine Empfehlung machen und entscheidest dann.
+Ja. Du kannst dem Architect-Agenten beim `/architect`-Aufruf sagen welche Technologien du bevorzugst. Claude dokumentiert die Entscheidung dann in ADR-000001 — mit Begründung. Oder du lässt Claude auf Basis der Requirements eine Empfehlung machen und entscheidest dann.
 
 **Muss ich alle Artefakte lesen und freigeben?**
 
-Beim manuellen Modus: Ja, empfohlen. Beim `/sprint`-Modus kannst du auf automatisches Gate-Passing vertrauen — Claude gibt nur bei echten Blockaden zurück. Kritische Dokumente (SB, ADR-001) solltest du immer kurz gegenlesen, da sie alle nachfolgenden Phasen prägen.
+Beim manuellen Modus: Ja, empfohlen. Beim `/sprint`-Modus kannst du auf automatisches Gate-Passing vertrauen — Claude gibt nur bei echten Blockaden zurück. Kritische Dokumente (SB, ADR-000001) solltest du immer kurz gegenlesen, da sie alle nachfolgenden Phasen prägen.
 
 **Was passiert mit dem Code nach dem Review?**
 
@@ -448,7 +448,7 @@ Ein leichtgewichtiges Entscheidungsprotokoll, das in jedem Projekt automatisch a
 
 **Kann ich die Tool Chain für jede Technologie nutzen?**
 
-Ja — sie ist bewusst technologieneutral. Der Architect-Agent entscheidet beim ersten Projekt, welcher Tech-Stack verwendet wird (`ADR-001`). Erst danach wird Technologie-spezifisch entwickelt.
+Ja — sie ist bewusst technologieneutral. Der Architect-Agent entscheidet beim ersten Projekt, welcher Tech-Stack verwendet wird (`ADR-000001`). Erst danach wird Technologie-spezifisch entwickelt.
 
 ---
 
@@ -470,9 +470,9 @@ Ja — sie ist bewusst technologieneutral. Der Architect-Agent entscheidet beim 
 | `/test-run` | Phase 7b: Tests ausführen |
 | `/review` | Phase 8: Code Review |
 | `/manual` | Phase 9: Nutzer-Dokumentation |
-| `/retro [projekt] [nr]` | Post-Sprint: Retrospektive (AC) → `RETRO-NNN` |
-| `/health-check [projekt]` | Post-Sprint: Metriken-Analyse (AC, ab Sprint 3) → `METRICS-NNN` |
-| `/coach [projekt] "[problem]"` | Ad-hoc: Sofortige Prozessberatung (AC, jederzeit) → `IMPD-NNN` |
+| `/retro [projekt] [nr]` | Post-Sprint: Retrospektive (AC) → `RETRO-NNNNNN` |
+| `/health-check [projekt]` | Post-Sprint: Metriken-Analyse (AC, ab Sprint 3) → `METRICS-NNNNNN` |
+| `/coach [projekt] "[problem]"` | Ad-hoc: Sofortige Prozessberatung (AC, jederzeit) → `IMPD-NNNNNN` |
 | `/agile-coach retro\|metrics\|impediment` | Umbrella-Command für alle AC-Modi |
 
 ---
@@ -489,4 +489,4 @@ Ja — sie ist bewusst technologieneutral. Der Architect-Agent entscheidet beim 
 
 ---
 
-*Letzte Aktualisierung: 2026-06-19 — Tool Chain v1.2 (AC implementiert: /retro, /health-check, /coach, /agile-coach — RETRO-NNN, METRICS-NNN, IMPD-NNN)*
+*Letzte Aktualisierung: 2026-06-19 — Tool Chain v1.2 (AC implementiert: /retro, /health-check, /coach, /agile-coach — RETRO-NNNNNN, METRICS-NNNNNN, IMPD-NNNNNN)*

@@ -16,7 +16,7 @@ Ohne Argument wird nach dem Projektnamen gefragt.
 2. Legt `projects/<projektname>/INDEX.md` an
 3. Aktiviert den PM-Agenten mit seinem System-Prompt (aus `toolchain/agents/pm-agent.md`)
 4. Führt ein strukturiertes Stakeholder-Interview durch (max. 3 Runden à max. 3 Fragen)
-5. Erstellt `projects/<projektname>/SB-001-<projektname>.md`
+5. Erstellt `projects/<projektname>/SB-000001-<projektname>.md`
 6. Aktualisiert `projects/<projektname>/INDEX.md`
 7. Gibt Übergabe-Zusammenfassung für `/ba` aus
 
@@ -31,6 +31,6 @@ Nach Abschluss: `/ba` aufrufen
 ---
 
 **Agent:** PM (Product Manager)
-**Output:** `SB-NNN` Stakeholder Brief
+**Output:** `SB-NNNNNN` Stakeholder Brief
 **Template:** `toolchain/templates/stakeholder-brief.md`
 **Agent-Definition:** `toolchain/agents/pm-agent.md`

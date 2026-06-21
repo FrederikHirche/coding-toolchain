@@ -1,24 +1,24 @@
 ---
-id: TP-NNN
-title: Testplan [Projekttitel] Sprint NNN
+id: TP-NNNNNN
+title: Testplan [Projekttitel] Sprint NNNNNN
 version: 1.0
 status: DRAFT
 author-agent: QA (QA Engineer)
 date: YYYY-MM-DD
-sprint: NNN
-based-on: US-NNN (kommagetrennte Liste)
+sprint: NNNNNN
+based-on: US-NNNNNN (kommagetrennte Liste)
 supersedes: —
 superseded-by: —
 ablage: projects/<name>/testing/
 ---
 
-# Testplan: [Projekttitel] — Sprint NNN
+# Testplan: [Projekttitel] — Sprint NNNNNN
 
 ## 1. Testumfang
 
-**Getestete Features (Sprint NNN):**
-- US-NNN: [Titel]
-- US-NNN: [Titel]
+**Getestete Features (Sprint NNNNNN):**
+- US-NNNNNN: [Titel]
+- US-NNNNNN: [Titel]
 
 **Explizit NICHT getestet (Begründung):**
 - [Feature / Bereich] — [Grund: z. B. außerhalb Sprint-Scope, wird manuell getestet]
@@ -51,7 +51,7 @@ ablage: projects/<name>/testing/
 
 ```bash
 # Unit Tests
-[Befehl aus ADR-001 / STRUCTURE.md]
+[Befehl aus ADR-000001 / STRUCTURE.md]
 
 # Integration Tests
 [Befehl]
@@ -73,7 +73,7 @@ npx playwright test --reporter=html
 
 | Testdatei | Feature-Bereich | US-Referenz | Status |
 |---|---|---|---|
-| `tests/e2e/[feature].spec.ts` | [Bereich] | US-NNN | [ ] vorhanden / [ ] zu erstellen |
+| `tests/e2e/[feature].spec.ts` | [Bereich] | US-NNNNNN | [ ] vorhanden / [ ] zu erstellen |
 
 **Page Objects (POM):**
 
@@ -85,9 +85,9 @@ npx playwright test --reporter=html
 
 | TC-ID | Beschreibung | Typ | Priorität |
 |---|---|---|---|
-| E2E-001 | [Happy Path] | Happy Path | P0 |
-| E2E-002 | [Fehlerfall] | Error Case | P1 |
-| E2E-003 | [Accessibility] | A11y | P1 |
+| E2E-000001 | [Happy Path] | Happy Path | P0 |
+| E2E-000002 | [Fehlerfall] | Error Case | P1 |
+| E2E-000003 | [Accessibility] | A11y | P1 |
 
 **Voraussetzungen für E2E-Lauf:**
 - [ ] App läuft auf `[baseURL aus playwright.config.ts]`
@@ -98,9 +98,9 @@ npx playwright test --reporter=html
 
 ## 4. Manuelle Testfälle
 
-### Feature: [US-NNN — Titel]
+### Feature: [US-NNNNNN — Titel]
 
-#### TC-001: [Testfall-Titel] — P0 (Blocker)
+#### TC-000001: [Testfall-Titel] — P0 (Blocker)
 
 | Feld | Inhalt |
 |---|---|
@@ -111,7 +111,7 @@ npx playwright test --reporter=html
 | **Status** | ⬜ Nicht getestet |
 | **Anmerkungen** | — |
 
-#### TC-002: [Fehlerfalltest] — P1 (Kritisch)
+#### TC-000002: [Fehlerfalltest] — P1 (Kritisch)
 
 | Feld | Inhalt |
 |---|---|
@@ -130,9 +130,9 @@ npx playwright test --reporter=html
 
 | ID | Test | Methode | Erwartetes Ergebnis |
 |---|---|---|---|
-| SEC-001 | Unautorisierter Zugriff auf geschützte Route | Direktaufruf ohne Token | HTTP 401 / Redirect Login |
-| SEC-002 | SQL-Injection im Suchfeld | Eingabe: `' OR '1'='1` | Kein Datenleck, saubere Fehlermeldung |
-| SEC-003 | XSS im Textfeld | Eingabe: `<script>alert(1)</script>` | Kein Script-Execution |
+| SEC-000001 | Unautorisierter Zugriff auf geschützte Route | Direktaufruf ohne Token | HTTP 401 / Redirect Login |
+| SEC-000002 | SQL-Injection im Suchfeld | Eingabe: `' OR '1'='1` | Kein Datenleck, saubere Fehlermeldung |
+| SEC-000003 | XSS im Textfeld | Eingabe: `<script>alert(1)</script>` | Kein Script-Execution |
 
 ---
 
@@ -154,7 +154,7 @@ npx playwright test --reporter=html
 
 | ID | Schweregrad | Titel | US-Referenz | Status |
 |---|---|---|---|---|
-| BUG-NNN | BLOCKER | [Kurzbeschreibung] | US-NNN | OFFEN |
+| BUG-NNNNNN | BLOCKER | [Kurzbeschreibung] | US-NNNNNN | OFFEN |
 
 ---
 

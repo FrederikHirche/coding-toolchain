@@ -11,7 +11,7 @@ Zweck: Einzelne Referenzdatei für NotebookLM-Analyse und schnelle Orientierung.
 ## Architektur-Prinzip
 
 Templates sind technologieunabhängig. Kein Template setzt eine Sprache, ein Framework oder
-eine Plattform voraus. Technologieentscheidungen werden ausschließlich in `ADR-001-tech-stack.md`
+eine Plattform voraus. Technologieentscheidungen werden ausschließlich in `ADR-000001-tech-stack.md`
 festgehalten und sind ab Status APPROVED verbindlich.
 
 Jedes Template enthält:
@@ -26,7 +26,7 @@ Artefakte werden niemals gelöscht.
 
 ## SB — Stakeholder Brief (`stakeholder-brief.md`)
 
-**Präfix:** `SB-NNN`  
+**Präfix:** `SB-NNNNNN`  
 **Erstellt von:** PM (Product Manager) via `/kickoff`  
 **Basiert auf:** Stakeholder-Interview (5 Runden)
 
@@ -48,9 +48,9 @@ was das Projekt ist, warum es existiert, für wen es gebaut wird und was Erfolg 
 
 ## REQ — Requirements-Dokument (`requirements.md`)
 
-**Präfix:** `REQ-NNN`  
+**Präfix:** `REQ-NNNNNN`  
 **Erstellt von:** BA (Business Analyst) via `/ba`  
-**Basiert auf:** `SB-NNN`
+**Basiert auf:** `SB-NNNNNN`
 
 Das Requirements-Dokument strukturiert alle Anforderungen des Projekts in eine Form,
 die der Architect und die Entwickler direkt verwenden können.
@@ -66,9 +66,9 @@ die der Architect und die Entwickler direkt verwenden können.
 
 ## US — User Story (`user-story.md`)
 
-**Präfix:** `US-NNN`  
+**Präfix:** `US-NNNNNN`  
 **Erstellt von:** BA (Business Analyst) via `/ba`, verfeinert in `/refine`  
-**Basiert auf:** `REQ-NNN`
+**Basiert auf:** `REQ-NNNNNN`
 
 Jede User Story beschreibt ein konkretes Nutzerziel aus Nutzerperspektive.
 Pro Feature-Bereich werden mehrere User Stories erstellt.
@@ -90,9 +90,9 @@ Pro Feature-Bereich werden mehrere User Stories erstellt.
 
 ## ADR — Architecture Decision Record (`architecture-decision.md`)
 
-**Präfix:** `ADR-NNN` (ADR-001 ist immer der Tech-Stack)  
+**Präfix:** `ADR-NNNNNN` (ADR-000001 ist immer der Tech-Stack)  
 **Erstellt von:** AR (Software Architect) via `/architect`  
-**Basiert auf:** `REQ-NNN`, `US-NNN`, `SB-NNN`
+**Basiert auf:** `REQ-NNNNNN`, `US-NNNNNN`, `SB-NNNNNN`
 
 ADRs dokumentieren technische Entscheidungen mit vollständiger Begründung — inklusive
 verworfener Alternativen. Sie sind ab Status APPROVED verbindlich für alle Agenten.
@@ -106,16 +106,16 @@ verworfener Alternativen. Sie sind ab Status APPROVED verbindlich für alle Agen
 - Konsequenzen: Positiv / Negativ / Neutral
 - Reversibilität: Kann die Entscheidung später rückgängig gemacht werden?
 
-ADR-001 (Tech-Stack) deckt ab: Programmiersprache(n), Frontend-Ansatz, Backend-Ansatz
+ADR-000001 (Tech-Stack) deckt ab: Programmiersprache(n), Frontend-Ansatz, Backend-Ansatz
 und API-Stil, Datenhaltung, Hosting/Deployment, Auth, Observability.
 
 ---
 
 ## UX — UX-Spec (`ux-spec.md`)
 
-**Präfix:** `UX-NNN`  
+**Präfix:** `UX-NNNNNN`  
 **Erstellt von:** UX (UX Designer) via `/ux`  
-**Basiert auf:** `US-NNN`, ADRs, `SB-NNN`
+**Basiert auf:** `US-NNNNNN`, ADRs, `SB-NNNNNN`
 
 Die UX-Spec ist die verbindliche Grundlage für den Frontend-Agenten. Sie beschreibt
 das Nutzererlebnis vollständig — ohne Design-Tools zu benötigen.
@@ -133,9 +133,9 @@ das Nutzererlebnis vollständig — ohne Design-Tools zu benötigen.
 
 ## SP — Sprint Backlog (`sprint-backlog.md`)
 
-**Präfix:** `SP-NNN`  
+**Präfix:** `SP-NNNNNN`  
 **Erstellt von:** BA, FE, BE (gemeinsam) via `/refine`  
-**Basiert auf:** `US-NNN`, `UX-NNN`, ADRs
+**Basiert auf:** `US-NNNNNN`, `UX-NNNNNN`, ADRs
 
 Der Sprint Backlog definiert, was in einem Sprint umgesetzt wird — verfeinert,
 geschätzt und mit klarem Sprint-Ziel.
@@ -152,9 +152,9 @@ geschätzt und mit klarem Sprint-Ziel.
 
 ## TP — Testplan (`test-plan.md`)
 
-**Präfix:** `TP-NNN`  
+**Präfix:** `TP-NNNNNN`  
 **Erstellt von:** QA (QA Engineer) via `/test-plan`  
-**Basiert auf:** `US-NNN`, `UX-NNN`, FE/BE-Übergabeprotokolle
+**Basiert auf:** `US-NNNNNN`, `UX-NNNNNN`, FE/BE-Übergabeprotokolle
 
 Der Testplan definiert systematisch alle Testfälle eines Sprints, bevor die Tests
 ausgeführt werden.
@@ -172,9 +172,9 @@ ausgeführt werden.
 
 ## RV — Review-Checkliste (`review-checklist.md`)
 
-**Präfix:** `RV-NNN`  
+**Präfix:** `RV-NNNNNN`  
 **Erstellt von:** RV (Code Reviewer) via `/review`  
-**Basiert auf:** Code-Diff, `TR-NNN`, `TP-NNN`, ADRs, `US-NNN`
+**Basiert auf:** Code-Diff, `TR-NNNNNN`, `TP-NNNNNN`, ADRs, `US-NNNNNN`
 
 Der Review-Bericht dokumentiert das Code Review in 6 Dimensionen und enthält die
 finale Merge-Entscheidung.
@@ -218,13 +218,13 @@ sondern fortlaufend ergänzt.
 Laufendes Protokoll aller projektbezogenen Entscheidungen — wer hat wann was entschieden
 und warum. Verhindert, dass Entscheidungen vergessen werden oder neu diskutiert werden müssen.
 
-**Eintrag-Format:** DEC-NNN | Datum | Agent | Entscheidung | Begründung | Alternativen
+**Eintrag-Format:** DEC-NNNNNN | Datum | Agent | Entscheidung | Begründung | Alternativen
 
 ---
 
 ## RETRO — Sprint-Retrospektive (`retrospective.md`)
 
-**Präfix:** `RETRO-NNN`  
+**Präfix:** `RETRO-NNNNNN`  
 **Erstellt von:** AC (Agile Coach) via `/retro`  
 **Basiert auf:** Sprint-Artefakte, Nutzer-Interview
 
@@ -244,7 +244,7 @@ nicht die Inhalte.
 
 ## IMPD — Impediment-Dokument (`impediment.md`)
 
-**Präfix:** `IMPD-NNN`  
+**Präfix:** `IMPD-NNNNNN`  
 **Erstellt von:** AC (Agile Coach) via `/impediment`  
 **Basiert auf:** Nutzer-Interview
 
@@ -262,7 +262,7 @@ Interview, wenn der Nutzer Friction spürt, das Problem aber noch nicht benennen
 
 ## PC — Process Change Proposal (`process-change.md`)
 
-**Präfix:** `PC-NNN`  
+**Präfix:** `PC-NNNNNN`  
 **Erstellt von:** AC (Agile Coach) via `/retro`, `/health-check`, `/coach`, `/impediment`
 
 Formaler Vorschlag zur Änderung der Tool Chain selbst — nicht des Projekt-Inhalts.
@@ -281,7 +281,7 @@ Wird erst nach Nutzer-Freigabe umgesetzt.
 
 ## ADR-Branching — Branching Strategy (`branching-strategy.md`)
 
-**Präfix:** `ADR-NNN` (eingebettet als ADR)  
+**Präfix:** `ADR-NNNNNN` (eingebettet als ADR)  
 **Erstellt von:** AR (Software Architect) via `/architect`
 
 Spezialisiertes ADR-Template für die Git-Branching-Strategie des Projekts.
@@ -291,7 +291,7 @@ Release-Prozess.
 **Kernabschnitte:**
 - Gewähltes Modell: Git Flow / GitHub Flow / Trunk-Based / Feature Branch
 - Branch-Typen: main, develop, feature/, hotfix/, release/
-- Namenskonventionen: `feature/US-042-login`, `hotfix/BUG-007-auth`
+- Namenskonventionen: `feature/US-000042-login`, `hotfix/BUG-000007-auth`
 - Merge-Strategie: Merge Commit / Squash / Rebase
 - Release-Prozess: Wann wird ein Release-Branch erstellt?
 - Schutzregeln: Wer darf in main/develop mergen?

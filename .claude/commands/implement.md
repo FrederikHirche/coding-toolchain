@@ -12,7 +12,7 @@ Aktiviert **Frontend Developer Agent (FE)** und/oder **Backend Developer Agent (
 
 ## Was passiert (BE-Modus)
 
-1. Liest ADR-001, STRUCTURE.md, REQ-NNN, US-NNN des Sprints
+1. Liest ADR-000001, STRUCTURE.md, REQ-NNNNNN, US-NNNNNN des Sprints
 2. Erstellt API-Kontrakt (OpenAPI / GraphQL Schema) — vor Code
 3. Implementiert: Datenschicht → Business Logic → API-Layer
 4. Schreibt Integration-Tests
@@ -20,7 +20,7 @@ Aktiviert **Frontend Developer Agent (FE)** und/oder **Backend Developer Agent (
 
 ## Was passiert (FE-Modus)
 
-1. Liest UX-NNN, ADR-001, API-Kontrakt
+1. Liest UX-NNNNNN, ADR-000001, API-Kontrakt
 2. Implementiert Komponenten: Bottom-Up (Atome → Moleküle → Seiten)
 3. Schreibt Unit-Tests
 4. Setzt Accessibility-Attribute
@@ -39,5 +39,5 @@ Nach Abschluss: `/test-plan`
 ---
 
 **Agenten:** FE (Frontend Developer), BE (Backend Developer)
-**Input:** UX-NNN, ADR-NNN, STRUCTURE.md, US-NNN
+**Input:** UX-NNNNNN, ADR-NNNNNN, STRUCTURE.md, US-NNNNNN
 **Agent-Definitionen:** `toolchain/agents/frontend-agent.md`, `toolchain/agents/backend-agent.md`

@@ -27,11 +27,11 @@ Aktiviert den **Orchestrator** im Read-only-Modus. Gibt einen vollständigen Lag
 PROJEKT: mein-projekt    PHASE: ARCHITECTURE
 ═══════════════════════════════════════
 ARTEFAKTE:
-  ✅ SB-001 (APPROVED)
-  ✅ REQ-001 (APPROVED), US-001..005 (APPROVED)
-  ⚠️  ADR-001 (DRAFT) — GATE BLOCKIERT
+  ✅ SB-000001 (APPROVED)
+  ✅ REQ-000001 (APPROVED), US-000001..005 (APPROVED)
+  ⚠️  ADR-000001 (DRAFT) — GATE BLOCKIERT
 
-BLOCKER: 1 — ADR-001 muss APPROVED sein
+BLOCKER: 1 — ADR-000001 muss APPROVED sein
 NÄCHSTE AKTION: /architect mein-projekt
 ```
 

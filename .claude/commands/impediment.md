@@ -19,8 +19,8 @@ Ohne Projektname: AC fragt zuerst nach dem Projekt, dann startet das Interview.
 2. Nach dem Interview: AC liest relevante Artefakte (`.phase`, `INDEX.md`, `DECISIONS.md`)
 3. Erstellt Diagnose: Was ist das Impediment, wo sitzt es, wie schwer ist es?
 4. Gibt eine Sofortmaßnahme und eine strukturelle Empfehlung aus
-5. Erstellt `IMPD-NNN` Impediment-Dokument
-6. Erstellt `PC-NNN` wenn eine Tool-Chain-Änderung empfohlen wird
+5. Erstellt `IMPD-NNNNNN` Impediment-Dokument
+6. Erstellt `PC-NNNNNN` wenn eine Tool-Chain-Änderung empfohlen wird
 
 ## Unterschied zu anderen AC-Commands
 
@@ -37,13 +37,13 @@ Ohne Projektname: AC fragt zuerst nach dem Projekt, dann startet das Interview.
 
 ## Nächster Schritt
 
-Nach Abschluss: Sofortmaßnahme aus `IMPD-NNN` umsetzen.
-Falls strukturelle Tool-Chain-Änderung nötig: `/coach [projektname]` für PC-NNN.
+Nach Abschluss: Sofortmaßnahme aus `IMPD-NNNNNN` umsetzen.
+Falls strukturelle Tool-Chain-Änderung nötig: `/coach [projektname]` für PC-NNNNNN.
 
 ---
 
 **Agent:** AC (Agile Coach)
 **Input:** Interview-Antworten des Nutzers + situativ relevante Projektartefakte
-**Output:** `IMPD-NNN`, ggf. `PC-NNN`
+**Output:** `IMPD-NNNNNN`, ggf. `PC-NNNNNN`
 **Template:** `toolchain/templates/impediment.md`, `toolchain/templates/process-change.md`
 **Agent-Definition:** `toolchain/agents/agile-coach-agent.md`

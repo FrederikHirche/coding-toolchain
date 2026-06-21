@@ -47,13 +47,13 @@ Der Standard-Workflow für einen vollständigen Entwicklungssprint — von Disco
 
 **Befehl:** `/kickoff`  
 **Agent:** PM  
-**Ergebnis:** `SB-NNN`
+**Ergebnis:** `SB-NNNNNN`
 
 ### Gate 1 → Phase 2
 
 | Kriterium | Prüfung | Schwere |
 |---|---|---|
-| `SB-NNN` existiert | Datei vorhanden | BLOCKER |
+| `SB-NNNNNN` existiert | Datei vorhanden | BLOCKER |
 | Status `APPROVED` | Header-Feld `status: APPROVED` | BLOCKER |
 | Scope definiert | Abschnitt "In Scope" und "Out of Scope" ausgefüllt | BLOCKER |
 | ≥ 3 Must-Have-Features | MoSCoW-Tabelle zählen | MAJOR |
@@ -69,13 +69,13 @@ Der Standard-Workflow für einen vollständigen Entwicklungssprint — von Disco
 
 **Befehl:** `/ba`  
 **Agent:** BA  
-**Ergebnis:** `REQ-NNN`, `US-NNN` (mehrere)
+**Ergebnis:** `REQ-NNNNNN`, `US-NNNNNN` (mehrere)
 
 ### Gate 2 → Phase 3
 
 | Kriterium | Prüfung | Schwere |
 |---|---|---|
-| `REQ-NNN` status `APPROVED` | Header prüfen | BLOCKER |
+| `REQ-NNNNNN` status `APPROVED` | Header prüfen | BLOCKER |
 | Alle Must-Have-Features haben ≥1 US | Zählen | BLOCKER |
 | Jede US hat ≥3 Akzeptanzkriterien | Given/When/Then-Blöcke zählen | BLOCKER |
 | Non-Functional Requirements dokumentiert | Abschnitt 2 in REQ | MAJOR |
@@ -90,16 +90,16 @@ Der Standard-Workflow für einen vollständigen Entwicklungssprint — von Disco
 
 **Befehl:** `/architect`  
 **Agent:** AR  
-**Ergebnis:** `ADR-001` (Tech-Stack), weitere ADRs, `STRUCTURE.md`
+**Ergebnis:** `ADR-000001` (Tech-Stack), weitere ADRs, `STRUCTURE.md`
 
 ### Gate 3 → Phase 4
 
 | Kriterium | Prüfung | Schwere |
 |---|---|---|
-| `ADR-001` status `APPROVED` | Header prüfen | BLOCKER |
+| `ADR-000001` status `APPROVED` | Header prüfen | BLOCKER |
 | Alle NFRs aus REQ adressiert | Kreuzreferenz REQ ↔ ADRs | BLOCKER |
 | `STRUCTURE.md` existiert | Datei vorhanden | BLOCKER |
-| Systemdesign-Diagramm | In ADR-001 oder eigenem Dok | MAJOR |
+| Systemdesign-Diagramm | In ADR-000001 oder eigenem Dok | MAJOR |
 | Jeder ADR hat Alternativen-Sektion | Abschnitt prüfen | MAJOR |
 | Reversibilität dokumentiert | Checkbox in ADR | MINOR |
 
@@ -111,13 +111,13 @@ Der Standard-Workflow für einen vollständigen Entwicklungssprint — von Disco
 
 **Befehl:** `/ux`  
 **Agent:** UX  
-**Ergebnis:** `UX-NNN` pro Feature-Bereich
+**Ergebnis:** `UX-NNNNNN` pro Feature-Bereich
 
 ### Gate 4 → Phase 5
 
 | Kriterium | Prüfung | Schwere |
 |---|---|---|
-| `UX-NNN` für alle Sprint-Stories | Kreuzreferenz US ↔ UX | BLOCKER |
+| `UX-NNNNNN` für alle Sprint-Stories | Kreuzreferenz US ↔ UX | BLOCKER |
 | Alle UI-Zustände beschrieben | loading, error, empty, success | BLOCKER |
 | Accessibility-Level definiert | WCAG-Angabe in UX | MAJOR |
 | Microcopy vollständig | Alle User-facing Texte | MAJOR |
@@ -132,13 +132,13 @@ Der Standard-Workflow für einen vollständigen Entwicklungssprint — von Disco
 
 **Befehl:** `/refine`  
 **Agenten:** BA + FE + BE  
-**Ergebnis:** `SP-NNN` (Sprint Backlog)
+**Ergebnis:** `SP-NNNNNN` (Sprint Backlog)
 
 ### Gate 5 → Phase 6
 
 | Kriterium | Prüfung | Schwere |
 |---|---|---|
-| `SP-NNN` existiert | Datei vorhanden | BLOCKER |
+| `SP-NNNNNN` existiert | Datei vorhanden | BLOCKER |
 | Alle Sprint-Stories geschätzt | Keine leere Schätzung | BLOCKER |
 | Sprint-Ziel definiert | Abschnitt im SP | MAJOR |
 | Technische Voraussetzungen gelistet | Abschnitt im SP | MAJOR |
@@ -174,16 +174,16 @@ Der Standard-Workflow für einen vollständigen Entwicklungssprint — von Disco
 
 **Befehle:** `/test-plan` → `/test-run`  
 **Agent:** QA  
-**Ergebnis:** `TP-NNN`, `TR-NNN`, ggf. `BUG-NNN`
+**Ergebnis:** `TP-NNNNNN`, `TR-NNNNNN`, ggf. `BUG-NNNNNN`
 
 ### Gate 7 → Phase 8
 
 | Kriterium | Prüfung | Schwere |
 |---|---|---|
-| `TP-NNN` status `APPROVED` | Header prüfen | BLOCKER |
+| `TP-NNNNNN` status `APPROVED` | Header prüfen | BLOCKER |
 | Keine offenen `BLOCKER`-Bugs | BUG-Dateien prüfen | BLOCKER |
 | Automatisierte Tests: alle grün | `test`-Befehl aus `.toolchain.yml` | BLOCKER |
-| `TR-NNN` mit Freigabe `APPROVED` oder `CONDITIONAL` | Header prüfen | BLOCKER |
+| `TR-NNNNNN` mit Freigabe `APPROVED` oder `CONDITIONAL` | Header prüfen | BLOCKER |
 | Coverage-Ziel erreicht | Coverage-Report prüfen | MAJOR |
 | P0-Testfälle alle `✅ Bestanden` | TP-Tabelle prüfen | MAJOR |
 
@@ -195,16 +195,16 @@ Der Standard-Workflow für einen vollständigen Entwicklungssprint — von Disco
 
 **Befehl:** `/review`  
 **Agent:** RV  
-**Ergebnis:** `RV-NNN` mit Merge-Entscheidung
+**Ergebnis:** `RV-NNNNNN` mit Merge-Entscheidung
 
 ### Gate 8 → DONE
 
 | Kriterium | Prüfung | Schwere |
 |---|---|---|
-| `RV-NNN` status `APPROVED` | Header prüfen | BLOCKER |
+| `RV-NNNNNN` status `APPROVED` | Header prüfen | BLOCKER |
 | Entscheidung: `APPROVED` | Review-Entscheidungsfeld | BLOCKER |
 | Keine `BLOCKER`-Anmerkungen | Review-Bericht | BLOCKER |
-| Technische Schulden erfasst | DEBT-NNN erstellt oder explizit "keine" | MAJOR |
+| Technische Schulden erfasst | DEBT-NNNNNN erstellt oder explizit "keine" | MAJOR |
 
 **Bei PASS:** `.phase` auf `DOCUMENTATION` setzen
 
@@ -214,14 +214,14 @@ Der Standard-Workflow für einen vollständigen Entwicklungssprint — von Disco
 
 **Befehl:** `/manual`  
 **Agent:** MW (Manual Writer)  
-**Ergebnis:** `DOC-NNN` (Feature-Guides), `RN-NNN` (Release Notes), `GS-001` (erster Sprint)
+**Ergebnis:** `DOC-NNNNNN` (Feature-Guides), `RN-NNNNNN` (Release Notes), `GS-000001` (erster Sprint)
 
 ### Gate 9 → DONE
 
 | Kriterium | Prüfung | Schwere |
 |---|---|---|
-| `DOC-NNN` für alle APPROVED US | Kreuzreferenz RV-NNN ↔ DOC | BLOCKER |
-| `RN-NNN` existiert | Datei vorhanden | BLOCKER |
+| `DOC-NNNNNN` für alle APPROVED US | Kreuzreferenz RV-NNNNNN ↔ DOC | BLOCKER |
+| `RN-NNNNNN` existiert | Datei vorhanden | BLOCKER |
 | Kein Entwicklerjargon ohne Erklärung | Selbstauskunft MW | MAJOR |
 | Jede Anleitung hat Happy Path + ≥1 Fehlerfall | Inhaltsprüfung | MAJOR |
 | Screenshot-Platzhalter gesetzt | `[SCREENSHOT: ...]`-Marker | MINOR |
@@ -239,18 +239,18 @@ Der Standard-Workflow für einen vollständigen Entwicklungssprint — von Disco
 **Ergebnis:** Release-Tag, aktualisiertes `.phase`
 
 Diese Phase führt den Code-Merge gemäß der im Projekt festgelegten Branching-Strategie durch.
-Die Strategie ist verbindlich in `ADR-NNN-branching-strategy.md` dokumentiert — ORCH entscheidet
+Die Strategie ist verbindlich in `ADR-NNNNNN-branching-strategy.md` dokumentiert — ORCH entscheidet
 nichts Strategisches, sondern führt das vereinbarte Protokoll aus.
 
 ### Gate 10 → RELEASED
 
 | Kriterium | Prüfung | Schwere |
 |---|---|---|
-| Branching-Strategie in ADR vorhanden | `ADR-NNN-branching-strategy.md` status `APPROVED` | BLOCKER |
+| Branching-Strategie in ADR vorhanden | `ADR-NNNNNN-branching-strategy.md` status `APPROVED` | BLOCKER |
 | Merge-Ziel-Branch korrekt | Gemäß ADR: main / develop / release/x.y | BLOCKER |
 | Git-Tag gesetzt | `vSPRINT-N` oder semver gemäß ADR | BLOCKER |
 | `REGISTRY.md` aktualisiert | Sprint als RELEASED markiert | MAJOR |
-| Release Notes verlinkt | `RN-NNN` in REGISTRY-Eintrag | MAJOR |
+| Release Notes verlinkt | `RN-NNNNNN` in REGISTRY-Eintrag | MAJOR |
 | `.phase` auf `RELEASED` gesetzt | Header prüfen | MAJOR |
 
 ### Release-Checkliste (ORCH führt aus)
@@ -294,7 +294,7 @@ und erfordert explizite Nutzeranweisung mit Begründung — kein automatischer S
 Nach erfolgreichem Release (Phase 10):
 - [ ] `.phase` auf `RELEASED` gesetzt
 - [ ] `REGISTRY.md` aktualisiert (Sprint als RELEASED markiert)
-- [ ] Technische Schulden in `DEBT-NNN` dokumentiert
+- [ ] Technische Schulden in `DEBT-NNNNNN` dokumentiert
 - [ ] Abgelöste Artefakte auf `SUPERSEDED` gesetzt
 - [ ] Release-Tag in Git gesetzt und gepusht
 - [ ] Nächster Sprint: `/refine` vorbereiten

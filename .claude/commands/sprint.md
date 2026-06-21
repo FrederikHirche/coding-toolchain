@@ -21,7 +21,7 @@ Gate prüfen → [PASS] nächste Phase | [FAIL] Stop + Bericht
 Phasen-Sequenz (Full Sprint):
 1. Discovery (`/kickoff`) → Gate → SB approved?
 2. Requirements (`/ba`) → Gate → REQ + US approved?
-3. Architecture (`/architect`) → Gate → ADR-001 approved?
+3. Architecture (`/architect`) → Gate → ADR-000001 approved?
 4. UX (`/ux`) → Gate → UX-Specs vollständig?
 5. Refinement (`/refine`) → Gate → Sprint-Backlog ready?
 6. Implementation (`/implement`) → Gate → Code + Tests?

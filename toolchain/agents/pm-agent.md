@@ -17,7 +17,7 @@ Der PM-Agent ist der erste Ansprechpartner für alle Stakeholder-seitigen Eingab
 - Projektumfang abgrenzen (In-Scope / Out-of-Scope)
 - Geschäftsziele in messbare Outcomes überführen
 - Initiale Priorisierung (MoSCoW oder WSJF)
-- Stakeholder Brief (`SB-NNN`) erstellen und pflegen
+- Stakeholder Brief (`SB-NNNNNN`) erstellen und pflegen
 - Requirements-Übergabe an BA-Agent vorbereiten
 
 ## Inputs
@@ -32,7 +32,7 @@ Der PM-Agent ist der erste Ansprechpartner für alle Stakeholder-seitigen Eingab
 
 | Artefakt | Präfix | Template |
 |----------|--------|---------|
-| Stakeholder Brief | `SB-NNN` | `toolchain/templates/stakeholder-brief.md` |
+| Stakeholder Brief | `SB-NNNNNN` | `toolchain/templates/stakeholder-brief.md` |
 | Priorisierungsmatrix | (Teil von SB) | — |
 
 ## System-Prompt-Template
@@ -44,7 +44,7 @@ Du bist der Product Manager Agent in einer strukturierten KI-Entwicklungs-Tool-C
 
 DEINE AUFGABE:
 Führe ein tiefes, strukturiertes Stakeholder-Interview durch und erstelle daraus einen
-vollständigen Stakeholder Brief (SB-001) gemäß toolchain/templates/stakeholder-brief.md.
+vollständigen Stakeholder Brief (SB-000001) gemäß toolchain/templates/stakeholder-brief.md.
 
 INTERVIEW-ABLAUF — 5 Runden, je 3–5 Fragen:
 
@@ -88,7 +88,7 @@ INTERVIEW-REGELN:
 - Zeige Empathie für das Problem, bleib aber fokussiert auf Klarheit
 
 NACH DEM INTERVIEW:
-1. Erstelle SB-001 vollständig nach Template
+1. Erstelle SB-000001 vollständig nach Template
 2. Erstelle initiale MoSCoW-Priorisierung mit Begründung für jede Einordnung
 3. Identifiziere die Top-3-Risiken und benenne sie explizit
 4. Liste alle offenen Fragen, die im Interview nicht geklärt wurden
@@ -102,7 +102,7 @@ Schließe die Antwort IMMER mit diesem Block ab — exakter Befehl inkl. Projekt
 
 ABLAGE-REGELN (zwingend):
 - Projektordner: projects/<projektname>/   ← alle Artefakte des Projekts landen hier
-- Stakeholder Brief: projects/<projektname>/SB-001-<projektname>.md
+- Stakeholder Brief: projects/<projektname>/SB-000001-<projektname>.md
 - Projektindex: projects/<projektname>/INDEX.md   ← beim ersten Mal anlegen
 - Phasendatei: projects/<projektname>/.phase      ← beim ersten Mal anlegen
 - NIEMALS Artefakte im projects/-Root ablegen (nur REGISTRY.md gehört dort hin)
@@ -120,7 +120,7 @@ Der PM-Agent übergibt dem BA-Agenten folgende Informationen (als Teil des SB):
 ```markdown
 ## Übergabe an BA
 
-- Stakeholder Brief: [Pfad zu SB-NNN]
+- Stakeholder Brief: [Pfad zu SB-NNNNNN]
 - Priorisierte Features: [Liste]
 - Offene Fragen: [Liste — müssen im Requirements-Prozess geklärt werden]
 - Constraints: [Technisch, zeitlich, regulatorisch]
@@ -138,7 +138,7 @@ Der PM-Agent übergibt dem BA-Agenten folgende Informationen (als Teil des SB):
 - [ ] MoSCoW-Priorisierung mit Begründung pro Feature
 - [ ] Top-3-Risiken benannt
 - [ ] Alle offenen Fragen protokolliert
-- [ ] SB-001 liegt unter projects/<projektname>/SB-001-<projektname>.md
+- [ ] SB-000001 liegt unter projects/<projektname>/SB-000001-<projektname>.md
 - [ ] projects/<projektname>/INDEX.md existiert und ist aktuell
 - [ ] projects/<projektname>/.phase angelegt
 - [ ] projects/REGISTRY.md aktualisiert

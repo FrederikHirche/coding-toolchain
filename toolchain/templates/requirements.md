@@ -1,11 +1,11 @@
 ---
-id: REQ-NNN
+id: REQ-NNNNNN
 title: [Projekttitel] Requirements
 version: 1.0
 status: DRAFT
 author-agent: BA (Business Analyst)
 date: YYYY-MM-DD
-based-on: SB-NNN
+based-on: SB-NNNNNN
 supersedes: —
 superseded-by: —
 ---
@@ -18,14 +18,14 @@ superseded-by: —
 
 | ID | Anforderung | Priorität | US-Referenz |
 |---|---|---|---|
-| F-001 | [Das System muss / soll ...] | Must | US-NNN |
-| F-002 | [Das System muss / soll ...] | Should | US-NNN |
+| F-001 | [Das System muss / soll ...] | Must | US-NNNNNN |
+| F-002 | [Das System muss / soll ...] | Should | US-NNNNNN |
 
 ### 1.2 [Feature-Bereich 2]
 
 | ID | Anforderung | Priorität | US-Referenz |
 |---|---|---|---|
-| F-010 | [Das System muss / soll ...] | Must | US-NNN |
+| F-010 | [Das System muss / soll ...] | Must | US-NNNNNN |
 
 ---
 
@@ -74,13 +74,13 @@ superseded-by: —
 
 ```
 Epic 1: [Name]
-  └─ US-001: [Kurztitel] (Must)
-  └─ US-002: [Kurztitel] (Must) → abhängig von US-001
-  └─ US-003: [Kurztitel] (Should)
+  └─ US-000001: [Kurztitel] (Must)
+  └─ US-000002: [Kurztitel] (Must) → abhängig von US-000001
+  └─ US-000003: [Kurztitel] (Should)
 
 Epic 2: [Name]
-  └─ US-010: [Kurztitel] (Must)
-  └─ US-011: [Kurztitel] (Could) → abhängig von US-010
+  └─ US-000010: [Kurztitel] (Must)
+  └─ US-000011: [Kurztitel] (Could) → abhängig von US-000010
 ```
 
 ---
@@ -121,15 +121,15 @@ Epic 2: [Name]
 ## 8. Übergabe an Architect-Agent
 
 **Kritische nicht-funktionale Anforderungen:**
-- [NF-NNN: Besonders wichtig für Architekturentscheidungen]
+- [NF-NNNNNN: Besonders wichtig für Architekturentscheidungen]
 
 **Technische Fragen für Architect:**
 - [Was muss der Architect klären?]
 
 **Sprint-1-Kandidaten:**
-- US-001: [Titel]
-- US-002: [Titel]
-- US-010: [Titel]
+- US-000001: [Titel]
+- US-000002: [Titel]
+- US-000010: [Titel]
 
 ---
 

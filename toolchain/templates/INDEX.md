@@ -9,27 +9,27 @@ Letzte Aktualisierung: 2026-06-18
 
 | Datei | Artefakt-Präfix | Erstellt von | Phase |
 |-------|----------------|-------------|-------|
-| `stakeholder-brief.md` | `SB-NNN` | PM | Discovery |
-| `requirements.md` | `REQ-NNN` | BA | Requirements |
-| `user-story.md` | `US-NNN` | BA | Requirements |
-| `architecture-decision.md` | `ADR-NNN` | AR | Architecture |
-| `ux-spec.md` | `UX-NNN` | UX | UX Design |
-| `sprint-backlog.md` | `SP-NNN` | BA+FE+BE | Refinement |
-| `test-plan.md` | `TP-NNN` | QA | Testing |
-| `review-checklist.md` | `RV-NNN` | RV | Review |
+| `stakeholder-brief.md` | `SB-NNNNNN` | PM | Discovery |
+| `requirements.md` | `REQ-NNNNNN` | BA | Requirements |
+| `user-story.md` | `US-NNNNNN` | BA | Requirements |
+| `architecture-decision.md` | `ADR-NNNNNN` | AR | Architecture |
+| `ux-spec.md` | `UX-NNNNNN` | UX | UX Design |
+| `sprint-backlog.md` | `SP-NNNNNN` | BA+FE+BE | Refinement |
+| `test-plan.md` | `TP-NNNNNN` | QA | Testing |
+| `review-checklist.md` | `RV-NNNNNN` | RV | Review |
 | `tech-debt-registry.md` | `DEBT-REGISTRY` | RV | Review (einmalig pro Projekt) |
 | `decisions.md` | `DECISIONS.md` | ORCH | Alle Phasen (fortlaufend) |
-| `retrospective.md` | `RETRO-NNN` | AC | Post-Sprint (optional) |
-| `impediment.md` | `IMPD-NNN` | AC | Jederzeit via `/impediment` |
-| `process-change.md` | `PC-NNN` | AC | Post-Sprint (optional) |
-| `branching-strategy.md` | `ADR-NNN` | AR | Architecture (einmalig pro Projekt) |
+| `retrospective.md` | `RETRO-NNNNNN` | AC | Post-Sprint (optional) |
+| `impediment.md` | `IMPD-NNNNNN` | AC | Jederzeit via `/impediment` |
+| `process-change.md` | `PC-NNNNNN` | AC | Post-Sprint (optional) |
+| `branching-strategy.md` | `ADR-NNNNNN` | AR | Architecture (einmalig pro Projekt) |
 
 ## Verwendung
 
 ```bash
 # Neues Artefakt aus Template erzeugen:
 cp toolchain/templates/user-story.md \
-   projects/<projektname>/US-001-login.md
+   projects/<projektname>/US-000001-login.md
 # Dann: Platzhalter ersetzen, Header ausfüllen
 ```
 

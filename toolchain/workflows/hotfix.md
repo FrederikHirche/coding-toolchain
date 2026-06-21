@@ -22,7 +22,7 @@ Alle drei Bedingungen müssen erfüllt sein:
 
 1. **Produktionsfehler** — Bug betrifft Live-System oder blockiert Release
 2. **Kein Scope-Wechsel** — Nur Fehler-Korrektur, keine neuen Features
-3. **Architektur unverändert** — `ADR-001` bleibt gültig, kein neuer ADR nötig
+3. **Architektur unverändert** — `ADR-000001` bleibt gültig, kein neuer ADR nötig
 
 Wenn eine der Bedingungen nicht erfüllt ist → normaler Sprint-Workflow.
 
@@ -31,7 +31,7 @@ Wenn eine der Bedingungen nicht erfüllt ist → normaler Sprint-Workflow.
 ```
 HOTFIX-ANALYSIS
   /hotfix-analyse [intern, Teil von /hotfix]
-  [BA] — BUG-NNN anlegen, Root-Cause, betroffene Komponenten
+  [BA] — BUG-NNNNNN anlegen, Root-Cause, betroffene Komponenten
   Dauer: max. 30 Minuten
         ↓
 HOTFIX-IMPLEMENTATION
@@ -52,7 +52,7 @@ HOTFIX-REVIEW
 
 | Kriterium | Schwere |
 |---|---|
-| `BUG-NNN` erstellt mit Root-Cause | BLOCKER |
+| `BUG-NNNNNN` erstellt mit Root-Cause | BLOCKER |
 | Betroffene Komponenten identifiziert | BLOCKER |
 | Fix-Ansatz beschrieben (keine blindes Patchen) | BLOCKER |
 | Regressionsrisiko eingeschätzt | MAJOR |
@@ -69,7 +69,7 @@ HOTFIX-REVIEW
 
 | Kriterium | Schwere |
 |---|---|
-| `TR-NNN` (Smoke Test) vorhanden | BLOCKER |
+| `TR-NNNNNN` (Smoke Test) vorhanden | BLOCKER |
 | Smoke-Test: kein neuer BLOCKER-Bug | BLOCKER |
 | Ursprünglicher Bug reproduzierbar getestet | BLOCKER |
 | Regressionstest durchgeführt | MAJOR |
@@ -78,7 +78,7 @@ HOTFIX-REVIEW
 
 | Kriterium | Schwere |
 |---|---|
-| `RV-NNN` mit `APPROVED` | BLOCKER |
+| `RV-NNNNNN` mit `APPROVED` | BLOCKER |
 | Keine Security-Anmerkungen (BLOCKER/MAJOR) | BLOCKER |
 | Kein ADR-Verstoß | MAJOR |
 
@@ -86,10 +86,10 @@ HOTFIX-REVIEW
 
 | Artefakt | Pflicht | Inhalt |
 |----------|---------|--------|
-| `BUG-NNN` | ✓ | Fehlerbeschreibung, Root-Cause, betroffene Komponenten |
-| `TR-NNN` | ✓ | Smoke-Test-Ergebnis |
-| `RV-NNN` | ✓ | Fokussierter Review |
-| `TP-NNN` | ✗ optional | Nur wenn umfangreichere Tests nötig |
+| `BUG-NNNNNN` | ✓ | Fehlerbeschreibung, Root-Cause, betroffene Komponenten |
+| `TR-NNNNNN` | ✓ | Smoke-Test-Ergebnis |
+| `RV-NNNNNN` | ✓ | Fokussierter Review |
+| `TP-NNNNNN` | ✗ optional | Nur wenn umfangreichere Tests nötig |
 
 ## .phase Verhalten
 
@@ -99,7 +99,7 @@ Nach erfolgreichem Merge: `.phase` wieder auf vorherigen Wert setzen.
 ```yaml
 # .phase während Hotfix
 current-phase: HOTFIX-REVIEW
-hotfix-for: BUG-007
+hotfix-for: BUG-000007
 previous-stable-phase: DONE
 sprint: 2
 ```

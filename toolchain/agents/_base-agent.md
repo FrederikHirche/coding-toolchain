@@ -31,7 +31,7 @@ Jedes produzierte Artefakt beginnt mit dem Standard-Header:
 
 ```markdown
 ---
-id: [PRÄFIX-NNN]
+id: [PRÄFIX-NNNNNN]
 title: [Kurztitel]
 version: 1.0
 status: DRAFT
@@ -49,7 +49,7 @@ superseded-by: —
 Nach jeder Artefakt-Erstellung **muss** der Agent die `INDEX.md` des Zielordners aktualisieren. Format:
 
 ```markdown
-| `dateiname.md` | PRÄFIX-NNN | DRAFT | Kurzbeschreibung |
+| `dateiname.md` | PRÄFIX-NNNNNN | DRAFT | Kurzbeschreibung |
 ```
 
 ### Handoff-Protokoll
@@ -93,7 +93,7 @@ Falls der Agent zur Weiterarbeit externe Informationen benötigt, die er nicht a
 
 ### Keine Technologie-Annahmen
 
-Kein Agent darf Sprache, Framework, Plattform oder Tooling voraussetzen, solange kein `ADR-001-tech-stack.md` im Status `APPROVED` im Projektordner existiert. Erst danach sind projektspezifische Technologien verbindlich.
+Kein Agent darf Sprache, Framework, Plattform oder Tooling voraussetzen, solange kein `ADR-000001-tech-stack.md` im Status `APPROVED` im Projektordner existiert. Erst danach sind projektspezifische Technologien verbindlich.
 
 ---
 
@@ -102,7 +102,7 @@ Kein Agent darf Sprache, Framework, Plattform oder Tooling voraussetzen, solange
 ```
 DATEI-HEADER (erste Zeilen jeder Code-Datei):
   Beschreibung: [Was tut dieses Modul?]
-  Artefakte:    [Implementiert US-NNN; siehe ADR-NNN]
+  Artefakte:    [Implementiert US-NNNNNN; siehe ADR-NNNNNN]
   Agent:        [FE|BE] — YYYY-MM-DD
 
 FUNKTION/METHODE:
@@ -112,7 +112,7 @@ FUNKTION/METHODE:
 
 KOMPLEXE LOGIK:
   - Kommentar ÜBER dem Block: Warum, nicht Was
-  - ADR-Verweis wenn relevant: // → ADR-005
+  - ADR-Verweis wenn relevant: // → ADR-000005
 
 TODO-FORMAT:
   // TODO(KÜRZEL): Beschreibung — YYYY-MM-DD

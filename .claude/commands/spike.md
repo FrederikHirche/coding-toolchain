@@ -22,12 +22,12 @@ SPIKE-BRIEF      → PM-Agent (Fragestellung, Erfolgskriterien, Timebox definier
      ↓
 SPIKE-RESEARCH   → AR-Agent (Analyse, PoC wenn nötig, Empfehlung)
      ↓
-SPIKE-REPORT     → AR-Agent (Spike-Report: SRP-NNN)
+SPIKE-REPORT     → AR-Agent (Spike-Report: SRP-NNNNNN)
 ```
 
 ## Artefakte
 
-- `SRP-NNN` — Spike Report (Ergebnis, Empfehlung, Verworfene Optionen)
+- `SRP-NNNNNN` — Spike Report (Ergebnis, Empfehlung, Verworfene Optionen)
 - Optional: PoC-Code (wird nach Spike gelöscht oder in echtes Projekt überführt)
 
 ## Abgrenzung

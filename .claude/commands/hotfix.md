@@ -18,7 +18,7 @@ Aktiviert den **verkürzten Hotfix-Workflow**. Überspringt Discovery, Requireme
 ## Workflow
 
 ```
-HOTFIX-ANALYSIS  → BA-Agent (minimal: BUG-NNN anlegen, Ursache analysieren)
+HOTFIX-ANALYSIS  → BA-Agent (minimal: BUG-NNNNNN anlegen, Ursache analysieren)
      ↓
 HOTFIX-IMPLEMENT → FE/BE-Agent (nur betroffene Komponenten)
      ↓
@@ -30,14 +30,14 @@ HOTFIX-REVIEW    → RV-Agent (fokussierter Review nur der Änderung)
 ## Artefakte
 
 Minimale Artefakt-Produktion:
-- `BUG-NNN` — Fehlerbeschreibung + Root Cause
-- `TR-NNN` — Testergebnis (Smoke Test)
-- `RV-NNN` — Review-Bericht (vereinfacht)
+- `BUG-NNNNNN` — Fehlerbeschreibung + Root Cause
+- `TR-NNNNNN` — Testergebnis (Smoke Test)
+- `RV-NNNNNN` — Review-Bericht (vereinfacht)
 
 ## Vorbedingungen
 
 - Projekt muss sich in Phase `DONE` oder `IMPLEMENTATION` befinden
-- `ADR-001` muss `APPROVED` sein (kein Architektur-Wechsel)
+- `ADR-000001` muss `APPROVED` sein (kein Architektur-Wechsel)
 - Mindestens ein Mensch autorisiert den Hotfix
 
 ---

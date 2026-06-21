@@ -1,16 +1,16 @@
 ---
-id: ADR-NNN
+id: ADR-NNNNNN
 title: [Kurztitel der Entscheidung]
 version: 1.0
 status: DRAFT
 author-agent: AR (Software Architect)
 date: YYYY-MM-DD
-based-on: REQ-NNN
+based-on: REQ-NNNNNN
 supersedes: —
 superseded-by: —
 ---
 
-# ADR-NNN: [Kurztitel der Entscheidung]
+# ADR-NNNNNN: [Kurztitel der Entscheidung]
 
 ## Status
 
@@ -20,7 +20,7 @@ superseded-by: —
 
 [Beschreibung des Problems oder der Situation, die diese Entscheidung notwendig macht.
 Was ist der technische oder fachliche Druck? Welche Constraints existieren?
-Welche Anforderungen aus REQ-NNN treiben diese Entscheidung?]
+Welche Anforderungen aus REQ-NNNNNN treiben diese Entscheidung?]
 
 ## Entscheidung
 
@@ -32,7 +32,7 @@ Welche Anforderungen aus REQ-NNN treiben diese Entscheidung?]
 
 [Warum ist Option X die beste Wahl für diesen Kontext?
 Konkrete Argumente, keine generischen Aussagen.
-Bezug auf Anforderungen aus REQ-NNN wenn möglich.]
+Bezug auf Anforderungen aus REQ-NNNNNN wenn möglich.]
 
 ## Betrachtete Alternativen
 
@@ -100,7 +100,7 @@ z. B. Welche Pakete, Konfiguration, Coding-Patterns sind verpflichtend?]
 
 | ADR | Beziehung |
 |---|---|
-| ADR-NNN | [Diese Entscheidung setzt ADR-NNN voraus / wird von ADR-NNN vorausgesetzt] |
+| ADR-NNNNNN | [Diese Entscheidung setzt ADR-NNNNNN voraus / wird von ADR-NNNNNN vorausgesetzt] |
 
 ---
 

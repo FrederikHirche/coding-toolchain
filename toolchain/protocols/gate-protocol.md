@@ -35,13 +35,13 @@ Gates sind Übergangspunkte zwischen Phasen. Sie sichern, dass kein Artefakt-Man
 GATE: Phase 2 → Phase 3 (Requirements → Architecture)
 ════════════════════════════════════════
 
-🔴 BLOCKER [FAIL]  REQ-001 status muss APPROVED sein
+🔴 BLOCKER [FAIL]  REQ-000001 status muss APPROVED sein
               → Aktuell: DRAFT
               → Aktion: BA-Agent um Freigabe bitten
 
 🔴 BLOCKER [PASS]  Alle Must-Have-US vorhanden (5/5)
 
-🟡 MAJOR   [FAIL]  Story-Map in REQ-001 fehlt
+🟡 MAJOR   [FAIL]  Story-Map in REQ-000001 fehlt
               → Abschnitt 3 nicht ausgefüllt
               → Aktion: BA ergänzen, dann Gate neu prüfen
 
@@ -56,7 +56,7 @@ BLOCKER: 1 offen
 MAJOR:   1 offen
 MINOR:   1 → als TODO übernommen
 
-NÄCHSTE AKTION: BA-Session öffnen, REQ-001 finalisieren
+NÄCHSTE AKTION: BA-Session öffnen, REQ-000001 finalisieren
 BEFEHL:         /ba [projektname]
 ════════════════════════════════════════
 ```

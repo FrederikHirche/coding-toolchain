@@ -18,7 +18,7 @@ Leichtgewichtiges, chronologisches Protokoll aller wesentlichen Entscheidungen i
 
 ## Aktive Entscheidungen
 
-### DEC-NNN — [Kurztitel der Entscheidung]
+### DEC-NNNNNN — [Kurztitel der Entscheidung]
 
 | Feld | Wert |
 |---|---|
@@ -42,7 +42,7 @@ Leichtgewichtiges, chronologisches Protokoll aller wesentlichen Entscheidungen i
 - [Was ändert sich durch diese Entscheidung?]
 - [Was wird dadurch leichter / schwerer?]
 
-**Abhängige Artefakte:** [ADR-NNN, US-NNN, ...]
+**Abhängige Artefakte:** [ADR-NNNNNN, US-NNNNNN, ...]
 
 ---
 
@@ -60,7 +60,7 @@ Entscheidungen, die revidiert oder überschrieben wurden, bleiben hier sichtbar.
 
 | ID | Datum | Kurztitel | Ersetzt durch | Grund |
 |----|-------|---------|--------------|-------|
-| DEC-NNN | YYYY-MM-DD | [Titel] | DEC-NNN | [Grund] |
+| DEC-NNNNNN | YYYY-MM-DD | [Titel] | DEC-NNNNNN | [Grund] |
 
 ---
 

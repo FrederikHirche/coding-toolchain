@@ -1,5 +1,5 @@
 ---
-id: SB-001
+id: SB-000001
 title: [Projekttitel]
 version: 1.0
 status: DRAFT
@@ -12,7 +12,7 @@ superseded-by: —
 
 # Stakeholder Brief: [Projekttitel]
 
-> **Ablage:** `projects/[projektname]/SB-001-[projektname].md`
+> **Ablage:** `projects/[projektname]/SB-000001-[projektname].md`
 > Dieses Dokument darf NUR innerhalb des zugehörigen Projektordners gespeichert werden.
 
 ---
@@ -167,4 +167,4 @@ superseded-by: —
 ---
 
 *Erstellt von: PM-Agent | Datum: YYYY-MM-DD | Version: 1.0*
-*Ablage: projects/[projektname]/SB-001-[projektname].md*
+*Ablage: projects/[projektname]/SB-000001-[projektname].md*

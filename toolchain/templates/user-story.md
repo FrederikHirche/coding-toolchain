@@ -1,5 +1,5 @@
 ---
-id: US-NNN
+id: US-NNNNNN
 title: [Kurztitel]
 version: 1.0
 status: DRAFT
@@ -12,7 +12,7 @@ supersedes: —
 superseded-by: —
 ---
 
-# US-NNN: [Kurztitel]
+# US-NNNNNN: [Kurztitel]
 
 ## User Story
 
@@ -25,7 +25,7 @@ superseded-by: —
 ## Kontext
 
 [Optionaler Hintergrund: Warum ist diese Story wichtig? Woher kommt sie?
-Verweis auf SB-NNN oder REQ-F-NNN wenn sinnvoll.]
+Verweis auf SB-NNNNNN oder REQ-F-NNNNNN wenn sinnvoll.]
 
 ---
 
@@ -72,15 +72,15 @@ DANN     [...]
 
 | Typ | Referenz | Beschreibung |
 |---|---|---|
-| Blockiert durch | US-NNN | [Diese Story kann erst starten wenn US-NNN fertig ist] |
-| Blockiert | US-NNN | [Diese Story muss fertig sein bevor US-NNN beginnen kann] |
-| ADR | ADR-NNN | [Diese Story hängt von Architekturentscheidung ab] |
+| Blockiert durch | US-NNNNNN | [Diese Story kann erst starten wenn US-NNNNNN fertig ist] |
+| Blockiert | US-NNNNNN | [Diese Story muss fertig sein bevor US-NNNNNN beginnen kann] |
+| ADR | ADR-NNNNNN | [Diese Story hängt von Architekturentscheidung ab] |
 
 ---
 
 ## UX-Referenz
 
-- UX-Spec: [UX-NNN — Titel] *(wird nach /ux befüllt)*
+- UX-Spec: [UX-NNNNNN — Titel] *(wird nach /ux befüllt)*
 
 ---
 
@@ -99,7 +99,7 @@ DANN     [...]
 - [ ] Alle Akzeptanzkriterien implementiert und verifiziert
 - [ ] Unit-Tests für alle neuen Funktionen
 - [ ] Code kommentiert nach CLAUDE.md-Standard
-- [ ] Code Review abgeschlossen (RV-NNN)
+- [ ] Code Review abgeschlossen (RV-NNNNNN)
 - [ ] Kein offener BLOCKER-Bug
 - [ ] Dokumentation (INDEX.md, API-Kontrakt) aktualisiert
 
