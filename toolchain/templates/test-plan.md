@@ -9,6 +9,7 @@ sprint: NNN
 based-on: US-NNN (kommagetrennte Liste)
 supersedes: —
 superseded-by: —
+ablage: projects/<name>/testing/
 ---
 
 # Testplan: [Projekttitel] — Sprint NNN
@@ -55,12 +56,43 @@ superseded-by: —
 # Integration Tests
 [Befehl]
 
-# E2E Tests
-[Befehl]
+# E2E Tests (Playwright)
+npx playwright test --reporter=html
 
 # Coverage-Report
 [Befehl]
 ```
+
+### 3.3 Playwright E2E — Testinventar
+
+**Konfigurationsdatei:** `playwright.config.ts` (Projektroot)
+
+**Playwright Report-Ablage:** `projects/<name>/testing/playwright-report/`
+
+**Zu erstellende / vorhandene Testdateien:**
+
+| Testdatei | Feature-Bereich | US-Referenz | Status |
+|---|---|---|---|
+| `tests/e2e/[feature].spec.ts` | [Bereich] | US-NNN | [ ] vorhanden / [ ] zu erstellen |
+
+**Page Objects (POM):**
+
+| Page-Object-Datei | Beschreibt | Benötigte `data-testid` Attribute |
+|---|---|---|
+| `tests/e2e/pages/[page].page.ts` | [Seite/View] | `[data-testid="..."]` (Liste) |
+
+**Testfälle pro Spec-Datei:**
+
+| TC-ID | Beschreibung | Typ | Priorität |
+|---|---|---|---|
+| E2E-001 | [Happy Path] | Happy Path | P0 |
+| E2E-002 | [Fehlerfall] | Error Case | P1 |
+| E2E-003 | [Accessibility] | A11y | P1 |
+
+**Voraussetzungen für E2E-Lauf:**
+- [ ] App läuft auf `[baseURL aus playwright.config.ts]`
+- [ ] Testdaten-Seed ausgeführt: `[Befehl]`
+- [ ] Umgebungsvariablen gesetzt: `[Liste]`
 
 ---
 
@@ -140,4 +172,4 @@ superseded-by: —
 
 ---
 
-*Erstellt von: QA-Agent | Datum: YYYY-MM-DD | Version: 1.0*
+*Erstellt von: QA-Agent | Datum: YYYY-MM-DD | Version: 1.0 | Ablage: `projects/<name>/testing/`*

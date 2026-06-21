@@ -3,7 +3,7 @@
 Konsolidierte Übersicht aller Agenten-Rollen.  
 Zweck: Einzelne Referenzdatei für NotebookLM-Analyse und schnelle Orientierung.
 
-**Letzte Aktualisierung:** 2026-06-19  
+**Letzte Aktualisierung:** 2026-06-21  
 **Pflege-Regel:** Diese Datei wird bei jedem Hinzufügen oder Ändern einer Agenten-Datei aktualisiert.
 
 ---
@@ -183,21 +183,24 @@ Umgebungsvariablen für Tests).
 **Datei:** `qa-agent.md`  
 **Kürzel:** QA  
 **Aktiviert durch:** `/test-plan`, `/test-run`  
-**Primäre Artefakte:** `TP-NNN` (Testplan), `TR-NNN` (Testergebnis), `BUG-NNN` (Fehler)
+**Primäre Artefakte:** `TP-NNN`, `TR-NNN`, `BUG-NNN` — alle in `projects/<name>/testing/`
 
 Der QA-Agent sichert die Qualität auf zwei Ebenen: Testplan erstellen (Phase A) und
 Tests ausführen (Phase B).
 
 **Phase A — Testplan:** Für jede User Story mindestens einen positiven Testfall (Happy Path),
 einen negativen Testfall und Boundary-Tests. Sicherheitstests für auth-relevante Features.
-Priorisierung in P0 (blocker), P1 (kritisch), P2 (normal).
+Priorisierung in P0 (blocker), P1 (kritisch), P2 (normal). Enthält Playwright E2E Inventar
+(Sektion 3.3): Testdateien, Page Objects, benötigte `data-testid` Attribute, Voraussetzungen.
 
-**Phase B — Testausführung:** Unit → Integration → E2E ausführen, Fehler als BUG-NNN
-erfassen (Schweregrad: BLOCKER / CRITICAL / MAJOR / MINOR), Coverage-Report generieren,
+**Phase B — Testausführung:** Unit → Integration → E2E (Playwright) ausführen.
+Playwright-spezifisch: `playwright.config.ts` prüfen, `npx playwright test --reporter=html`
+ausführen, HTML-Report nach `projects/<name>/testing/playwright-report/` ablegen.
+Fehler als BUG-NNN erfassen (inkl. Screenshot- und Trace-Pfad), Coverage-Report generieren,
 Freigabe-Empfehlung (APPROVED / CONDITIONAL / REJECTED) dokumentieren.
 
-**Übergabe an:** Code Reviewer — gibt Testplan, Ergebnisse, Coverage, offene Bugs und
-Freigabe-Empfehlung weiter.
+**Übergabe an:** Code Reviewer — gibt Testplan, Ergebnisse, Coverage, offene Bugs,
+Playwright-Report-Pfad und Freigabe-Empfehlung weiter.
 
 ---
 
@@ -206,21 +209,28 @@ Freigabe-Empfehlung weiter.
 **Datei:** `reviewer-agent.md`  
 **Kürzel:** RV  
 **Aktiviert durch:** `/review`  
-**Primäres Artefakt:** `RV-NNN` (Review-Bericht)
+**Primäres Artefakt:** `RV-NNN` (in `projects/<name>/reviews/`)
 
-Der Reviewer-Agent führt die finale technische Qualitätsprüfung durch — unabhängig von
-den Entwicklungsagenten, objektiv.
+Der Reviewer-Agent führt eine **zweistufige Abnahme** durch: erst Nutzerabnahme (Phase A),
+dann technisches Code Review (Phase B).
 
-**6 Review-Dimensionen (in dieser Reihenfolge):**
+**Phase A — Nutzerabnahme (2 Schritte):**
+1. Test-Guide erstellen: Nutzerfreundliche, nummerierte Schritte pro Feature aus US-NNN und TP-NNN.
+   Kein Tech-Jargon. Pausiert nach Präsentation — Nutzer testet eigenständig.
+2. Nutzer-Interview: Strukturierte Befragung pro Feature (funktioniert? unerwartetes Verhalten?
+   UX-Eindruck? Änderungswünsche?). Ergibt Befund: ACCEPTED / CONDITIONAL / REJECTED.
+
+**Phase B — Technisches Code Review (6 Dimensionen):**
 1. Korrektheit — Alle Akzeptanzkriterien implementiert? API-Kontrakt eingehalten?
 2. Sicherheit — Input-Validierung, keine Secrets, Auth korrekt, Injection-Schutz?
 3. ADR-Konformität — Tech-Stack und alle weiteren ADRs eingehalten?
 4. Code-Qualität — Kommentierungsstandard, Datei-Header, keine Magic Numbers?
-5. Testabdeckung — Unit-Tests für Kernfunktionen, Happy Path + Fehlerfall?
+5. Testabdeckung — Unit-Tests, E2E (Playwright), Happy Path + Fehlerfall?
 6. Performance & Wartbarkeit — N+1 Queries, Lesbarkeit, angemessene Komplexität?
 
-**Entscheidungen:** APPROVED / REQUEST CHANGES / REJECTED — jeweils mit Begründung.
-Technische Schulden werden als DEBT-NNN erfasst.
+**Gesamtentscheidung** kombiniert Nutzer-Befund + technischen Review.
+REJECTED durch Nutzer überstimmt technisch APPROVED.
+Technische Schulden als DEBT-NNN in `projects/<name>/retros/` erfasst.
 
 ---
 

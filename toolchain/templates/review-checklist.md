@@ -1,6 +1,6 @@
 ---
 id: RV-NNN
-title: Code Review [Projekttitel] Sprint NNN
+title: Review [Projekttitel] Sprint NNN
 version: 1.0
 status: DRAFT
 author-agent: RV (Code Reviewer)
@@ -12,7 +12,7 @@ supersedes: —
 superseded-by: —
 ---
 
-# Code Review: [Projekttitel] — Sprint NNN
+# Review: [Projekttitel] — Sprint NNN
 
 ## Review-Übersicht
 
@@ -22,9 +22,42 @@ superseded-by: —
 | Reviewed Commit | [SHA] |
 | Reviewer-Agent | RV |
 | QA-Freigabe | [APPROVED / CONDITIONAL / REJECTED] |
+| Nutzerabnahme | **[ACCEPTED / CONDITIONAL / REJECTED]** |
+| Technischer Review | **[APPROVED / REQUEST CHANGES / REJECTED]** |
 | Gesamtentscheidung | **[APPROVED / REQUEST CHANGES / REJECTED]** |
 
 ---
+
+## Teil 1: Nutzerabnahme (User Acceptance Review)
+
+### Test-Guide
+
+*(Hier den präsentierten Test-Guide einfügen — dient als Nachweis was getestet wurde)*
+
+**Feature: [US-NNN — Titel]**
+1. [Schritt] → Erwartet: [Ergebnis]
+2. [Schritt] → Erwartet: [Ergebnis]
+3. ...
+
+### Interview-Ergebnisse
+
+| Feature (US-NNN) | Funktioniert? | Nutzer-Befund | Anmerkungen aus Interview |
+|---|---|---|---|
+| US-NNN: [Titel] | Ja / Nein / Teilweise | ACCEPTED / CONDITIONAL / REJECTED | [Zitat oder Beschreibung] |
+
+### Nutzerabnahme-Entscheidung
+
+**[ ] ACCEPTED** — Alle Features funktionieren wie erwartet.
+
+**[ ] CONDITIONAL** — Kleinere Abweichungen oder UX-Anmerkungen:
+- [Feature]: [Anmerkung]
+
+**[ ] REJECTED** — Feature erfüllt fachliche Erwartung nicht:
+- [Feature]: [Was genau hat nicht gestimmt?]
+
+---
+
+## Teil 2: Technisches Code Review
 
 ## Dimension 1: Korrektheit
 
@@ -144,14 +177,14 @@ superseded-by: —
 | MINOR | [N] |
 | SUGGESTION | [N] |
 
-### Gesamtentscheidung
+### Gesamtentscheidung (Nutzer + Technik)
 
-**[ ] APPROVED** — Alle Blocker-Checks bestanden. Kann gemergt werden.
+**[ ] APPROVED** — Nutzer hat abgenommen (ACCEPTED), alle technischen Blocker-Checks bestanden.
 
 **[ ] REQUEST CHANGES** — Folgende Punkte müssen vor Merge behoben werden:
-- [Anmerkung-ID]: [Kurzbeschreibung]
+- [Nutzer-Anmerkung / Anmerkung-ID]: [Kurzbeschreibung]
 
-**[ ] REJECTED** — Grundlegende Probleme (Security, ADR-Verletzung, fehlende Kernfunktionalität):
+**[ ] REJECTED** — Kritische Probleme (Nutzer-REJECTED, Security, ADR-Verletzung, fehlende Kernfunktionalität):
 - [Begründung]
 
 ### Technische Schulden (für nächsten Sprint)
@@ -162,4 +195,4 @@ superseded-by: —
 
 ---
 
-*Erstellt von: RV-Agent | Datum: YYYY-MM-DD | Version: 1.0*
+*Erstellt von: RV-Agent | Datum: YYYY-MM-DD | Version: 1.0 | Ablage: `projects/<name>/reviews/`*

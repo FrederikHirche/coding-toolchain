@@ -146,6 +146,30 @@ TODO-FORMAT:
 
 NNN = dreistellig, sequenziell pro Projekt.
 
+### Projektordner-Struktur
+
+Alle projektspezifischen Artefakte liegen in `projects/<name>/` — **niemals im Projekt-Root**.
+Jeder Artefakttyp hat einen definierten Unterordner:
+
+```
+projects/<name>/
+  discovery/        SB-NNN, DECISIONS.md
+  requirements/     REQ-NNN, US-NNN
+  architecture/     ADR-NNN, STRUCTURE.md
+  ux/               UX-NNN
+  sprints/          SP-NNN
+  testing/          TP-NNN, TR-NNN, BUG-NNN, playwright-report/
+  reviews/          RV-NNN
+  docs/             DOC-NNN, RN-NNN, GS-NNN
+  retros/           RETRO-NNN, IMPD-NNN, PC-NNN, DEBT-NNN, SRP-NNN
+  INDEX.md
+  .phase
+  .toolchain.yml
+```
+
+Jeder Agent erstellt den Unterordner falls nicht vorhanden und schreibt **ausschließlich**
+in den zugehörigen Unterordner. Die `INDEX.md` im Projektroot verweist auf alle Unterordner.
+
 ### Artefakt-Lebenszyklus
 
 ```

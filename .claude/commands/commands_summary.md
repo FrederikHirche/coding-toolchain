@@ -3,7 +3,7 @@
 Konsolidierte Übersicht aller Slash Commands.  
 Zweck: Einzelne Referenzdatei für NotebookLM-Analyse und schnelle Orientierung.
 
-**Letzte Aktualisierung:** 2026-06-19  
+**Letzte Aktualisierung:** 2026-06-21  
 **Pflege-Regel:** Diese Datei wird bei jedem Hinzufügen oder Ändern eines Commands aktualisiert.
 
 ---
@@ -143,20 +143,23 @@ Standard-Reihenfolge Full-Sprint:
 
 **Aktiviert:** QA (QA Engineer)  
 **Wann nutzen:** Nach Abschluss des Testplans.  
-**Was passiert:** Führt automatisierte Tests aus (Unit → Integration → E2E), protokolliert Ergebnisse, erfasst Fehler als BUG-NNN, erstellt Coverage-Report, gibt Freigabe-Empfehlung: APPROVED / CONDITIONAL / REJECTED.  
-**Vorbedingung:** `TP-NNN` APPROVED, Testumgebung konfiguriert  
-**Output:** `TR-NNN` Testergebnis-Bericht, ggf. `BUG-NNN`  
+**Was passiert:** Führt automatisierte Tests aus (Unit → Integration → E2E mit Playwright). Für E2E: prüft `playwright.config.ts`, führt `npx playwright test --reporter=html` aus, speichert HTML-Report in `projects/<name>/testing/playwright-report/`. Erfasst Fehler als BUG-NNN (inkl. Screenshot- und Trace-Pfad aus Playwright). Erstellt Coverage-Report und Freigabe-Empfehlung: APPROVED / CONDITIONAL / REJECTED.  
+**Vorbedingung:** `TP-NNN` APPROVED, Testumgebung konfiguriert, App erreichbar für Playwright  
+**Output:** `TR-NNN`, ggf. `BUG-NNN`, Playwright HTML-Report — alle in `projects/<name>/testing/`  
 **Nächste Phase:** `/review [projektname] [sprint-nr]`
 
 ---
 
-### /review — Code Review
+### /review — User Review + Code Review mit User-Story-Abnahme
 
 **Aktiviert:** RV (Code Reviewer)  
 **Wann nutzen:** Nach bestandenem Test-Lauf, vor dem Merge.  
-**Was passiert:** Review in 6 Dimensionen: Korrektheit → Sicherheit → ADR-Konformität → Code-Qualität → Testabdeckung → Performance/Wartbarkeit. Merge-Entscheidung: APPROVED / REQUEST CHANGES / REJECTED.  
-**Vorbedingung:** `TR-NNN` vorhanden, keine BLOCKER-Bugs offen  
-**Output:** `RV-NNN` Review-Bericht  
+**Was passiert (3 Phasen):**
+1. **Test-Guide erstellen:** RV-Agent erstellt nutzerfreundlichen Test-Guide (klare Schritte, kein Tech-Jargon) aus US-NNN und TP-NNN — dann ⏸ pausieren, Nutzer testet.
+2. **Nutzer-Interview:** Wenn Nutzer zurückkommt: strukturiertes Interview pro Feature (funktioniert? unerwartetes? UX-Eindruck?). Ergibt Nutzer-Befund: ACCEPTED / CONDITIONAL / REJECTED.
+3. **Technisches Code Review:** 6 Dimensionen (Korrektheit → Sicherheit → ADR-Konformität → Code-Qualität → Testabdeckung → Performance). Gesamtentscheidung kombiniert Nutzer + Technik.  
+**Vorbedingung:** `TR-NNN` vorhanden, keine BLOCKER-Bugs offen, App zugänglich  
+**Output:** `RV-NNN` (in `projects/<name>/reviews/`)  
 **Nächste Phase (APPROVED):** `/manual [projektname] [sprint-nr]`  
 **Nächste Phase (REQUEST CHANGES):** `/implement [fe|be] [projektname]`  
 **Nächste Phase (REJECTED):** `/ba [projektname]`

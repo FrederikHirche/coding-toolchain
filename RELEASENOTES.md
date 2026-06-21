@@ -9,6 +9,42 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 
 ---
 
+## v1.2 — 2026-06-21
+
+### Neu
+
+**Projektordner-Struktur — definierte Unterordner pro Artefakttyp**
+- Neue Konvention in `CLAUDE.md` (Abschnitt "Projektordner-Struktur"):
+  alle Artefakte liegen in typspezifischen Unterordnern von `projects/<name>/` —
+  niemals im Projekt-Root: `discovery/`, `requirements/`, `architecture/`, `ux/`,
+  `sprints/`, `testing/`, `reviews/`, `docs/`, `retros/`
+- Alle betroffenen Agenten und Templates wurden mit Ordnerangaben aktualisiert
+
+**`/review` — User Acceptance Review + Nutzer-Interview (2-stufige Abnahme)**
+- Drei Phasen statt einer: (1) Test-Guide erstellen & präsentieren, (2) Nutzer-Interview,
+  (3) technisches Code Review
+- Phase 1: RV-Agent erstellt nutzerfreundlichen Test-Guide (klare Schritte, kein Jargon)
+  aus US-NNN und TP-NNN — pausiert danach und wartet auf Nutzer
+- Phase 2: Strukturiertes Interview zu jedem Feature — Befund: ACCEPTED / CONDITIONAL / REJECTED
+- Phase 3: Technisches Review unverändert (6 Dimensionen)
+- Gesamtentscheidung kombiniert Nutzer-Befund und technischen Review —
+  REJECTED durch Nutzer überstimmt technisch APPROVED
+- Betroffen: `.claude/commands/review.md`, `toolchain/agents/reviewer-agent.md` (v2.0),
+  `toolchain/templates/review-checklist.md` (neuer Abschnitt "Teil 1: Nutzerabnahme"),
+  `.claude/commands/commands_summary.md`, `toolchain/agents/agents_summary.md`
+
+**Playwright E2E — explizite Integration in QA-Workflow**
+- `test-plan.md` Template: neue Sektion 3.3 "Playwright E2E Testinventar"
+  (Testdateien, Page Objects, benötigte `data-testid` Attribute, Voraussetzungen)
+- `qa-agent.md`: Phase B System-Prompt mit Playwright-spezifischen Schritten erweitert
+  (Config prüfen, `--reporter=html`, Report-Ablage, Screenshot/Trace-Pfade erfassen)
+- `test-run.md`: Playwright-Befehle und Report-Ablage explizit dokumentiert
+- Betroffen: `toolchain/templates/test-plan.md`, `toolchain/agents/qa-agent.md`,
+  `.claude/commands/test-run.md`, `.claude/commands/commands_summary.md`,
+  `toolchain/agents/agents_summary.md`
+
+---
+
 ## v1.1 — 2026-06-19
 
 ### Neu
