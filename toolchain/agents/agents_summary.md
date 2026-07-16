@@ -3,7 +3,7 @@
 Konsolidierte Übersicht aller Agenten-Rollen.  
 Zweck: Einzelne Referenzdatei für NotebookLM-Analyse und schnelle Orientierung.
 
-**Letzte Aktualisierung:** 2026-06-21  
+**Letzte Aktualisierung:** 2026-07-17  
 **Pflege-Regel:** Diese Datei wird bei jedem Hinzufügen oder Ändern einer Agenten-Datei aktualisiert.
 
 ---
@@ -102,6 +102,14 @@ ADR schreiben), Systemdesign als ASCII- oder Mermaid-Diagramm, Projektstruktur (
 
 **Prinzip:** Jede Entscheidung muss begründet sein. Sicherheit und Datenschutz sind
 First-Class-Concerns. Reversible von irreversiblen Entscheidungen explizit unterscheiden.
+Standardpräferenz Architekturschema: **Microservices vor Monolith** — ein Monolith ist nur mit
+expliziter Begründung der Abweichung (z. B. kleines Team, kein Ops für verteilte Systeme,
+kleiner Scope) im ADR zulässig.
+
+**Container-Prinzip:** Bei Containerisierung legt der AR-Agent Base-Image-Strategie und
+Größenbudget im ADR fest (Distroless/Alpine/Slim, Multi-Stage-Builds als Standard) — bindend
+für den BE-Agenten. Kein eigener Agent dafür; Umsetzung erfolgt über AR (Vorgabe) und BE
+(Umsetzung + Prüfung), siehe unten.
 
 **Übergabe an:** UX-Agent und Dev-Agenten — gibt verbindlichen Tech-Stack, alle ADRs und
 Projektstruktur weiter.
@@ -170,6 +178,11 @@ Business Logic (Services, Use Cases) → API-Layer (Controller, Resolver, Handle
 
 **Sicherheits-Checkliste (für jede Funktion):** Input-Validierung, parametrisierte Queries
 (SQL-Injection-Schutz), Auth-Check für geschützte Endpoints, keine Secrets in Logs.
+
+**Container-Checkliste (nur bei Containerisierung laut ADR-000001):** Kleinstes passendes
+Base-Image, Multi-Stage-Build (Build-Tooling nie im Runtime-Image), nur Produktions-
+Dependencies im finalen Layer, Cache-effiziente Layer-Reihenfolge, Image-Größe gegen
+ADR-Budget geprüft und im Handoff dokumentiert.
 
 **Pflichtkommentare:** `// Implementiert: [US-NNNNNN]`, `// Sicherheitshinweis: [...]`
 

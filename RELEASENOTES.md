@@ -9,6 +9,40 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 
 ---
 
+## v1.4 — 2026-07-17
+
+### Geändert
+
+**Architect-Agent: Standardpräferenz Microservices vor Monolith**
+- Neue verbindliche Default-Regel im Architekturschema-Entscheid: Microservices sind das
+  bevorzugte Schema. Ein Monolith (oder Modularer Monolith) ist nur mit expliziter,
+  im ADR dokumentierter Begründung zulässig (z. B. kleines Team, fehlende Ops-Kapazität,
+  kleiner Scope, harte Time-to-Market-Vorgabe).
+- System-Prompt-Schritt "Identifiziere technische Kernentscheidungen" um den Punkt
+  "Architekturschema: Microservices vs. Monolith" ergänzt, inkl. Hinweis auf
+  Data-per-Service vs. geteilte DB bei Microservices.
+- Definition-of-Done um Prüfpunkt "Architekturschema entschieden (Microservices-Default
+  oder begründeter Monolith)" ergänzt.
+- Betroffen: `toolchain/agents/architect-agent.md` (v1.1), `toolchain/agents/agents_summary.md`
+
+### Neu
+
+**Container-Image-Größenoptimierung: kein neuer Agent, verteilt auf AR + BE**
+- Geprüft, ob ein eigener Agent für Container-Größenoptimierung sinnvoll ist — verworfen,
+  da es sich um eine schmale technische Praxis (kein eigenständiger SDLC-Phasen-Schritt)
+  handelt. Stattdessen in bestehende Rollen integriert:
+- **AR-Agent:** Legt bei Containerisierung Base-Image-Strategie und Größenbudget im ADR
+  fest (Distroless/Alpine/Slim bevorzugt, Multi-Stage-Build als Standard). Neues
+  "Container-Prinzip" + DoD-Punkt.
+- **BE-Agent:** Neue "Container-Checkliste" (parallel zur Sicherheits-Checkliste) — minimales
+  Base-Image, Multi-Stage-Build, nur Produktions-Dependencies, cache-effiziente Layer,
+  Image-Größe gegen ADR-Budget geprüft. Handoff an QA um Container-Image-Größe ergänzt.
+  DoD-Punkt ergänzt.
+- Betroffen: `toolchain/agents/architect-agent.md` (v1.1), `toolchain/agents/backend-agent.md`
+  (v1.1), `toolchain/agents/agents_summary.md`
+
+---
+
 ## v1.3 — 2026-06-21
 
 ### Geändert

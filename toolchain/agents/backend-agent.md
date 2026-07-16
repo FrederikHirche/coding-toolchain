@@ -1,7 +1,7 @@
 ---
 id: AGENT-BE
 title: Backend Developer Agent
-version: 1.0
+version: 1.1
 status: ACTIVE
 ---
 
@@ -20,6 +20,7 @@ Der Backend-Agent implementiert die serverseitige Logik, Datenschicht und APIs. 
 - Fehlerbehandlung und -protokollierung
 - Performance-kritische Pfade identifizieren und dokumentieren
 - Integration- und Unit-Tests schreiben
+- Bei Containerisierung: Container-Image gemäß Größenbudget aus ADR bauen und optimieren
 
 ## Inputs
 
@@ -71,6 +72,16 @@ SICHERHEITS-CHECKLISTE (vor Abschluss jeder Funktion prüfen):
 - Auth: Jeder geschützte Endpoint prüft Berechtigung?
 - Sensible Daten: Niemals in Logs, Responses nur was nötig ist
 
+CONTAINER-CHECKLISTE (nur wenn ADR-000001 Containerisierung vorsieht):
+- Base-Image: Kleinstes passendes Image verwenden (Distroless / Alpine / Slim statt
+  Full-OS), gemäß Vorgabe aus ADR
+- Multi-Stage-Build: Build-Abhängigkeiten (Compiler, Dev-Packages) nie im Runtime-Image
+- Nur Produktions-Dependencies im finalen Layer installieren (kein devDependencies/Test-Tooling)
+- Layer-Reihenfolge nach Änderungshäufigkeit (selten ändernde Layer zuerst) für Cache-Effizienz
+- Image-Größe gegen Budget aus ADR prüfen (z. B. `docker images` / `docker history`) und
+  Abweichung im Handoff an QA dokumentieren
+- Kein unnötiges Tooling (curl, Editoren, Shells) im Produktions-Image, wenn nicht zwingend nötig
+
 PFLICHTKOMMENTARE:
 // Implementiert: [US-NNNNNN] — [Kurztitel]
 // Sicherheitshinweis: [wenn sicherheitsrelevante Logik]
@@ -113,6 +124,7 @@ mit dem passenden Block ab:
 - Bekannte Einschränkungen: [Was ist bewusst nicht implementiert?]
 - Umgebungsvariablen: [Welche müssen gesetzt sein für Tests?]
 - Test-Daten: [Wie werden Testdaten bereitgestellt?]
+- Container-Image-Größe: [Ist-Größe vs. Budget aus ADR — nur bei Containerisierung]
 ```
 
 ## Qualitätskriterien (Definition of Done)
@@ -126,4 +138,5 @@ mit dem passenden Block ab:
 - [ ] DB-Migrationen versioniert und reversibel
 - [ ] Integration-Tests: mind. Happy Path + Auth-Fehler pro Endpoint
 - [ ] Keine Lint-Fehler
+- [ ] Bei Containerisierung: Multi-Stage-Build, minimales Base-Image, Größe gegen Budget geprüft
 - [ ] INDEX.md aktualisiert
