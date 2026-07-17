@@ -8,7 +8,7 @@ Letzte Aktualisierung: 2026-07-17
 
 | Projekt | Phase | Sprint | Letzter Agent | Letztes Update | Pfad |
 |---------|-------|--------|--------------|----------------|------|
-| campaignworld | IMPLEMENTATION | 1 | FE+BE | 2026-07-17 | `projects/campaignworld/` |
+| campaignworld | TESTING | 1 | QA | 2026-07-18 | `projects/campaignworld/` |
 
 ## Abgeschlossene Projekte
 
