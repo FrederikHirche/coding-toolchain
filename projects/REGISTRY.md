@@ -2,13 +2,13 @@
 
 Zentrale Übersicht aller Projekte, die die AI Development Tool Chain verwenden.
 
-Letzte Aktualisierung: 2026-06-18
+Letzte Aktualisierung: 2026-07-17
 
 ## Aktive Projekte
 
 | Projekt | Phase | Sprint | Letzter Agent | Letztes Update | Pfad |
 |---------|-------|--------|--------------|----------------|------|
-| _(noch keine Projekte)_ | — | — | — | — | — |
+| campaignworld | IMPLEMENTATION | 1 | FE+BE | 2026-07-17 | `projects/campaignworld/` |
 
 ## Abgeschlossene Projekte
 
