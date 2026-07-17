@@ -9,6 +9,37 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 
 ---
 
+## v1.5 — 2026-07-17
+
+### Neu
+
+**Root-`.gitignore` + vollständiges `projects/_template/`-Skelett**
+- Jedes `projects/<name>/` ist als eigenes Git-Repository vorgesehen (nicht Teil des
+  Toolchain-Repos). Neues Root-`.gitignore` schließt `projects/*` aus — Ausnahmen:
+  `REGISTRY.md` und `_template/` bleiben getrackt. Zusätzlich generelle Ignores für
+  OS-Dateien, Editor-Ordner, Logs/Temp, `.env*`, `node_modules/` etc.
+- `projects/_template/` von zwei Dateien (`.phase`, `INDEX.md`) auf vollständiges
+  Projekt-Skelett erweitert: `.toolchain.yml`, `.toolchain-config`, `README.md`,
+  `.gitignore` (Vorlage für das jeweilige Projekt-Repo) sowie alle Artefakt-Unterordner
+  (`discovery/` inkl. `DECISIONS.md`, `requirements/`, `architecture/`, `ux/`, `sprints/`,
+  `testing/`, `reviews/`, `docs/`, `retros/`) mit `.gitkeep`.
+- Bewusst NICHT im Template enthalten: `src/`, `tests/`, `infra/`, `scripts/` — diese
+  sind technologieabhängig und werden erst nach ADR-000001 vom Architect-Agenten angelegt
+  (Prinzip "Keine Technologie-Annahmen", `_base-agent.md`).
+- `CLAUDE.md` ("Neues Projekt starten") und `.claude/commands/kickoff.md` aktualisiert:
+  neuer Ablauf ist Kopie aus `_template/` + `git init` im Projektordner statt leerem `mkdir`.
+- Betroffen: `.gitignore` (neu), `projects/_template/**` (neu), `CLAUDE.md`,
+  `.claude/commands/kickoff.md`, `.claude/commands/commands_summary.md`
+
+### Bekannte Inkonsistenz (nicht in diesem Release behoben)
+
+- `toolchain/agents/pm-agent.md` legt `SB-000001` noch direkt unter `projects/<name>/` ab,
+  nicht unter `projects/<name>/discovery/` wie in CLAUDE.md ("Projektordner-Struktur", seit
+  v1.2) vorgesehen. Betrifft nur Artefakt-Pfade innerhalb eines Projekt-Repos, nicht die
+  Git-Struktur dieses Releases — separat zu beheben.
+
+---
+
 ## v1.4 — 2026-07-17
 
 ### Geändert

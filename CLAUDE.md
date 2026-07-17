@@ -238,19 +238,28 @@ nur bei grundlegender Umstrukturierung der Tool Chain.
 
 ## Neues Projekt starten
 
+Jedes Projekt unter `projects/<projektname>/` ist ein **eigenes Git-Repository** — nicht Teil
+des Toolchain-Repositorys. Das Root-`.gitignore` schließt `projects/*` bewusst aus (Ausnahmen:
+`REGISTRY.md` und `_template/`), damit kein Projektinhalt versehentlich ins Toolchain-Repo
+gerät.
+
 ```bash
-# 1. Projektordner anlegen (manuell oder durch /kickoff automatisch)
-mkdir -p projects/<projektname>
+# 1. Projektordner aus der Vorlage anlegen (manuell oder durch /kickoff automatisch)
+cp -r projects/_template projects/<projektname>
+cd projects/<projektname>
 
-# 2. Git Hooks installieren (einmalig pro Repository)
-bash toolchain/hooks/setup-hooks.sh
+# 2. Eigenes Git-Repository initialisieren
+git init
 
-# 3. Tool Chain Config anlegen
-cp .toolchain.yml projects/<projektname>/.toolchain.yml
-# Danach: project.name befüllen
+# 3. Git Hooks installieren (einmalig pro Projekt-Repository)
+bash ../../toolchain/hooks/setup-hooks.sh
 
-# 4. Starten
-# In Claude Code: /kickoff
+# 4. Tool Chain Config befüllen
+# .toolchain.yml wurde aus der Vorlage kopiert — project.name, description, created befüllen
+
+# 5. Starten
+cd ../..
+# In Claude Code: /kickoff <projektname>
 # Oder: /sprint <projektname> 1    ← orchestriert alles automatisch
 ```
 

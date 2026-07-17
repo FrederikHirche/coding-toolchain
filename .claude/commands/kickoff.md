@@ -12,8 +12,10 @@ Ohne Argument wird nach dem Projektnamen gefragt.
 
 ## Was passiert
 
-1. Legt `projects/<projektname>/` an (falls nicht vorhanden)
-2. Legt `projects/<projektname>/INDEX.md` an
+1. Legt `projects/<projektname>/` an — als Kopie von `projects/_template/`
+   (falls der Ordner nicht bereits existiert)
+2. Initialisiert dort ein **eigenes Git-Repository** (`git init`) — das Projekt ist NICHT
+   Teil des Toolchain-Repositorys; Root-`.gitignore` schließt `projects/*` entsprechend aus
 3. Aktiviert den PM-Agenten mit seinem System-Prompt (aus `toolchain/agents/pm-agent.md`)
 4. Führt ein strukturiertes Stakeholder-Interview durch (max. 3 Runden à max. 3 Fragen)
 5. Erstellt `projects/<projektname>/SB-000001-<projektname>.md`

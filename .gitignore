@@ -1,0 +1,50 @@
+# .gitignore — coding-toolchain (Meta-Repository)
+#
+# Jedes projects/<projektname>/ ist ein EIGENES Git-Repository (siehe CLAUDE.md,
+# Abschnitt "Neues Projekt starten"). Dieses Root-Repository trackt daher bewusst
+# nur die Registry und das Template — niemals den Inhalt einzelner Projekte.
+
+# ─────────────────────────────────────
+# Projekte: alles ignorieren außer Registry + Template
+# ─────────────────────────────────────
+projects/*
+!projects/REGISTRY.md
+!projects/.gitkeep
+!projects/_template
+!projects/_template/**
+
+# ─────────────────────────────────────
+# Betriebssystem
+# ─────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─────────────────────────────────────
+# Editor / IDE
+# ─────────────────────────────────────
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# ─────────────────────────────────────
+# Logs, temporäre Dateien, Caches
+# ─────────────────────────────────────
+*.log
+*.tmp
+.cache/
+.temp/
+
+# ─────────────────────────────────────
+# Umgebungsvariablen / Secrets
+# ─────────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ─────────────────────────────────────
+# Abhängigkeiten (falls jemals im Root installiert statt in einem Projekt)
+# ─────────────────────────────────────
+node_modules/
+__pycache__/
+.venv/

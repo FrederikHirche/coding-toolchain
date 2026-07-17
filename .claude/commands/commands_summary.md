@@ -65,7 +65,7 @@ Standard-Reihenfolge Full-Sprint:
 
 **Aktiviert:** PM (Product Manager)  
 **Wann nutzen:** Start eines neuen Projekts. Kein Vorgänger nötig — das ist der Einstiegspunkt der Tool Chain.  
-**Was passiert:** Strukturiertes Stakeholder-Interview in 5 Runden (Problemraum, Nutzer, Scope, Erfolgskriterien, Constraints). Nach dem Interview wird der Stakeholder Brief (SB-000001) erstellt, MoSCoW-Priorisierung festgelegt und die Top-3-Risiken benannt. Projektordner, INDEX.md und `.phase`-Datei werden angelegt.  
+**Was passiert:** Projektordner wird als Kopie von `projects/_template/` angelegt und erhält ein eigenes Git-Repository (`git init`) — getrennt vom Toolchain-Repo. Strukturiertes Stakeholder-Interview in 5 Runden (Problemraum, Nutzer, Scope, Erfolgskriterien, Constraints). Nach dem Interview wird der Stakeholder Brief (SB-000001) erstellt, MoSCoW-Priorisierung festgelegt und die Top-3-Risiken benannt. INDEX.md und `.phase`-Datei sind bereits aus der Vorlage vorhanden.  
 **Output:** `SB-NNNNNN` Stakeholder Brief  
 **Nächste Phase:** `/ba [projektname]`
 
