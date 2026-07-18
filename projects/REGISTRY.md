@@ -8,7 +8,7 @@ Letzte Aktualisierung: 2026-07-17
 
 | Projekt | Phase | Sprint | Letzter Agent | Letztes Update | Pfad |
 |---------|-------|--------|--------------|----------------|------|
-| campaignworld | REVIEW | 1 | RV | 2026-07-18 | `projects/campaignworld/` |
+| campaignworld | DONE (Sprint 1) | 1 | MW | 2026-07-18 | `projects/campaignworld/` |
 
 ## Abgeschlossene Projekte
 
