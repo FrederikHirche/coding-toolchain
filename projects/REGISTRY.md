@@ -8,7 +8,7 @@ Letzte Aktualisierung: 2026-07-17
 
 | Projekt | Phase | Sprint | Letzter Agent | Letztes Update | Pfad |
 |---------|-------|--------|--------------|----------------|------|
-| campaignworld | ARCHITECTURE (Phase 2.5 — Entity-Dashboard & Design) | 2.5 | AR | 2026-07-18 | `projects/campaignworld/` |
+| campaignworld | UX (Phase 2.5 — Entity-Dashboard & Design) | 2.5 | UX | 2026-07-18 | `projects/campaignworld/` |
 
 ## Abgeschlossene Projekte
 
