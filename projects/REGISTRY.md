@@ -8,7 +8,7 @@ Letzte Aktualisierung: 2026-07-17
 
 | Projekt | Phase | Sprint | Letzter Agent | Letztes Update | Pfad |
 |---------|-------|--------|--------------|----------------|------|
-| campaignworld | TESTING abgeschlossen, CONDITIONAL (Phase 2.5 — Entity-Dashboard & Design) | 2.5 | QA | 2026-07-18 | `projects/campaignworld/` |
+| campaignworld | REVIEW (Phase 2.5 — pausiert für US-000031, jetzt implementiert, Review wird fortgesetzt) | 2.5 | FE | 2026-07-18 | `projects/campaignworld/` |
 
 ## Abgeschlossene Projekte
 
