@@ -8,7 +8,7 @@ Letzte Aktualisierung: 2026-07-17
 
 | Projekt | Phase | Sprint | Letzter Agent | Letztes Update | Pfad |
 |---------|-------|--------|--------------|----------------|------|
-| campaignworld | REJECTED (Sprint 2, Scope-Klärung) | 2 | RV | 2026-07-18 | `projects/campaignworld/` |
+| campaignworld | DISCOVERY (Phase 2.5 — Entity-Dashboard & Design) | 2.5 | PM | 2026-07-18 | `projects/campaignworld/` |
 
 ## Abgeschlossene Projekte
 
