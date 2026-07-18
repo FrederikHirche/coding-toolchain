@@ -8,7 +8,7 @@ Letzte Aktualisierung: 2026-07-17
 
 | Projekt | Phase | Sprint | Letzter Agent | Letztes Update | Pfad |
 |---------|-------|--------|--------------|----------------|------|
-| campaignworld | DISCOVERY (Phase 2.5 — Entity-Dashboard & Design) | 2.5 | PM | 2026-07-18 | `projects/campaignworld/` |
+| campaignworld | REQUIREMENTS (Phase 2.5 — Entity-Dashboard & Design) | 2.5 | BA | 2026-07-18 | `projects/campaignworld/` |
 
 ## Abgeschlossene Projekte
 
