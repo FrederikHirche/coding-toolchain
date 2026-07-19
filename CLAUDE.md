@@ -133,12 +133,15 @@ TODO-FORMAT:
 | UX-Spec | `UX-NNNNNN` | `UX-000001-onboarding.md` |
 | Sprint Backlog | `SP-NNNNNN` | `SP-000001-sprint1.md` |
 | Testplan | `TP-NNNNNN` | `TP-000001-smoke.md` |
+| Testergebnis-Bericht | `TR-NNNNNN` | `TR-000001-sprint-1.md` |
+| Fehlerbericht | `BUG-NNNNNN` | `BUG-000001-login-crash.md` |
 | Review-Bericht | `RV-NNNNNN` | `RV-000001-sprint-1.md` |
 | Technische Schuld | `DEBT-NNNNNN` | `DEBT-000001-n+1-queries.md` |
 | Spike Report | `SRP-NNNNNN` | `SRP-000001-db-eval.md` |
 | Feature-Guide | `DOC-NNNNNN` | `DOC-000001-login.md` |
 | Release Notes | `RN-NNNNNN` | `RN-000001-sprint-1.md` |
 | Getting Started | `GS-NNNNNN` | `GS-000001.md` |
+| FAQ | `FAQ-NNNNNN` | `FAQ-000001-<thema>.md` |
 | Entscheidungsprotokoll | `DECISIONS.md` | `DECISIONS.md` (pro Projekt) |
 | Sprint-Retrospektive | `RETRO-NNNNNN` | `RETRO-000001-sprint-1.md` |
 | Impediment | `IMPD-NNNNNN` | `IMPD-000001-handoff-luecke.md` |
@@ -175,7 +178,7 @@ in den zugehörigen Unterordner. Die `INDEX.md` im Projektroot verweist auf alle
 ```
 DRAFT → REVIEW → APPROVED → ACTIVE → SUPERSEDED | ARCHIVED
 
-- Artefakte werden NIE gelöscht
+- Artefakte werden NIE von der KI ohne direkten Userbefehl gelöscht
 - Ersetzt: [SUPERSEDED by ADR-000007]
 - Versionierung: v1.0, v1.1, v2.0 (Minor = Inhalt, Major = Struktur)
 ```
@@ -252,7 +255,10 @@ cd projects/<projektname>
 git init
 
 # 3. Git Hooks installieren (einmalig pro Projekt-Repository)
+# Linux/Mac/WSL/Git-Bash:
 bash ../../toolchain/hooks/setup-hooks.sh
+# Windows/PowerShell (nativ, kein Git-Bash/WSL nötig):
+pwsh ../../toolchain/hooks/setup-hooks.ps1
 
 # 4. Tool Chain Config befüllen
 # .toolchain.yml wurde aus der Vorlage kopiert — project.name, description, created befüllen

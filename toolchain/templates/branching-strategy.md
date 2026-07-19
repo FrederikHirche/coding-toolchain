@@ -19,7 +19,7 @@ superseded-by: —
 
 ## Status
 
-`DRAFT` | `REVIEW` | `APPROVED` | `SUPERSEDED`
+`DRAFT` | `REVIEW` | `APPROVED` | `ACTIVE` | `SUPERSEDED` | `ARCHIVED`
 
 ---
 

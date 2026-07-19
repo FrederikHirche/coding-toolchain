@@ -142,7 +142,7 @@ Der Standard-Workflow für einen vollständigen Entwicklungssprint — von Disco
 | Alle Sprint-Stories geschätzt | Keine leere Schätzung | BLOCKER |
 | Sprint-Ziel definiert | Abschnitt im SP | MAJOR |
 | Technische Voraussetzungen gelistet | Abschnitt im SP | MAJOR |
-| Keine ungelösten Tech-Blocker | Prüfen | MAJOR |
+| Keine ungelösten Tech-Blocker | Selbstauskunft BA+FE+BE: SP-NNNNNN Abschnitt "Risiken & Unsicherheiten" — keine offenen Blocker-Einträge | MAJOR |
 
 **Bei PASS:** `.phase` auf `IMPLEMENTATION` setzen
 
@@ -160,7 +160,7 @@ Der Standard-Workflow für einen vollständigen Entwicklungssprint — von Disco
 |---|---|---|
 | API-Kontrakt existiert | OpenAPI/Schema-Datei vorhanden | BLOCKER |
 | Keine Lint-Fehler | `lint`-Befehl aus `.toolchain.yml` | BLOCKER |
-| Alle US-Akzeptanzkriterien umgesetzt | Selbstauskunft FE+BE | BLOCKER |
+| Alle US-Akzeptanzkriterien umgesetzt | cross-ref: jede Sprint-US-NNNNNN hat ≥1 `// Implementiert: US-NNNNNN`-Kommentar im Code (Pflichtkommentar aus CLAUDE.md) | BLOCKER |
 | Datei-Header in Code-Dateien | Stichprobe 3 Dateien | MAJOR |
 | Funktions-Kommentare | Stichprobe 5 Funktionen | MAJOR |
 | Unit-Tests vorhanden | Test-Dateien existieren | MAJOR |
@@ -174,7 +174,7 @@ Der Standard-Workflow für einen vollständigen Entwicklungssprint — von Disco
 
 **Befehle:** `/test-plan` → `/test-run`  
 **Agent:** QA  
-**Ergebnis:** `TP-NNNNNN`, `TR-NNNNNN`, ggf. `BUG-NNNNNN`
+**Ergebnis:** `TP-NNNNNN`, `TR-NNNNNN`, ggf. `BUG-NNNNNN` — inklusive Browser-Clickpfade und Performanztests
 
 ### Gate 7 → Phase 8
 
@@ -184,6 +184,8 @@ Der Standard-Workflow für einen vollständigen Entwicklungssprint — von Disco
 | Keine offenen `BLOCKER`-Bugs | BUG-Dateien prüfen | BLOCKER |
 | Automatisierte Tests: alle grün | `test`-Befehl aus `.toolchain.yml` | BLOCKER |
 | `TR-NNNNNN` mit Freigabe `APPROVED` oder `CONDITIONAL` | Header prüfen | BLOCKER |
+| Browser-Clickpfade im UI geprüft | TR-NNNNNN: Testmodus (headed/UI oder mit Begründung headless) dokumentiert | BLOCKER |
+| Performanztests abgeschlossen | TP-NNNNNN: PERF-Zielwerte ausgefüllt (kein `[Ziel]`-Platzhalter) und TR-NNNNNN enthält gemessene Ist-Werte | BLOCKER |
 | Coverage-Ziel erreicht | Coverage-Report prüfen | MAJOR |
 | P0-Testfälle alle `✅ Bestanden` | TP-Tabelle prüfen | MAJOR |
 

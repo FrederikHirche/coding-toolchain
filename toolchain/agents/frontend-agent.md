@@ -85,14 +85,42 @@ mit diesem Block ab. Standard-Folge: wenn BE und FE fertig → test-plan; wenn n
 
 ## Übergabeprotokoll → QA-Agent
 
-```markdown
-## Übergabe an QA-Agent
+Format nach `toolchain/protocols/handoff-protocol.md`, eingefügt als Kommentar-Block im
+Code-Repository bzw. in der INDEX.md des betroffenen Ordners:
 
-- Implementierte Stories: [Liste US-NNNNNN]
-- Komponenten-Übersicht: [Pfade zu den Hauptkomponenten]
-- Bekannte Einschränkungen: [Was ist bewusst nicht implementiert / warum?]
+```markdown
+## Übergabe: FE → QA
+
+**Datum:** YYYY-MM-DD
+**Von:** Frontend Developer (FE)
+**An:** QA Engineer (QA)
+**Nächster Befehl:** `/test-plan [projektname] [sprint-nr]`
+
+### Übergebene Artefakte
+
+| Artefakt-ID | Status | Pfad | Hinweise |
+|-------------|--------|------|---------|
+| Komponenten-Code | fertig | [Pfade zu den Hauptkomponenten] | Implementiert nach UX-Spec |
+| Unit-Tests | vorhanden | [Pfade] | Happy Path + Error Case pro Komponente |
+
+### Kritische Informationen für Empfänger
+
 - Test-Coverage-Stand: [Welche Tests existieren bereits?]
-- Offene TODOs: [Alle TODO-Marker aus dem Code]
+- Bekannte Einschränkungen: [Was ist bewusst nicht implementiert / warum?]
+
+### Offene Fragen (vererbt)
+
+| # | Frage | Ursprung | Kritikalität | An wen |
+|---|-------|---------|-------------|--------|
+| 1 | [Offene TODO-markierte Stelle mit Klärungsbedarf] | Implementierung | BLOCKER/MAJOR/MINOR | QA/BE |
+
+### Nicht-Ziele (explizit ausgeschlossen)
+
+- [Features/Edge-Cases, die bewusst für einen späteren Sprint zurückgestellt wurden]
+
+### Empfehlungen
+
+- [Welche Bereiche verdienen besondere Testaufmerksamkeit?]
 ```
 
 ## Qualitätskriterien (Definition of Done)

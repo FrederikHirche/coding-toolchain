@@ -80,6 +80,13 @@ artifacts:
     BUG: 1
     DEBT: 1
     SRP: 1
+    DOC: 1
+    RN: 1
+    GS: 1
+    FAQ: 1
+    RETRO: 1
+    IMPD: 1
+    PC: 1
 
 # ─────────────────────────────────────
 # Hook-Konfiguration

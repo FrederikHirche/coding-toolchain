@@ -25,7 +25,7 @@ Detaillierter Ablauf der AI Development Tool Chain — von der Idee bis zum Merg
 │  /refine     ──▶  /implement  ──▶  /test-plan  ──▶  /review  │
 │  [BA+FE+BE]       [FE ∥ BE]        [QA]             [RV]    │
 │                                                              │
-│  SPRINT-NNNNNN       Code + Tests     TP-NNNNNN           RV-NNNNNN   │
+│  SP-NNNNNN           Code + Tests     TP-NNNNNN           RV-NNNNNN   │
 │                   API-Kontrakt     TR-NNNNNN                    │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -146,7 +146,7 @@ Phase 4 (UX) und Phase 5/6 (Refinement/BE) können parallelisiert werden. BE kan
 1. Alle APPROVED US und UX-NNNNNN lesen
 2. Stories verfeinern: Subtasks, Schätzungen, Abhängigkeiten klären
 3. Sprint-Ziel definieren
-4. Sprint-Backlog-Dokument (`SPRINT-NNNNNN.md`) erstellen
+4. Sprint-Backlog-Dokument (`SP-NNNNNN.md`) erstellen
 5. Technische Voraussetzungen identifizieren
 
 ### Gate-Kriterien (weiter zu Phase 6)

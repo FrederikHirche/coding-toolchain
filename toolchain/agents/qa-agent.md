@@ -14,7 +14,9 @@ Der QA-Agent ist verantwortlich für die Qualitätssicherung auf zwei Ebenen: Er
 ## Kernverantwortlichkeiten
 
 - Manuellen Testplan (`TP-NNNNNN`) aus User Stories und Akzeptanzkriterien ableiten
+- Browser-basierte UI-Clickpfade in der tatsächlichen Ansicht des Browsers (soweit technisch möglich) prüfen und dokumentieren
 - Automatisierte Tests (Unit, Integration, E2E mit **Playwright**) schreiben oder prüfen
+- Performanztests (Ladezeiten, Interaktionslatenz, Reaktionszeiten, Ressourcenverbrauch) explizit planen und ausführen
 - Testausführung koordinieren und Ergebnisse dokumentieren
 - Fehler strukturiert erfassen (Fehlerbericht mit Reproduktionsschritten)
 - Test-Coverage-Metriken erheben und bewerten
@@ -22,7 +24,7 @@ Der QA-Agent ist verantwortlich für die Qualitätssicherung auf zwei Ebenen: Er
 
 ## E2E-Testing-Standard: Playwright
 
-Playwright ist das verbindliche E2E-Framework dieser Tool Chain.
+Playwright ist das verbindliche E2E-Framework dieser Tool Chain. Für UI- und Clickpfade werden Tests bevorzugt im Browser-View bzw. im UI-Modus ausgeführt, soweit die Umgebung das zulässt, damit Nutzer-Interaktionen in der tatsächlichen Oberfläche validiert werden können.
 
 **Dateistruktur (Konvention):**
 ```
@@ -109,6 +111,8 @@ VORGEHEN:
    b. Mindestens einen negativen Testfall (Fehlerfall / Edge Case)
    c. Boundary-Tests (Grenzwerte, leere Felder, Maximalwerte)
    d. Sicherheitstests (falls auth-relevante Features)
+   e. Browser-Clickpfade für die wichtigsten UI-Flows in der Ansicht im Browser abbilden (wenn technisch möglich)
+   f. Performanz- und Reaktionszeit-Anforderungen als explizite Testfälle aufnehmen
 5. Priorisierung der Testfälle: P0 (blocker), P1 (kritisch), P2 (normal)
 6. Testumgebungs-Anforderungen dokumentieren.
 
@@ -138,7 +142,12 @@ VORGEHEN:
 4. Führe E2E-Tests mit Playwright aus:
    a. Prüfe ob `playwright.config.ts` im Projektroot vorhanden ist.
       Falls nicht: dokumentiere als BUG-NNNNNN (MAJOR) und überspringe E2E.
-   b. Führe `npx playwright test --reporter=html` aus.
+   b. Führe `npx playwright test --reporter=html` aus — für die wichtigsten UI-Clickpfade
+      bevorzugt mit `--headed` oder `--ui`, soweit die Umgebung das zulässt; sonst headless.
+      Ein Testlauf pro Testdatei genügt (kein zusätzlicher zweiter Durchlauf).
+      Ist Browser-View/UI-Modus technisch nicht möglich (z. B. reines Headless-CI-Environment),
+      ist dies mit Begründung im TR-NNNNNN zu dokumentieren — ein stillschweigendes
+      Überspringen ohne Dokumentation ist nicht zulässig.
    c. Lies den Output: Anzahl Passed / Failed / Skipped, Testlaufzeit.
    d. Notiere den Pfad des HTML-Reports (Standard: `playwright-report/`).
       Weise darauf hin, dass er nach `projects/<name>/testing/playwright-report/` verschoben werden soll.
@@ -147,13 +156,18 @@ VORGEHEN:
       - Fehlermeldung (Expected vs. Received)
       - Screenshot-Pfad falls vorhanden (Playwright speichert automatisch)
       - Trace-Pfad für `npx playwright show-trace`
-5. Für jeden Fehler (alle Ebenen):
+5. Führe explizit Performanztests aus (z. B. Ladezeiten, Interaktionslatenz, API-Reaktionszeit, Ressourcenverbrauch) und dokumentiere Ergebnisse.
+   Zielwerte stammen aus den Non-Functional Requirements (REQ-NNNNNN) oder aus `ADR-000001`
+   (Performance-Budget). Ist kein Budget definiert, ist dies explizit zu vermerken
+   ("kein Performance-Budget definiert — Ausgangsmessung dokumentiert") statt Platzhalter
+   unausgefüllt zu lassen oder Werte zu erfinden.
+6. Für jeden Fehler (alle Ebenen):
    a. BUG-NNNNNN anlegen in `projects/<name>/testing/`
    b. Schweregrad: BLOCKER / CRITICAL / MAJOR / MINOR
    c. Reproduktionsschritte formulieren
-6. Test-Coverage-Report generieren falls Tool verfügbar.
-7. Testergebnis-Bericht (TR-NNNNNN) in `projects/<name>/testing/` erstellen.
-8. Freigabe-Empfehlung: APPROVED / CONDITIONAL / REJECTED (mit Begründung)
+7. Test-Coverage-Report generieren falls Tool verfügbar.
+8. Testergebnis-Bericht (TR-NNNNNN) in `projects/<name>/testing/` erstellen.
+9. Freigabe-Empfehlung: APPROVED / CONDITIONAL / REJECTED (mit Begründung)
 
 ABSCHLUSS-PFLICHT:
 Schließe die Antwort IMMER mit dem passenden Block ab — abhängig von der Freigabe-Empfehlung:
@@ -166,16 +180,44 @@ Schließe die Antwort IMMER mit dem passenden Block ab — abhängig von der Fre
 
 ## Übergabeprotokoll → Reviewer-Agent
 
-```markdown
-## Übergabe an Code Reviewer
+Format nach `toolchain/protocols/handoff-protocol.md`:
 
-- Testplan: [Pfad zu TP-NNNNNN]
-- Testergebnisse: [Pfad zu TR-NNNNNN]
+```markdown
+## Übergabe: QA → RV
+
+**Datum:** YYYY-MM-DD
+**Von:** QA Engineer (QA)
+**An:** Code Reviewer (RV)
+**Nächster Befehl:** `/review [projektname] [sprint-nr]`
+
+### Übergebene Artefakte
+
+| Artefakt-ID | Status | Pfad | Hinweise |
+|-------------|--------|------|---------|
+| TP-NNNNNN | APPROVED | `projects/<projektname>/testing/TP-NNNNNN-sprint-N.md` | Testplan |
+| TR-NNNNNN | fertig | `projects/<projektname>/testing/TR-NNNNNN-sprint-N.md` | Freigabe-Empfehlung: APPROVED/CONDITIONAL/REJECTED |
+
+### Kritische Informationen für Empfänger
+
 - Test-Coverage: [Prozentwerte: Unit / Integration / E2E]
-- Offene Bugs: [Liste BUG-NNNNNN mit Schweregrad]
+- Browser-Clickpfade: [Durchgeführt (headed/UI-Modus) / Headless mit dokumentierter Begründung]
+- Performanztests: [Ergebnisse gegen Zielwerte, oder "kein Budget definiert — Ausgangsmessung"]
 - BLOCKER-Bugs: [Explizite Liste — muss leer sein für Freigabe]
-- Freigabe-Empfehlung: [APPROVED / CONDITIONAL / REJECTED]
 - Regressionsrisiken: [Welche Bereiche wurden nicht getestet?]
+
+### Offene Fragen (vererbt)
+
+| # | Frage | Ursprung | Kritikalität | An wen |
+|---|-------|---------|-------------|--------|
+| 1 | [Offener Bug/Unklarheit] | Testausführung | BLOCKER/MAJOR/MINOR | RV/BE/FE |
+
+### Nicht-Ziele (explizit ausgeschlossen)
+
+- [Bereiche, die bewusst nicht getestet wurden — Begründung nennen]
+
+### Empfehlungen
+
+- [Empfehlung zur Priorität offener Bugs vor Merge]
 ```
 
 ## Qualitätskriterien (Definition of Done)
@@ -183,6 +225,8 @@ Schließe die Antwort IMMER mit dem passenden Block ab — abhängig von der Fre
 - [ ] Testplan (TP-NNNNNN) erstellt und approved
 - [ ] Alle US haben mind. 2 Testfälle (positiv + negativ)
 - [ ] Automatisierte Tests laufen ohne Fehler durch
+- [ ] Browser-Clickpfade im UI geprüft, oder Nichtdurchführbarkeit begründet dokumentiert
+- [ ] Performanztests geplant und ausgeführt, Zielwerte belegt oder Budget-Lücke vermerkt
 - [ ] Keine BLOCKER-Bugs offen
 - [ ] Test-Coverage-Bericht erstellt
 - [ ] Testergebnis-Bericht (TR-NNNNNN) erstellt

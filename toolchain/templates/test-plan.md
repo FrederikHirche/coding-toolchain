@@ -69,6 +69,10 @@ npx playwright test --reporter=html
 
 **Playwright Report-Ablage:** `projects/<name>/testing/playwright-report/`
 
+**Browser-Ansicht und UI-Clickpfade:**
+- Wichtige UI-Clickpfade werden in einem Testlauf bevorzugt im Playwright-UI-/headed-Modus geprüft (kein zusätzlicher zweiter headless-Durchlauf derselben Specs).
+- Ist headed/UI-Modus technisch nicht möglich, ist dies mit Begründung in TR-NNNNNN zu dokumentieren — stillschweigendes Überspringen ist nicht zulässig.
+
 **Zu erstellende / vorhandene Testdateien:**
 
 | Testdatei | Feature-Bereich | US-Referenz | Status |
@@ -93,6 +97,19 @@ npx playwright test --reporter=html
 - [ ] App läuft auf `[baseURL aus playwright.config.ts]`
 - [ ] Testdaten-Seed ausgeführt: `[Befehl]`
 - [ ] Umgebungsvariablen gesetzt: `[Liste]`
+
+### 3.4 Performanztests
+
+Zielwerte stammen aus den Non-Functional Requirements (REQ-NNNNNN) oder aus `ADR-000001`
+(Performance-Budget). Ist kein Budget definiert, ist dies statt eines leeren `[Ziel]`-Platzhalters
+explizit zu vermerken: "kein Performance-Budget definiert — Ausgangsmessung dokumentiert".
+
+| ID | Bereich | Methode | Erwartetes Ergebnis |
+|---|---|---|---|
+| PERF-000001 | Seitenladezeit | Browser-Performance-Messung (z. B. `performance.timing`, Lighthouse-CI) | Ladezeit unter [Ziel] s |
+| PERF-000002 | Interaktionslatenz | Klick-/Eingabe-Flow in Browser (Playwright-Tracing) | Reaktion innerhalb [Ziel] ms |
+| PERF-000003 | API-Antwortzeit | Netzwerk-/Backend-Messung (z. B. Playwright Network-Events) | Antwortzeit unter [Ziel] ms |
+| PERF-000004 | Ressourcenverbrauch | Browser- und Server-Metriken (z. B. Playwright Tracing, Server-Monitoring) | Keine auffälligen Peaks / Budget eingehalten |
 
 ---
 
@@ -144,6 +161,7 @@ npx playwright test --reporter=html
 |---|---|---|---|
 | Automatisiert — Unit | — | — | — |
 | Automatisiert — Integration | — | — | — |
+| Automatisiert — Performance | — | — | — |
 | Manuell — P0 | — | — | — |
 | Manuell — P1 | — | — | — |
 | Manuell — P2 | — | — | — |

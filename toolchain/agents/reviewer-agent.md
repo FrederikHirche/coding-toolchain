@@ -37,6 +37,7 @@ das technische Code Review unabhängig von den Entwicklungsagenten durch.
 |----------|--------|--------|---------|
 | Review-Bericht | `RV-NNNNNN` | `projects/<name>/reviews/` | `toolchain/templates/review-checklist.md` |
 | Merge-Entscheidung | (Teil von RV) | — | APPROVED / REQUEST CHANGES / REJECTED |
+| Technische Schulden (falls gefunden) | `DEBT-NNNNNN` | `projects/<name>/retros/` | `toolchain/templates/tech-debt-registry.md` |
 
 ## System-Prompt-Template
 
@@ -174,18 +175,44 @@ Schließe die Antwort IMMER mit dem zum Review-Ergebnis passenden Block ab:
 ▶ **Nächste Phase:** [Befehl abhängig von Gesamtentscheidung — oben auswählen]
 ```
 
-## Übergabeprotokoll (nach APPROVED)
+## Übergabeprotokoll (nach APPROVED) → Manual-Writer-Agent
+
+Format nach `toolchain/protocols/handoff-protocol.md`:
 
 ```markdown
-## Freigabe-Dokumentation
+## Übergabe: RV → MW
 
-- Review-Bericht: [Pfad zu RV-NNNNNN]
+**Datum:** YYYY-MM-DD
+**Von:** Code Reviewer (RV)
+**An:** Manual Writer (MW)
+**Nächster Befehl:** `/manual [projektname] [sprint-nr]`
+
+### Übergebene Artefakte
+
+| Artefakt-ID | Status | Pfad | Hinweise |
+|-------------|--------|------|---------|
+| RV-NNNNNN | APPROVED | `projects/<projektname>/reviews/RV-NNNNNN-sprint-N.md` | Nutzer-Befund + technische Entscheidung |
+| DEBT-NNNNNN | [erfasst/keine] | `projects/<projektname>/retros/DEBT-NNNNNN-beschreibung.md` | Nur falls technische Schulden gefunden wurden |
+
+### Kritische Informationen für Empfänger
+
+- Implementierte Stories: [Liste US-NNNNNN — Basis für Feature-Guides]
 - Nutzer-Befund: [ACCEPTED / CONDITIONAL für jedes Feature]
-- Technische Entscheidung: APPROVED
 - Merge-Zeitpunkt: [YYYY-MM-DD HH:MM]
-- Implementierte Stories: [Liste US-NNNNNN]
-- Offene SUGGESTION-Punkte: [Liste — für nächsten Sprint]
-- Technische Schulden erfasst: [Ja/Nein — Pfad zu DEBT-NNNNNN wenn Ja]
+
+### Offene Fragen (vererbt)
+
+| # | Frage | Ursprung | Kritikalität | An wen |
+|---|-------|---------|-------------|--------|
+| 1 | [Offene SUGGESTION, die dokumentiert werden sollte] | Review | MINOR | MW |
+
+### Nicht-Ziele (explizit ausgeschlossen)
+
+- Technische Entwickler-Dokumentation wurde nicht erstellt — nicht Aufgabe von MW.
+
+### Empfehlungen
+
+- [Welche Features brauchen besondere Aufmerksamkeit in der Nutzer-Doku?]
 ```
 
 ## Qualitätskriterien (Definition of Done)

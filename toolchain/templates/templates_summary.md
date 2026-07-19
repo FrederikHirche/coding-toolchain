@@ -3,7 +3,7 @@
 Konsolidierte Übersicht aller Artefakt-Templates.  
 Zweck: Einzelne Referenzdatei für NotebookLM-Analyse und schnelle Orientierung.
 
-**Letzte Aktualisierung:** 2026-06-19  
+**Letzte Aktualisierung:** 2026-07-20  
 **Pflege-Regel:** Diese Datei wird bei jedem Hinzufügen oder Ändern eines Templates aktualisiert.
 
 ---
@@ -163,7 +163,7 @@ ausgeführt werden.
 - Testumfang: Welche Stories und Features sind im Scope?
 - Testumgebung: Anforderungen an Setup, Testdaten, Konfiguration
 - Testfälle pro Story: Happy Path, negative Tests (Fehlerfälle), Boundary-Tests,
-  Sicherheitstests (bei auth-relevanten Features)
+  Sicherheitstests (bei auth-relevanten Features), Browser-Clickpfade und Performanztests
 - Priorisierung: P0 (Blocker — muss vor Release behoben), P1 (Kritisch), P2 (Normal)
 - Testumgebungs-Anforderungen: Was muss konfiguriert sein?
 - Automatisierungsgrad: Welche Tests werden automatisiert, welche manuell?
@@ -295,3 +295,86 @@ Release-Prozess.
 - Merge-Strategie: Merge Commit / Squash / Rebase
 - Release-Prozess: Wann wird ein Release-Branch erstellt?
 - Schutzregeln: Wer darf in main/develop mergen?
+
+---
+
+## DOC — Feature-Guide (`feature-guide.md`)
+
+**Präfix:** `DOC-NNNNNN`  
+**Erstellt von:** MW (Manual Writer) via `/manual`  
+**Basiert auf:** `US-NNNNNN`, `UX-NNNNNN`, `RV-NNNNNN`
+
+Nutzerorientierte Schritt-für-Schritt-Anleitung pro Feature-Gruppe — aus Nutzersicht,
+ohne Entwickler-Jargon.
+
+**Kernabschnitte:**
+- Was das Feature tut (1 Satz) und Voraussetzungen
+- Schritt für Schritt: Aktion + was der Nutzer danach sieht
+- Tipps und Hinweise, häufige Fragen zu diesem Feature
+- Fehlerbehebung
+- Screenshot-Platzhalter (`[SCREENSHOT: ...]`)
+
+---
+
+## RN — Release Notes (`release-notes.md`)
+
+**Präfix:** `RN-NNNNNN`  
+**Erstellt von:** MW (Manual Writer) via `/manual`  
+**Basiert auf:** `RV-NNNNNN`, `US-NNNNNN`
+
+Nutzerorientierte Zusammenfassung der Sprint-Änderungen — nicht zu verwechseln mit dem
+Tool-Chain-eigenen `RELEASENOTES.md` im Repo-Root.
+
+**Kernabschnitte:**
+- Neu / Geändert / Behoben — je aus Nutzersicht formuliert
+- Bekannte Einschränkungen
+- Verweise auf zugehörige `DOC-NNNNNN`-Guides
+
+---
+
+## GS — Getting Started (`getting-started.md`)
+
+**Präfix:** `GS-000001` (einmalig pro Projekt, Sprint 1)  
+**Erstellt von:** MW (Manual Writer) via `/manual`  
+**Basiert auf:** `SB-NNNNNN`, `US-NNNNNN` (Sprint 1)
+
+Einstiegsanleitung für neue Nutzer — was ist das Produkt, erste Schritte, wichtigste
+Funktionen im Überblick.
+
+**Kernabschnitte:**
+- Was ist [Produkt]? Bevor du anfängst. Erste Schritte.
+- Die wichtigsten Funktionen im Überblick (mit Verweis auf `DOC-NNNNNN`)
+- Wenn etwas nicht funktioniert (Verweis auf `FAQ-NNNNNN`)
+
+---
+
+## FAQ — Häufige Fragen (`faq.md`)
+
+**Präfix:** `FAQ-NNNNNN`  
+**Erstellt von:** MW (Manual Writer) via `/manual`  
+**Basiert auf:** `DOC-NNNNNN`, `RV-NNNNNN`
+
+Häufig gestellte Nutzerfragen zu implementierten Features — aus Nutzersicht, ohne
+Fachbegriffe. Wird ab Sprint 2 oder bei erkennbarem FAQ-Bedarf erstellt/aktualisiert,
+nicht in jedem Sprint neu angelegt.
+
+**Kernabschnitte:**
+- Fragen gruppiert nach Feature-Bereich (nicht chronologisch)
+- Kurze, direkte Antworten mit Verweis auf den zugehörigen `DOC-NNNNNN`-Guide
+- Abschnitt "Allgemeine Fragen" für Themen ohne Feature-Bezug (Konto, Datenschutz, ...)
+
+---
+
+## SRP — Spike Report (`spike-report.md`)
+
+**Präfix:** `SRP-NNNNNN`  
+**Erstellt von:** AR (Software Architect) via `/spike`  
+**Basiert auf:** Spike-Brief (PM), `SB-NNNNNN` (falls vorhanden)
+
+Ergebnis einer zeitlich begrenzten technischen Erkundung (kein Sprint, kein ADR).
+Fließt als Input in den nächsten `/architect`-Aufruf.
+
+**Kernabschnitte:**
+- Fragestellung, Erfolgskriterien, Ergebnis, Empfehlung (explizit, keine offene Abwägung)
+- Verworfene Optionen, offene Fragen, nächster Schritt (ADR anlegen / neuer Spike / verwerfen)
+- Enthält einen vollständigen Übergabe-Block (AR → PM/Nutzer) nach `handoff-protocol.md`

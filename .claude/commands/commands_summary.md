@@ -3,7 +3,7 @@
 Konsolidierte Übersicht aller Slash Commands.  
 Zweck: Einzelne Referenzdatei für NotebookLM-Analyse und schnelle Orientierung.
 
-**Letzte Aktualisierung:** 2026-06-21  
+**Letzte Aktualisierung:** 2026-07-20  
 **Pflege-Regel:** Diese Datei wird bei jedem Hinzufügen oder Ändern eines Commands aktualisiert.
 
 ---
@@ -35,7 +35,7 @@ Standard-Reihenfolge Full-Sprint:
 
 **Aktiviert:** Orchestrator (ORCH)  
 **Wann nutzen:** Wenn ein vollständiger Sprint ohne manuelle Steuerung durchgeführt werden soll. Der Orchestrator aktiviert alle Phasen sequenziell, prüft Gates und stoppt bei Blockern.  
-**Was passiert:** Alle 9 Phasen (Discovery bis Dokumentation) werden nacheinander ausgeführt. Nach jeder Phase wird ein Gate-Check durchgeführt. BLOCKER stoppen den Sprint und warten auf Nutzer-Entscheidung.  
+**Was passiert:** Alle 10 Phasen (Discovery bis Release) werden nacheinander ausgeführt. Nach jeder Phase wird ein Gate-Check durchgeführt. BLOCKER stoppen den Sprint und warten auf Nutzer-Entscheidung.  
 **Variante zu:** Manuellem Durchlaufen der einzelnen Phase-Commands  
 **Vorbedingung:** Projektordner muss existieren oder wird angelegt.
 

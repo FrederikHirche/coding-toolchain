@@ -63,7 +63,7 @@ Optional, aber wertvoll bei Entscheidungsspielräumen.]
 
 ```
 PM ──[SB-NNNNNN]──▶ BA ──[REQ+US]──▶ AR ──[ADR+STRUCT]──▶ UX ──[UX-NNNNNN]──▶
-FE+BE ──[Code+Kontrakt]──▶ QA ──[TP+TR]──▶ RV ──[RV-NNNNNN]──▶ [MERGE]
+FE+BE ──[Code+Kontrakt]──▶ QA ──[TP+TR]──▶ RV ──[RV-NNNNNN]──▶ MW ──[DOC+RN]──▶ [RELEASE]
 ```
 
 ## Übergabe-Validierung durch Empfänger

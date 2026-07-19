@@ -45,41 +45,8 @@ SPIKE-REPORT
 
 ## Spike Report Format (`SRP-NNNNNN`)
 
-```markdown
----
-id: SRP-NNNNNN
-title: Spike: [Fragestellung]
-version: 1.0
-status: DRAFT
-author-agent: AR
-date: YYYY-MM-DD
-timebox: [H]h
-actual-time: [H]h
----
-
-## 1. Fragestellung
-[Was sollte herausgefunden werden?]
-
-## 2. Erfolgskriterien
-[Wann ist der Spike erfolgreich?]
-
-## 3. Ergebnis
-[Was wurde herausgefunden?]
-
-## 4. Empfehlung
-[Was soll als nächstes passieren? Entscheidung klar benennen]
-
-## 5. Verworfene Optionen
-[Was wurde warum ausgeschlossen?]
-
-## 6. Offene Fragen
-[Was blieb ungeklärt?]
-
-## 7. Nächster Schritt
-[ ] Empfehlung → ADR-NNNNNN anlegen mit /architect
-[ ] Weitere Erkundung nötig → Neuer Spike
-[ ] Idee verwerfen → Begründung dokumentieren
-```
+Vollständiges Template mit Header, allen Abschnitten und Übergabe-Block:
+`toolchain/templates/spike-report.md`.
 
 ## Timebox-Regeln
 
@@ -96,19 +63,26 @@ Wenn Timebox erreicht: Spike-Report mit Zwischenergebnis abgeben. Kein unkontrol
 
 ### Gate: Brief → Research
 
-| Kriterium | Schwere |
-|---|---|
-| Fragestellung in einem Satz formulierbar | BLOCKER |
-| Timebox definiert | BLOCKER |
-| Erfolgskriterien messbar | MAJOR |
+| Kriterium | Prüfung | Schwere |
+|---|---|---|
+| Fragestellung in einem Satz formulierbar | SRP-NNNNNN Abschnitt 1 — ein Satz, kein Absatz | BLOCKER |
+| Timebox definiert | SRP-NNNNNN Header-Feld `timebox` ausgefüllt | BLOCKER |
+| Erfolgskriterien messbar | SRP-NNNNNN Abschnitt 2 enthält konkrete, prüfbare Kriterien | MAJOR |
 
 ### Gate: Research → Report
 
-| Kriterium | Schwere |
-|---|---|
-| Timebox eingehalten (oder Ausnahme begründet) | MAJOR |
-| Empfehlung explizit (keine "es kommt drauf an"-Antworten) | BLOCKER |
-| Verworfene Optionen dokumentiert | MAJOR |
+| Kriterium | Prüfung | Schwere |
+|---|---|---|
+| Timebox eingehalten (oder Ausnahme begründet) | SRP-NNNNNN: `actual-time` ≤ `timebox`, oder Begründung in Abschnitt 3 | MAJOR |
+| Empfehlung explizit (keine "es kommt drauf an"-Antworten) | SRP-NNNNNN Abschnitt 4 nennt konkrete Entscheidung | BLOCKER |
+| Verworfene Optionen dokumentiert | SRP-NNNNNN Abschnitt 5 ausgefüllt | MAJOR |
+
+## Rollback-Regeln
+
+| Gate-Fehlschlag | Rollback-Ziel | Wer wird aktiviert |
+|---|---|---|
+| Gate Brief → Research | SPIKE-BRIEF | PM (Fragestellung/Timebox/Erfolgskriterien nachschärfen) |
+| Gate Research → Report | SPIKE-RESEARCH | AR (weitere Recherche oder Empfehlung konkretisieren) |
 
 ## .phase Verhalten
 

@@ -138,6 +138,9 @@ TODO-FORMAT:
 | Technische Schulden | `DEBT` | pro Projekt ab 001 |
 | Feature-Guide | `DOC` | pro Projekt ab 001 |
 | Release Notes | `RN` | pro Projekt ab 001 |
+| Getting Started | `GS` | einmalig (`GS-000001`) |
+| FAQ | `FAQ` | pro Projekt ab 001 |
+| Spike Report | `SRP` | pro Projekt ab 001 |
 | Sprint-Retrospektive | `RETRO` | pro Projekt ab 001 |
 | Impediment | `IMPD` | pro Projekt ab 001 |
 | Process Change Proposal | `PC` | pro Projekt ab 001 |

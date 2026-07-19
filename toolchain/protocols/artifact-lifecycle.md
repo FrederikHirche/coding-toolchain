@@ -8,7 +8,9 @@ status: ACTIVE
 # Protokoll: Artefakt-Lebenszyklus
 
 Alle Artefakte in der Tool Chain durchlaufen einen definierten Lebenszyklus.
-Kein Artefakt wird gelöscht — der Zustand wird explizit verwaltet.
+Kein Artefakt wird von der KI eigenständig gelöscht — der Zustand wird explizit verwaltet.
+Eine Löschung erfolgt ausschließlich auf direkten, expliziten Userbefehl (siehe
+"Löschung auf direkten Userbefehl" unten).
 
 ## Status-Übergänge
 
@@ -126,11 +128,24 @@ Bevor ein Artefakt auf `ARCHIVED` oder `SUPERSEDED` gesetzt wird:
 2. Jede Referenz auf das neue Artefakt aktualisieren oder als `[veraltet]` markieren
 3. Im neuen Artefakt: `supersedes: [alte-ID]` im Header eintragen
 
+## Löschung auf direkten Userbefehl
+
+Die Regel "kein Artefakt wird gelöscht" schützt vor unbeabsichtigtem oder eigenständig
+KI-initiiertem Datenverlust. Sie verhindert nicht, dass ein User explizit die Löschung
+eines Artefakts oder eines gesamten Projekts anordnet (z. B. bei vollständigem
+Projektabbruch).
+
+Bei einer user-angeordneten Löschung:
+- Kein Agent löscht eigenständig oder auf Verdacht — nur nach explizitem, direktem Userbefehl.
+- Die Löschung wird in `projects/REGISTRY.md` unter "Pausierte / Abgebrochene Projekte" mit
+  Datum, Grund und Hinweis auf die fehlende Wiederherstellbarkeit dokumentiert.
+- Dies ist die einzige Ausnahme vom SUPERSEDED/ARCHIVED-Fluss.
+
 ## Verbotene Aktionen
 
 | Aktion | Stattdessen |
 |--------|-------------|
-| Artefakt-Datei löschen | Status auf ARCHIVED setzen |
+| Artefakt-Datei eigenständig (ohne direkten Userbefehl) löschen | Status auf ARCHIVED setzen |
 | Artefakt ohne Header-Update ändern | Version erhöhen, Änderungshistorie eintragen |
 | Status zurücksetzen (z.B. APPROVED → DRAFT) | Neues Artefakt anlegen mit `supersedes:` |
 | Artefakt-ID wiederverwenden | Neue fortlaufende Nummer vergeben |

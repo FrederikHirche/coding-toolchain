@@ -3,7 +3,7 @@
 Artefakt-Templates für alle Phasen der Tool Chain.
 Alle Templates sind technologieunabhängig und enthalten den Standard-Artefakt-Header.
 
-Letzte Aktualisierung: 2026-06-18
+Letzte Aktualisierung: 2026-07-20
 
 ## Inhalt
 
@@ -19,10 +19,15 @@ Letzte Aktualisierung: 2026-06-18
 | `review-checklist.md` | `RV-NNNNNN` | RV | Review |
 | `tech-debt-registry.md` | `DEBT-REGISTRY` | RV | Review (einmalig pro Projekt) |
 | `decisions.md` | `DECISIONS.md` | ORCH | Alle Phasen (fortlaufend) |
+| `feature-guide.md` | `DOC-NNNNNN` | MW | Dokumentation |
+| `release-notes.md` | `RN-NNNNNN` | MW | Dokumentation |
+| `getting-started.md` | `GS-000001` | MW | Dokumentation (einmalig, Sprint 1) |
+| `faq.md` | `FAQ-NNNNNN` | MW | Dokumentation (ab Sprint 2 / bei Bedarf) |
 | `retrospective.md` | `RETRO-NNNNNN` | AC | Post-Sprint (optional) |
 | `impediment.md` | `IMPD-NNNNNN` | AC | Jederzeit via `/impediment` |
 | `process-change.md` | `PC-NNNNNN` | AC | Post-Sprint (optional) |
 | `branching-strategy.md` | `ADR-NNNNNN` | AR | Architecture (einmalig pro Projekt) |
+| `spike-report.md` | `SRP-NNNNNN` | AR | Spike (via `/spike`) |
 
 ## Verwendung
 

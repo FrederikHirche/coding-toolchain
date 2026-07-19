@@ -3,7 +3,7 @@
 Konsolidierte Übersicht aller Agenten-Rollen.  
 Zweck: Einzelne Referenzdatei für NotebookLM-Analyse und schnelle Orientierung.
 
-**Letzte Aktualisierung:** 2026-07-17  
+**Letzte Aktualisierung:** 2026-07-20  
 **Pflege-Regel:** Diese Datei wird bei jedem Hinzufügen oder Ändern einer Agenten-Datei aktualisiert.
 
 ---
@@ -114,6 +114,12 @@ für den BE-Agenten. Kein eigener Agent dafür; Umsetzung erfolgt über AR (Vorg
 **Übergabe an:** UX-Agent und Dev-Agenten — gibt verbindlichen Tech-Stack, alle ADRs und
 Projektstruktur weiter.
 
+**Spike-Modus (`/spike`):** Zeitlich strikt begrenzte technische Erkundung ohne Sprint- oder
+ADR-Verpflichtung — übernimmt das Spike-Brief vom PM-Agenten (Fragestellung, Timebox,
+Erfolgskriterien), recherchiert/prototypt innerhalb der Timebox und liefert `SRP-NNNNNN`
+(Spike Report) mit expliziter Empfehlung. Übergabe geht an PM/Nutzer, nicht an einen
+Entwicklungsagenten.
+
 ---
 
 ## UX — UX Designer
@@ -204,16 +210,20 @@ Tests ausführen (Phase B).
 **Phase A — Testplan:** Für jede User Story mindestens einen positiven Testfall (Happy Path),
 einen negativen Testfall und Boundary-Tests. Sicherheitstests für auth-relevante Features.
 Priorisierung in P0 (blocker), P1 (kritisch), P2 (normal). Enthält Playwright E2E Inventar
-(Sektion 3.3): Testdateien, Page Objects, benötigte `data-testid` Attribute, Voraussetzungen.
+(Sektion 3.3): Testdateien, Page Objects, benötigte `data-testid` Attribute, Voraussetzungen,
+und explizit Browser-Clickpfade. Performanztestfälle stehen in einer eigenen Sektion 3.4.
 
-**Phase B — Testausführung:** Unit → Integration → E2E (Playwright) ausführen.
+**Phase B — Testausführung:** Unit → Integration → E2E (Playwright) → Performanztests ausführen.
 Playwright-spezifisch: `playwright.config.ts` prüfen, `npx playwright test --reporter=html`
-ausführen, HTML-Report nach `projects/<name>/testing/playwright-report/` ablegen.
+in einem Durchlauf ausführen — wichtige UI-Clickpfade bevorzugt im Browser-View bzw. im
+headed/UI-Modus, sonst headless mit dokumentierter Begründung —, HTML-Report nach
+`projects/<name>/testing/playwright-report/` ablegen.
 Fehler als BUG-NNNNNN erfassen (inkl. Screenshot- und Trace-Pfad), Coverage-Report generieren,
-Freigabe-Empfehlung (APPROVED / CONDITIONAL / REJECTED) dokumentieren.
+Performanz-Metriken gegen dokumentierte Zielwerte erfassen und Freigabe-Empfehlung
+(APPROVED / CONDITIONAL / REJECTED) dokumentieren.
 
-**Übergabe an:** Code Reviewer — gibt Testplan, Ergebnisse, Coverage, offene Bugs,
-Playwright-Report-Pfad und Freigabe-Empfehlung weiter.
+**Übergabe an:** Code Reviewer — gibt Testplan, Ergebnisse, Coverage, Browser-Clickpfad- und
+Performanz-Ergebnisse, offene Bugs, Playwright-Report-Pfad und Freigabe-Empfehlung weiter.
 
 ---
 
@@ -222,7 +232,7 @@ Playwright-Report-Pfad und Freigabe-Empfehlung weiter.
 **Datei:** `reviewer-agent.md`  
 **Kürzel:** RV  
 **Aktiviert durch:** `/review`  
-**Primäres Artefakt:** `RV-NNNNNN` (in `projects/<name>/reviews/`)
+**Primäres Artefakt:** `RV-NNNNNN` (in `projects/<name>/reviews/`), ggf. `DEBT-NNNNNN` (in `projects/<name>/retros/`)
 
 Der Reviewer-Agent führt eine **zweistufige Abnahme** durch: erst Nutzerabnahme (Phase A),
 dann technisches Code Review (Phase B).
@@ -252,7 +262,7 @@ Technische Schulden als DEBT-NNNNNN in `projects/<name>/retros/` erfasst.
 **Datei:** `manual-writer-agent.md`  
 **Kürzel:** MW  
 **Aktiviert durch:** `/manual`  
-**Primäre Artefakte:** `DOC-NNNNNN` (Feature-Guide), `RN-NNNNNN` (Release Notes), `GS-000001` (Getting Started)
+**Primäre Artefakte:** `DOC-NNNNNN` (Feature-Guide), `RN-NNNNNN` (Release Notes), `GS-000001` (Getting Started), `FAQ-NNNNNN` (ab Sprint 2 / bei Bedarf)
 
 Der Manual Writer schreibt ausschließlich für menschliche Endnutzer — nicht für Entwickler.
 Er tritt als letzte Phase eines Sprints in Aktion, nach erfolgreichem Code Review.
@@ -262,7 +272,9 @@ erkläre (nummerierte Schritt-für-Schritt-Anleitungen mit Aktion + Systemreakti
 aber kompakt (kein Marketingtext).
 
 **Kernaufgaben:** Feature-Guides pro Nutzer-Ziel-Gruppe, Release Notes mit Übersicht der
-neuen Features, Getting-Started-Guide beim ersten Sprint. Screenshot-Platzhalter setzen wo nötig.
+neuen Features, Getting-Started-Guide beim ersten Sprint, FAQ ab Sprint 2 bzw. bei erkennbarem
+Bedarf. Screenshot-Platzhalter setzen wo nötig. Zuarbeit zum projektweiten `DECISIONS.md`
+(Terminologie- und Dokumentationsentscheidungen).
 
 **Übergabe an:** Orchestrator (Sprint-Abschluss) — Sprint wird in REGISTRY.md als DONE markiert.
 

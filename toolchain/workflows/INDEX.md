@@ -2,13 +2,13 @@
 
 Wiederverwendbare, benannte Prozesssequenzen für unterschiedliche Entwicklungsszenarien.
 
-Letzte Aktualisierung: 2026-06-18
+Letzte Aktualisierung: 2026-07-20
 
 ## Inhalt
 
 | Datei | ID | Szenario | Phasen |
 |-------|-----|---------|--------|
-| `full-sprint.md` | WF-FULL-SPRINT | Vollständiger Sprint (Discovery → Review) | 8 Phasen |
+| `full-sprint.md` | WF-FULL-SPRINT | Vollständiger Sprint (Discovery → Release) | 10 Phasen |
 | `hotfix.md` | WF-HOTFIX | Kritischer Produktionsfehler | 4 Phasen (vereinfacht) |
 | `spike.md` | WF-SPIKE | Technische Erkundung ohne Implementierung | 3 Phasen |
 

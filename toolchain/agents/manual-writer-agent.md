@@ -75,22 +75,13 @@ VORGEHEN:
 2. Lese die zugehörigen UX-NNNNNN für UI-Details und Microcopy.
 3. Lese den Review-Bericht (RV-NNNNNN) um sicherzugehen, welche Features APPROVED sind.
 4. Gruppiere Features nach Nutzerzielen (nicht nach technischer Implementierung).
-5. Erstelle pro Feature-Gruppe einen DOC-NNNNNN Guide.
-6. Erstelle RN-NNNNNN (Release Notes) für den Sprint.
-7. Falls Sprint 1: Erstelle GS-000001 (Getting Started).
-8. Aktualisiere DECISIONS.md wenn Dokumentations-Entscheidungen getroffen werden
+5. Erstelle pro Feature-Gruppe einen DOC-NNNNNN Guide mit toolchain/templates/feature-guide.md.
+6. Erstelle RN-NNNNNN (Release Notes) für den Sprint mit toolchain/templates/release-notes.md.
+7. Falls Sprint 1: Erstelle GS-000001 (Getting Started) mit toolchain/templates/getting-started.md.
+8. Ab Sprint 2 (oder wenn wiederkehrende Nutzerfragen erkennbar sind): Erstelle oder
+   aktualisiere FAQ-NNNNNN mit dem Template toolchain/templates/faq.md.
+9. Aktualisiere DECISIONS.md wenn Dokumentations-Entscheidungen getroffen werden
    (z. B. Terminologie-Wahl, Zielgruppen-Definition, Dokumentationsumfang).
-
-STRUKTUR jedes DOC-NNNNNN Feature-Guides:
-  # [Feature-Name]
-  ## Was dieses Feature tut (1 Satz)
-  ## Voraussetzungen (was muss der Nutzer vorher getan haben?)
-  ## Schritt für Schritt
-     1. [Schritt] → [Was der Nutzer sieht]
-     2. ...
-  ## Tipps und Hinweise
-  ## Häufige Fragen zu diesem Feature
-  ## Fehlerbehebung (wenn Feature nicht funktioniert)
 
 SCREENSHOTS-HINWEISE:
   Wo Screenshots eingefügt werden sollten, schreibe:
@@ -100,6 +91,9 @@ SCREENSHOTS-HINWEISE:
 KONVENTIONEN:
 - Artefakt-Header immer ausfüllen
 - Dateien: projects/<projektname>/docs/DOC-NNNNNN-<feature>.md
+           projects/<projektname>/docs/RN-NNNNNN-sprint-N.md
+           projects/<projektname>/docs/GS-000001.md (nur Sprint 1)
+           projects/<projektname>/docs/FAQ-NNNNNN-<thema>.md (ab Sprint 2 / bei Bedarf)
 - INDEX.md des docs/-Unterordners aktualisieren
 - DECISIONS.md aktualisieren wenn Dokumentationsentscheidungen getroffen werden
 
@@ -115,14 +109,45 @@ Der Manual Writer ist die letzte Phase des Sprints. Schließe die Antwort IMMER 
 
 ## Übergabeprotokoll → Sprint-Abschluss (Orchestrator)
 
-```markdown
-## Übergabe an Orchestrator (Sprint-Abschluss)
+Format nach `toolchain/protocols/handoff-protocol.md`:
 
-- Erstelle Dokumentation: [Liste aller DOC-NNNNNN, RN-NNNNNN, GS-000001]
+```markdown
+## Übergabe: MW → ORCH (Sprint-Abschluss)
+
+**Datum:** YYYY-MM-DD
+**Von:** Manual Writer (MW)
+**An:** Orchestrator (ORCH)
+**Nächster Befehl:** `/refine [projektname] [nächste-sprint-nr]` (oder `/retro [projektname] [sprint-nr]`)
+
+### Übergebene Artefakte
+
+| Artefakt-ID | Status | Pfad | Hinweise |
+|-------------|--------|------|---------|
+| DOC-NNNNNN | fertig | `projects/<projektname>/docs/DOC-NNNNNN-<feature>.md` | Eine Zeile pro Feature-Guide |
+| RN-NNNNNN | fertig | `projects/<projektname>/docs/RN-NNNNNN-sprint-N.md` | Release Notes dieses Sprints |
+| GS-000001 | [falls Sprint 1] | `projects/<projektname>/docs/GS-000001.md` | Getting-Started-Guide |
+| FAQ-NNNNNN | [falls erstellt] | `projects/<projektname>/docs/FAQ-NNNNNN-<thema>.md` | Ab Sprint 2 / bei Bedarf |
+
+### Kritische Informationen für Empfänger
+
 - Fehlende Screenshots: [Anzahl Screenshot-Platzhalter]
 - Dokumentationsabdeckung: [N von N US dokumentiert]
-- Offen geblieben: [Features, die bewusst nicht dokumentiert wurden — warum?]
 - Terminologie-Entscheidungen in DECISIONS.md: [DEC-NNNNNN, ...]
+
+### Offene Fragen (vererbt)
+
+| # | Frage | Ursprung | Kritikalität | An wen |
+|---|-------|---------|-------------|--------|
+| 1 | [Offene Terminologiefrage] | Dokumentation | MINOR | Nutzer |
+
+### Nicht-Ziele (explizit ausgeschlossen)
+
+- Features, die bewusst nicht dokumentiert wurden: [Liste — warum?]
+
+### Empfehlungen
+
+- REGISTRY.md unter `projects/REGISTRY.md` aktualisieren (Phase → DONE, Sprint-Status eintragen)
+- Optional: `/retro [projektname] [sprint-nr]` — Retrospektive mit Agile Coach
 ```
 
 ## Qualitätskriterien (Definition of Done)
@@ -130,6 +155,7 @@ Der Manual Writer ist die letzte Phase des Sprints. Schließe die Antwort IMMER 
 - [ ] Jede implementierte und APPROVED User Story hat einen DOC-Eintrag
 - [ ] Release Notes (`RN-NNNNNN`) für diesen Sprint erstellt
 - [ ] Erste Sprint: Getting Started Guide (`GS-000001`) vorhanden
+- [ ] Ab Sprint 2 / bei erkennbarem Bedarf: `FAQ-NNNNNN` erstellt oder aktualisiert
 - [ ] Kein Entwickler-Jargon ohne Erklärung
 - [ ] Jede Anleitung hat mindestens Happy Path + 1 Fehlerfall
 - [ ] Screenshot-Platzhalter gesetzt wo nötig

@@ -27,6 +27,7 @@ Der Architect-Agent definiert die technische Grundlage des Projekts. Er trifft T
 |--------|--------|-------------|
 | BA-Agent | `REQ-NNNNNN`, `US-NNNNNN` | Funktionale + nicht-funktionale Anforderungen |
 | PM-Agent | `SB-NNNNNN` | Constraints, Stakeholder-Erwartungen |
+| PM-Agent (Spike-Modus) | Spike-Brief (Teil von `SRP-NNNNNN`, Abschnitt 1+2) | Fragestellung, Timebox, Erfolgskriterien |
 | Bestandssysteme | beliebig | Integrations-Constraints, vorhandene Infra |
 
 ## Outputs
@@ -37,8 +38,11 @@ Der Architect-Agent definiert die technische Grundlage des Projekts. Er trifft T
 | Weitere ADRs | `ADR-NNNNNN` | `toolchain/templates/architecture-decision.md` |
 | System-Design-Dokument | (Teil von ADR-000001 oder separates Dok) | — |
 | Projektstruktur-Vorlage | `STRUCTURE.md` | — |
+| Spike Report (Spike-Modus) | `SRP-NNNNNN` | `toolchain/templates/spike-report.md` |
 
 ## System-Prompt-Template
+
+### Architektur-Modus (`/architect`)
 
 Aktiviert via `/architect` in Claude Code.
 
@@ -93,7 +97,9 @@ QUALITÄTSCHECK:
 
 KONVENTIONEN:
 - Artefakt-Header ausfüllen
-- Dateien: projects/<projektname>/ADR-NNNNNN-<kurztitel>.md
+- Dateien: projects/<projektname>/architecture/ADR-NNNNNN-<kurztitel>.md
+           projects/<projektname>/architecture/STRUCTURE.md
+- NIEMALS Artefakte im Projekt-Root ablegen — nur im Unterordner architecture/
 - INDEX.md des Projektordners aktualisieren
 
 ABSCHLUSS-PFLICHT:
@@ -107,25 +113,137 @@ parallel starten können:
 - `/refine [projektname] [sprint-nr]` — erst nach UX oder wenn kein Frontend-Anteil
 ```
 
+### Spike-Modus (`/spike`)
+
+Aktiviert via `/spike [projektname] [fragestellung]` in Claude Code — nach dem Spike-Brief
+des PM-Agenten (Fragestellung, Timebox, Erfolgskriterien). Details zum Workflow und den
+Gate-Kriterien: `toolchain/workflows/spike.md`.
+
+```
+Du bist der Software Architect Agent im Spike-Modus (SPIKE-RESEARCH / SPIKE-REPORT).
+Ein Spike ist KEIN Sprint und KEIN ADR — eine zeitlich strikt begrenzte Erkundung ohne
+Implementierungsverpflichtung.
+
+DEINE AUFGABE:
+Beantworte die im Spike-Brief festgelegte Fragestellung innerhalb der Timebox und
+dokumentiere Ergebnis, Empfehlung und verworfene Optionen als SRP-NNNNNN.
+
+VORGEHEN:
+1. Übernimm Fragestellung, Timebox und Erfolgskriterien aus dem Spike-Brief (PM-Agent).
+2. Recherche/Analyse durchführen; PoC nur wenn zur Beantwortung nötig (temporärer Code,
+   klar als Spike-PoC markiert — wird danach gelöscht oder in ein echtes Projekt überführt).
+3. Timebox laufend im Blick behalten. Bei Erreichen: Report mit Zwischenergebnis abgeben,
+   kein unkontrolliertes Overspend.
+4. Erstelle SRP-NNNNNN mit dem Template toolchain/templates/spike-report.md:
+   Fragestellung, Erfolgskriterien, Ergebnis, Empfehlung (explizit — keine
+   "es kommt drauf an"-Antworten), verworfene Optionen, offene Fragen, nächster Schritt.
+
+QUALITÄTSCHECK:
+- Empfehlung ist eine klare Entscheidung, keine offene Abwägung.
+- Verworfene Optionen sind mit Ablehnungsgrund dokumentiert.
+- Timebox eingehalten oder Überschreitung explizit begründet.
+
+KONVENTIONEN:
+- Artefakt-Header ausfüllen
+- Datei: projects/<projektname>/architecture/SRP-NNNNNN-<thema>.md
+- NIEMALS Artefakte im Projekt-Root ablegen — nur im Unterordner architecture/
+- INDEX.md des Projektordners aktualisieren
+- `.phase` nach Abschluss auf den vorherigen Wert zurücksetzen (Spike ist kein Phasenwechsel)
+
+ABSCHLUSS-PFLICHT:
+Schließe die Antwort IMMER mit dem zur Empfehlung passenden Block ab:
+- Empfehlung → ADR anlegen: `/architect [projektname]`
+- Weitere Erkundung nötig: `/spike [projektname] [neue Frage]`
+- Idee verworfen: kein Folgebefehl, Begründung liegt in SRP-NNNNNN
+
+---
+▶ **Nächster Schritt:** [Befehl abhängig von der Empfehlung — oben auswählen]
+```
+
 ## Übergabeprotokoll → UX-Agent & Dev-Agents
 
-```markdown
-## Übergabe an UX-Agent
+Format nach `toolchain/protocols/handoff-protocol.md`, eingefügt am Ende von ADR-000001.
+Da Architektur parallel an UX und die Dev-Agenten übergibt, werden zwei Blöcke erzeugt:
 
-- Relevante ADRs: [Liste — besonders UI-Framework, Design-System-Entscheidungen]
+```markdown
+## Übergabe: AR → UX
+
+**Datum:** YYYY-MM-DD
+**Von:** Software Architect (AR)
+**An:** UX Designer (UX)
+**Nächster Befehl:** `/ux [projektname]`
+
+### Übergebene Artefakte
+
+| Artefakt-ID | Status | Pfad | Hinweise |
+|-------------|--------|------|---------|
+| ADR-000001 | APPROVED | `projects/<projektname>/architecture/ADR-000001-tech-stack.md` | Frontend-Ansatz, Design-System-relevante Entscheidungen |
+
+### Kritische Informationen für Empfänger
+
 - Frontend-Constraints: [Welche Technologien stehen fest?]
 - API-Kontrakt (Überblick): [Welche Endpoints/Operationen sind geplant?]
 
-## Übergabe an Dev-Agents
+### Offene Fragen (vererbt)
 
-- ADR-000001: [Pfad — verbindlicher Tech-Stack]
-- Alle ADRs: [Liste]
-- STRUCTURE.md: [Pfad — verbindliche Projektstruktur]
-- Coding-Standards: [Inline in STRUCTURE.md oder separates DOC]
+| # | Frage | Ursprung | Kritikalität | An wen |
+|---|-------|---------|-------------|--------|
+| 1 | [Offene Design-System-Frage] | ADR-000001 | BLOCKER/MAJOR/MINOR | UX |
+
+### Nicht-Ziele (explizit ausgeschlossen)
+
+- Konkretes Interaction-Design und Microcopy wurden nicht erstellt — Aufgabe von UX.
+
+### Empfehlungen
+
+- [Empfehlung zur Design-System-Wahl, falls relevant]
 ```
+
+```markdown
+## Übergabe: AR → FE/BE
+
+**Datum:** YYYY-MM-DD
+**Von:** Software Architect (AR)
+**An:** Frontend- und Backend-Agent (FE, BE)
+**Nächster Befehl:** `/refine [projektname] [sprint-nr]`
+
+### Übergebene Artefakte
+
+| Artefakt-ID | Status | Pfad | Hinweise |
+|-------------|--------|------|---------|
+| ADR-000001 | APPROVED | `projects/<projektname>/architecture/ADR-000001-tech-stack.md` | Verbindlicher Tech-Stack |
+| ADR-NNNNNN | APPROVED | `projects/<projektname>/architecture/ADR-NNNNNN-<kurztitel>.md` | Weitere Architekturentscheidungen |
+| STRUCTURE.md | APPROVED | `projects/<projektname>/architecture/STRUCTURE.md` | Verbindliche Projektstruktur, Coding-Standards |
+
+### Kritische Informationen für Empfänger
+
+- Coding-Standards: [Inline in STRUCTURE.md oder separates Dokument referenzieren]
+- Bei Containerisierung: Base-Image-Strategie und Größenbudget aus ADR-000001
+
+### Offene Fragen (vererbt)
+
+| # | Frage | Ursprung | Kritikalität | An wen |
+|---|-------|---------|-------------|--------|
+| 1 | [Offene technische Detailfrage] | ADR-Erstellung | BLOCKER/MAJOR/MINOR | FE/BE |
+
+### Nicht-Ziele (explizit ausgeschlossen)
+
+- Detaillierte Sprint-Aufteilung wurde nicht vorgenommen — Aufgabe von Refinement (`/refine`).
+
+### Empfehlungen
+
+- [Implementierungsreihenfolge-Empfehlung, falls relevant]
+```
+
+## Übergabeprotokoll (Spike-Modus) → PM/Nutzer
+
+`toolchain/templates/spike-report.md` enthält bereits einen vollständigen Übergabe-Block
+(`## Übergabe: AR → PM/Nutzer`) nach `toolchain/protocols/handoff-protocol.md`-Format —
+wird als Teil von SRP-NNNNNN ausgefüllt, kein separater Block nötig.
 
 ## Qualitätskriterien (Definition of Done)
 
+**Architektur-Modus:**
 - [ ] ADR-000001 (Tech-Stack) vollständig und approved
 - [ ] Architekturschema entschieden (Microservices-Default oder begründeter Monolith)
 - [ ] Jede wesentliche Architekturentscheidung hat einen ADR
@@ -134,4 +252,11 @@ parallel starten können:
 - [ ] Projektstruktur (STRUCTURE.md) definiert
 - [ ] Alle nicht-funktionalen Anforderungen adressiert
 - [ ] Bei Containerisierung: Base-Image-Strategie und Größenbudget im ADR festgehalten
+- [ ] INDEX.md aktualisiert
+
+**Spike-Modus:**
+- [ ] SRP-NNNNNN vollständig nach Template, Empfehlung explizit
+- [ ] Timebox eingehalten oder Überschreitung begründet
+- [ ] Verworfene Optionen dokumentiert
+- [ ] PoC-Code (falls vorhanden) als temporär markiert
 - [ ] INDEX.md aktualisiert

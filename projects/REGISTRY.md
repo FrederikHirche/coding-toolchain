@@ -2,13 +2,13 @@
 
 Zentrale Übersicht aller Projekte, die die AI Development Tool Chain verwenden.
 
-Letzte Aktualisierung: 2026-07-17
+Letzte Aktualisierung: 2026-07-19
 
 ## Aktive Projekte
 
 | Projekt | Phase | Sprint | Letzter Agent | Letztes Update | Pfad |
 |---------|-------|--------|--------------|----------------|------|
-| campaignworld | REVIEW (Phase 2.5 — pausiert für US-000031, jetzt implementiert, Review wird fortgesetzt) | 2.5 | FE | 2026-07-18 | `projects/campaignworld/` |
+| _(keine)_ | — | — | — | — | — |
 
 ## Abgeschlossene Projekte
 
@@ -20,7 +20,7 @@ Letzte Aktualisierung: 2026-07-17
 
 | Projekt | Letzte Phase | Pausiert seit | Grund | Pfad |
 |---------|-------------|--------------|-------|------|
-| _(noch keine)_ | — | — | — | — |
+| campaignworld | TESTING (Sprint 3) abgeschlossen — Übergang zu REVIEW nicht vollzogen: der anschließende `/review`-Aufruf brach mit einem Server-Hänger ab, die REVIEW-Phase wurde nie erreicht | 2026-07-19 | Vom Stakeholder auf direkten Userbefehl vollständig gelöscht (kein Backup, kein Remote) — wiederholte Performance-/Stabilitätsprobleme über mehrere Sprints trotz Fixversuchen (siehe TR-000001/002/004/005/006, DEBT-000017). Vorgeschichte: Sprint 2.5 wurde nach Freigabe von US-000031 in REVIEW abgeschlossen (2026-07-18); Sprint 3 durchlief anschließend regulär TESTING, wo ein Dashboard-Routing-Bug (`ENTITY_TYPE_REGISTRY`) gefunden wurde, bevor der `/review`-Aufruf mit dem oben genannten Server-Hänger scheiterte. Stakeholder bewertete dies als strukturelles statt punktuelles Risiko. | `projects/campaignworld/` (Ordnerinhalt vollständig gelöscht, 2026-07-19) |
 
 ---
 
@@ -36,7 +36,11 @@ Wenn `/kickoff` ein neues Projekt anlegt, wird diese Datei automatisch aktualisi
 
 ```
 INIT → DISCOVERY → REQUIREMENTS → ARCHITECTURE → UX →
-REFINEMENT → IMPLEMENTATION → TESTING → REVIEW → DONE
+REFINEMENT → IMPLEMENTATION → TESTING → REVIEW → DOCUMENTATION → DONE → RELEASED
+
+DONE = Sprint inhaltlich abgeschlossen, noch nicht gemerged/getaggt.
+RELEASED = Gemerged und getaggt (Phase 10 abgeschlossen) — danach beginnt der nächste
+Sprint wieder bei REFINEMENT.
 
 Sonder-Phasen: HOTFIX-* | SPIKE
 ```

@@ -132,13 +132,17 @@ history:
 
 ```
 INIT → DISCOVERY → REQUIREMENTS → ARCHITECTURE → UX → REFINEMENT →
-IMPLEMENTATION → TESTING → REVIEW → DOCUMENTATION → RELEASE → RELEASED
+IMPLEMENTATION → TESTING → REVIEW → DOCUMENTATION → DONE → RELEASED →
+(nächster Sprint: REFINEMENT)
 
 Für Hotfix-Workflow:
-INIT → HOTFIX-ANALYSIS → HOTFIX-IMPLEMENTATION → HOTFIX-TESTING → HOTFIX-REVIEW → DONE
+INIT → HOTFIX-ANALYSE → HOTFIX-IMPLEMENT → HOTFIX-TESTING → HOTFIX-REVIEW →
+(zurück zu previous-stable-phase nach Merge, siehe hotfix.md)
 ```
 
-`DONE` (Legacy) = Sprint dokumentiert, aber vor Phase-10-Einführung abgeschlossen — gilt als `RELEASED`.
+`DONE` = Gate 9 bestanden, Sprint inhaltlich abgeschlossen (Doku vorhanden), aber noch nicht
+gemerged/getaggt. `RELEASED` = Gate 10 bestanden, Phase 10 (Merge + Tag) abgeschlossen.
+Beide sind reguläre, aufeinanderfolgende Zwischenzustände desselben Sprints — kein Legacy-Wert.
 
 ## Eskalationsregeln
 

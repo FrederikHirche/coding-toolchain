@@ -29,58 +29,68 @@ Wenn eine der Bedingungen nicht erfüllt ist → normaler Sprint-Workflow.
 ## Phasen-Sequenz
 
 ```
-HOTFIX-ANALYSIS
+HOTFIX-ANALYSE
   /hotfix-analyse [intern, Teil von /hotfix]
   [BA] — BUG-NNNNNN anlegen, Root-Cause, betroffene Komponenten
   Dauer: max. 30 Minuten
         ↓
-HOTFIX-IMPLEMENTATION
+HOTFIX-IMPLEMENT
   /implement [spezifische Dateien]
   [FE und/oder BE] — Nur betroffene Komponenten
   Dauer: richtet sich nach Komplexität
         ↓
 HOTFIX-TESTING
-  /test-run [smoke]
-  [QA] — Smoke-Test + Regressionstest betroffener Bereiche
+  /test-run [projektname] [sprint-nr]
+  [QA] — Smoke-Test + Regressionstest betroffener Bereiche (kein vollständiger Testlauf)
         ↓
 HOTFIX-REVIEW
-  /review [hotfix-branch]
-  [RV] — Fokussierter Review der Änderung
+  /review [projektname] [sprint-nr]
+  [RV] — Fokussierter Review der Änderung, ausgeführt auf dem Hotfix-Branch
 ```
 
 ## Gate 1: Analysis → Implementation
 
-| Kriterium | Schwere |
-|---|---|
-| `BUG-NNNNNN` erstellt mit Root-Cause | BLOCKER |
-| Betroffene Komponenten identifiziert | BLOCKER |
-| Fix-Ansatz beschrieben (keine blindes Patchen) | BLOCKER |
-| Regressionsrisiko eingeschätzt | MAJOR |
+| Kriterium | Prüfung | Schwere |
+|---|---|---|
+| `BUG-NNNNNN` erstellt mit Root-Cause | Abschnitt "Root-Cause" in BUG-NNNNNN ausgefüllt | BLOCKER |
+| Betroffene Komponenten identifiziert | Abschnitt "Betroffene Komponenten" in BUG-NNNNNN ausgefüllt | BLOCKER |
+| Fix-Ansatz beschrieben (keine blindes Patchen) | Abschnitt "Fix-Ansatz" in BUG-NNNNNN ausgefüllt (kein Platzhalter) | BLOCKER |
+| Regressionsrisiko eingeschätzt | BUG-NNNNNN: Hoch/Mittel/Gering + Begründung | MAJOR |
 
 ## Gate 2: Implementation → Testing
 
-| Kriterium | Schwere |
-|---|---|
-| Nur betroffene Dateien geändert (kein Feature-Creep) | BLOCKER |
-| Fix adressiert Root-Cause, nicht nur Symptom | BLOCKER |
-| Kein neuer Lint-Fehler | MAJOR |
+| Kriterium | Prüfung | Schwere |
+|---|---|---|
+| Nur betroffene Dateien geändert (kein Feature-Creep) | Diff-Vergleich gegen "Betroffene Komponenten" aus BUG-NNNNNN | BLOCKER |
+| Fix adressiert Root-Cause, nicht nur Symptom | Selbstauskunft FE/BE: Root-Cause aus BUG-NNNNNN behoben | BLOCKER |
+| Kein neuer Lint-Fehler | `lint`-Befehl aus `.toolchain.yml` | MAJOR |
 
 ## Gate 3: Testing → Review
 
-| Kriterium | Schwere |
-|---|---|
-| `TR-NNNNNN` (Smoke Test) vorhanden | BLOCKER |
-| Smoke-Test: kein neuer BLOCKER-Bug | BLOCKER |
-| Ursprünglicher Bug reproduzierbar getestet | BLOCKER |
-| Regressionstest durchgeführt | MAJOR |
+| Kriterium | Prüfung | Schwere |
+|---|---|---|
+| `TR-NNNNNN` (Smoke Test) vorhanden | Datei vorhanden | BLOCKER |
+| Smoke-Test: kein neuer BLOCKER-Bug | TR-NNNNNN Bug-Liste enthält keine neuen BLOCKER-Einträge | BLOCKER |
+| Ursprünglicher Bug reproduzierbar getestet | TR-NNNNNN: expliziter Retest-Vermerk zum Original-Bug | BLOCKER |
+| Regressionstest durchgeführt | Abschnitt "Regressionstest" in TR-NNNNNN ausgefüllt | MAJOR |
 
 ## Gate 4: Review → Merge
 
-| Kriterium | Schwere |
-|---|---|
-| `RV-NNNNNN` mit `APPROVED` | BLOCKER |
-| Keine Security-Anmerkungen (BLOCKER/MAJOR) | BLOCKER |
-| Kein ADR-Verstoß | MAJOR |
+| Kriterium | Prüfung | Schwere |
+|---|---|---|
+| `RV-NNNNNN` mit `APPROVED` | Header-Feld `status: APPROVED` | BLOCKER |
+| Keine Security-Anmerkungen (BLOCKER/MAJOR) | RV-NNNNNN Sicherheits-Dimension: keine offenen BLOCKER/MAJOR | BLOCKER |
+| Kein ADR-Verstoß | RV-NNNNNN ADR-Konformitäts-Dimension | MAJOR |
+
+## Rollback-Regeln
+
+| Gate-Fehlschlag | Rollback-Ziel | Wer wird aktiviert |
+|---|---|---|
+| Gate 1 | HOTFIX-ANALYSE | BA (Root-Cause nachschärfen) |
+| Gate 2 | HOTFIX-IMPLEMENT | FE/BE (Korrektur) |
+| Gate 3 | HOTFIX-IMPLEMENT | FE/BE (Bug-Fix) |
+| Gate 4 (REQUEST CHANGES) | HOTFIX-IMPLEMENT | FE/BE (Korrekturen) |
+| Gate 4 (REJECTED) | HOTFIX-ANALYSE | BA (Root-Cause-Problem) |
 
 ## Artefakte (Minimal-Set)
 

@@ -102,10 +102,10 @@ Schließe die Antwort IMMER mit diesem Block ab — exakter Befehl inkl. Projekt
 
 ABLAGE-REGELN (zwingend):
 - Projektordner: projects/<projektname>/   ← alle Artefakte des Projekts landen hier
-- Stakeholder Brief: projects/<projektname>/SB-000001-<projektname>.md
+- Stakeholder Brief: projects/<projektname>/discovery/SB-000001-<projektname>.md
 - Projektindex: projects/<projektname>/INDEX.md   ← beim ersten Mal anlegen
 - Phasendatei: projects/<projektname>/.phase      ← beim ersten Mal anlegen
-- NIEMALS Artefakte im projects/-Root ablegen (nur REGISTRY.md gehört dort hin)
+- NIEMALS Artefakte im Projekt-Root ablegen — nur im zugehörigen Unterordner (hier: discovery/)
 - REGISTRY.md unter projects/REGISTRY.md aktualisieren (Projekteintrag hinzufügen)
 
 TONALITÄT:
@@ -115,16 +115,42 @@ Zeige echtes Interesse am Problem — gutes Interviewing ist aktives Zuhören.
 
 ## Übergabeprotokoll → BA-Agent
 
-Der PM-Agent übergibt dem BA-Agenten folgende Informationen (als Teil des SB):
+Format nach `toolchain/protocols/handoff-protocol.md`, eingefügt am Ende des SB:
 
 ```markdown
-## Übergabe an BA
+## Übergabe: PM → BA
 
-- Stakeholder Brief: [Pfad zu SB-NNNNNN]
-- Priorisierte Features: [Liste]
-- Offene Fragen: [Liste — müssen im Requirements-Prozess geklärt werden]
-- Constraints: [Technisch, zeitlich, regulatorisch]
-- Stakeholder-Kontakte: [Wer kann für Rückfragen kontaktiert werden]
+**Datum:** YYYY-MM-DD
+**Von:** Product Manager (PM)
+**An:** Business Analyst (BA)
+**Nächster Befehl:** `/ba [projektname]`
+
+### Übergebene Artefakte
+
+| Artefakt-ID | Status | Pfad | Hinweise |
+|-------------|--------|------|---------|
+| SB-000001 | APPROVED | `projects/<projektname>/discovery/SB-000001-<projektname>.md` | Priorisierte Features (MoSCoW), Erfolgskriterien, MVP-Definition |
+
+### Kritische Informationen für Empfänger
+
+- Stakeholder-Kontakte: [Wer kann für Rückfragen kontaktiert werden?]
+- Constraints: [Technisch, zeitlich, regulatorisch — aus SB übernehmen]
+- Top-3-Risiken: [Aus SB übernehmen]
+
+### Offene Fragen (vererbt)
+
+| # | Frage | Ursprung | Kritikalität | An wen |
+|---|-------|---------|-------------|--------|
+| 1 | [Im Interview ungeklärt gebliebene Frage] | Interview Runde N | BLOCKER/MAJOR/MINOR | Stakeholder |
+
+### Nicht-Ziele (explizit ausgeschlossen)
+
+- Technische Machbarkeit wurde nicht bewertet — Aufgabe des Architect-Agenten.
+- Detaillierte Akzeptanzkriterien fehlen noch — werden von BA erarbeitet.
+
+### Empfehlungen
+
+- Priorisierungsreihenfolge für die erste Requirements-Runde: [Top-Features aus MoSCoW]
 ```
 
 ## Qualitätskriterien (Definition of Done)
@@ -138,7 +164,7 @@ Der PM-Agent übergibt dem BA-Agenten folgende Informationen (als Teil des SB):
 - [ ] MoSCoW-Priorisierung mit Begründung pro Feature
 - [ ] Top-3-Risiken benannt
 - [ ] Alle offenen Fragen protokolliert
-- [ ] SB-000001 liegt unter projects/<projektname>/SB-000001-<projektname>.md
+- [ ] SB-000001 liegt unter projects/<projektname>/discovery/SB-000001-<projektname>.md
 - [ ] projects/<projektname>/INDEX.md existiert und ist aktuell
 - [ ] projects/<projektname>/.phase angelegt
 - [ ] projects/REGISTRY.md aktualisiert

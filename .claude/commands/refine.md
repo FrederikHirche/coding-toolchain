@@ -12,7 +12,7 @@ Bereitet den Sprint Backlog vor: verfeinert User Stories, schätzt Aufwände und
 
 1. Liest alle APPROVED US-NNNNNN und UX-NNNNNN
 2. Verfeinert Stories: Subtasks, Schätzungen (Story Points oder T-Shirt-Sizes), Abhängigkeiten
-3. Erstellt Sprint-Backlog-Dokument (`projects/<projektname>/sprints/SPRINT-NNNNNN.md`)
+3. Erstellt Sprint-Backlog-Dokument (`projects/<projektname>/sprints/SP-NNNNNN.md`)
 4. Definiert Sprint-Ziel und Abnahmekriterien
 5. Identifiziert technische Voraussetzungen (was muss vor dem Sprint fertig sein?)
 6. Aktualisiert INDEX.md
@@ -29,4 +29,4 @@ Nach Abschluss: `/implement`
 ---
 
 **Beteiligte Agenten:** BA, FE, BE (gemeinsames Refinement)
-**Output:** `SPRINT-NNNNNN.md` Sprint Backlog
+**Output:** `SP-NNNNNN` Sprint Backlog

@@ -102,29 +102,80 @@ mit dem passenden Block ab:
 
 ## Übergabeprotokoll → Frontend-Agent
 
-```markdown
-## API-Kontrakt Übergabe
+Format nach `toolchain/protocols/handoff-protocol.md`:
 
-- API-Kontrakt-Datei: [Pfad zu OpenAPI/Schema-Datei]
-- Base-URL: [Lokale Entwicklungs-URL]
+```markdown
+## Übergabe: BE → FE
+
+**Datum:** YYYY-MM-DD
+**Von:** Backend Developer (BE)
+**An:** Frontend Developer (FE)
+**Nächster Befehl:** `/implement fe [projektname]`
+
+### Übergebene Artefakte
+
+| Artefakt-ID | Status | Pfad | Hinweise |
+|-------------|--------|------|---------|
+| API-Kontrakt | fertig | [Pfad zu OpenAPI/Schema-Datei] | Base-URL: [lokale Entwicklungs-URL] |
+
+### Kritische Informationen für Empfänger
+
 - Authentifizierungsmethode: [Bearer Token / Session / API-Key / ...]
 - Endpunkte dieser Sprint: [Liste mit kurzer Beschreibung]
 - Bekannte Breaking Changes: [Falls relevante Änderungen an bestehenden Endpunkten]
 - Fehlercodes: [Projektspezifische Error-Code-Referenz]
+
+### Offene Fragen (vererbt)
+
+| # | Frage | Ursprung | Kritikalität | An wen |
+|---|-------|---------|-------------|--------|
+| 1 | [Offene Schnittstellenfrage] | API-Design | BLOCKER/MAJOR/MINOR | FE |
+
+### Nicht-Ziele (explizit ausgeschlossen)
+
+- [Endpunkte, die bewusst für einen späteren Sprint zurückgestellt wurden]
+
+### Empfehlungen
+
+- [Empfehlung zur Reihenfolge der Frontend-Integration]
 ```
 
 ## Übergabeprotokoll → QA-Agent
 
 ```markdown
-## Übergabe an QA-Agent
+## Übergabe: BE → QA
 
-- Implementierte Stories: [Liste US-NNNNNN]
-- API-Kontrakt: [Pfad]
-- DB-Migrationen: [Liste der Migrationen]
-- Bekannte Einschränkungen: [Was ist bewusst nicht implementiert?]
+**Datum:** YYYY-MM-DD
+**Von:** Backend Developer (BE)
+**An:** QA Engineer (QA)
+**Nächster Befehl:** `/test-plan [projektname] [sprint-nr]`
+
+### Übergebene Artefakte
+
+| Artefakt-ID | Status | Pfad | Hinweise |
+|-------------|--------|------|---------|
+| API-Kontrakt | fertig | [Pfad] | Verbindliche Schnittstellendefinition |
+| DB-Migrationen | versioniert | [Liste der Migrationen] | Reversibel |
+
+### Kritische Informationen für Empfänger
+
 - Umgebungsvariablen: [Welche müssen gesetzt sein für Tests?]
 - Test-Daten: [Wie werden Testdaten bereitgestellt?]
 - Container-Image-Größe: [Ist-Größe vs. Budget aus ADR — nur bei Containerisierung]
+
+### Offene Fragen (vererbt)
+
+| # | Frage | Ursprung | Kritikalität | An wen |
+|---|-------|---------|-------------|--------|
+| 1 | [Offene Test-Setup-Frage] | Implementierung | BLOCKER/MAJOR/MINOR | QA |
+
+### Nicht-Ziele (explizit ausgeschlossen)
+
+- Bekannte Einschränkungen: [Was ist bewusst nicht implementiert?]
+
+### Empfehlungen
+
+- [Welche Endpunkte/Pfade verdienen besondere Testaufmerksamkeit?]
 ```
 
 ## Qualitätskriterien (Definition of Done)

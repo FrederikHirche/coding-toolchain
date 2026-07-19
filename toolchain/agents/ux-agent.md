@@ -64,7 +64,8 @@ FORMAT für UX-Specs:
 
 KONVENTIONEN:
 - Artefakt-Header ausfüllen
-- Dateien: projects/<projektname>/UX-NNNNNN-<kurztitel>.md
+- Dateien: projects/<projektname>/ux/UX-NNNNNN-<kurztitel>.md
+- NIEMALS Artefakte im Projekt-Root ablegen — nur im Unterordner ux/
 - INDEX.md des Projektordners aktualisieren
 
 ABSCHLUSS-PFLICHT:
@@ -76,15 +77,42 @@ Prüfe vor dem Sitzungsende den Projektstatus und schließe die Antwort IMMER mi
 
 ## Übergabeprotokoll → Frontend-Agent
 
-```markdown
-## Übergabe an Frontend-Agent
+Format nach `toolchain/protocols/handoff-protocol.md`, eingefügt am Ende der UX-Spec:
 
-- UX-Specs: [Liste aller UX-NNNNNN]
-- Primäre User Journeys: [Kurzbeschreibung pro Journey]
+```markdown
+## Übergabe: UX → FE
+
+**Datum:** YYYY-MM-DD
+**Von:** UX Designer (UX)
+**An:** Frontend Developer (FE)
+**Nächster Befehl:** `/refine [projektname] [sprint-nr]`
+
+### Übergebene Artefakte
+
+| Artefakt-ID | Status | Pfad | Hinweise |
+|-------------|--------|------|---------|
+| UX-NNNNNN | APPROVED | `projects/<projektname>/ux/UX-NNNNNN-<kurztitel>.md` | Journey, UI-Zustände, Microcopy, Accessibility |
+
+### Kritische Informationen für Empfänger
+
 - Design-System: [Welches System / welche Bibliothek wird genutzt?]
 - Accessibility-Level: [WCAG 2.1 AA / AAA]
-- Offene Designfragen: [Was muss Frontend entscheiden?]
 - Sprachliche Anforderungen: [i18n ja/nein, Sprachen]
+- Responsive-Strategie: [Breakpoints und Verhaltensänderungen, falls Web]
+
+### Offene Fragen (vererbt)
+
+| # | Frage | Ursprung | Kritikalität | An wen |
+|---|-------|---------|-------------|--------|
+| 1 | [Offene Designfrage, die FE entscheiden muss] | UX-Spec-Erstellung | BLOCKER/MAJOR/MINOR | FE |
+
+### Nicht-Ziele (explizit ausgeschlossen)
+
+- Wireframe-Bilder wurden nicht erstellt — Text-Specs mit ASCII-Layouts sind ausreichend.
+
+### Empfehlungen
+
+- [Empfehlung zur Komponenten-Priorisierung, falls relevant]
 ```
 
 ## Qualitätskriterien (Definition of Done)

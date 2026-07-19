@@ -9,6 +9,220 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 
 ---
 
+## v1.9 — 2026-07-20
+
+### Neu
+
+**Vier fehlende Artefakt-Templates ergänzt: SRP, DOC, RN, GS**
+- `toolchain/templates/spike-report.md` (`SRP-NNNNNN`) — inkl. vollständigem Übergabe-Block
+  (AR → PM/Nutzer) nach `handoff-protocol.md`. `spike.md`s bisherige Inline-Kopie des Formats
+  entfernt und durch Verweis auf das Template ersetzt (Duplikat-/Drift-Risiko beseitigt).
+- `toolchain/templates/feature-guide.md` (`DOC-NNNNNN`), `toolchain/templates/release-notes.md`
+  (`RN-NNNNNN`, projektspezifisch — nicht zu verwechseln mit dieser Datei), `toolchain/templates/
+  getting-started.md` (`GS-000001`).
+- `manual-writer-agent.md`: VORGEHEN referenziert jetzt alle vier Templates statt (bei DOC) einer
+  Inline-Kopie der Struktur.
+- Alle vier in `toolchain/templates/INDEX.md` und `templates_summary.md` aufgenommen.
+
+**Architect-Agent: `/spike`-Modus nachgerüstet**
+- `architect-agent.md` behauptete (über `agents_summary.md`) durch `/spike` aktivierbar zu sein,
+  enthielt aber keinerlei Spike-Logik. Neuer Abschnitt "Spike-Modus (`/spike`)" mit eigenem
+  System-Prompt (SPIKE-RESEARCH/SPIKE-REPORT, Timebox-Disziplin, `SRP-NNNNNN` via Template),
+  eigener Definition-of-Done und Verweis auf den im Template enthaltenen Übergabe-Block.
+- Inputs/Outputs-Tabellen um Spike-Brief (Input) und `SRP-NNNNNN` (Output) ergänzt.
+
+### Geändert
+
+**CLAUDE.md's Artefakt-Namenstabelle vervollständigt**
+- `TR-NNNNNN` (Testergebnis-Bericht) und `BUG-NNNNNN` (Fehlerbericht) fehlten, obwohl beide
+  toolchain-weit aktiv verwendet werden (u. a. in `_base-agent.md`s eigener Referenztabelle,
+  die beide bereits korrekt listete) — ergänzt.
+
+**Gate 5 und Gate 6 in `full-sprint.md`: unverifizierbare Prüfmethoden ersetzt**
+- Gate 5 ("Keine ungelösten Tech-Blocker") hatte als Prüfung wörtlich "Prüfen" — eine
+  Tautologie ohne Methode. Ersetzt durch einen konkreten Verweis auf SP-NNNNNN Abschnitt
+  "Risiken & Unsicherheiten".
+- Gate 6 ("Alle US-Akzeptanzkriterien umgesetzt") war ein BLOCKER-Kriterium, das per
+  Selbstauskunft von FE+BE abgenommen wurde — dieselbe Rolle, die es umsetzt, zertifiziert
+  sich selbst. Ersetzt durch eine objektive `cross-ref`-Prüfung: jede Sprint-US-NNNNNN
+  braucht mindestens einen `// Implementiert: US-NNNNNN`-Pflichtkommentar im Code
+  (Konvention bereits in CLAUDE.md vorhanden, jetzt auch als Gate-Prüfmethode genutzt).
+
+**`hotfix.md` und `spike.md`: fehlende Prüfung-Spalte und Rollback-Regeln ergänzt**
+- Beide Workflows hatten Gate-Tabellen ohne Prüfung-Spalte (nur Kriterium + Schwere) — jedes
+  Kriterium bekam jetzt eine konkrete, dateibezogene Prüfmethode.
+- Beide Workflows hatten keine Rollback-Regeln (im Gegensatz zu `full-sprint.md`) — ergänzt.
+- `hotfix.md` referenzierte zudem nicht-existente Befehlssyntax (`/test-run [smoke]`,
+  `/review [hotfix-branch]`) — auf die tatsächliche Signatur `[projektname] [sprint-nr]`
+  korrigiert, mit Klarstellung im Fließtext (Smoke-Test-Umfang, Hotfix-Branch-Kontext).
+
+**`reviewer-agent.md`: `DEBT-NNNNNN` fehlte in der Outputs-Tabelle**
+- War nur im Fließtext (ARTEFAKT-ABLAGE, Definition of Done) erwähnt, nicht in der Tabelle,
+  die typischerweise als Kurzreferenz genutzt wird — ergänzt.
+
+**`setup-hooks.ps1` — native Windows-Installationsvariante**
+- Neues `toolchain/hooks/setup-hooks.ps1`, funktional äquivalent zu `setup-hooks.sh`, ohne
+  Abhängigkeit von Git-Bash/WSL (nur das *Installationsscript* brauchte eine Windows-Variante —
+  die Git Hooks selbst sind weiterhin Bash-Skripte, die Git for Windows über sein gebündeltes
+  `sh.exe` transparent ausführt).
+- `toolchain/hooks/INDEX.md` und CLAUDE.md's "Neues Projekt starten" zeigen jetzt beide Varianten.
+
+- Betroffen: `toolchain/templates/{spike-report,feature-guide,release-notes,getting-started}.md`
+  (neu), `toolchain/templates/INDEX.md`, `toolchain/templates/templates_summary.md`,
+  `toolchain/agents/architect-agent.md`, `toolchain/agents/manual-writer-agent.md`,
+  `toolchain/agents/reviewer-agent.md`, `toolchain/agents/agents_summary.md`,
+  `toolchain/workflows/full-sprint.md`, `toolchain/workflows/hotfix.md`,
+  `toolchain/workflows/spike.md`, `toolchain/hooks/setup-hooks.ps1` (neu),
+  `toolchain/hooks/INDEX.md`, `CLAUDE.md`
+
+---
+
+## v1.8 — 2026-07-20
+
+### Neu
+
+**FAQ-NNNNNN als vollwertiger Artefakttyp eingeführt**
+- Neues Template `toolchain/templates/faq.md`.
+- `manual-writer-agent.md`: FAQ wird jetzt tatsächlich erzeugt (VORGEHEN-Schritt, Ablage-Pfad,
+  Definition-of-Done-Eintrag) statt nur in Kernverantwortlichkeiten/Outputs erwähnt zu werden,
+  ohne je erzeugt zu werden.
+- `FAQ-NNNNNN` in CLAUDE.md's Artefakt-Benennungstabelle, `_base-agent.md`s Referenztabelle
+  (dort auch `GS` und `SRP` ergänzt, die bereits in CLAUDE.md standen aber in der
+  Agenten-Referenztabelle fehlten), `templates_summary.md` und `agents_summary.md` ergänzt.
+- ID-Zähler `FAQ` in `projects/_template/.toolchain.yml` ergänzt.
+
+### Geändert
+
+**Projekt-Unterordner-Pflicht durchgesetzt (PM, BA, AR, UX, AC)**
+- Fünf Agenten schrieben ihr primäres Artefakt entgegen CLAUDE.md's expliziter Regel
+  ("schreibt ausschließlich in den zugehörigen Unterordner") ins Projekt-Root:
+  `pm-agent.md` (SB → jetzt `discovery/`), `ba-agent.md` (REQ/US → jetzt `requirements/`),
+  `architect-agent.md` (ADR/STRUCTURE.md → jetzt `architecture/`), `ux-agent.md`
+  (UX → jetzt `ux/`), `agile-coach-agent.md` (RETRO/IMPD/PC → jetzt `retros/`).
+  Reviewer- und Manual-Writer-Agent waren bereits korrekt.
+- Jede korrigierte Datei bekam zusätzlich eine explizite "NIEMALS im Projekt-Root ablegen"-Zeile.
+
+**DONE als regulärer Zwischenzustand vor RELEASED etabliert**
+- `orchestrator.md`s "Gültige Phasenwerte" enthielt eine widersprüchliche Mischung: die
+  Hauptkette ließ DONE ganz weg (`... DOCUMENTATION → RELEASE → RELEASED`), während eine
+  separate Zeile DONE nachträglich als "Legacy" für vor Phase-10-Einführung abgeschlossene
+  Sprints erklärte. Jetzt einheitlich: `... DOCUMENTATION → DONE → RELEASED`, DONE ist ein
+  regulärer, aktueller Zwischenzustand (Sprint inhaltlich fertig, noch nicht gemerged),
+  RELEASED der Zustand nach Phase 10 (Merge + Tag). Hotfix-Phasennamen im selben Abschnitt
+  ebenfalls auf die kanonischen deutschen Namen korrigiert (waren `HOTFIX-ANALYSIS`/
+  `HOTFIX-IMPLEMENTATION`, jetzt `HOTFIX-ANALYSE`/`HOTFIX-IMPLEMENT`, wie in `hotfix.md`).
+- `projects/REGISTRY.md`s Phasen-Referenz war unvollständig (endete bei REVIEW → DONE, ohne
+  DOCUMENTATION/RELEASED) — ergänzt und mit Kurzerklärung versehen.
+
+**Handoff-Protokoll vereinheitlicht**
+- Kein Agent produzierte bisher das in `handoff-protocol.md` vorgeschriebene Format
+  (Überschrift `## Übergabe: [Quelle] → [Ziel]`, Felder Datum/Von/An/Nächster-Befehl,
+  Artefakte-Tabelle, Offene-Fragen-Tabelle mit Kritikalität, Nicht-Ziele, Empfehlungen) —
+  jeder Agent nutzte ein eigenes, einfacheres Ad-hoc-Bullet-Format.
+- Alle Handoff-Blöcke vereinheitlicht: `pm-agent.md` (→BA), `ba-agent.md` (→AR),
+  `architect-agent.md` (→UX und →FE/BE, zwei Blöcke), `ux-agent.md` (→FE),
+  `frontend-agent.md` (→QA), `backend-agent.md` (→FE und →QA, zwei Blöcke),
+  `qa-agent.md` (→RV), `reviewer-agent.md` (→MW), `manual-writer-agent.md` (→ORCH).
+  Bestehende agentenspezifische Inhalte (z. B. Browser-Clickpfad/Performanz-Felder bei QA)
+  wurden in die neuen Abschnitte übernommen, nicht verworfen.
+- `agile-coach-agent.md` bewusst ausgenommen: AC übergibt an den Nutzer, nicht an einen
+  Agenten — das Protokoll gilt explizit nur für Agent-zu-Agent-Übergaben. Dies jetzt im
+  Text vermerkt, statt als stille Abweichung stehen zu lassen.
+- `handoff-protocol.md`s eigene "Übergabe-Kette im Full-Sprint-Workflow"-Grafik endete bei
+  `RV ──▶ [MERGE]` ohne MW — ergänzt zu `RV ──▶ MW ──[DOC+RN]──▶ [RELEASE]`.
+
+**Weitere stale `SPRINT-NNNNNN`-Referenz gefunden**
+- `toolchain/PROCESS.md` verwendete an zwei Stellen noch `SPRINT-NNNNNN` statt `SP-NNNNNN`
+  (derselbe Fehler wie in `.claude/commands/refine.md`, dort bereits in v1.7 korrigiert) —
+  ebenfalls auf `SP-NNNNNN` korrigiert.
+
+- Betroffen: `toolchain/agents/{pm,ba,architect,ux,frontend,backend,qa,reviewer,
+  manual-writer,agile-coach,orchestrator,_base}-agent.md`, `toolchain/protocols/handoff-protocol.md`,
+  `toolchain/templates/faq.md` (neu), `toolchain/templates/templates_summary.md`,
+  `toolchain/agents/agents_summary.md`, `CLAUDE.md`, `projects/REGISTRY.md`,
+  `projects/_template/.toolchain.yml`, `toolchain/PROCESS.md`
+
+---
+
+## v1.7 — 2026-07-20
+
+### Geändert
+
+**Review-Nachbesserung zu v1.6 (Browser-Clickpfade/Performanztests): Lücken geschlossen**
+- Gate 7 (`full-sprint.md`): Browser-Clickpfade und Performanztests von MAJOR auf BLOCKER
+  angehoben, mit objektiv prüfbaren Kriterien (dokumentierter Testmodus bzw. ausgefüllte
+  Zielwerte) statt vagem "Report prüfen".
+- QA-Agent (`qa-agent.md`): Doppelte Testausführung (headed + headless) zu einem Durchlauf
+  zusammengeführt; stillschweigendes Überspringen von Browser-Clickpfad-Tests ohne
+  Dokumentation ist nicht mehr zulässig; doppelte Schrittnummerierung ("6." zweimal) in
+  Phase B korrigiert; Performanz-Zielwerte müssen aus REQ/ADR stammen oder explizit als
+  "kein Budget definiert" vermerkt werden statt Platzhalter offen zu lassen.
+- Übergabeprotokoll QA → Reviewer (`qa-agent.md`) um Felder für Browser-Clickpfad- und
+  Performanz-Ergebnisse ergänzt.
+- Testplan-Template (`test-plan.md`): Performanztest-Sektion 3.4 um Zielwert-Quelle und
+  konkrete Messmethoden ergänzt.
+- Agents-Summary (`agents_summary.md`): fehlerhafte Zuordnung der Performanztestfälle zu
+  Sektion 3.3 korrigiert (tatsächlich Sektion 3.4); Übergabe-Beschreibung ergänzt.
+- CLAUDE.md und `artifact-lifecycle.md`: Artefakt-Lebenszyklus-Regel präzisiert —
+  Artefakte werden nie *von der KI eigenständig* gelöscht; eine Löschung auf direkten,
+  expliziten Userbefehl (z. B. vollständiger Projektabbruch) ist die einzige Ausnahme und
+  wird in `REGISTRY.md` dokumentiert.
+- `projects/REGISTRY.md`: campaignworld-Eintrag präzisiert, sodass TESTING (Sprint 3) und
+  der gescheiterte `/review`-Aufruf als eindeutig unterschiedene, sequenzielle Ereignisse
+  beschrieben sind (statt einer scheinbar widersprüchlichen Phasenangabe).
+- Betroffen: `CLAUDE.md`, `toolchain/protocols/artifact-lifecycle.md`, `projects/REGISTRY.md`,
+  `toolchain/agents/qa-agent.md`, `toolchain/workflows/full-sprint.md`,
+  `toolchain/templates/test-plan.md`, `toolchain/agents/agents_summary.md`
+
+### Behoben
+
+**Toolchain-weiter Konsistenz-Audit: ID-Formate, fehlende Phasen, Lifecycle-Status, Dokumentation**
+- `/refine` erzeugte Sprint-Backlogs als `SPRINT-NNNNNN.md` statt `SP-NNNNNN` — dadurch waren
+  sie für `/retro` und Gate-Checks unauffindbar. Korrigiert auf `SP-NNNNNN`.
+- `/sprint` listete nur 8 statt der tatsächlichen 10 Phasen (Dokumentation und Release fehlten
+  komplett) und widersprach damit `commands_summary.md`s eigener Phasenzahl-Angabe. Beide
+  Phasen ergänzt, `commands_summary.md` auf "10 Phasen (Discovery bis Release)" korrigiert.
+- `/kickoff` behauptete "max. 3 Runden à max. 3 Fragen", während `pm-agent.md` und
+  `commands_summary.md` übereinstimmend 5 Runden mit je 3–5 Fragen definieren. Auf 5 Runden
+  vereinheitlicht.
+- ADR- und Branching-Strategy-Template zeigten nur 4 der 6 Lifecycle-Status-Werte (fehlten:
+  `ACTIVE`, `ARCHIVED`) — ein Architect konnte ein ADR damit nie als `ACTIVE` markieren.
+  Beide Templates auf die vollständige Statuskette korrigiert.
+- `hotfix.md`s Phasendiagramm nutzte englische Phasennamen (`HOTFIX-ANALYSIS`,
+  `HOTFIX-IMPLEMENTATION`), die vom kanonischen `.phase`-Enum (`HOTFIX-ANALYSE`,
+  `HOTFIX-IMPLEMENT`) abwichen. Diagramm auf die kanonischen deutschen Namen korrigiert.
+- `architecture.html` und `api_documentation.html` waren seit 2026-06-18 nicht aktualisiert
+  und erwähnten weder den Agile-Coach (AC) noch `/retro`, `/health-check`, `/coach`,
+  `/impediment`. Agenten-/Phasen-/Command-Zähler korrigiert (11 Rollen, 18 Commands,
+  10 Phasen), AC als bedarfsweise aktivierte Rolle ergänzt, Zustandsdiagramm um
+  DONE → RELEASED ergänzt, fehlende Post-Sprint-Commands in der API-Tabelle nachgetragen.
+- `projects/_template/.toolchain.yml` fehlten ID-Zähler für `DOC, RN, GS, RETRO, IMPD, PC` —
+  ergänzt.
+- `toolchain/workflows/INDEX.md` behauptete ebenfalls "8 Phasen" für `full-sprint.md` —
+  auf 10 Phasen korrigiert, konsistent mit obiger Korrektur.
+- Betroffen: `.claude/commands/refine.md`, `.claude/commands/sprint.md`,
+  `.claude/commands/kickoff.md`, `.claude/commands/commands_summary.md`,
+  `toolchain/templates/architecture-decision.md`, `toolchain/templates/branching-strategy.md`,
+  `toolchain/workflows/hotfix.md`, `toolchain/workflows/INDEX.md`, `architecture.html`,
+  `api_documentation.html`, `projects/_template/.toolchain.yml`
+
+---
+
+## v1.6 — 2026-07-19
+
+### Neu
+
+**QA- und Testprozess um Browser-UI-Clickpfade und Performanztests erweitert**
+- QA-Agent, Testplan-Template und Full-Sprint-Workflow wurden um verbindliche Prüfungen für
+  Browser-basierte UI-Clickpfade erweitert, soweit die Umgebung das zulässt.
+- Performanztests sind nun explizit Teil des Testings und werden im Testplan, im QA-Workflow
+  und in den Qualitätskriterien dokumentiert.
+- Betroffen: `toolchain/agents/qa-agent.md`, `toolchain/templates/test-plan.md`,
+  `toolchain/workflows/full-sprint.md`, `toolchain/agents/agents_summary.md`,
+  `toolchain/templates/templates_summary.md`
+
+---
+
 ## v1.5 — 2026-07-17
 
 ### Neu

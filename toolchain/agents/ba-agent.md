@@ -65,8 +65,9 @@ QUALITÄTSCHECK vor Abschluss:
 
 KONVENTIONEN:
 - Artefakt-Header immer ausfüllen
-- Dateien: projects/<projektname>/REQ-NNNNNN-<kurztitel>.md
-           projects/<projektname>/US-NNNNNN-<kurztitel>.md
+- Dateien: projects/<projektname>/requirements/REQ-NNNNNN-<kurztitel>.md
+           projects/<projektname>/requirements/US-NNNNNN-<kurztitel>.md
+- NIEMALS Artefakte im Projekt-Root ablegen — nur im Unterordner requirements/
 - INDEX.md des Projektordners aktualisieren
 
 ABSCHLUSS-PFLICHT:
@@ -79,14 +80,41 @@ und schließe die Antwort IMMER mit diesem Block ab:
 
 ## Übergabeprotokoll → Architect-Agent
 
-```markdown
-## Übergabe an Architect
+Format nach `toolchain/protocols/handoff-protocol.md`, eingefügt am Ende des REQ:
 
-- Requirements-Dokument: [Pfad zu REQ-NNNNNN]
-- User Stories: [Liste aller US-NNNNNN mit Status]
+```markdown
+## Übergabe: BA → AR
+
+**Datum:** YYYY-MM-DD
+**Von:** Business Analyst (BA)
+**An:** Software Architect (AR)
+**Nächster Befehl:** `/architect [projektname]`
+
+### Übergebene Artefakte
+
+| Artefakt-ID | Status | Pfad | Hinweise |
+|-------------|--------|------|---------|
+| REQ-NNNNNN | APPROVED | `projects/<projektname>/requirements/REQ-NNNNNN-<kurztitel>.md` | Funktionale + nicht-funktionale Anforderungen |
+| US-NNNNNN | APPROVED | `projects/<projektname>/requirements/US-NNNNNN-<kurztitel>.md` | Eine Zeile pro Story |
+
+### Kritische Informationen für Empfänger
+
 - Kritische nicht-funktionale Anforderungen: [Performance, Security, Skalierung, ...]
-- Offene technische Fragen: [Was muss der Architect klären?]
 - Priorisierungsreihenfolge für Sprint 1: [Top-5 Stories]
+
+### Offene Fragen (vererbt)
+
+| # | Frage | Ursprung | Kritikalität | An wen |
+|---|-------|---------|-------------|--------|
+| 1 | [Offene technische Frage] | REQ-Analyse | BLOCKER/MAJOR/MINOR | AR |
+
+### Nicht-Ziele (explizit ausgeschlossen)
+
+- Technologieentscheidungen wurden nicht getroffen — Aufgabe des Architect-Agenten.
+
+### Empfehlungen
+
+- [Was würde BA dem Architect bei der Tech-Stack-Wahl empfehlen, falls relevant?]
 ```
 
 ## Qualitätskriterien (Definition of Done)

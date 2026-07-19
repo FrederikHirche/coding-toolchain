@@ -189,7 +189,7 @@
 
 <header>
   <h1>API &amp; Protokoll-Dokumentation</h1>
-  <p>AI Development Tool Chain · Agenten-Kommunikation, Protokolle &amp; Schnittstellen · 2026-06-18</p>
+  <p>AI Development Tool Chain · Agenten-Kommunikation, Protokolle &amp; Schnittstellen · Version 1.1 · 2026-07-20</p>
 </header>
 
 <nav>
@@ -366,6 +366,34 @@ graph LR
           <td>ORCH+AR</td>
           <td>SRP-NNN</td>
           <td>Technische Frage</td>
+        </tr>
+        <tr>
+          <td><code>/retro [projekt] [nr]</code></td>
+          <td><span style="color:var(--accent)">WRITE</span></td>
+          <td>AC</td>
+          <td>RETRO-NNN</td>
+          <td>Sprint abgeschlossen</td>
+        </tr>
+        <tr>
+          <td><code>/health-check [projekt]</code></td>
+          <td><span style="color:var(--accent3)">READ</span></td>
+          <td>AC</td>
+          <td>— (nur Ausgabe)</td>
+          <td>≥ 3 abgeschlossene Sprints</td>
+        </tr>
+        <tr>
+          <td><code>/coach [projekt] [problem]</code></td>
+          <td><span style="color:var(--accent3)">READ</span></td>
+          <td>AC</td>
+          <td>— (nur Ausgabe)</td>
+          <td>Konkretes Prozess-Problem benannt</td>
+        </tr>
+        <tr>
+          <td><code>/impediment [projekt]</code></td>
+          <td><span style="color:var(--accent)">WRITE</span></td>
+          <td>AC</td>
+          <td>IMPD-NNN</td>
+          <td>Unbenannte Prozess-Friction vermutet</td>
         </tr>
       </tbody>
     </table>
@@ -811,7 +839,7 @@ sequenceDiagram
 </main>
 
 <footer>
-  AI Development Tool Chain · API &amp; Protokoll-Dokumentation · Version 1.0 · 2026-06-18
+  AI Development Tool Chain · API &amp; Protokoll-Dokumentation · Version 1.1 · 2026-07-20
 </footer>
 
 <script>

@@ -17,7 +17,7 @@ Ohne Argument wird nach dem Projektnamen gefragt.
 2. Initialisiert dort ein **eigenes Git-Repository** (`git init`) — das Projekt ist NICHT
    Teil des Toolchain-Repositorys; Root-`.gitignore` schließt `projects/*` entsprechend aus
 3. Aktiviert den PM-Agenten mit seinem System-Prompt (aus `toolchain/agents/pm-agent.md`)
-4. Führt ein strukturiertes Stakeholder-Interview durch (max. 3 Runden à max. 3 Fragen)
+4. Führt ein strukturiertes Stakeholder-Interview durch (5 Runden, je 3–5 Fragen)
 5. Erstellt `projects/<projektname>/SB-000001-<projektname>.md`
 6. Aktualisiert `projects/<projektname>/INDEX.md`
 7. Gibt Übergabe-Zusammenfassung für `/ba` aus

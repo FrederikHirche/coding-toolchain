@@ -158,7 +158,7 @@
 
 <header>
   <h1>AI Development Tool Chain — Architektur</h1>
-  <p>Technologieneutrale, agentische Entwicklungs-Tool-Chain · Version 1.0 · 2026-06-18</p>
+  <p>Technologieneutrale, agentische Entwicklungs-Tool-Chain · Version 1.1 · 2026-07-20</p>
 </header>
 
 <nav>
@@ -179,11 +179,11 @@
     </div>
     <div class="badge">
       <div class="badge-label">Agenten-Rollen</div>
-      <div class="badge-value"><span>10</span> Rollen</div>
+      <div class="badge-value"><span>11</span> Rollen</div>
     </div>
     <div class="badge">
       <div class="badge-label">Slash Commands</div>
-      <div class="badge-value"><span>14</span> Commands</div>
+      <div class="badge-value"><span>18</span> Commands</div>
     </div>
     <div class="badge">
       <div class="badge-label">Workflow-Szenarien</div>
@@ -195,7 +195,7 @@
     </div>
     <div class="badge">
       <div class="badge-label">Prozess-Phasen</div>
-      <div class="badge-value"><span>9</span> Phasen</div>
+      <div class="badge-value"><span>10</span> Phasen</div>
     </div>
   </div>
 
@@ -215,7 +215,7 @@ graph TB
     subgraph L1["  Schicht 1 — Meta  (toolchain/)  "]
         direction LR
         A1["_base-agent.md\nBasis-Regeln"]
-        A2["10 Agenten-Def.\nPM BA AR UX FE BE QA RV MW ORCH"]
+        A2["11 Agenten-Def.\nPM BA AR UX FE BE QA RV MW AC ORCH"]
         A3["10 Artefakt-Templates\nSB REQ US ADR UX SP TP RV DOC DEBT"]
         A4["3 Protokolle\nHandoff · Gate · Lifecycle"]
         A5["Git Hooks\npre-commit · post-commit"]
@@ -226,6 +226,7 @@ graph TB
         B1["4 Meta-Commands\n/status /sprint /hotfix /spike"]
         B2["10 Phasen-Commands\n/kickoff ... /manual"]
         B3["3 Workflows\nFull Sprint · Hotfix · Spike"]
+        B4["4 Post-Sprint-Commands\n/retro /health-check /coach /impediment"]
     end
 
     subgraph L3["  Schicht 3 — Projekt  (projects/name/)  "]
@@ -265,6 +266,8 @@ graph TB
       <div class="mermaid">
 flowchart LR
     ORCH(["ORCH\nOrchestrator"]):::meta
+    %% AC (Agile Coach) ist nicht Teil der sequenziellen Sprint-Pipeline, sondern
+    %% wird bedarfsweise vom ORCH aus aktiviert (siehe gestrichelte Kanten unten)
 
     PM["PM\nProduct\nManager"]:::agent
     BA["BA\nBusiness\nAnalyst"]:::agent
@@ -275,6 +278,7 @@ flowchart LR
     QA["QA\nQA\nEngineer"]:::agent
     RV["RV\nCode\nReviewer"]:::agent
     MW["MW\nManual\nWriter"]:::agent
+    AC["AC\nAgile\nCoach"]:::coach
 
     ORCH -->|"/kickoff"| PM
     PM -->|"SB-NNN"| BA
@@ -288,14 +292,18 @@ flowchart LR
     QA -->|"TP+TR"| RV
     RV -->|"RV-NNN\nAPPROVED"| MW
     MW -->|"DOC-NNN\nRN-NNN"| ORCH
+    ORCH -.->|"/retro /health-check\n/coach /impediment"| AC
+    AC -.->|"RETRO/IMPD/PC-NNN"| ORCH
 
     classDef meta fill:#1a2a4a,stroke:#6c8fff,stroke-width:2px,color:#e2e8f0,rx:20
     classDef agent fill:#1e2340,stroke:#2e3248,stroke-width:1px,color:#e2e8f0
+    classDef coach fill:#2d2a1e,stroke:#f59e0b,stroke-width:1px,color:#e2e8f0,stroke-dasharray:3 3
       </div>
       <div class="legend">
         <div class="legend-item"><div class="legend-dot" style="background:#6c8fff"></div> Orchestrator: kennt Gesamtzustand, keine fachliche Rolle</div>
         <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div> Parallelisierung: FE und BE können gleichzeitig arbeiten</div>
         <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div> Jede Verbindung überträgt spezifische Artefakte</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div> AC (gestrichelt): bedarfsweise aktiviert, kein fester Pipeline-Schritt</div>
       </div>
     </div>
   </section>
@@ -325,15 +333,16 @@ stateDiagram-v2
     IMPLEMENTATION --> TESTING : Gate 6 ✅
     TESTING --> REVIEW : Gate 7 ✅
     REVIEW --> DOCUMENTATION : Gate 8 ✅
-    DOCUMENTATION --> DONE : Merge
-    DONE --> REFINEMENT : Nächster Sprint
+    DOCUMENTATION --> DONE : Gate 9 ✅
+    DONE --> RELEASED : Phase 10 (Merge + Tag)
+    RELEASED --> REFINEMENT : Nächster Sprint
 
     REVIEW --> IMPLEMENTATION : REQUEST CHANGES
     REVIEW --> DISCOVERY : REJECTED (Scope)
     TESTING --> IMPLEMENTATION : BLOCKER Bug
     ARCHITECTURE --> REQUIREMENTS : Unmachbare Req.
 
-    state DONE {
+    state RELEASED {
         [*] --> Sprint_Abschluss
         Sprint_Abschluss --> Registry_Update
         Registry_Update --> [*]
@@ -435,7 +444,7 @@ flowchart LR
     subgraph FS["Full Sprint  (/sprint)"]
         direction TB
         fs1["Discovery"]-->fs2["Requirements"]-->fs3["Architecture"]-->fs4["UX"]
-        fs4-->fs5["Refinement"]-->fs6["Implementation"]-->fs7["Testing"]-->fs8["Review"]-->fs9["Docs"]
+        fs4-->fs5["Refinement"]-->fs6["Implementation"]-->fs7["Testing"]-->fs8["Review"]-->fs9["Docs"]-->fs10["Release"]
     end
 
     subgraph HF["Hotfix  (/hotfix)"]
@@ -453,7 +462,7 @@ flowchart LR
     style SP fill:#1a2a1a,stroke:#34d399,stroke-width:2px,color:#e2e8f0
       </div>
       <div class="legend">
-        <div class="legend-item"><div class="legend-dot" style="background:#6c8fff"></div> Full Sprint: 9 Phasen, vollständiger Artefakt-Satz</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#6c8fff"></div> Full Sprint: 10 Phasen, vollständiger Artefakt-Satz</div>
         <div class="legend-item"><div class="legend-dot" style="background:#f87171"></div> Hotfix: 4 Phasen, minimaler Artefakt-Footprint (BUG+TR+RV)</div>
         <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div> Spike: 3 Phasen, endet im SRP-NNN Report — kein produktiver Code</div>
       </div>
@@ -463,7 +472,7 @@ flowchart LR
 </main>
 
 <footer>
-  AI Development Tool Chain · Version 1.0 · 2026-06-18 · Technologieneutral &amp; agentisch
+  AI Development Tool Chain · Version 1.1 · 2026-07-20 · Technologieneutral &amp; agentisch
 </footer>
 
 <script>

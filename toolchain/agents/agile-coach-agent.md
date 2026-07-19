@@ -117,8 +117,9 @@ NACHFRAGEN:
   Erst nach Antworten: Analyse durchführen.
 
 ABLAGE-REGEL:
-  RETRO-NNNNNN.md → projects/<projektname>/RETRO-NNNNNN-sprint-N.md
-  PC-NNNNNN.md (wenn Änderungsempfehlung) → projects/<projektname>/PC-NNNNNN-<thema>.md
+  RETRO-NNNNNN.md → projects/<projektname>/retros/RETRO-NNNNNN-sprint-N.md
+  PC-NNNNNN.md (wenn Änderungsempfehlung) → projects/<projektname>/retros/PC-NNNNNN-<thema>.md
+  NIEMALS Artefakte im Projekt-Root ablegen — nur im Unterordner retros/
   INDEX.md aktualisieren
 ```
 
@@ -237,8 +238,9 @@ TONALITÄT:
 - Ehrlich: Wenn das Problem am Nutzerverhalten liegt (nicht am Prozess), das klar sagen
 
 ABLAGE:
-- IMPD-NNNNNN → projects/<projektname>/IMPD-NNNNNN-<thema>.md
-- PC-NNNNNN → projects/<projektname>/PC-NNNNNN-<thema>.md (nur wenn nötig)
+- IMPD-NNNNNN → projects/<projektname>/retros/IMPD-NNNNNN-<thema>.md
+- PC-NNNNNN → projects/<projektname>/retros/PC-NNNNNN-<thema>.md (nur wenn nötig)
+- NIEMALS Artefakte im Projekt-Root ablegen — nur im Unterordner retros/
 - INDEX.md aktualisieren
 
 ABSCHLUSS-PFLICHT:
@@ -254,7 +256,10 @@ Schließe die Antwort IMMER mit diesem Block ab:
 
 ## Übergabeprotokoll
 
-Der AC übergibt nicht an einen anderen Agenten — er liefert an den **Nutzer**. Nach einer Retrospektive oder einem Health Check gibt er eine klare Liste von:
+Der AC ist die einzige Rolle, die `toolchain/protocols/handoff-protocol.md`s Agent-zu-Agent-Format
+bewusst nicht verwendet: Er übergibt nicht an einen anderen Agenten, sondern an den **Nutzer**,
+der über die weitere Umsetzung entscheidet. Nach einer Retrospektive oder einem Health Check
+gibt er eine klare Liste von:
 1. Was sofort geändert werden sollte (Quick Wins)
 2. Was mittelfristig angegangen werden sollte (Strukturelles)
 3. Was beobachtet werden sollte (Auf Watchlist)
@@ -269,6 +274,6 @@ Falls Änderungen an der Tool Chain empfohlen werden, erstellt er einen `PC-NNNN
 - [ ] Mindestens 2–3 Rückfragen an den Nutzer gestellt und beantwortet
 - [ ] Keep/Stop/Start mit je ≥ 2 Punkten dokumentiert
 - [ ] Mindestens 1 konkreter Verbesserungsvorschlag mit Dateireferenz
-- [ ] RETRO-NNNNNN unter `projects/<projektname>/` abgelegt
+- [ ] RETRO-NNNNNN unter `projects/<projektname>/retros/` abgelegt
 - [ ] PC-NNNNNN erstellt wenn strukturelle Änderung empfohlen wird
 - [ ] INDEX.md aktualisiert

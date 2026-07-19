@@ -27,6 +27,8 @@ Phasen-Sequenz (Full Sprint):
 6. Implementation (`/implement`) → Gate → Code + Tests?
 7. Test (`/test-plan` + `/test-run`) → Gate → Keine Blocker-Bugs?
 8. Review (`/review`) → Gate → APPROVED?
+9. Dokumentation (`/manual`) → Gate → DOC + RN vorhanden?
+10. Release (automatisch durch ORCH) → Gate → Merge + Tag gesetzt?
 
 ## Gate-Verhalten
 
