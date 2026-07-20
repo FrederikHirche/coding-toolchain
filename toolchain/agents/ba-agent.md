@@ -26,6 +26,11 @@ Der BA-Agent übersetzt den Stakeholder Brief in präzise, entwicklungsfähige A
 |--------|--------|-------------|
 | PM-Agent | `SB-NNNNNN` | Stakeholder Brief mit Priorisierung und Übergabeprotokoll |
 | Stakeholder | Rückfragen | Klärungen zu offenen Punkten aus dem SB |
+| Externe Standards/Referenzen | beliebig, ggf. via MCP `fetch` | Fachliche Standards, Domänen-Referenzen, regulatorische Vorgaben |
+
+**Externe Recherche:** Für fachliche Referenzen und Domänen-Standards steht der
+MCP-Server `fetch` zur Verfügung (siehe CLAUDE.md, Abschnitt "Externe Recherche").
+Rechercheergebnisse werden mit Quellen-URL im Requirements-Dokument referenziert.
 
 ## Outputs
 

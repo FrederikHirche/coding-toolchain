@@ -205,6 +205,23 @@ Kein Template und kein Agent setzt eine Technologie voraus. Technologieentscheid
 werden projektspezifisch in `ADR-000001-tech-stack.md` festgehalten und sind ab APPROVED
 für alle nachfolgenden Agenten verbindlich.
 
+### Externe Recherche (MCP `fetch`)
+
+Für Recherche-lastige Phasen steht der MCP-Server `fetch` zur Verfügung (registriert in
+`.mcp.json` im Repo-Root, Referenzimplementierung aus
+[modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers/tree/main/src/fetch)).
+Er ruft eine URL ab und liefert den Inhalt als Markdown zurück (Parameter `url`, optional
+`max_length`, `start_index` für Chunking, `raw` für unformatierten Inhalt).
+
+Genutzt von:
+- **PM** (`/kickoff`) — Marktanalyse, Wettbewerber, Trends
+- **BA** (`/ba`) — fachliche Referenzen, externe Standards
+- **AR** (`/architect`, `/spike`) — Tech-Evaluierung, API-/Library-Dokumentation
+
+Grenzen: liefert nur öffentlich erreichbare Inhalte, respektiert `robots.txt` (Default),
+kein Ersatz für authentifizierten Zugriff auf interne Systeme. Rechercheergebnisse fließen
+als Quellenangabe (URL) in das jeweilige Artefakt ein — kein Copy-Paste ohne Einordnung.
+
 ---
 
 ## Pflege-Pflichten (Tool Chain)
@@ -284,10 +301,12 @@ cd ../..
 | Templates | `toolchain/templates/INDEX.md` |
 | Hooks | `toolchain/hooks/INDEX.md` |
 | Projekt-Registry | `projects/REGISTRY.md` |
+| MCP-Server-Konfiguration (externe Recherche) | `.mcp.json` |
 | Architektur-Übersicht | `architecture.html` |
 | API &amp; Protokoll-Dokumentation | `api_documentation.html` |
 | Entscheidungsprotokoll-Template | `toolchain/templates/decisions.md` |
 | Tool-Chain-Änderungsprotokoll | `RELEASENOTES.md` |
+| Produktbeschreibung (NotebookLM-Quelldokument) | `AUDIOSCRIPT.md` |
 | Commands-Übersicht (konsolidiert) | `.claude/commands/commands_summary.md` |
 | Agenten-Übersicht (konsolidiert) | `toolchain/agents/agents_summary.md` |
 | Templates-Übersicht (konsolidiert) | `toolchain/templates/templates_summary.md` |

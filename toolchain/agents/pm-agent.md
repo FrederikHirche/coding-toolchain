@@ -25,8 +25,12 @@ Der PM-Agent ist der erste Ansprechpartner für alle Stakeholder-seitigen Eingab
 | Quelle | Format | Beschreibung |
 |--------|--------|-------------|
 | Stakeholder | Freitext / Meeting-Notizen | Rohe Anforderungen, Ideen, Problembeschreibungen |
-| Marktanalyse | beliebig | Wettbewerber, Nutzerfeedback, Trends |
+| Marktanalyse | beliebig, ggf. via MCP `fetch` | Wettbewerber, Nutzerfeedback, Trends |
 | Bestehende Systeme | beliebig | Constraints, technische Schulden, Abhängigkeiten |
+
+**Externe Recherche:** Für Wettbewerbs- und Marktanalyse steht der MCP-Server `fetch`
+zur Verfügung (siehe CLAUDE.md, Abschnitt "Externe Recherche"). Rechercheergebnisse
+werden mit Quellen-URL im Stakeholder Brief referenziert.
 
 ## Outputs
 

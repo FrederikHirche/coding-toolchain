@@ -9,6 +9,29 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 
 ---
 
+## v1.10 — 2026-07-20
+
+### Neu
+
+**MCP-Server `fetch` integriert (externe Recherche)**
+- `.mcp.json` im Repo-Root angelegt: registriert den Referenz-MCP-Server `fetch`
+  ([modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers/tree/main/src/fetch)),
+  gestartet via `python -m mcp_server_fetch` (Paket `mcp-server-fetch` per `pip install
+  mcp-server-fetch` installiert — kein `uv`/`uvx` auf diesem System nötig).
+- `CLAUDE.md`: neuer Abschnitt "Externe Recherche (MCP `fetch`)" — beschreibt Zweck,
+  Parameter, nutzende Agenten (PM, BA, AR) und Grenzen (nur öffentliche Inhalte,
+  robots.txt-Konformität, Quellenpflicht). Neue Zeile in der Referenzen-Tabelle.
+- `pm-agent.md`, `ba-agent.md`, `architect-agent.md`: Inputs-Tabellen und je ein
+  "Externe Recherche"-Hinweis ergänzt — PM für Markt-/Wettbewerbsanalyse, BA für
+  fachliche Standards/Domänen-Referenzen, AR für Tech-/API-Dokumentation (Architektur-
+  und Spike-Modus).
+- `spike.md`: SPIKE-RESEARCH-Phasenbeschreibung verweist jetzt auf `fetch` als
+  Recherchequelle.
+- `agents_summary.md`: PM-, BA- und AR-Abschnitte (inkl. Spike-Modus) um
+  "Externe Recherche"-Zeile ergänzt.
+
+---
+
 ## v1.9 — 2026-07-20
 
 ### Neu

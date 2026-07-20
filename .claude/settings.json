@@ -25,7 +25,15 @@
       "PowerShell($git = \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\18\\\\Community\\\\Common7\\\\IDE\\\\CommonExtensions\\\\Microsoft\\\\TeamFoundation\\\\Team Explorer\\\\Git\\\\cmd\\\\git.exe\" ; & $git stash && & $git pull --rebase origin main && & $git stash pop)",
       "PowerShell($git = \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\18\\\\Community\\\\Common7\\\\IDE\\\\CommonExtensions\\\\Microsoft\\\\TeamFoundation\\\\Team Explorer\\\\Git\\\\cmd\\\\git.exe\" ; & $git add toolchain/protocols/SECURITY-GUIDELINES.md toolchain/protocols/INDEX.md toolchain/workflows/full-sprint.md toolchain/agents/orchestrator.md toolchain/templates/branching-strategy.md toolchain/templates/INDEX.md && & $git status)",
       "PowerShell($git = \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\18\\\\Community\\\\Common7\\\\IDE\\\\CommonExtensions\\\\Microsoft\\\\TeamFoundation\\\\Team Explorer\\\\Git\\\\cmd\\\\git.exe\" ; & $git diff .claude/settings.json)",
-      "PowerShell($git = \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\18\\\\Community\\\\Common7\\\\IDE\\\\CommonExtensions\\\\Microsoft\\\\TeamFoundation\\\\Team Explorer\\\\Git\\\\cmd\\\\git.exe\" ; & $git add -A && & $git commit -m \"chore: Audio-Datei aktualisiert, settings.json erweitert\" && & $git push origin main)"
+      "PowerShell($git = \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\18\\\\Community\\\\Common7\\\\IDE\\\\CommonExtensions\\\\Microsoft\\\\TeamFoundation\\\\Team Explorer\\\\Git\\\\cmd\\\\git.exe\" ; & $git add -A && & $git commit -m \"chore: Audio-Datei aktualisiert, settings.json erweitert\" && & $git push origin main)",
+      "WebFetch(domain:github.com)",
+      "PowerShell(Get-Command uvx -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-Command uv -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-Command python -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-Command docker -ErrorAction SilentlyContinue)",
+      "PowerShell(python -m pip install --user mcp-server-fetch 2>&1)",
+      "PowerShell(python -m mcp_server_fetch --help)",
+      "PowerShell(git check-ignore -v .mcp.json)"
     ]
   }
 }

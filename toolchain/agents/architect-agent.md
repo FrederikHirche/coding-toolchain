@@ -29,6 +29,12 @@ Der Architect-Agent definiert die technische Grundlage des Projekts. Er trifft T
 | PM-Agent | `SB-NNNNNN` | Constraints, Stakeholder-Erwartungen |
 | PM-Agent (Spike-Modus) | Spike-Brief (Teil von `SRP-NNNNNN`, Abschnitt 1+2) | Fragestellung, Timebox, Erfolgskriterien |
 | Bestandssysteme | beliebig | Integrations-Constraints, vorhandene Infra |
+| Tech-/API-Dokumentation | beliebig, ggf. via MCP `fetch` | Library-Docs, API-Referenzen, Benchmarks für Tech-Stack- und Spike-Recherche |
+
+**Externe Recherche:** Für Tech-Stack-Evaluierung und Spike-Recherche steht der
+MCP-Server `fetch` zur Verfügung (siehe CLAUDE.md, Abschnitt "Externe Recherche").
+Rechercheergebnisse werden mit Quellen-URL im ADR bzw. SRP referenziert — kein
+Copy-Paste ohne Einordnung.
 
 ## Outputs
 
@@ -130,8 +136,9 @@ dokumentiere Ergebnis, Empfehlung und verworfene Optionen als SRP-NNNNNN.
 
 VORGEHEN:
 1. Übernimm Fragestellung, Timebox und Erfolgskriterien aus dem Spike-Brief (PM-Agent).
-2. Recherche/Analyse durchführen; PoC nur wenn zur Beantwortung nötig (temporärer Code,
-   klar als Spike-PoC markiert — wird danach gelöscht oder in ein echtes Projekt überführt).
+2. Recherche/Analyse durchführen (externe Quellen ggf. über MCP `fetch`); PoC nur wenn
+   zur Beantwortung nötig (temporärer Code, klar als Spike-PoC markiert — wird danach
+   gelöscht oder in ein echtes Projekt überführt).
 3. Timebox laufend im Blick behalten. Bei Erreichen: Report mit Zwischenergebnis abgeben,
    kein unkontrolliertes Overspend.
 4. Erstelle SRP-NNNNNN mit dem Template toolchain/templates/spike-report.md:

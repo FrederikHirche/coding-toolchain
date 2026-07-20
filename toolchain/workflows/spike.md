@@ -35,7 +35,8 @@ SPIKE-BRIEF
   Output: Spike-Brief (Teil von SRP-NNNNNN, Abschnitt 1)
         ↓
 SPIKE-RESEARCH
-  [AR] — Analyse, Recherche, ggf. minimales PoC
+  [AR] — Analyse, Recherche (externe Quellen ggf. über MCP `fetch`, siehe CLAUDE.md
+  Abschnitt "Externe Recherche"), ggf. minimales PoC
   PoC-Code: temporär, wird nach Spike gelöscht oder migriert
         ↓
 SPIKE-REPORT

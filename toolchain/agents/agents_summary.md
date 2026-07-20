@@ -62,6 +62,9 @@ Top-3-Risiken benennen, alle offenen Fragen protokollieren.
 
 **Übergabe an:** BA-Agent — gibt Stakeholder Brief, Priorisierung, Constraints und offene Fragen weiter.
 
+**Externe Recherche:** Kann für Wettbewerbs-/Marktanalyse den MCP-Server `fetch` nutzen
+(siehe CLAUDE.md, Abschnitt "Externe Recherche").
+
 ---
 
 ## BA — Business Analyst
@@ -83,6 +86,9 @@ und muss von den Must-Have-Einträgen aus der MoSCoW-Priorisierung abgedeckt sei
 
 **Übergabe an:** Architect-Agent — gibt Requirements, User Stories, kritische NFRs und
 Priorisierungsreihenfolge weiter.
+
+**Externe Recherche:** Kann für fachliche Standards/Domänen-Referenzen den MCP-Server
+`fetch` nutzen (siehe CLAUDE.md, Abschnitt "Externe Recherche").
 
 ---
 
@@ -119,6 +125,9 @@ ADR-Verpflichtung — übernimmt das Spike-Brief vom PM-Agenten (Fragestellung, 
 Erfolgskriterien), recherchiert/prototypt innerhalb der Timebox und liefert `SRP-NNNNNN`
 (Spike Report) mit expliziter Empfehlung. Übergabe geht an PM/Nutzer, nicht an einen
 Entwicklungsagenten.
+
+**Externe Recherche:** Kann für Tech-Stack-Evaluierung und Spike-Recherche den MCP-Server
+`fetch` nutzen (siehe CLAUDE.md, Abschnitt "Externe Recherche").
 
 ---
 
