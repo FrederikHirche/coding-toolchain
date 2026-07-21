@@ -9,6 +9,14 @@
     - pre-commit:  Lint, Header-Check, Secret-Scan, TODO-Format-Check
     - post-commit: INDEX.md-Erinnerung, Artefakt-Pflege-Hinweis
 
+  Installiert werden die PowerShell-nativen Hook-Varianten (pre-commit.windows.ps1,
+  post-commit.windows.ps1), nicht die Bash-Skripte (pre-commit, post-commit). Grund:
+  viele Windows-Umgebungen (insbesondere MinGit-Installationen ohne gebündeltes
+  sh.exe/bash.exe) haben keine funktionierende Bash — nur ggf. Windows' eigenen,
+  nicht-funktionsfähigen WSL-`bash.exe`-Launcher-Stub in PATH. Die installierten Hooks
+  nutzen deshalb Windows PowerShell 5.1 (nicht `pwsh`) als Shebang-Interpreter — siehe
+  Kommentar in pre-commit.windows.ps1 für die Begründung.
+
 .PARAMETER ProjectRoot
   Pfad zum Projekt-Repository (Standard: aktuelles Verzeichnis)
 
@@ -48,13 +56,13 @@ Write-Host ""
 # ─────────────────────────────────────
 # Hooks installieren
 # ─────────────────────────────────────
-# Git fuehrt Hooks unter Windows ueber die Git-Bash-Shim aus; die Hook-Dateien
-# bleiben deshalb unveraendert (Bash-Skripte ohne .sh-Endung), nur das
-# Installationsscript selbst ist hier PowerShell-nativ.
+# Installiert die PowerShell-nativen Hook-Quelldateien (*.windows.ps1) als die von git
+# erwarteten erweiterungslosen Zieldateien (pre-commit, post-commit) — siehe .DESCRIPTION
+# oben. Setzt keine funktionierende Bash im Zielsystem voraus.
 $Hooks = @("pre-commit", "post-commit")
 
 foreach ($Hook in $Hooks) {
-    $Src = Join-Path $ToolchainDir "hooks\$Hook"
+    $Src = Join-Path $ToolchainDir "hooks\$Hook.windows.ps1"
     $Dst = Join-Path $GitHooksDir $Hook
 
     if (-not (Test-Path $Src)) {

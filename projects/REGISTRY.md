@@ -2,13 +2,13 @@
 
 Zentrale Übersicht aller Projekte, die die AI Development Tool Chain verwenden.
 
-Letzte Aktualisierung: 2026-07-19
+Letzte Aktualisierung: 2026-07-20
 
 ## Aktive Projekte
 
 | Projekt | Phase | Sprint | Letzter Agent | Letztes Update | Pfad |
 |---------|-------|--------|--------------|----------------|------|
-| _(keine)_ | — | — | — | — | — |
+| campaignworld | IMPLEMENTATION | 1 | BA+FE+BE | 2026-07-21 | `projects/campaignworld/` |
 
 ## Abgeschlossene Projekte
 
@@ -20,7 +20,7 @@ Letzte Aktualisierung: 2026-07-19
 
 | Projekt | Letzte Phase | Pausiert seit | Grund | Pfad |
 |---------|-------------|--------------|-------|------|
-| campaignworld | TESTING (Sprint 3) abgeschlossen — Übergang zu REVIEW nicht vollzogen: der anschließende `/review`-Aufruf brach mit einem Server-Hänger ab, die REVIEW-Phase wurde nie erreicht | 2026-07-19 | Vom Stakeholder auf direkten Userbefehl vollständig gelöscht (kein Backup, kein Remote) — wiederholte Performance-/Stabilitätsprobleme über mehrere Sprints trotz Fixversuchen (siehe TR-000001/002/004/005/006, DEBT-000017). Vorgeschichte: Sprint 2.5 wurde nach Freigabe von US-000031 in REVIEW abgeschlossen (2026-07-18); Sprint 3 durchlief anschließend regulär TESTING, wo ein Dashboard-Routing-Bug (`ENTITY_TYPE_REGISTRY`) gefunden wurde, bevor der `/review`-Aufruf mit dem oben genannten Server-Hänger scheiterte. Stakeholder bewertete dies als strukturelles statt punktuelles Risiko. | `projects/campaignworld/` (Ordnerinhalt vollständig gelöscht, 2026-07-19) |
+| campaignworld *(v1, siehe unten)* | TESTING (Sprint 3) abgeschlossen — Übergang zu REVIEW nicht vollzogen: der anschließende `/review`-Aufruf brach mit einem Server-Hänger ab, die REVIEW-Phase wurde nie erreicht | 2026-07-19 | Vom Stakeholder auf direkten Userbefehl vollständig gelöscht (kein Backup, kein Remote) — wiederholte Performance-/Stabilitätsprobleme über mehrere Sprints trotz Fixversuchen (siehe TR-000001/002/004/005/006, DEBT-000017). Vorgeschichte: Sprint 2.5 wurde nach Freigabe von US-000031 in REVIEW abgeschlossen (2026-07-18); Sprint 3 durchlief anschließend regulär TESTING, wo ein Dashboard-Routing-Bug (`ENTITY_TYPE_REGISTRY`) gefunden wurde, bevor der `/review`-Aufruf mit dem oben genannten Server-Hänger scheiterte. Stakeholder bewertete dies als strukturelles statt punktuelles Risiko. **Hinweis (2026-07-20):** Projektname wurde für einen eigenständigen Neuanlauf wiederverwendet, siehe Eintrag in „Aktive Projekte" oben — kein Zusammenhang mit diesem gelöschten Artefaktbestand, Nummerierung beginnt neu bei SB-000001. | `projects/campaignworld/` (Ordnerinhalt vollständig gelöscht, 2026-07-19; Pfad seit 2026-07-20 mit neuem, eigenständigem Projektanlauf belegt) |
 
 ---
 

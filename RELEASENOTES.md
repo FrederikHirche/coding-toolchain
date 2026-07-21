@@ -9,6 +9,40 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 
 ---
 
+## v1.11 — 2026-07-22
+
+### Behoben
+
+**Git Hooks unter Windows: Bash-Annahme durch PowerShell-native Hooks ersetzt**
+- Ursache: `toolchain/hooks/pre-commit`/`post-commit` sind Bash-Skripte; `toolchain/hooks/INDEX.md`
+  ging bisher davon aus, dass Git for Windows sie problemlos über ein gebündeltes `sh.exe`
+  ausführt. Das gilt nicht für **MinGit**-Installationen (minimale Git-Distribution ohne
+  Bash/MSYS-Userland) — dort liegt oft nur Windows' eigener, nicht-funktionsfähiger
+  WSL-`bash.exe`-Launcher-Stub in PATH, was jeden Commit mit einem kryptischen
+  Socket-/Puffer-Fehler blockierte (entdeckt im Projekt `campaignworld`).
+- `toolchain/hooks/pre-commit.windows.ps1`, `toolchain/hooks/post-commit.windows.ps1`
+  (neu): PowerShell-native 1:1-Portierungen der beiden Bash-Hooks (gleiche 4 Checks:
+  Lint, Datei-Header, Secret-Scan, TODO-Format). Nutzen bewusst **Windows PowerShell 5.1**
+  (`C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe`) als Shebang-Interpreter,
+  nicht `pwsh` (PowerShell 7) — git leitet keine Shebang-Argumente weiter und ruft immer
+  nur `<interpreter> <hook-pfad>` ohne Flags auf; `pwsh`s striktes `-File`-Binding
+  verlangt dafür eine `.ps1`-Endung, die eine erweiterungslose Hook-Datei nie hat,
+  während PowerShell 5.1s Argument-Bindung den erweiterungslosen Pfad direkt akzeptiert.
+- `toolchain/hooks/setup-hooks.ps1`: installiert jetzt die neuen `*.windows.ps1`-Dateien
+  (umbenannt zu `pre-commit`/`post-commit`) statt die Bash-Dateien unverändert zu kopieren.
+  `setup-hooks.sh` (Linux/Mac/WSL/echtes Git-Bash) bleibt unverändert und installiert
+  weiterhin die Bash-Variante.
+- `toolchain/hooks/INDEX.md`: Dateitabelle und Erklärung entsprechend aktualisiert,
+  falsche sh.exe-Annahme korrigiert.
+- Auswirkung: Neue Projekte unter Windows-Umgebungen ohne funktionierende Bash (z. B.
+  MinGit-only-Setups) können jetzt über `pwsh toolchain/hooks/setup-hooks.ps1` funktionierende
+  Git Hooks erhalten, ohne dieses Problem erneut entdecken zu müssen. Bereits bestehende
+  Projekte mit fehlschlagenden Bash-Hooks können die Hooks durch erneuten Aufruf von
+  `setup-hooks.ps1` auf die PowerShell-Variante umstellen (bestehender Hook wird automatisch
+  gesichert, siehe Backup-Logik in `setup-hooks.ps1`).
+
+---
+
 ## v1.10 — 2026-07-20
 
 ### Neu
