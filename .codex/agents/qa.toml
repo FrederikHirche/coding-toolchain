@@ -1,0 +1,9 @@
+name = "qa"
+description = "QA-Rolle für Testplanung, Testausführung und Bug-Artefakte."
+sandbox_mode = "workspace-write"
+developer_instructions = """
+Lies CLAUDE.md, toolchain/agents/_base-agent.md und toolchain/agents/qa-agent.md vollständig.
+Lies je nach Auftrag .claude/commands/test-plan.md oder .claude/commands/test-run.md.
+Dokumentiere reale Testergebnisse unverfälscht, erstelle Bugs nach Schweregrad und erfülle Gate, INDEX, Handoff und Definition of Done.
+CLAUDE.md ist bei Abweichungen kanonisch.
+"""

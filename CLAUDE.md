@@ -224,6 +224,28 @@ als Quellenangabe (URL) in das jeweilige Artefakt ein — kein Copy-Paste ohne E
 
 ---
 
+## Additive Codex-Kompatibilität
+
+Claude Code und diese Datei bleiben die kanonische Ausführungsumgebung und fachliche Quelle
+der Tool Chain. Die Codex-Integration ist ausschließlich additiv:
+
+| Pfad | Zweck |
+|------|-------|
+| `AGENTS.md` | Kurzer Codex-Adapter mit explizitem Vorrang dieser `CLAUDE.md` |
+| `.agents/skills/coding-toolchain/` | Nativer Codex-Router für die bestehenden Commands |
+| `.codex/config.toml` | Registrierung der Codex-Rollenadapter |
+| `.codex/agents/` | Codex-Agenten, die auf die kanonischen Definitionen unter `toolchain/agents/` verweisen |
+| `projects/_template/AGENTS.md` | Codex-Anweisungen für eigenständige Projekt-Repositories |
+
+Codex-spezifische Dateien dürfen Commands, Rollen, Templates, Protokolle oder Prioritäten
+von Claude Code nicht überschreiben. Konsistenzprüfung:
+
+```powershell
+pwsh -NoProfile -File toolchain/scripts/validate-codex-compat.ps1
+```
+
+---
+
 ## Pflege-Pflichten (Tool Chain)
 
 Diese Regeln gelten immer dann, wenn Claude Änderungen an der Tool Chain selbst vornimmt
@@ -310,3 +332,5 @@ cd ../..
 | Commands-Übersicht (konsolidiert) | `.claude/commands/commands_summary.md` |
 | Agenten-Übersicht (konsolidiert) | `toolchain/agents/agents_summary.md` |
 | Templates-Übersicht (konsolidiert) | `toolchain/templates/templates_summary.md` |
+| Additive Codex-Anweisungen | `AGENTS.md` |
+| Codex-Kompatibilitätsprüfung | `toolchain/scripts/validate-codex-compat.ps1` |

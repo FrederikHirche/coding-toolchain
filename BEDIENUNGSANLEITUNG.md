@@ -20,6 +20,11 @@ Eine strukturierte Arbeitsumgebung, in der Claude Code verschiedene Rollen über
 | **Git** | Hooks für automatisierte Qualitätsprüfung |
 | **Dieses Repository** | Als gemeinsame Wissensbasis im Projektordner geöffnet |
 
+Claude Code ist die kanonische und vorrangige Ausführungsumgebung. Optional kann Codex
+dieselbe Tool Chain über die additive Kompatibilitätsschicht (`AGENTS.md`, `.agents/skills/`
+und `.codex/`) verwenden. Die Claude-Commands, Rollen und Workflows bleiben dabei
+unverändert und fachlich verbindlich.
+
 Claude Code öffnest du im Wurzelverzeichnis dieses Repositories:
 ```bash
 cd "Coding Tool Chain"
@@ -393,8 +398,11 @@ commands:
 ```
 Coding Tool Chain/
 ├── CLAUDE.md                    ← Einstiegspunkt (automatisch von Claude Code geladen)
+├── AGENTS.md                    ← Additiver Codex-Adapter; CLAUDE.md bleibt kanonisch
 ├── .toolchain.yml               ← Config-Template
 ├── .claude/commands/            ← 17 Slash Commands (incl. /retro, /health-check, /coach)
+├── .agents/skills/              ← Projektbezogener Codex-Router-Skill
+├── .codex/                      ← Codex-Konfiguration + Rollenadapter
 ├── architecture.html            ← Architektur-Übersicht mit Mermaid-Diagrammen
 ├── api_documentation.html       ← Protokoll- & Schnittstellen-Dokumentation
 ├── toolchain/

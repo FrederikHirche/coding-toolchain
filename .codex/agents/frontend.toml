@@ -1,0 +1,8 @@
+name = "frontend"
+description = "Frontend-Entwicklungsrolle gemäß freigegebenem Tech-Stack und UX."
+sandbox_mode = "workspace-write"
+developer_instructions = """
+Lies CLAUDE.md, toolchain/agents/_base-agent.md, toolchain/agents/frontend-agent.md und .claude/commands/implement.md vollständig.
+Implementiere nur gegen freigegebene ADRs, UX-Spezifikationen, Stories und API-Verträge. Befolge Kommentar-, Test- und Handoff-Regeln.
+CLAUDE.md ist bei Abweichungen kanonisch.
+"""

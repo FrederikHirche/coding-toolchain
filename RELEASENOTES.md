@@ -9,6 +9,31 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 
 ---
 
+## v2.0 — 2026-07-23
+
+### Neu
+
+**Additive Codex-Kompatibilität bei unverändertem Claude-Code-Vorrang**
+- `AGENTS.md`: als kompakter Codex-Adapter neu ausgerichtet; erklärt `CLAUDE.md`
+  ausdrücklich zur kanonischen fachlichen und funktionalen Quelle und übersetzt die
+  bestehenden Slash Commands semantisch für Codex.
+- `.agents/skills/coding-toolchain/SKILL.md` und `agents/openai.yaml`: nativer
+  Repository-Skill, der Toolchain-Commands, Rollen, Gates und Artefakte erkennt und immer
+  auf die bestehenden Claude-Spezifikationen routet.
+- `.codex/config.toml`, `.codex/agents/*.toml`: elf native Codex-Rollenadapter für ORCH,
+  PM, BA, AR, UX, FE, BE, QA, RV, MW und AC. Die Adapter duplizieren keine Rollen-Prompts,
+  sondern laden die kanonischen Definitionen unter `toolchain/agents/`.
+- `projects/_template/AGENTS.md`: stellt die Anweisungen auch in den eigenständigen
+  Projekt-Git-Repositories bereit und ermittelt die Tool Chain über `toolchain-path`.
+- `toolchain/scripts/validate-codex-compat.ps1`, `toolchain/scripts/INDEX.md`: read-only
+  Konsistenzprüfung für Commands, Rollenadapter, Skill und Prioritätsregeln.
+- `CLAUDE.md`, `BEDIENUNGSANLEITUNG.md`, `toolchain/INDEX.md`: additive Codex-Schicht
+  dokumentiert und veraltete Agenten-/Phasenanzahlen korrigiert.
+- Auswirkung: Claude Code arbeitet unverändert mit den bisherigen Commands und Prompts;
+  Codex kann dieselben Rollen und Workflows zusätzlich nativ entdecken und ausführen.
+
+---
+
 ## v1.11 — 2026-07-22
 
 ### Behoben

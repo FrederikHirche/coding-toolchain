@@ -33,7 +33,8 @@
       "PowerShell(Get-Command docker -ErrorAction SilentlyContinue)",
       "PowerShell(python -m pip install --user mcp-server-fetch 2>&1)",
       "PowerShell(python -m mcp_server_fetch --help)",
-      "PowerShell(git check-ignore -v .mcp.json)"
+      "PowerShell(git check-ignore -v .mcp.json)",
+      "PowerShell(git add -A)"
     ]
   }
 }

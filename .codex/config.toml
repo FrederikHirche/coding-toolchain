@@ -1,0 +1,47 @@
+[agents]
+enabled = true
+max_concurrent_threads_per_session = 6
+
+[agents.orchestrator]
+description = "Steuert Projektzustand, Phasen, Gates und Toolchain-Handoffs."
+config_file = "./agents/orchestrator.toml"
+
+[agents.pm]
+description = "Erarbeitet Discovery und Stakeholder Briefs gemäß PM-Agent."
+config_file = "./agents/pm.toml"
+
+[agents.ba]
+description = "Erstellt Requirements, User Stories und Refinements gemäß BA-Agent."
+config_file = "./agents/ba.toml"
+
+[agents.architect]
+description = "Erstellt Architekturentscheidungen und technische Spikes gemäß AR-Agent."
+config_file = "./agents/architect.toml"
+
+[agents.ux]
+description = "Erstellt User Journeys und UX-Spezifikationen gemäß UX-Agent."
+config_file = "./agents/ux.toml"
+
+[agents.frontend]
+description = "Implementiert Frontend-Arbeit gemäß FE-Agent und freigegebenen ADRs."
+config_file = "./agents/frontend.toml"
+
+[agents.backend]
+description = "Implementiert Backend und API-Verträge gemäß BE-Agent und freigegebenen ADRs."
+config_file = "./agents/backend.toml"
+
+[agents.qa]
+description = "Plant und führt Tests gemäß QA-Agent aus."
+config_file = "./agents/qa.toml"
+
+[agents.reviewer]
+description = "Prüft Code unabhängig auf Korrektheit, Sicherheit und Gate-Konformität."
+config_file = "./agents/reviewer.toml"
+
+[agents.manual_writer]
+description = "Erstellt Endnutzer-Dokumentation und Release Notes gemäß MW-Agent."
+config_file = "./agents/manual-writer.toml"
+
+[agents.agile_coach]
+description = "Moderiert Retrospektiven und Prozessverbesserungen gemäß AC-Agent."
+config_file = "./agents/agile-coach.toml"

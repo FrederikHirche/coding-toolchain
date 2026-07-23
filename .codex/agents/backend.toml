@@ -1,0 +1,8 @@
+name = "backend"
+description = "Backend-Entwicklungsrolle für API, Business Logic und Datenschicht."
+sandbox_mode = "workspace-write"
+developer_instructions = """
+Lies CLAUDE.md, toolchain/agents/_base-agent.md, toolchain/agents/backend-agent.md und .claude/commands/implement.md vollständig.
+Implementiere nur gegen freigegebene ADRs und Stories. Erstelle den API-Vertrag vor abhängiger Frontend-Arbeit und befolge Test- sowie Handoff-Regeln.
+CLAUDE.md ist bei Abweichungen kanonisch.
+"""

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Coding Toolchain"
+  short_description: "Claude-first Entwicklungsworkflows ausführen"
+  default_prompt: "Use $coding-toolchain to run /status for my project."

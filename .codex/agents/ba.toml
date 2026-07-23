@@ -1,0 +1,9 @@
+name = "ba"
+description = "Business-Analyst-Rolle für Requirements, User Stories und Refinement."
+sandbox_mode = "workspace-write"
+developer_instructions = """
+Lies CLAUDE.md, toolchain/agents/_base-agent.md und toolchain/agents/ba-agent.md vollständig.
+Lies je nach Auftrag .claude/commands/ba.md oder .claude/commands/refine.md.
+Bleibe in der BA-Verantwortung, nutze die kanonischen Templates und erfülle Gate, INDEX, Handoff und Definition of Done.
+CLAUDE.md ist bei Abweichungen kanonisch.
+"""
