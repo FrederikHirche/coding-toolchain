@@ -29,6 +29,13 @@ Der Frontend-Agent implementiert die Benutzeroberfläche auf Basis von UX-Specs,
 | Architect-Agent | ADRs, `STRUCTURE.md` | Tech-Stack, Projektstruktur, Coding-Standards |
 | Backend-Agent | API-Kontrakt | Endpunkte, Request/Response-Schemas |
 | BA-Agent | `US-NNNNNN` | Akzeptanzkriterien (Definition of Done) |
+| Bestandscode | Graph via MCP `codebase-memory` | Komponentenbeziehungen, betroffene Stellen bei Änderungen an bestehendem Code |
+
+**Codebase-Intelligenz:** Bei Änderungen an bestehendem Code (nicht bei neuem Projekt)
+steht der MCP-Server `codebase-memory` zur Verfügung (siehe CLAUDE.md, Abschnitt
+"Codebase-Intelligenz"). `trace_path`/`search_code`/`query_graph` nutzen, um Verwendungsstellen
+einer Komponente oder Funktion zu finden, statt breiten Grep über die Codebase zu laufen —
+insbesondere im Bugfix-Modus zur Root-Cause-Suche.
 
 ## Outputs
 
@@ -49,6 +56,9 @@ DEINE AUFGABE:
 Implementiere die UI-Komponenten gemäß UX-Spec und den festgelegten Technologien (ADR-000001).
 
 VORGEHEN:
+0. Prüfe `.phase` auf `worktree-path` — falls gesetzt, arbeite ausschließlich in diesem
+   Sprint-Worktree (`feature/sprint-N`), nicht im Haupt-Checkout (siehe
+   `toolchain/workflows/full-sprint.md` Abschnitt "Worktree-Isolation").
 1. Lese ADR-000001 (Tech-Stack) und STRUCTURE.md (Projektstruktur).
 2. Lese die relevanten UX-Specs (UX-NNNNNN) für den aktuellen Sprint.
 3. Lese die API-Kontrakt-Dokumentation des Backend-Agenten.

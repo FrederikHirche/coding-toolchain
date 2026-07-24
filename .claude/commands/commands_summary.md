@@ -3,7 +3,7 @@
 Konsolidierte Übersicht aller Slash Commands.  
 Zweck: Einzelne Referenzdatei für NotebookLM-Analyse und schnelle Orientierung.
 
-**Letzte Aktualisierung:** 2026-07-24 (v2.2 — Root-Cause-Disziplin bei Bugfixes)  
+**Letzte Aktualisierung:** 2026-07-24 (v2.4 — Statusprojektion-Gegenprüfung + Sprint-Worktree-Isolation)  
 **Pflege-Regel:** Diese Datei wird bei jedem Hinzufügen oder Ändern eines Commands aktualisiert.
 
 ---
@@ -25,7 +25,7 @@ Standard-Reihenfolge Full-Sprint:
 
 **Aktiviert:** Orchestrator (ORCH)  
 **Wann nutzen:** Jederzeit, um den aktuellen Stand eines Projekts zu überblicken — welche Phase ist aktiv, welche Artefakte fehlen, was blockiert den nächsten Schritt.  
-**Was passiert:** Liest `.phase` und `INDEX.md` des Projekts, analysiert Gate-Kriterien, listet alle Artefakte mit Status und gibt eine klare Handlungsempfehlung mit dem nächsten Slash Command.  
+**Was passiert:** Liest `.phase` und `INDEX.md` des Projekts, analysiert Gate-Kriterien, listet alle Artefakte mit Status und gibt eine klare Handlungsempfehlung mit dem nächsten Slash Command. Prüft zusätzlich die konkret nachprüfbaren Behauptungen im Freitext-Statusabschnitt (z. B. "In Bearbeitung") stichprobenartig gegen `git log`/`git status` und die referenzierten Dateien — meldet Abweichungen als Befund, schreibt sie aber nicht selbst zurück (Status-Modus bleibt read-only).  
 **Output:** Strukturierter Statusbericht im Terminal (kein Artefakt)  
 **Kein Vorgänger nötig.**
 
@@ -35,7 +35,7 @@ Standard-Reihenfolge Full-Sprint:
 
 **Aktiviert:** Orchestrator (ORCH)  
 **Wann nutzen:** Wenn ein vollständiger Sprint ohne manuelle Steuerung durchgeführt werden soll. Der Orchestrator aktiviert alle Phasen sequenziell, prüft Gates und stoppt bei Blockern.  
-**Was passiert:** Alle 10 Phasen (Discovery bis Release) werden nacheinander ausgeführt. Nach jeder Phase wird ein Gate-Check durchgeführt. BLOCKER stoppen den Sprint und warten auf Nutzer-Entscheidung.  
+**Was passiert:** Alle 10 Phasen (Discovery bis Release) werden nacheinander ausgeführt. Nach jeder Phase wird ein Gate-Check durchgeführt. BLOCKER stoppen den Sprint und warten auf Nutzer-Entscheidung. Ab Phase 6 (Implementierung) wird auf einem eigenen Sprint-Worktree (`feature/sprint-N`) statt im Haupt-Checkout gearbeitet — Merge, Tag und Worktree-Cleanup erfolgen gebündelt in Phase 10 (siehe `toolchain/workflows/full-sprint.md` Abschnitt "Worktree-Isolation"). Bei Wiederaufnahme eines unterbrochenen Sprints: bestehenden Worktree wiederbetreten, Statusprojektion aus INDEX.md vor Fortsetzung gegenprüfen.  
 **Variante zu:** Manuellem Durchlaufen der einzelnen Phase-Commands  
 **Vorbedingung:** Projektordner muss existieren oder wird angelegt.
 
@@ -144,7 +144,7 @@ Standard-Reihenfolge Full-Sprint:
 **Wann nutzen:** Nach bestandenem Analyze-Gate — tatsächliche Code-Implementierung.  
 **Was passiert (BE):** API-First: Erst API-Kontrakt (OpenAPI/GraphQL) erstellen, dann Datenschicht → Business Logic → API-Layer implementieren. Vollständige Code-Kommentierung nach Standard.  
 **Was passiert (FE):** Komponenten Bottom-Up implementieren (Atome → Moleküle → Seiten), basierend auf UX-Spec und API-Kontrakt. Accessibility-Attribute, Unit-Tests.  
-**Vorbedingung:** `SP-NNNNNN` vorhanden, UX-Specs vorhanden, Gate 5.5 (`/analyze`) bestanden  
+**Vorbedingung:** `SP-NNNNNN` vorhanden, UX-Specs vorhanden, Gate 5.5 (`/analyze`) bestanden, Sprint-Worktree angelegt bzw. wiederbetreten (siehe `toolchain/workflows/full-sprint.md` Abschnitt "Worktree-Isolation")  
 **Bugfix-Rückläufer:** Wird `/implement` mit einem offenen `BUG-NNNNNN` aufgerufen (Rollback aus Gate 7), ist Root-Cause-Analyse vor jeder Code-Änderung Pflicht — siehe `toolchain/templates/bug-report.md`.  
 **Output:** Code + API-Kontrakt  
 **Nächste Phase:** `/test-plan [projektname] [sprint-nr]`

@@ -30,6 +30,11 @@ Aktiviert **Frontend Developer Agent (FE)** und/oder **Backend Developer Agent (
 Gate 5.5 (`/analyze [projektname]`) bestanden — keine offene BLOCKER-Inkonsistenz zwischen
 REQ/US, ADR, UX und SP.
 
+Sprint-Worktree angelegt bzw. (nach Unterbrechung) wiederbetreten — FE/BE arbeiten bis Gate 9
+auf `feature/sprint-N`, nicht im Haupt-Checkout (siehe `toolchain/workflows/full-sprint.md`
+Abschnitt "Worktree-Isolation"). Bei Wiederaufnahme: Statusprojektion aus INDEX.md vor
+Fortsetzung gegenprüfen.
+
 ## Bugfix-Rückläufer (Gate 7 Rollback)
 
 Wird `/implement` mit einem offenen `BUG-NNNNNN` (Status `OFFEN`) statt mit neuen Sprint-Stories

@@ -3,6 +3,9 @@
     "fetch": {
       "command": "python",
       "args": ["-m", "mcp_server_fetch"]
+    },
+    "codebase-memory": {
+      "command": "codebase-memory-mcp"
     }
   }
 }

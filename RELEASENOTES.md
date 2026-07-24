@@ -9,6 +9,99 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 
 ---
 
+## v2.4 — 2026-07-24
+
+### Neu
+
+**Statusprojektion-Gegenprüfung — "In Bearbeitung"-Prosa ist keine Quelle der Wahrheit**
+- `toolchain/agents/_base-agent.md`: neue Pflichtregel "Statusnarrative sind Projektionen,
+  keine Quelle der Wahrheit" — Freitext-Statusabschnitte in INDEX.md (z. B. "In Bearbeitung")
+  gelten als ungeprüfte Behauptung, nicht als Fakt. Bevor ein Agent auf einer solchen
+  Behauptung aufbaut, muss er die konkret prüfbaren Teile (Commit-Status, Datei-Existenz,
+  DoD-Checkbox-Zustand) gegen Primärevidenz (`git log`/`git status`, Dateien, US-Checkboxen)
+  gegenprüfen und Abweichungen korrigieren statt stillschweigend zu übernehmen. Explizite
+  Ausnahme für read-only-deklarierte Modi (`/status`): dort wird die Abweichung nur gemeldet,
+  nicht selbst korrigiert.
+- Auslöser: `GAP-000001` (Converge-Lauf gegen `projects/campaignworld/`) fand INDEX.md mit
+  einer faktisch falschen Behauptung zum Commit-Status vor, die unwidersprochen über mehrere
+  Tage stehen geblieben war — bis dahin gab es keine Regel, die eine Gegenprüfung verlangte.
+- `toolchain/agents/orchestrator.md`: Status-Modus prüft die Statusprojektion jetzt aktiv
+  gegen, meldet Abweichungen im Statusbericht (Beispielausgabe ergänzt), schreibt aber nicht
+  selbst zurück (read-only-Vertrag von `/status` bleibt unverändert). Sprint-Modus verifiziert
+  beim Wiederbetreten einer Phase ≥ 6 zusätzlich die Statusprojektion vor Fortsetzung.
+- `.claude/commands/status.md`: Ablaufbeschreibung um den Gegenprüfungsschritt ergänzt, "Keine
+  Veränderungen"-Vertrag bleibt bestehen (Befund wird nur gemeldet).
+- `.claude/commands/commands_summary.md`, `toolchain/agents/agents_summary.md`: nachgezogen.
+- Auswirkung: Rein deklaratives Verhalten — keine neue Infrastruktur, keine Datenbank (bewusst
+  kein 1:1-Import des GSD-Pi-Vorbilds "DB-authoritative state"). Der Rechercheaufwand ist
+  bewusst günstig gehalten (Stichprobe, kein vollständiger `/converge`-Scan) und ersetzt
+  `/converge` nicht.
+
+**Sprint-Worktree-Isolation (Phase 6–9) — inspiriert von GSD Pi's Milestone-Worktrees**
+- `toolchain/workflows/full-sprint.md`: neuer Abschnitt "Worktree-Isolation" — ab Betreten von
+  Phase 6 (Implementierung) arbeiten FE/BE/QA/RV/MW auf einem eigenen Git-Worktree
+  (`.worktrees/sprint-N` auf Branch `feature/sprint-N`) statt im Haupt-Checkout. Geltungsbereich
+  bewusst auf den regulären Sprint-Workflow beschränkt — **nicht** für `/hotfix` (Geschwindigkeit
+  vor Isolation), `/spike` (unverbindliche Erkundung) oder `/converge` (liest nur). Phase 10
+  (Release) übernimmt Merge (weiterhin `--no-ff`, **kein** Squash — bestehende
+  History-Erhaltungs-Konvention bleibt unangetastet, abweichend vom GSD-Pi-Vorbild), Tag und
+  Worktree-Cleanup gebündelt; `git push` sowie Worktree-/Branch-Entfernung erfordern explizite
+  Nutzerbestätigung, auch bei vollständigem Gate-10-PASS.
+- Bei Gate 8 REJECTED (Rollback zu PM): Worktree bleibt bestehen, wird nicht automatisch
+  verworfen — Weiterverwendung ist eine PM/Nutzer-Entscheidung nach Scope-Klärung.
+- `toolchain/agents/orchestrator.md`: `.phase`-Dateiformat um `worktree-path`/`worktree-branch`
+  ergänzt; Sprint-Modus legt den Worktree beim erstmaligen Betreten von Phase 6 an bzw.
+  betritt ihn bei Wiederaufnahme erneut (nie neu anlegen).
+- `toolchain/agents/backend-agent.md`, `toolchain/agents/frontend-agent.md`: neuer VORGEHEN-
+  Schritt 0 — Arbeit findet im Sprint-Worktree statt, sofern `.phase` einen `worktree-path`
+  gesetzt hat.
+- `projects/_template/.gitignore`: `.worktrees/` ergänzt.
+- `.claude/commands/implement.md`, `.claude/commands/sprint.md`: Vorbedingung bzw.
+  Phasen-Übersicht um Worktree-Schritte ergänzt.
+- `toolchain/agents/agents_summary.md`, `.claude/commands/commands_summary.md`: nachgezogen.
+- Auswirkung: Ein unterbrochener Sprint (z. B. Token-Limit-Pause, wie bei `projects/campaignworld`
+  Sprint 1 tatsächlich passiert) hinterlässt ab jetzt einen eindeutig lokalisierbaren,
+  isolierten Arbeitsstand statt eines mehrdeutigen Haupt-Checkout-Zustands. Bestehende Projekte
+  sind nicht rückwirkend betroffen — die Konvention gilt ab dem nächsten `/implement`-Einstieg
+  in Phase 6; kein automatisches Umschreiben laufender Sprints.
+
+---
+
+## v2.3 — 2026-07-24
+
+### Neu
+
+**Codebase-Intelligenz (MCP `codebase-memory`) — toolchain-weit registriert**
+- `.mcp.json`: neuer Server-Eintrag `codebase-memory` (Referenzimplementierung
+  [DeusData/codebase-memory-mcp](https://github.com/DeusData/codebase-memory-mcp)), analog
+  zum bestehenden `fetch`-Eintrag — gilt für alle Projekte, kein Per-Projekt-Opt-in.
+- `CLAUDE.md`: neuer Abschnitt "Codebase-Intelligenz (MCP `codebase-memory`)" nach dem
+  bestehenden "Externe Recherche"-Abschnitt, plus zwei neue Zeilen in der Referenztabelle.
+  Der Server baut einen strukturellen Code-Graphen (Tree-sitter + SQLite, pro Projekt
+  indiziert) und beantwortet Struktur-/Aufruf-/Änderungsfragen per Tool-Call
+  (`search_graph`, `trace_path`, `query_graph`, `detect_changes`, `get_architecture`,
+  `search_code`, `semantic_query`, `manage_adr`) statt per Datei-für-Datei-Grep.
+- `toolchain/agents/architect-agent.md`: neuer Input "Bestandscode (Converge-Modus)" und
+  Nutzungshinweis; Converge-Modus-SCAN-Schritt und ADR-Drift-Prüfung (MATCH-Schritt)
+  verweisen jetzt auf `index_repository`/`get_architecture`/`search_graph`/`trace_path`
+  statt auf manuelles Datei-Lesen.
+- `toolchain/agents/backend-agent.md`, `toolchain/agents/frontend-agent.md`: neuer Input
+  "Bestandscode" und Nutzungshinweis für `trace_path`/`search_code`/`query_graph` bei
+  Änderungen an bestehendem Code, insbesondere zur Root-Cause-Suche im Bugfix-Modus.
+- `toolchain/agents/reviewer-agent.md`: neuer Input "Bestandscode (Change-Impact)"; Review-
+  Dimension 1 (Korrektheit) prüft jetzt zusätzlich `detect_changes`-Ergebnisse.
+- `toolchain/agents/qa-agent.md`: neuer Input "Bestandscode (Dead-Code-Analyse)" —
+  ergänzt, ersetzt aber nicht den bestehenden Test-Coverage-Report.
+- `toolchain/agents/agents_summary.md`: entsprechende "Codebase-Intelligenz"-Zeilen bei
+  AR, FE, BE, QA, RV nachgezogen.
+- Auswirkung: Alle code-nahen Phasen (`/architect`, `/converge`, `/implement`, `/review`,
+  `/test-plan`, `/test-run`) können strukturelle Code-Fragen per Graph-Query statt per
+  Volltext-Grep beantworten — bei größeren Projekt-Codebases ein spürbarer Token- und
+  Konsistenzvorteil. Rein additiv: kein bestehendes Verhalten, Gate oder Artefakt-Format
+  wurde verändert; Nutzung ist optional (keine Prüfschritte hängen an `codebase-memory`).
+
+---
+
 ## v2.2 — 2026-07-24
 
 ### Neu

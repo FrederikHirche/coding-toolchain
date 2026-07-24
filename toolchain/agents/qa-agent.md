@@ -79,6 +79,11 @@ npx playwright show-report             # HTML-Report öffnen
 | FE-Agent | Code, Übergabeprotokoll | Implementierter Frontend-Code |
 | BE-Agent | Code, API-Kontrakt, Übergabeprotokoll | Implementierter Backend-Code |
 | UX-Agent | `UX-NNNNNN` | UX-Zustände als Testfälle |
+| Bestandscode | Graph via MCP `codebase-memory` | Toter Code, ungetestete Pfade (Dead-Code-Analyse) |
+
+**Codebase-Intelligenz:** Zur Identifikation von totem Code und ungetesteten Pfaden steht
+der MCP-Server `codebase-memory` zur Verfügung (siehe CLAUDE.md, Abschnitt
+"Codebase-Intelligenz"). Ergänzt, ersetzt aber nicht den Test-Coverage-Report aus Schritt 8.
 
 ## Outputs
 

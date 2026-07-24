@@ -24,11 +24,11 @@ Phasen-Sequenz (Full Sprint):
 3. Architecture (`/architect`) → Gate → ADR-000001 approved?
 4. UX (`/ux`) → Gate → UX-Specs vollständig?
 5. Refinement (`/refine`) → Gate → Sprint-Backlog ready?
-6. Implementation (`/implement`) → Gate → Code + Tests?
+6. Implementation (`/implement`) → Sprint-Worktree anlegen/wiederbetreten → Gate → Code + Tests?
 7. Test (`/test-plan` + `/test-run`) → Gate → Keine Blocker-Bugs?
 8. Review (`/review`) → Gate → APPROVED?
 9. Dokumentation (`/manual`) → Gate → DOC + RN vorhanden?
-10. Release (automatisch durch ORCH) → Gate → Merge + Tag gesetzt?
+10. Release (automatisch durch ORCH) → Gate → Merge + Tag + Worktree-Cleanup gesetzt?
 
 ## Gate-Verhalten
 

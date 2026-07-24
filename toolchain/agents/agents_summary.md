@@ -17,6 +17,10 @@ Alle Agenten erben die Basisregeln aus `_base-agent.md`. Diese Basisregeln defin
 - die Abschluss-Pflicht (jede Agenten-Antwort endet mit dem nächsten Slash Command)
 - die Gate-Selbstprüfung (Definition-of-Done-Checkliste vor Abschluss)
 - das Rückfragen-Protokoll (offene Fragen strukturiert auflisten statt raten)
+- die Regel "Statusnarrative sind Projektionen, keine Quelle der Wahrheit" — Freitext-
+  Statusabschnitte in INDEX.md (z. B. "In Bearbeitung") gelten als ungeprüfte Behauptung, nicht
+  als Fakt, und müssen vor Weiterverwendung gegen Primärevidenz (git log/status, Dateien,
+  DoD-Checkboxen) gegengeprüft werden
 
 Kein Agent setzt eine Technologie voraus — alle Entscheidungen werden in `ADR-000001-tech-stack.md`
 dokumentiert und sind ab APPROVED verbindlich für alle nachfolgenden Agenten.
@@ -46,6 +50,20 @@ Agent als nächstes aktiv wird.
 **Eskalationslogik:** BLOCKER → Stop. MAJOR → Warnung + Nutzer-Bestätigung. MINOR → als TODO
 in nächste Phase übernehmen. ADR-000001 fehlt bei Implementierung → Hard-Stop zu `/architect`.
 Gate 5.5 BLOCKER offen → Hard-Stop zum fundverursachenden Agenten.
+
+**Statusprojektion gegenprüfen:** Vor Übernahme von INDEX.md-Freitextstatus in einen
+Statusbericht prüft ORCH die konkret prüfbaren Behauptungen darin gegen Primärevidenz
+(`git log`/`git status`, Dateien, DoD-Checkboxen) und korrigiert Abweichungen sichtbar, statt
+sie unkommentiert zu übernehmen — besonders beim Wiederbetreten eines unterbrochenen Sprints.
+
+**Sprint-Worktree (Phase 6–9):** Beim erstmaligen Betreten von Phase 6 legt ORCH einen
+Git-Worktree auf `feature/sprint-N` an (`.phase`-Felder `worktree-path`/`worktree-branch`);
+FE/BE/QA/RV/MW arbeiten bis Gate 9 dort statt im Haupt-Checkout. Bei Wiederaufnahme nach
+Unterbrechung wird der bestehende Worktree wiederbetreten, nie neu angelegt. Merge, Tag und
+Worktree-Cleanup erfolgen gebündelt in Phase 10 (Release) — `git push` und Worktree-/Branch-
+Entfernung erfordern explizite Nutzerbestätigung. Gilt nur für den regulären Sprint-Workflow,
+nicht für `/hotfix`, `/spike` oder `/converge` (siehe `toolchain/workflows/full-sprint.md`
+Abschnitt "Worktree-Isolation").
 
 ---
 
@@ -144,6 +162,10 @@ automatischer Fix. `.phase` wird nach Abschluss zurückgesetzt — kein Phasenwe
 **Externe Recherche:** Kann für Tech-Stack-Evaluierung und Spike-Recherche den MCP-Server
 `fetch` nutzen (siehe CLAUDE.md, Abschnitt "Externe Recherche").
 
+**Codebase-Intelligenz:** Nutzt für den Converge-Scan und die Ist-Architektur-Erfassung den
+MCP-Server `codebase-memory` (siehe CLAUDE.md, Abschnitt "Codebase-Intelligenz") —
+strukturelle Graph-Queries statt Datei-für-Datei-Lesen.
+
 ---
 
 ## UX — UX Designer
@@ -195,6 +217,13 @@ Fehler abdeckt, ist Teil des Fixes, nicht optional.
 **Übergabe an:** QA-Agent — gibt implementierte Stories, Komponenten-Übersicht, bekannte
 Einschränkungen und Test-Coverage-Stand weiter.
 
+**Codebase-Intelligenz:** Bei Änderungen an bestehendem Code nutzt FE den MCP-Server
+`codebase-memory` (siehe CLAUDE.md, Abschnitt "Codebase-Intelligenz"), um Verwendungsstellen
+zu finden — insbesondere zur Root-Cause-Suche im Bugfix-Modus.
+
+**Sprint-Worktree:** Arbeitet, sofern `.phase` ein `worktree-path` gesetzt hat, ausschließlich
+im Sprint-Worktree (`feature/sprint-N`), nicht im Haupt-Checkout.
+
 ---
 
 ## BE — Backend Developer
@@ -228,6 +257,13 @@ Fehler abdeckt, ist Teil des Fixes, nicht optional.
 
 **Übergabe an:** FE-Agent (API-Kontrakt) und QA-Agent (implementierte Stories, Migrationen,
 Umgebungsvariablen für Tests).
+
+**Codebase-Intelligenz:** Bei Änderungen an bestehendem Code nutzt BE den MCP-Server
+`codebase-memory` (siehe CLAUDE.md, Abschnitt "Codebase-Intelligenz"), um Aufrufketten und
+betroffene Stellen zu finden — insbesondere zur Root-Cause-Suche im Bugfix-Modus.
+
+**Sprint-Worktree:** Arbeitet, sofern `.phase` ein `worktree-path` gesetzt hat, ausschließlich
+im Sprint-Worktree (`feature/sprint-N`), nicht im Haupt-Checkout.
 
 ---
 
@@ -265,6 +301,10 @@ QA, der Abschnitt "Root-Cause" bleibt bewusst offen für FE/BE. Zurückgemeldete
 **Übergabe an:** Code Reviewer — gibt Testplan, Ergebnisse, Coverage, Browser-Clickpfad- und
 Performanz-Ergebnisse, offene Bugs, Playwright-Report-Pfad und Freigabe-Empfehlung weiter.
 
+**Codebase-Intelligenz:** Kann für die Identifikation von totem Code und ungetesteten Pfaden
+den MCP-Server `codebase-memory` nutzen (siehe CLAUDE.md, Abschnitt "Codebase-Intelligenz") —
+ergänzt, ersetzt aber nicht den Test-Coverage-Report.
+
 ---
 
 ## RV — Code Reviewer
@@ -294,6 +334,9 @@ dann technisches Code Review (Phase B).
 **Gesamtentscheidung** kombiniert Nutzer-Befund + technischen Review.
 REJECTED durch Nutzer überstimmt technisch APPROVED.
 Technische Schulden als DEBT-NNNNNN in `projects/<name>/retros/` erfasst.
+
+**Codebase-Intelligenz:** Nutzt für die Change-Impact-Einschätzung des Diffs den MCP-Server
+`codebase-memory` (`detect_changes` — siehe CLAUDE.md, Abschnitt "Codebase-Intelligenz").
 
 ---
 

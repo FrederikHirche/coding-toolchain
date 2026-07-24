@@ -17,6 +17,10 @@ Aktiviert den **Orchestrator** im Read-only-Modus. Gibt einen vollständigen Lag
    - Liest `INDEX.md` (alle Artefakte + Status)
    - Analysiert Gate-Kriterien der aktuellen Phase
    - Identifiziert alle Blocker
+   - Prüft die konkret nachprüfbaren Behauptungen im Freitext-Statusabschnitt (z. B.
+     "In Bearbeitung") stichprobenartig gegen `git log`/`git status` und die referenzierten
+     Dateien — meldet Abweichungen als Befund, **schreibt sie aber nicht selbst zurück**
+     (siehe "Keine Veränderungen" unten)
 3. Gibt strukturierten Statusbericht aus
 4. Empfiehlt den nächsten Slash Command
 

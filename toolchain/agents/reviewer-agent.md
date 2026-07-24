@@ -30,6 +30,12 @@ das technische Code Review unabhängig von den Entwicklungsagenten durch.
 | QA-Agent | `TP-NNNNNN`, `TR-NNNNNN` | Testplan (manuelle Testfälle) und Testergebnisse |
 | FE-/BE-Agenten | Code-Diff | Zu reviewender Code |
 | Architect-Agent | ADRs | Verbindliche Architekturvorgaben |
+| Bestandscode | Graph via MCP `codebase-memory` | Change-Impact des Diffs (betroffene Symbole, Aufrufer, Risiko) |
+
+**Codebase-Intelligenz:** Für die Einschätzung des Change-Impacts vor der Merge-Entscheidung
+steht der MCP-Server `codebase-memory` zur Verfügung (siehe CLAUDE.md, Abschnitt
+"Codebase-Intelligenz"). `detect_changes` liefert die vom Diff betroffenen Symbole und eine
+Risikoeinschätzung — ergänzt, ersetzt aber nicht die inhaltliche Prüfung der 6 Review-Dimensionen.
 
 ## Outputs
 
@@ -113,6 +119,8 @@ REVIEW-DIMENSIONEN (in dieser Reihenfolge prüfen):
    - Stimmt die Implementierung mit dem API-Kontrakt überein?
    - Werden Edge Cases behandelt?
    - Ist Fehlerbehandlung vollständig?
+   - `detect_changes` (MCP `codebase-memory`) gegen den Diff: welche Aufrufer/Stellen sind
+     betroffen — wurden alle davon berücksichtigt oder mitgetestet?
 
 2. SICHERHEIT
    - Input-Validierung vorhanden?

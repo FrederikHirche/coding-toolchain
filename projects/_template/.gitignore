@@ -43,3 +43,9 @@ coverage/
 *.log
 *.tmp
 .cache/
+
+# ─────────────────────────────────────
+# Sprint-Worktrees (Phase 6–9, siehe toolchain/workflows/full-sprint.md
+# Abschnitt "Worktree-Isolation") — werden bei Release (Phase 10) entfernt
+# ─────────────────────────────────────
+.worktrees/

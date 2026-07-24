@@ -227,6 +227,33 @@ Grenzen: liefert nur öffentlich erreichbare Inhalte, respektiert `robots.txt` (
 kein Ersatz für authentifizierten Zugriff auf interne Systeme. Rechercheergebnisse fließen
 als Quellenangabe (URL) in das jeweilige Artefakt ein — kein Copy-Paste ohne Einordnung.
 
+### Codebase-Intelligenz (MCP `codebase-memory`)
+
+Für code-nahe Phasen steht der MCP-Server `codebase-memory` zur Verfügung (registriert in
+`.mcp.json` im Repo-Root, Referenzimplementierung
+[DeusData/codebase-memory-mcp](https://github.com/DeusData/codebase-memory-mcp)). Er baut
+einen strukturellen Code-Graphen (Tree-sitter-Parsing + SQLite-Speicher, pro Projekt
+indiziert) auf und beantwortet Struktur-, Aufruf- und Änderungsfragen per Tool-Call statt
+per Datei-für-Datei-Grep — bei größeren Codebases ein erheblicher Token-Vorteil gegenüber
+klassischem Grep/Glob.
+
+Werkzeuge (Auszug): `index_repository`, `search_graph`, `trace_path`, `query_graph`,
+`detect_changes`, `get_architecture`, `search_code`, `semantic_query`, `manage_adr`.
+
+Genutzt von:
+- **AR** (`/architect`, `/converge`) — Ist-Architektur erfassen (`get_architecture`),
+  Gap-Analyse gegen Spezifikation (`detect_changes`, `search_graph`, `trace_path`)
+- **BE/FE** (`/implement`) — Aufrufketten und betroffene Stellen in bestehendem Code
+  nachvollziehen (`trace_path`, `search_code`, `query_graph`) statt breitem Grep
+- **RV** (`/review`) — Change-Impact eines Diffs vor der Merge-Entscheidung einschätzen
+  (`detect_changes`)
+- **QA** (`/test-plan`, `/test-run`) — toten Code und ungetestete Pfade identifizieren
+
+Grenzen: liefert strukturelle/graphbasierte Fakten über den Code — kein Ersatz für
+fachliches Verständnis, Code Review oder Testausführung. Vor dem ersten Einsatz in einem
+Projekt einmalig `index_repository` gegen den Projektpfad ausführen; ein Background-Watcher
+hält den Index danach automatisch aktuell.
+
 ---
 
 ## Additive Codex-Kompatibilität
@@ -328,7 +355,8 @@ cd ../..
 | Templates | `toolchain/templates/INDEX.md` |
 | Hooks | `toolchain/hooks/INDEX.md` |
 | Projekt-Registry | `projects/REGISTRY.md` |
-| MCP-Server-Konfiguration (externe Recherche) | `.mcp.json` |
+| MCP-Server-Konfiguration (externe Recherche + Codebase-Intelligenz) | `.mcp.json` |
+| Codebase-Intelligenz (Referenzimplementierung) | [DeusData/codebase-memory-mcp](https://github.com/DeusData/codebase-memory-mcp) |
 | Architektur-Übersicht | `architecture.html` |
 | API &amp; Protokoll-Dokumentation | `api_documentation.html` |
 | Entscheidungsprotokoll-Template | `toolchain/templates/decisions.md` |

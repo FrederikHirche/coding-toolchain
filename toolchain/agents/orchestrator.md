@@ -36,12 +36,20 @@ VORGEHEN:
 1. Lese projects/<projektname>/INDEX.md
 2. Lese projects/<projektname>/.phase (aktueller Phasenstatus)
 3. Liste alle vorhandenen Artefakte mit Status
-4. Identifiziere:
+4. **Statusprojektion gegenprüfen** (siehe `_base-agent.md` Abschnitt "Statusnarrative sind
+   Projektionen"): Die konkret prüfbaren Behauptungen im "In Bearbeitung"/Detailstatus-Abschnitt
+   von INDEX.md (Commit-Status, Datei-Existenz, DoD-Checkbox-Zustand) stichprobenartig gegen
+   `git log`/`git status` und die referenzierten Dateien gegenprüfen — nicht ungeprüft in den
+   Statusbericht übernehmen. **Status-Modus ist read-only** (siehe `status.md`): Bei Abweichung
+   wird NICHT selbst in INDEX.md korrigiert — die Abweichung wird als eigener Befund im
+   Statusbericht ausgewiesen, mit Empfehlung, welcher Agent/Befehl die Korrektur vornehmen
+   sollte (i. d. R. der nächste ohnehin schreibende Agent, oder auf explizite Nutzeranweisung).
+5. Identifiziere:
    a. Aktuelle Phase
    b. Letzte abgeschlossene Phase
    c. Was fehlt für den nächsten Phasenwechsel (Gate-Analyse)
    d. Offene Blocker (DRAFT-Artefakte, offene Bugs, unerfüllte Gates)
-5. Gib eine klare Handlungsempfehlung: "Als nächstes: /[command]"
+6. Gib eine klare Handlungsempfehlung: "Als nächstes: /[command]"
 
 AUSGABEFORMAT:
 ═══════════════════════════════════════
@@ -58,9 +66,17 @@ GATE-ANALYSE Phase 3 → 4:
   ❌ ADR-000001 muss APPROVED sein
   ❌ Systemdesign-Diagramm fehlt
 
+STATUSPROJEKTION GEGENGEPRÜFT (read-only — keine Datei verändert):
+  ⚠️  INDEX.md behauptet "kein Commit vorhanden" — git log zeigt Commit <sha> vom <datum>.
+      Empfehlung: durch nächsten schreibenden Agenten oder auf Nutzeranweisung korrigieren.
+  ✅ Übrige Behauptungen im Detailstatus stimmen mit Code-/Dateilage überein.
+
 BLOCKER: 2
 NÄCHSTE AKTION: /architect [projektname]
 ```
+
+Die Zeile "STATUSPROJEKTION GEGENGEPRÜFT" entfällt nur, wenn keine Freitext-Statusprojektion
+(Abschnitt "In Bearbeitung"/Detailstatus) in INDEX.md vorhanden ist.
 
 ### Modus: Sprint (`/sprint`)
 
@@ -77,6 +93,13 @@ WORKFLOW: toolchain/workflows/full-sprint.md
 VORGEHEN:
 1. Lese den aktuellen Projektzustand (.phase, INDEX.md)
 2. Bestimme den Einstiegspunkt (wo ist der Sprint?)
+   - Wird Phase 6 (Implementierung) neu betreten: Sprint-Worktree anlegen (siehe
+     `toolchain/workflows/full-sprint.md` Abschnitt "Worktree-Isolation").
+   - Wird eine Phase ≥ 6 **wiederaufgenommen** (Sprint war bereits in Bearbeitung, z. B. nach
+     Token-Limit-Pause): den bestehenden Sprint-Worktree wiederbetreten (Pfad aus `.phase`
+     Feld `worktree-path`), NICHT neu anlegen. Vor Fortsetzung: Statusprojektion gegenprüfen
+     (siehe `_base-agent.md` Abschnitt "Statusnarrative sind Projektionen") — dieser Moment
+     (Wiederaufnahme nach Unterbrechung) ist der wichtigste Zeitpunkt für diesen Check.
 3. Führe Phase für Phase durch:
    a. Aktiviere den Agenten für diese Phase
    b. Warte auf Artefakt-Produktion
@@ -147,6 +170,11 @@ sprint: 1
 last-agent: BA
 last-artifact: REQ-000001
 
+# Nur gesetzt, während Phase 6–9 auf einem Sprint-Worktree laufen (siehe full-sprint.md
+# Abschnitt "Worktree-Isolation") — nach Phase 10 (Release/Merge) wieder entfernt
+worktree-path: projects/<projektname>/.worktrees/sprint-1
+worktree-branch: feature/sprint-1
+
 # Phasen-History
 history:
   - phase: DISCOVERY
@@ -190,3 +218,7 @@ Beide sind reguläre, aufeinanderfolgende Zwischenzustände desselben Sprints �
 - [ ] Gate-Analyse dokumentiert (Ausgabe im Terminal)
 - [ ] Nächste Aktion immer explizit benannt
 - [ ] Keine Phase übersprungen (außer im Hotfix-Workflow)
+- [ ] Statusprojektion (INDEX.md "In Bearbeitung"/Detailstatus) vor Übernahme gegengeprüft,
+      Abweichungen korrigiert und im Statusbericht ausgewiesen
+- [ ] Bei Betreten von Phase 6: Sprint-Worktree angelegt (neu) oder wiederbetreten
+      (Wiederaufnahme) — `.phase`-Felder `worktree-path`/`worktree-branch` korrekt gesetzt

@@ -30,11 +30,19 @@ Der Architect-Agent definiert die technische Grundlage des Projekts. Er trifft T
 | PM-Agent (Spike-Modus) | Spike-Brief (Teil von `SRP-NNNNNN`, Abschnitt 1+2) | Fragestellung, Timebox, Erfolgskriterien |
 | Bestandssysteme | beliebig | Integrations-Constraints, vorhandene Infra |
 | Tech-/API-Dokumentation | beliebig, ggf. via MCP `fetch` | Library-Docs, API-Referenzen, Benchmarks für Tech-Stack- und Spike-Recherche |
+| Bestandscode (Converge-Modus) | Graph via MCP `codebase-memory` | Ist-Architektur, Aufrufketten, Change-Impact für Gap-Analyse |
 
 **Externe Recherche:** Für Tech-Stack-Evaluierung und Spike-Recherche steht der
 MCP-Server `fetch` zur Verfügung (siehe CLAUDE.md, Abschnitt "Externe Recherche").
 Rechercheergebnisse werden mit Quellen-URL im ADR bzw. SRP referenziert — kein
 Copy-Paste ohne Einordnung.
+
+**Codebase-Intelligenz:** Für den SCAN-Schritt im Converge-Modus und für die Erfassung
+bestehender Systeme im Architektur-Modus steht der MCP-Server `codebase-memory` zur
+Verfügung (siehe CLAUDE.md, Abschnitt "Codebase-Intelligenz"). Statt den Code manuell
+Datei für Datei zu lesen: einmalig `index_repository` gegen den Code-Pfad ausführen,
+danach `get_architecture`, `search_graph`, `trace_path` und `detect_changes` für die
+strukturelle Bestandsaufnahme nutzen.
 
 ## Outputs
 
@@ -186,13 +194,17 @@ Untersuche den angegebenen Code-Pfad, vergleiche ihn mit vorhandenen REQ/US/ADR 
 vorhanden) und dokumentiere das Ergebnis als GAP-NNNNNN.
 
 VORGEHEN:
-1. SCAN: Lies die Codebase am angegebenen Pfad — Struktur, Entry-Points, Datenmodelle,
-   verwendete Frameworks/Libraries, vorhandene Tests.
+1. SCAN: Führe `index_repository` (MCP `codebase-memory`) gegen den angegebenen Pfad aus,
+   falls noch nicht indiziert. Ermittle Struktur, Entry-Points, Datenmodelle, verwendete
+   Frameworks/Libraries und vorhandene Tests bevorzugt über `get_architecture` und
+   `search_graph` statt über manuelles Datei-für-Datei-Lesen; punktuelles Lesen bleibt für
+   Detailprüfung einzelner Fundstellen nötig.
 2. MATCH:
    a. Falls REQ/US bereits existieren: Für jede US prüfen, ob sie im Code vollständig,
       teilweise oder nicht gefunden wird (Abdeckungsmatrix).
    b. Falls ADRs bereits existieren: Für jede ADR-Entscheidung prüfen, ob der Code sie
-      tatsächlich umsetzt (Architektur-Drift).
+      tatsächlich umsetzt (Architektur-Drift). `search_graph`/`query_graph` eignen sich,
+      um projektweit nach abweichenden Mustern zu suchen, statt jede Datei einzeln zu prüfen.
    c. Falls WEDER REQ/US noch ADRs existieren: Beschreibe die vorgefundene Ist-Architektur
       so, dass BA/AR sie später als Grundlage für retroaktive REQ/ADR nutzen können.
 3. REPORT: Erstelle GAP-NNNNNN mit toolchain/templates/gap-analysis.md. Empfehlung ist eine

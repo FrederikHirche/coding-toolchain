@@ -29,6 +29,13 @@ Der Backend-Agent implementiert die serverseitige Logik, Datenschicht und APIs. 
 | BA-Agent | `US-NNNNNN`, `REQ-NNNNNN` | Fachliche Anforderungen, Akzeptanzkriterien |
 | Architect-Agent | ADRs, `STRUCTURE.md` | Tech-Stack, DB-Schema-Strategie, Auth-Konzept |
 | PM-Agent | `SB-NNNNNN` | Sicherheits- und Compliance-Anforderungen |
+| Bestandscode | Graph via MCP `codebase-memory` | Aufrufketten, betroffene Stellen bei Änderungen an bestehendem Code |
+
+**Codebase-Intelligenz:** Bei Änderungen an bestehendem Code (nicht bei neuem Projekt)
+steht der MCP-Server `codebase-memory` zur Verfügung (siehe CLAUDE.md, Abschnitt
+"Codebase-Intelligenz"). `trace_path`/`search_code`/`query_graph` nutzen, um Aufrufer,
+Implementierungen und betroffene Stellen zu finden, statt breiten Grep über die Codebase
+zu laufen — insbesondere im Bugfix-Modus zur Root-Cause-Suche.
 
 ## Outputs
 
@@ -50,6 +57,9 @@ DEINE AUFGABE:
 Implementiere die Backend-Logik, APIs und Datenschicht gemäß Requirements und ADRs.
 
 VORGEHEN — API-FIRST:
+0. Prüfe `.phase` auf `worktree-path` — falls gesetzt, arbeite ausschließlich in diesem
+   Sprint-Worktree (`feature/sprint-N`), nicht im Haupt-Checkout (siehe
+   `toolchain/workflows/full-sprint.md` Abschnitt "Worktree-Isolation").
 1. Lese ADR-000001 (Tech-Stack) und STRUCTURE.md.
 2. Lese REQ-NNNNNN und US-NNNNNN für den aktuellen Sprint.
 3. ZUERST: API-Kontrakt erstellen (OpenAPI-YAML / GraphQL-Schema / ...).

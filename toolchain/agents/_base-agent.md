@@ -84,6 +84,35 @@ Verbindliche Regeln für diesen Abschluss-Block:
 
 Vor Abschluss führt jeder Agent eine Selbstprüfung seiner Definition-of-Done-Checkliste durch. Nicht erfüllte Kriterien werden explizit als `OFFEN` markiert — der Agent schließt nicht ab ohne diesen Abschnitt.
 
+### Statusnarrative sind Projektionen, keine Quelle der Wahrheit
+
+Freitext-Statusabschnitte in `INDEX.md` (z. B. "In Bearbeitung", "Detailstatus") sind von
+einem früheren Agenten geschriebene **Projektionen** — nützlich für Menschen, aber keine
+verifizierte Tatsache. Ein Agent darf eine solche Projektion nicht ungeprüft übernehmen oder
+weiterreichen, wenn er im Rahmen der aktuellen Session konkret auf ihr aufbaut (z. B. eine
+Story als "bereits erledigt" behandelt, weil INDEX.md das so vermerkt).
+
+Vorgehen, bevor eine Statusprojektion als Grundlage für eine Entscheidung dient:
+1. Die darin enthaltenen **konkret prüfbaren** Behauptungen identifizieren (Commit-Status,
+   Datei-/Ordner-Existenz, DoD-Checkbox-Zustand in referenzierten `US-NNNNNN`, Testergebnisse).
+2. Diese Behauptungen gegen Primärevidenz gegenprüfen — `git log`/`git status` des
+   Projekt-Repositories, tatsächliche Dateien, Checkbox-Zustand in den US-Dateien selbst.
+   Kein vollständiger `/converge`-Scan nötig — ein gezielter Stichprobencheck der Behauptungen
+   genügt, die für die aktuelle Aufgabe relevant sind.
+3. Bei Abweichung: Die Projektion in `INDEX.md` korrigieren (mit kurzem Hinweis, was und warum
+   korrigiert wurde) — **nicht** stillschweigend überschreiben, **nicht** die falsche Aussage
+   unkommentiert stehen lassen.
+4. Erst danach mit der eigentlichen Aufgabe fortfahren.
+
+Dieser Check ist bewusst günstig zu halten (keine vollständige Neuindizierung) — er ersetzt
+nicht `/converge`, sondern verhindert, dass eine offensichtlich falsche oder veraltete
+Freitext-Notiz unhinterfragt in eine neue Entscheidung einfließt.
+
+**Ausnahme:** Explizit als read-only deklarierte Modi (z. B. `/status`, siehe `status.md`
+Abschnitt "Keine Veränderungen") melden eine gefundene Abweichung als Befund, korrigieren
+INDEX.md aber nicht selbst — die Korrektur bleibt dem nächsten ohnehin schreibenden Agenten
+oder einer expliziten Nutzeranweisung vorbehalten.
+
 ### Rückfragen-Protokoll
 
 Falls der Agent zur Weiterarbeit externe Informationen benötigt, die er nicht aus Artefakten ableiten kann:

@@ -50,6 +50,54 @@ Der Standard-Workflow für einen vollständigen Entwicklungssprint — von Disco
 
 ---
 
+## Worktree-Isolation (Phase 6–9)
+
+**Standard-Mechanismus, nicht optional** (Abweichung erfordert Begründung in
+`ADR-NNNNNN-branching-strategy.md`, siehe Phase 10): Ab Betreten von Phase 6
+(Implementierung) arbeiten FE/BE (und danach QA/RV/MW für denselben Sprint) auf einem
+eigenen Git-Worktree statt direkt im Haupt-Checkout des Projekt-Repositories. Grund:
+Ein unterbrochener Sprint (z. B. Token-Limit-Pause) hinterlässt sonst einen mehrdeutigen
+Zustand im Haupt-Checkout — halb committeter Code, unklar welcher Stand tatsächlich auf
+der Platte liegt. Ein isolierter Worktree macht den Sprint-Fortschritt jederzeit eindeutig
+lokalisierbar und lässt den Haupt-Checkout unberührt, bis der Sprint durch Gate 8 (Review)
+und Gate 9 (Dokumentation) ist.
+
+**Geltungsbereich:** Nur Phase 6–9 des regulären Sprint-Workflows. **Nicht** für `/hotfix`
+(Geschwindigkeit ist hier wichtiger als Isolation — Bedingung 2 des Hotfix-Workflows schließt
+größeren Scope ohnehin aus), **nicht** für `/spike` (explizit unverbindliche Erkundung, meist
+verworfen) und **nicht** für `/converge` (liest nur, schreibt keinen Code).
+
+**Anlegen (Betreten von Phase 6, erstmalig für diesen Sprint):**
+
+```bash
+cd projects/<projektname>
+git worktree add .worktrees/sprint-<N> -b feature/sprint-<N>
+```
+
+In Claude-Code-Umgebungen mit `EnterWorktree`/`ExitWorktree`-Tools: dieselbe Semantik über
+diese Tools abbilden, sofern verfügbar — Fallback ist immer der reine `git worktree`-Befehl
+(technologieneutral, funktioniert auch unter Codex/anderen Umgebungen). `.worktrees/` gehört
+in die `.gitignore` des Projekt-Repositories (bereits in `projects/_template/.gitignore`
+vorgesehen).
+
+`.phase` wird um `worktree-path: projects/<projektname>/.worktrees/sprint-<N>` und
+`worktree-branch: feature/sprint-<N>` ergänzt (siehe `orchestrator.md`).
+
+**Wiederaufnahme (Phase 6–9 nach Unterbrechung, z. B. Token-Limit-Pause):** Bestehenden
+Worktree über `worktree-path` aus `.phase` wiederbetreten — niemals neu anlegen. Vor
+Fortsetzung: Statusprojektion gegenprüfen (siehe `_base-agent.md` Abschnitt "Statusnarrative
+sind Projektionen" und `orchestrator.md` Sprint-Modus).
+
+**Bei Gate 8 REJECTED** (Rollback zu PM, Scope-Problem): Worktree bleibt bestehen — wird
+nicht automatisch verworfen. Ob die bereits implementierte Arbeit weiterverwendet, angepasst
+oder verworfen wird, ist eine Entscheidung von PM/Nutzer nach Klärung des Scope-Problems,
+keine automatische Aktion.
+
+**Auflösen:** Siehe Phase 10 (Release) — Merge und Worktree-Cleanup erfolgen gemeinsam, erst
+nachdem Gate 8 (Review) und Gate 9 (Dokumentation) bestanden sind.
+
+---
+
 ## Phase 1: Discovery
 
 **Befehl:** `/kickoff`  
@@ -194,6 +242,9 @@ nach Korrektur erneut aufrufen.
 **Befehl:** `/implement`  
 **Agenten:** BE (zuerst) → FE  
 **Ergebnis:** Code + API-Kontrakt + Tests
+**Voraussetzung:** Sprint-Worktree angelegt bzw. wiederbetreten (siehe Abschnitt
+"Worktree-Isolation" oben) — FE/BE arbeiten ab hier bis Gate 9 auf `feature/sprint-<N>`,
+nicht im Haupt-Checkout.
 
 ### Gate 6 → Phase 7
 
@@ -301,16 +352,24 @@ nichts Strategisches, sondern führt das vereinbarte Protokoll aus.
 ### Release-Checkliste (ORCH führt aus)
 
 ```
-1. git checkout <merge-target-branch>       # gemäß ADR
+1. git checkout <merge-target-branch>       # gemäß ADR, im Haupt-Checkout (nicht im Worktree)
 2. git merge --no-ff feature/<sprint>       # kein Fast-Forward für History
 3. git tag -a v<sprint> -m "Sprint N: <sprint-ziel>"
 4. git push origin <merge-target-branch> --tags
-5. .phase auf RELEASED setzen
-6. REGISTRY.md: Sprint-Status auf RELEASED + Datum
+5. git worktree remove projects/<projektname>/.worktrees/sprint-<N>
+   git branch -d feature/sprint-<N>          # optional — nur wenn Branch-History nicht separat benötigt
+6. .phase: worktree-path/worktree-branch entfernen, Phase auf RELEASED setzen
+7. REGISTRY.md: Sprint-Status auf RELEASED + Datum
 ```
 
 **Hinweis:** Cherry-Picking (selektive Commit-Übernahme) ist eine Ausnahme-Operation
 und erfordert explizite Nutzeranweisung mit Begründung — kein automatischer Schritt.
+
+**Hinweis (Bestätigungspflicht):** Schritt 4 (`git push`) sowie Schritt 5 (Worktree-/Branch-
+Entfernung) sind schreibend gegen geteilten bzw. schwer reversiblen Zustand — ORCH führt diese
+konkreten Schritte nicht ohne explizite Nutzerbestätigung im Sitzungsverlauf aus, auch wenn
+Gate 10 vollständig PASS ist. Schritte 1–3 (lokaler Merge, Tag) sowie 6–7 (Metadaten) sind
+unkritisch und erfordern keine gesonderte Bestätigung.
 
 **Bei PASS:** Sprint vollständig abgeschlossen (`RELEASED`)  
 **Bei FAIL (kein ADR):** Hard-Stop → `/architect` zur Branching-Entscheidung
