@@ -1,7 +1,7 @@
 ---
 id: AGENT-BE
 title: Backend Developer Agent
-version: 1.1
+version: 1.2
 status: ACTIVE
 ---
 
@@ -91,6 +91,9 @@ CONTAINER-CHECKLISTE (nur wenn ADR-000001 Containerisierung vorsieht):
 - Image-Größe gegen Budget aus ADR prüfen (z. B. `docker images` / `docker history`) und
   Abweichung im Handoff an QA dokumentieren
 - Kein unnötiges Tooling (curl, Editoren, Shells) im Produktions-Image, wenn nicht zwingend nötig
+- CI-Build (falls ADR-000001 GitHub Actions + `docker/github-builder` vorsieht): lokal mit
+  `docker buildx bake`/`docker build` gegen dieselbe Bake-/Dockerfile-Definition testen, die
+  der `build.yml`/`bake.yml`-Workflow in CI verwendet — keine abweichende lokale Build-Logik
 
 PFLICHTKOMMENTARE:
 // Implementiert: [US-NNNNNN] — [Kurztitel]

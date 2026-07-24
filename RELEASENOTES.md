@@ -9,6 +9,30 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 
 ---
 
+## v2.5 — 2026-07-25
+
+### Neu
+
+**CI-Build-Empfehlung für Container-Projekte — `docker/github-builder`**
+- `toolchain/agents/architect-agent.md`: Container-Prinzip um eine CI-Build-Empfehlung
+  ergänzt — bei Containerisierung + GitHub Actions als CI-Plattform soll der AR-Agent die
+  wiederverwendbaren Workflows aus [docker/github-builder](https://github.com/docker/github-builder)
+  (`build.yml`/`bake.yml`) als Standardoption im ADR erwägen, statt Build-/Cache-/Multi-
+  Platform-Logik pro Repository selbst zu bauen. Begründung: signierte/verifizierte
+  GitHub-Actions-Cache-Einträge, native Multi-Platform-Parallelisierung, SLSA-Provenance
+  via GitHub-OIDC, Keyless-Registry-Auth (Docker Hub/ECR/GAR) ohne gespeicherte Credentials.
+  Abweichung (eigener buildx-Workflow) bleibt zulässig, ist aber im ADR zu begründen.
+- `toolchain/agents/backend-agent.md`: Container-Checkliste um einen Punkt ergänzt — falls
+  ADR-000001 `docker/github-builder` vorsieht, lokal gegen dieselbe Bake-/Dockerfile-
+  Definition testen, die der CI-Workflow verwendet (keine abweichende lokale Build-Logik).
+- `CLAUDE.md`: Referenzen-Tabelle um `docker/github-builder` ergänzt.
+- `toolchain/agents/agents_summary.md`: AR- und BE-Abschnitte nachgezogen.
+- Auswirkung: Rein empfehlender Charakter, kein neuer Agent, kein neuer Command. Nur
+  relevant, wenn ein Projekt-ADR Containerisierung + GitHub Actions vorsieht; andernfalls
+  keine Auswirkung auf bestehende Projekte.
+
+---
+
 ## v2.4 — 2026-07-24
 
 ### Neu

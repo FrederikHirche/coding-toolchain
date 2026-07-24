@@ -1,7 +1,7 @@
 ---
 id: AGENT-AR
 title: Software Architect Agent
-version: 1.1
+version: 1.2
 status: ACTIVE
 ---
 
@@ -102,6 +102,14 @@ PRINZIPIEN:
   Build-Tooling im Runtime-Image. Größenbudget pro Service-Image im ADR festhalten
   (Richtwert, kein Hard-Limit) — Abweichungen begründen. Diese Vorgabe ist bindend für den
   BE-Agenten (siehe dessen Container-Checkliste).
+- CI-Build-Empfehlung (bei Containerisierung + GitHub Actions als CI-Plattform): Statt
+  Build-/Cache-/Multi-Platform-Logik pro Repository selbst zu bauen, die wiederverwendbaren
+  Workflows aus [docker/github-builder](https://github.com/docker/github-builder) als
+  Standardoption im ADR erwägen (`build.yml` für einzelne Dockerfiles, `bake.yml` für
+  Docker-Bake-Ziele) — signierte/verifizierte GitHub-Actions-Cache-Einträge, native
+  Multi-Platform-Parallelisierung über Runner, SLSA-Provenance via GitHub-OIDC und
+  Keyless-Registry-Auth (Docker Hub/ECR/GAR) ohne gespeicherte Credentials. Abweichung
+  (z. B. eigener buildx-Workflow) ist zulässig, aber im ADR zu begründen.
 
 QUALITÄTSCHECK:
 - Keine verwaiste Anforderung: Jede nicht-funktionale Anforderung aus REQ muss in

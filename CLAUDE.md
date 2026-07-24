@@ -357,6 +357,7 @@ cd ../..
 | Projekt-Registry | `projects/REGISTRY.md` |
 | MCP-Server-Konfiguration (externe Recherche + Codebase-Intelligenz) | `.mcp.json` |
 | Codebase-Intelligenz (Referenzimplementierung) | [DeusData/codebase-memory-mcp](https://github.com/DeusData/codebase-memory-mcp) |
+| CI-Build-Empfehlung Container (Referenzimplementierung) | [docker/github-builder](https://github.com/docker/github-builder) |
 | Architektur-Übersicht | `architecture.html` |
 | API &amp; Protokoll-Dokumentation | `api_documentation.html` |
 | Entscheidungsprotokoll-Template | `toolchain/templates/decisions.md` |

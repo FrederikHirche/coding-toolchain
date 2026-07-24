@@ -143,6 +143,12 @@ Größenbudget im ADR fest (Distroless/Alpine/Slim, Multi-Stage-Builds als Stand
 für den BE-Agenten. Kein eigener Agent dafür; Umsetzung erfolgt über AR (Vorgabe) und BE
 (Umsetzung + Prüfung), siehe unten.
 
+**CI-Build-Empfehlung:** Bei Containerisierung + GitHub Actions erwägt der AR-Agent die
+wiederverwendbaren Workflows aus [docker/github-builder](https://github.com/docker/github-builder)
+(`build.yml`/`bake.yml`) als Standardoption im ADR statt eigener buildx-Cache-/Multi-Platform-
+Logik — signierter GHA-Cache, SLSA-Provenance via OIDC, Keyless-Registry-Auth. Abweichung ist
+im ADR zu begründen.
+
 **Übergabe an:** UX-Agent und Dev-Agenten — gibt verbindlichen Tech-Stack, alle ADRs und
 Projektstruktur weiter.
 
@@ -246,7 +252,8 @@ Business Logic (Services, Use Cases) → API-Layer (Controller, Resolver, Handle
 **Container-Checkliste (nur bei Containerisierung laut ADR-000001):** Kleinstes passendes
 Base-Image, Multi-Stage-Build (Build-Tooling nie im Runtime-Image), nur Produktions-
 Dependencies im finalen Layer, Cache-effiziente Layer-Reihenfolge, Image-Größe gegen
-ADR-Budget geprüft und im Handoff dokumentiert.
+ADR-Budget geprüft und im Handoff dokumentiert. Falls ADR `docker/github-builder` vorsieht:
+lokal gegen dieselbe Bake-/Dockerfile-Definition testen, die der CI-Workflow nutzt.
 
 **Pflichtkommentare:** `// Implementiert: [US-NNNNNN]`, `// Sicherheitshinweis: [...]`
 
