@@ -3,7 +3,7 @@
 Dieses Verzeichnis enthält alle Agenten-Definitionen der Tool Chain.
 Alle Agenten erben die Basisregeln aus `_base-agent.md`.
 
-Letzte Aktualisierung: 2026-06-18
+Letzte Aktualisierung: 2026-07-24
 
 ## Basis-Template
 
@@ -30,14 +30,17 @@ Letzte Aktualisierung: 2026-06-18
 ## Aktivierungsreihenfolge (Full Sprint)
 
 ```
-ORCH → PM → BA → AR → UX → (FE ∥ BE) → QA → RV → MW → ORCH
-                                                        ↓
-                                                   AC (optional, post-sprint)
+ORCH → PM → BA → AR → UX → (BA+FE+BE Refine) → ORCH[Analyze] → (FE ∥ BE) → QA → RV → MW → ORCH
+                                                                                             ↓
+                                                                                        AC (optional, post-sprint)
 ```
 
 FE und BE können parallel arbeiten sobald AR und UX abgeschlossen sind.
-Der ORCH schließt jeden Sprint-Zyklus mit Gate-Auswertung und .phase-Update.
+Der ORCH schließt jeden Sprint-Zyklus mit Gate-Auswertung und .phase-Update, und prüft vor
+`/implement` zusätzlich die Cross-Artefakt-Konsistenz (`/analyze`, Gate 5.5).
 AC wird nicht automatisch aktiviert — nur durch `/retro`, `/health-check` oder `/coach`.
+AR kann zusätzlich außerhalb der Sprint-Sequenz über `/converge` aktiviert werden (Brownfield-
+Gap-Analyse, kein Phasenwechsel).
 
 ## Jede Agenten-Datei enthält
 

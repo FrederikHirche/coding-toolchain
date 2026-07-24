@@ -64,7 +64,7 @@ Vorgehen (zwingend, in dieser Reihenfolge):
 
 1. **Status-Scan:** Welche Artefakte existieren im Projektordner? In welchem Status (DRAFT / APPROVED / …)?
 2. **Kette prüfen** (Standardreihenfolge Full-Sprint):
-   `/kickoff` → `/ba` → `/architect` → `/ux` → `/refine` → `/implement` → `/test-plan` → `/test-run` → `/review` → `/manual`
+   `/kickoff` → `/ba` → `/architect` → `/ux` → `/refine` → `/analyze` → `/implement` → `/test-plan` → `/test-run` → `/review` → `/manual`
 3. **Erste offene Phase** identifizieren: Was fehlt noch? Was ist die logisch nächste Aktion?
 4. **Ausgabe:** Als allerletzter Block der Chat-Antwort — zusätzlich zum Artefakt-Handoff-Block — immer:
 
@@ -94,6 +94,15 @@ Falls der Agent zur Weiterarbeit externe Informationen benötigt, die er nicht a
 ### Keine Technologie-Annahmen
 
 Kein Agent darf Sprache, Framework, Plattform oder Tooling voraussetzen, solange kein `ADR-000001-tech-stack.md` im Status `APPROVED` im Projektordner existiert. Erst danach sind projektspezifische Technologien verbindlich.
+
+### Verbindlichkeit der Projekt-Constitution
+
+Sobald `CON-000001-<projektname>.md` im Projektordner existiert und den Status `APPROVED` hat, ist sie für **jeden** Agenten bindend — unabhängig von Phase oder Rolle. Vor Abschluss einer Session prüft der Agent, ob sein eigenes Artefakt einem Prinzip (Abschnitt 2), einem Qualitäts-Mindeststandard (Abschnitt 3) oder einem Ausschluss (Abschnitt 4) der Constitution widerspricht.
+
+Bei einem erkannten Konflikt:
+- **Nicht stillschweigend nach Constitution richten** (Scope/Aufwand einfach anpassen ohne Hinweis) **und nicht stillschweigend ignorieren.**
+- Konflikt als offene Frage mit Kritikalität `BLOCKER` protokollieren (Rückfragen-Protokoll) und an PM eskalieren — nur PM kann mit Nutzer-Freigabe eine Ausnahme genehmigen oder die Constitution ändern (siehe `toolchain/templates/constitution.md`, Abschnitt 6+7).
+- Mit nicht betroffenen Teilen der Arbeit fortfahren.
 
 ---
 
@@ -126,9 +135,11 @@ TODO-FORMAT:
 | Typ | Präfix | Sequenz |
 |-----|--------|---------|
 | Stakeholder Brief | `SB` | pro Projekt ab 001 |
+| Projekt-Constitution | `CON` | einmalig pro Projekt (`CON-000001`), Änderungen als Versionserhöhung |
 | Requirements | `REQ` | pro Projekt ab 001 |
 | User Story | `US` | pro Projekt ab 001 |
 | Architecture Decision Record | `ADR` | pro Projekt ab 001 |
+| Gap-Analyse (Converge) | `GAP` | pro Projekt ab 001 |
 | UX-Spec | `UX` | pro Projekt ab 001 |
 | Sprint Backlog | `SP` | pro Projekt ab 001 |
 | Testplan | `TP` | pro Sprint ab 001 |

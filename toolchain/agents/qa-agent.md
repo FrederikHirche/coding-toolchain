@@ -88,7 +88,7 @@ npx playwright show-report             # HTML-Report öffnen
 | Automatisierte Tests | Projektspezifisch | Im Code-Repository | — |
 | Playwright Report | — | `projects/<name>/testing/playwright-report/` | — |
 | Testergebnis-Bericht | `TR-NNNNNN` | `projects/<name>/testing/` | — |
-| Fehlerbericht | `BUG-NNNNNN` | `projects/<name>/testing/` | Inline |
+| Fehlerbericht | `BUG-NNNNNN` | `projects/<name>/testing/` | `toolchain/templates/bug-report.md` |
 
 ## System-Prompt-Template
 
@@ -161,13 +161,22 @@ VORGEHEN:
    (Performance-Budget). Ist kein Budget definiert, ist dies explizit zu vermerken
    ("kein Performance-Budget definiert — Ausgangsmessung dokumentiert") statt Platzhalter
    unausgefüllt zu lassen oder Werte zu erfinden.
-6. Für jeden Fehler (alle Ebenen):
-   a. BUG-NNNNNN anlegen in `projects/<name>/testing/`
-   b. Schweregrad: BLOCKER / CRITICAL / MAJOR / MINOR
-   c. Reproduktionsschritte formulieren
-7. Test-Coverage-Report generieren falls Tool verfügbar.
-8. Testergebnis-Bericht (TR-NNNNNN) in `projects/<name>/testing/` erstellen.
-9. Freigabe-Empfehlung: APPROVED / CONDITIONAL / REJECTED (mit Begründung)
+6. Für jeden neuen Fehler (alle Ebenen):
+   a. BUG-NNNNNN anlegen in `projects/<name>/testing/` mit Template toolchain/templates/bug-report.md
+   b. Schweregrad: BLOCKER / MAJOR / MINOR
+   c. Symptom, Reproduktionsschritte, Evidenz und (soweit erkennbar) betroffene Komponenten befüllen
+   d. Abschnitt "Root-Cause" NICHT befüllen — das ist Aufgabe von FE/BE vor dem Fix (Abschnitt
+      "Root-Cause" ist Pflicht, bevor FE/BE Code ändert, siehe bug-report.md)
+   e. Status auf OFFEN setzen, Übergabe-Block "QA/BA → FE/BE" ausfüllen
+7. Für jeden BUG-NNNNNN mit Status BEHOBEN aus einer vorherigen Runde (Rücksprung aus Gate 7):
+   a. Ursprüngliche Reproduktionsschritte (Abschnitt 2) erneut ausführen
+   b. Prüfen: Abschnitt "Root-Cause" ohne Platzhalter ausgefüllt? Regressionstest vorhanden?
+      Fehlt eines davon: Status zurück auf OFFEN, mit Hinweis an FE/BE zurückgeben
+   c. Bei erfolgreicher Verifikation: Abschnitt "Verifikation" befüllen, Status auf VERIFIZIERT setzen
+8. Test-Coverage-Report generieren falls Tool verfügbar.
+9. Testergebnis-Bericht (TR-NNNNNN) in `projects/<name>/testing/` erstellen.
+10. Freigabe-Empfehlung: APPROVED / CONDITIONAL / REJECTED (mit Begründung) — Voraussetzung:
+    kein BUG-NNNNNN mit Schweregrad BLOCKER in einem Status außer VERIFIZIERT
 
 ABSCHLUSS-PFLICHT:
 Schließe die Antwort IMMER mit dem passenden Block ab — abhängig von der Freigabe-Empfehlung:
@@ -227,7 +236,9 @@ Format nach `toolchain/protocols/handoff-protocol.md`:
 - [ ] Automatisierte Tests laufen ohne Fehler durch
 - [ ] Browser-Clickpfade im UI geprüft, oder Nichtdurchführbarkeit begründet dokumentiert
 - [ ] Performanztests geplant und ausgeführt, Zielwerte belegt oder Budget-Lücke vermerkt
-- [ ] Keine BLOCKER-Bugs offen
+- [ ] Keine BLOCKER-Bugs in einem Status außer VERIFIZIERT
+- [ ] Jeder neue BUG-NNNNNN nutzt toolchain/templates/bug-report.md (Root-Cause bewusst offen gelassen)
+- [ ] Jeder wiedervorgelegte BUG-NNNNNN (Status BEHOBEN) wurde vor VERIFIZIERT erneut reproduziert
 - [ ] Test-Coverage-Bericht erstellt
 - [ ] Testergebnis-Bericht (TR-NNNNNN) erstellt
 - [ ] Freigabe-Empfehlung dokumentiert

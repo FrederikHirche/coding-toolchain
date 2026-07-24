@@ -43,6 +43,18 @@ Eine Löschung erfolgt ausschließlich auf direkten, expliziten Userbefehl (sieh
    neuere Version         abgeschlossen
 ```
 
+## Ausnahmen: domänenspezifische Status-Verläufe
+
+Einige Artefakttypen ersetzen `DRAFT → REVIEW → APPROVED → ACTIVE → SUPERSEDED | ARCHIVED`
+durch einen eigenen, für ihren Zweck aussagekräftigeren Status-Verlauf. Der jeweilige Template
+dokumentiert diesen Verlauf explizit im Abschnitt "Status-Verlauf" bzw. in einer entsprechenden
+Tabelle — dort gilt der domänenspezifische Verlauf, nicht der generische oben.
+
+| Artefakttyp | Status-Verlauf | Begründung |
+|---|---|---|
+| `IMPD-NNNNNN` | `DRAFT → ACTIVE → RESOLVED` | Ein Impediment ist ein Zustand, kein Freigabe-Dokument. |
+| `BUG-NNNNNN` | `OFFEN → IN_BEARBEITUNG → BEHOBEN → VERIFIZIERT` | Ein Bug durchläuft zwei Rollen (QA/BA → FE/BE → QA) statt einer Freigabekette; "offen" im Sinne der Gate-Kriterien heißt "Status ≠ VERIFIZIERT". |
+
 ## Versionierung
 
 Format: `MAJOR.MINOR`

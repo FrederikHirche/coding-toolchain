@@ -19,14 +19,20 @@ Detaillierter Ablauf der AI Development Tool Chain — von der Idee bis zum Merg
 └──────────────────────────────────────────────────────────────┘
 
 ┌──────────────────────────────────────────────────────────────┐
-│  PHASE 5          PHASE 6          PHASE 7          PHASE 8  │
-│  Refinement       Implementierung  Test             Review   │
+│  PHASE 5          PHASE 5.5        PHASE 6          PHASE 7  │
+│  Refinement       Analyse          Implementierung  Test     │
 │                                                              │
-│  /refine     ──▶  /implement  ──▶  /test-plan  ──▶  /review  │
-│  [BA+FE+BE]       [FE ∥ BE]        [QA]             [RV]    │
+│  /refine     ──▶  /analyze   ──▶  /implement  ──▶  /test-plan │
+│  [BA+FE+BE]       [ORCH]          [FE ∥ BE]        [QA]      │
 │                                                              │
-│  SP-NNNNNN           Code + Tests     TP-NNNNNN           RV-NNNNNN   │
-│                   API-Kontrakt     TR-NNNNNN                    │
+│  SP-NNNNNN        Gate-Report      Code + Tests     TP-NNNNNN │
+│                   (kein Artefakt)  API-Kontrakt     TR-NNNNNN │
+└──────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────┐
+│  PHASE 8          Review                                     │
+│  /review          [RV]                                       │
+│  RV-NNNNNN                                                    │
 └──────────────────────────────────────────────────────────────┘
 ```
 
@@ -39,14 +45,17 @@ Detaillierter Ablauf der AI Development Tool Chain — von der Idee bis zum Merg
 
 ### Ablauf
 
-1. Stakeholder-Interview strukturiert durchführen (3 Runden, max. 8 Fragen)
+1. Stakeholder-Interview strukturiert durchführen (5 Runden, je 3–5 Fragen)
 2. Stakeholder Brief (`SB-000001`) erstellen
-3. MoSCoW-Priorisierung der Features
-4. Übergabe an BA vorbereiten
+3. Projekt-Constitution (`CON-000001`) erstellen — nicht verhandelbare Prinzipien und
+   Qualitäts-Mindeststandards, bindend für alle Folgephasen (siehe `toolchain/templates/constitution.md`)
+4. MoSCoW-Priorisierung der Features
+5. Übergabe an BA vorbereiten
 
 ### Gate-Kriterien (weiter zu Phase 2)
 
 - [ ] `SB-NNNNNN` im Status `APPROVED`
+- [ ] `CON-000001` im Status `APPROVED`
 - [ ] Mindestens 3 Must-Have-Features definiert
 - [ ] Scope klar abgegrenzt (In/Out-of-Scope)
 - [ ] Erfolgskriterien messbar formuliert
@@ -149,12 +158,42 @@ Phase 4 (UX) und Phase 5/6 (Refinement/BE) können parallelisiert werden. BE kan
 4. Sprint-Backlog-Dokument (`SP-NNNNNN.md`) erstellen
 5. Technische Voraussetzungen identifizieren
 
-### Gate-Kriterien (weiter zu Phase 6)
+### Gate-Kriterien (weiter zu Phase 5.5)
 
 - [ ] Sprint-Ziel klar formuliert
 - [ ] Alle Sprint-Stories geschätzt
 - [ ] Keine ungelösten technischen Blocker
 - [ ] FE- und BE-Stories identifiziert und abgegrenzt
+
+---
+
+## Phase 5.5: Analyse (`/analyze`)
+
+**Agent:** Orchestrator (ORCH)
+**Ziel:** Sicherstellen, dass REQ/US, ADR, UX und SP widerspruchsfrei zueinander stehen, bevor
+Implementierungsaufwand investiert wird.
+
+### Ablauf
+
+1. Alle APPROVED REQ, US, ADR, UX, SP sowie CON-000001 (falls vorhanden) lesen
+2. Referenz-Vollständigkeit prüfen (`cross-ref`): jede Sprint-Story hat REQ- und ggf. UX-Referenz
+3. Inhaltliche Widersprüche prüfen (`self-assertion`): SP/US gegen ADR-Entscheidungen und gegen
+   CON-000001 Prinzipien/Ausschlüsse
+4. Gate-Bericht ausgeben, Fund einem Agenten zuordnen (BA/AR/UX/PM) — ORCH löst nicht selbst auf
+5. Ergebnis in `INDEX.md` Gate-History eintragen
+
+### Gate-Kriterien (weiter zu Phase 6)
+
+- [ ] Keine Sprint-Story ohne REQ-Referenz
+- [ ] Keine Sprint-Story widerspricht einer APPROVED ADR-Entscheidung
+- [ ] Keine Sprint-Story verletzt ein Prinzip/Ausschluss aus `CON-000001`
+- [ ] Keine offene BLOCKER-Frage aus vorherigen Übergaben unadressiert
+
+### Rollback
+
+Fund abhängig vom Widerspruch: REQ/US-Lücke → zurück zu Phase 2 (BA). ADR-Konflikt → zurück zu
+Phase 3 (AR). UX-Lücke → zurück zu Phase 4 (UX). Constitution-Konflikt → zurück zu Phase 1 (PM).
+Nach Korrektur: `/analyze` erneut aufrufen.
 
 ---
 
@@ -260,6 +299,7 @@ Nach erfolgreichem Merge:
 | 2 (BA) | 1 (PM) | Unklare Stakeholder-Anforderungen |
 | 3 (AR) | 2 (BA) | Technisch unmachbare Requirements |
 | 5 (Refinement) | 3 (AR) | Technischer Blocker ohne ADR-Abdeckung |
+| 5.5 (Analyse) | 2 (BA) / 3 (AR) / 4 (UX) / 1 (PM) | Cross-Artefakt-Widerspruch (je nach Fund) |
 | 6 (Implementierung) | 3 (AR) | ADR-Konflikt bei Implementierung |
 | 7 (QA) | 6 (Implementierung) | BLOCKER-Bug gefunden |
 | 8 (Review) | 6 (Implementierung) | REQUEST CHANGES |
@@ -270,12 +310,14 @@ Nach erfolgreichem Merge:
 ## Artefakt-Fluss
 
 ```
-SB-000001 (PM)
+SB-000001 + CON-000001 (PM)
   └─▶ REQ-000001 + US-000001..N (BA)
         └─▶ ADR-000001..N + STRUCTURE.md (AR)
               ├─▶ UX-000001..N (UX)
-              └─▶ API-Kontrakt (BE)
-                    ├─▶ Code (FE + BE)
-                    └─▶ TP-000001 + TR-000001 (QA)
-                          └─▶ RV-000001 (RV)
+              └─▶ SP-000001 (Refine: BA+FE+BE)
+                    └─▶ [Analyse-Gate: ORCH prüft REQ↔ADR↔UX↔SP↔CON auf Widerspruch]
+                          └─▶ API-Kontrakt (BE)
+                                ├─▶ Code (FE + BE)
+                                └─▶ TP-000001 + TR-000001 (QA)
+                                      └─▶ RV-000001 (RV)
 ```

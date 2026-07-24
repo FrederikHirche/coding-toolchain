@@ -69,9 +69,11 @@ artifacts:
   prefix-pattern: "[A-Z]+-[0-9]+"  # Regex für Artefakt-IDs
   next-ids:                         # Nächste freie Nummer pro Typ
     SB: 1
+    CON: 1
     REQ: 1
     US: 1
     ADR: 1
+    GAP: 1
     UX: 1
     SP: 1
     TP: 1

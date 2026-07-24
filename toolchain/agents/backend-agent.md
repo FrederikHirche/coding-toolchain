@@ -100,6 +100,36 @@ mit dem passenden Block ab:
 ▶ **Nächste Phase:** `/implement fe [projektname]` — oder `/test-plan [projektname] [sprint-nr]` wenn kein Frontend
 ```
 
+## Bugfix-Modus (Rücksprung aus Gate 7)
+
+Wird aktiviert, wenn `/implement be [projektname]` nach einem QA-Fund erneut aufgerufen wird —
+Rollback-Ziel von Gate 7 (siehe `toolchain/workflows/full-sprint.md`) für einen `BUG-NNNNNN`
+mit Status `OFFEN`, der BE zugewiesen ist.
+
+VORGEHEN (zwingend, in dieser Reihenfolge):
+1. Lese `BUG-NNNNNN` vollständig — Symptom, Reproduktionsschritte, Evidenz.
+2. Reproduziere den Fehler lokal (API-Call, Log, Query), BEVOR Code geändert wird.
+3. Befülle den Abschnitt "Root-Cause" in `BUG-NNNNNN` — direkte Ursache, zugrundeliegende
+   (systemische) Ursache, ggf. weitere Endpoints/Services mit demselben Muster. Keine
+   Fix-Arbeit vor diesem Schritt — ein Fix ohne dokumentierte Root-Cause gilt als
+   unvollständig (Gate 7).
+4. Befülle "Fix-Ansatz": was wird geändert, und warum das die Root-Cause behebt — nicht nur
+   den beobachteten Fall (z. B. nicht nur einen zusätzlichen Null-Check am Symptom-Ort, wenn
+   die Ursache eine fehlende Validierung an der API-Grenze ist).
+5. Implementiere den Fix. Ergänze einen Regressionstest (Integration- oder Unit-Test), der
+   den ursprünglichen Fehlerfall abdeckt (muss ohne den Fix fehlschlagen, mit Fix bestehen).
+6. Befülle "Regressionsrisiko" (Hoch/Mittel/Gering + Begründung).
+7. Status auf `BEHOBEN` setzen, Übergabe-Block "FE/BE → QA" in `BUG-NNNNNN` ausfüllen.
+
+QUALITÄTSCHECK:
+- Root-Cause-Abschnitt enthält keinen Platzhalter.
+- Regressionstest reproduziert den ursprünglichen Fehlerfall.
+- Fix-Ansatz erklärt den Bezug zur Root-Cause, nicht nur die Codeänderung selbst.
+
+ABSCHLUSS-PFLICHT:
+---
+▶ **Nächste Phase:** `/test-run [projektname] [sprint-nr]`
+
 ## Übergabeprotokoll → Frontend-Agent
 
 Format nach `toolchain/protocols/handoff-protocol.md`:
@@ -190,4 +220,5 @@ Format nach `toolchain/protocols/handoff-protocol.md`:
 - [ ] Integration-Tests: mind. Happy Path + Auth-Fehler pro Endpoint
 - [ ] Keine Lint-Fehler
 - [ ] Bei Containerisierung: Multi-Stage-Build, minimales Base-Image, Größe gegen Budget geprüft
+- [ ] Bei Bugfix: Root-Cause dokumentiert vor Fix-Implementierung, Regressionstest ergänzt
 - [ ] INDEX.md aktualisiert

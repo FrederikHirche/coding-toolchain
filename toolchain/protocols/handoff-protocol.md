@@ -62,8 +62,9 @@ Optional, aber wertvoll bei Entscheidungsspielräumen.]
 ## Übergabe-Kette im Full-Sprint-Workflow
 
 ```
-PM ──[SB-NNNNNN]──▶ BA ──[REQ+US]──▶ AR ──[ADR+STRUCT]──▶ UX ──[UX-NNNNNN]──▶
-FE+BE ──[Code+Kontrakt]──▶ QA ──[TP+TR]──▶ RV ──[RV-NNNNNN]──▶ MW ──[DOC+RN]──▶ [RELEASE]
+PM ──[SB+CON]──▶ BA ──[REQ+US]──▶ AR ──[ADR+STRUCT]──▶ UX ──[UX-NNNNNN]──▶
+(Refine: SP-NNNNNN) ──▶ ORCH[Analyze-Gate] ──▶ FE+BE ──[Code+Kontrakt]──▶
+QA ──[TP+TR]──▶ RV ──[RV-NNNNNN]──▶ MW ──[DOC+RN]──▶ [RELEASE]
 ```
 
 ## Übergabe-Validierung durch Empfänger

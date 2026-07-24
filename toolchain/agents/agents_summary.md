@@ -3,7 +3,7 @@
 Konsolidierte Übersicht aller Agenten-Rollen.  
 Zweck: Einzelne Referenzdatei für NotebookLM-Analyse und schnelle Orientierung.
 
-**Letzte Aktualisierung:** 2026-07-20  
+**Letzte Aktualisierung:** 2026-07-24  
 **Pflege-Regel:** Diese Datei wird bei jedem Hinzufügen oder Ändern einer Agenten-Datei aktualisiert.
 
 ---
@@ -27,20 +27,25 @@ dokumentiert und sind ab APPROVED verbindlich für alle nachfolgenden Agenten.
 
 **Datei:** `orchestrator.md`  
 **Kürzel:** ORCH  
-**Aktiviert durch:** `/status`, `/sprint`
+**Aktiviert durch:** `/status`, `/sprint`, `/analyze`
 
 Der Orchestrator ist der einzige Agent, der keine fachlichen Inhalte produziert — er kennt
 nur Zustand und Regeln. Er liest Projektzustände, bewertet Gates und entscheidet, welcher
 Agent als nächstes aktiv wird.
 
-**Zwei Modi:**
+**Drei Modi:**
 - *Status-Modus* (`/status`): Liest `.phase` und `INDEX.md`, analysiert Gate-Kriterien, gibt
   Statusbericht mit nächster empfohlener Aktion aus. Keine Artefakt-Produktion.
 - *Sprint-Modus* (`/sprint`): Orchestriert den vollständigen Sprint-Zyklus Phase für Phase.
   Aktiviert jeden Agenten, prüft Gates, stoppt bei BLOCKER und wartet auf Nutzer-Entscheidung.
+- *Analyze-Modus* (`/analyze`): Cross-Artefakt-Konsistenzprüfung zwischen REQ/US, ADR, UX, SP
+  und CON-000001 — Gate 5.5, zwischen `/refine` und `/implement`. Prüft strukturell (`cross-ref`)
+  und lässt Artefakte inhaltlich Selbstauskunft geben (`self-assertion`); löst Widersprüche
+  nicht selbst auf, sondern ordnet sie dem zuständigen Agenten zu (BA/AR/UX/PM).
 
 **Eskalationslogik:** BLOCKER → Stop. MAJOR → Warnung + Nutzer-Bestätigung. MINOR → als TODO
 in nächste Phase übernehmen. ADR-000001 fehlt bei Implementierung → Hard-Stop zu `/architect`.
+Gate 5.5 BLOCKER offen → Hard-Stop zum fundverursachenden Agenten.
 
 ---
 
@@ -58,7 +63,10 @@ und übersetzt Geschäftsziele in strukturierte Anforderungsdokumente.
 Scope & Abgrenzung → Erfolgskriterien & Messbarkeit → Constraints & Risiken.
 
 **Kernaufgaben:** Scope abgrenzen (In-Scope / Out-of-Scope), MoSCoW-Priorisierung erstellen,
-Top-3-Risiken benennen, alle offenen Fragen protokollieren.
+Top-3-Risiken benennen, alle offenen Fragen protokollieren. Erstellt zusätzlich die
+**Projekt-Constitution** (`CON-000001`) — nicht verhandelbare Prinzipien und Qualitäts-
+Mindeststandards, synthetisiert aus dem Interview (Schwerpunkt Runde 4+5), bindend für alle
+nachfolgenden Agenten ab Status APPROVED.
 
 **Übergabe an:** BA-Agent — gibt Stakeholder Brief, Priorisierung, Constraints und offene Fragen weiter.
 
@@ -96,7 +104,7 @@ Priorisierungsreihenfolge weiter.
 
 **Datei:** `architect-agent.md`  
 **Kürzel:** AR  
-**Aktiviert durch:** `/architect`, `/spike`  
+**Aktiviert durch:** `/architect`, `/spike`, `/converge`  
 **Primäre Artefakte:** `ADR-NNNNNN` (Architecture Decision Records), `STRUCTURE.md`
 
 Der Architect-Agent definiert die technische Grundlage. Alle seine Entscheidungen werden
@@ -125,6 +133,13 @@ ADR-Verpflichtung — übernimmt das Spike-Brief vom PM-Agenten (Fragestellung, 
 Erfolgskriterien), recherchiert/prototypt innerhalb der Timebox und liefert `SRP-NNNNNN`
 (Spike Report) mit expliziter Empfehlung. Übergabe geht an PM/Nutzer, nicht an einen
 Entwicklungsagenten.
+
+**Converge-Modus (`/converge`):** Bestandsaufnahme einer bereits existierenden Codebase
+gegenüber vorhandener Spezifikation (REQ/US/ADR) — für Brownfield-Übernahme in die Tool Chain
+oder bei Verdacht auf Spec-Drift. Scannt Code, gleicht mit REQ/US (Abdeckungsmatrix) und ADRs
+(Architektur-Drift) ab und liefert `GAP-NNNNNN` mit expliziter Empfehlung (retroaktive
+Artefakte anlegen / Stories als DONE markieren / Drift auflösen). Kein Code Review, kein
+automatischer Fix. `.phase` wird nach Abschluss zurückgesetzt — kein Phasenwechsel.
 
 **Externe Recherche:** Kann für Tech-Stack-Evaluierung und Spike-Recherche den MCP-Server
 `fetch` nutzen (siehe CLAUDE.md, Abschnitt "Externe Recherche").
@@ -172,6 +187,11 @@ Happy Path + Error Case.
 
 **Pflichtkommentare im Code:** `// Implementiert: [US-NNNNNN]` und `// Verwendet: [ADR-NNNNNN]`
 
+**Bugfix-Modus:** Bei Rücksprung aus Gate 7 (`BUG-NNNNNN` zugewiesen an FE) ist die
+Root-Cause-Analyse in `BUG-NNNNNN` vor jeder Code-Änderung Pflicht — kein Fix ohne
+dokumentierte direkte und systemische Ursache. Ein Regressionstest, der den ursprünglichen
+Fehler abdeckt, ist Teil des Fixes, nicht optional.
+
 **Übergabe an:** QA-Agent — gibt implementierte Stories, Komponenten-Übersicht, bekannte
 Einschränkungen und Test-Coverage-Stand weiter.
 
@@ -200,6 +220,11 @@ Dependencies im finalen Layer, Cache-effiziente Layer-Reihenfolge, Image-Größe
 ADR-Budget geprüft und im Handoff dokumentiert.
 
 **Pflichtkommentare:** `// Implementiert: [US-NNNNNN]`, `// Sicherheitshinweis: [...]`
+
+**Bugfix-Modus:** Bei Rücksprung aus Gate 7 (`BUG-NNNNNN` zugewiesen an BE) ist die
+Root-Cause-Analyse in `BUG-NNNNNN` vor jeder Code-Änderung Pflicht — kein Fix ohne
+dokumentierte direkte und systemische Ursache. Ein Regressionstest, der den ursprünglichen
+Fehler abdeckt, ist Teil des Fixes, nicht optional.
 
 **Übergabe an:** FE-Agent (API-Kontrakt) und QA-Agent (implementierte Stories, Migrationen,
 Umgebungsvariablen für Tests).
@@ -230,6 +255,12 @@ headed/UI-Modus, sonst headless mit dokumentierter Begründung —, HTML-Report 
 Fehler als BUG-NNNNNN erfassen (inkl. Screenshot- und Trace-Pfad), Coverage-Report generieren,
 Performanz-Metriken gegen dokumentierte Zielwerte erfassen und Freigabe-Empfehlung
 (APPROVED / CONDITIONAL / REJECTED) dokumentieren.
+
+**Bug-Erfassung & Re-Verifikation:** Neue Fehler werden als `BUG-NNNNNN` mit
+`toolchain/templates/bug-report.md` erfasst — Symptom, Reproduktionsschritte und Evidenz durch
+QA, der Abschnitt "Root-Cause" bleibt bewusst offen für FE/BE. Zurückgemeldete Bugs (Status
+`BEHOBEN`) werden erneut reproduziert; erst nach erfolgreicher Verifikation wird der Status auf
+`VERIFIZIERT` gesetzt — ein Bug gilt bis dahin als offen (Gate 7).
 
 **Übergabe an:** Code Reviewer — gibt Testplan, Ergebnisse, Coverage, Browser-Clickpfad- und
 Performanz-Ergebnisse, offene Bugs, Playwright-Report-Pfad und Freigabe-Empfehlung weiter.

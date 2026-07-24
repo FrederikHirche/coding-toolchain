@@ -9,6 +9,101 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 
 ---
 
+## v2.2 — 2026-07-24
+
+### Neu
+
+**Root-Cause-Disziplin bei Bugfixes (`bug-report.md`)**
+- `toolchain/templates/bug-report.md` (neu): erste formale Definition von `BUG-NNNNNN`.
+  Bislang existierte kein Template — `toolchain/workflows/hotfix.md`s Gates prüften bereits
+  Abschnitte namens "Root-Cause", "Betroffene Komponenten" und "Fix-Ansatz", ohne dass diese
+  irgendwo definiert waren. Das neue Template definiert genau diese Abschnitte (plus Symptom,
+  Reproduktionsschritte, Evidenz, Regressionsrisiko, Verifikation) und macht die
+  Root-Cause-Analyse für FE/BE vor jedem Fix verpflichtend — direkte Ursache, systemische
+  Ursache, betroffene weitere Stellen, ausgeschlossene Ursachen.
+- `toolchain/agents/qa-agent.md`: BUG-Erfassung nutzt jetzt das Template; neuer Schritt zur
+  Re-Verifikation zurückgemeldeter Bugs (`BEHOBEN` → `VERIFIZIERT`, oder zurück auf `OFFEN`
+  bei fehlender Root-Cause/Regressionstest). Schweregrad-Vokabular von vierstufig
+  (BLOCKER/CRITICAL/MAJOR/MINOR) auf das toolchain-weite dreistufige Schema
+  (BLOCKER/MAJOR/MINOR) korrigiert — CRITICAL existierte in keinem anderen Gate.
+- `toolchain/agents/frontend-agent.md`, `toolchain/agents/backend-agent.md`: neuer
+  "Bugfix-Modus" — Root-Cause-Analyse ist vor jeder Code-Änderung Pflicht, Regressionstest ist
+  Teil des Fixes.
+- `toolchain/workflows/full-sprint.md`: Gate 7 verlangt jetzt ausgefüllte Root-Cause für
+  BLOCKER/MAJOR-Bugs (BLOCKER) und für behobene MINOR-Bugs (MAJOR), sowie Status
+  `VERIFIZIERT` statt nur "nicht offen".
+- `toolchain/workflows/hotfix.md`: verweist jetzt auf das Template statt auf undefinierte
+  Abschnittsnamen; Gate 3 verlangt zusätzlich den Status `VERIFIZIERT`.
+- `toolchain/protocols/artifact-lifecycle.md`: neuer Abschnitt "Ausnahmen: domänenspezifische
+  Status-Verläufe" — dokumentiert, dass `BUG-NNNNNN` (wie bereits `IMPD-NNNNNN`) einen eigenen
+  Status-Verlauf statt des generischen DRAFT/APPROVED-Zyklus nutzt.
+- `.claude/commands/test-run.md`, `.claude/commands/implement.md`,
+  `.claude/commands/commands_summary.md`, `toolchain/agents/agents_summary.md`,
+  `toolchain/templates/templates_summary.md`, `toolchain/templates/INDEX.md`: nachgezogen.
+- Auswirkung: Bug-Fixes patchen nicht mehr nur das Symptom — Root-Cause-Dokumentation ist vor
+  Code-Änderung erzwungen, und ein Bug gilt erst nach erneuter QA-Reproduktion als erledigt,
+  nicht schon nach der Implementierung.
+
+---
+
+## v2.1 — 2026-07-24
+
+### Neu
+
+**Projekt-Constitution (`CON-000001`) — bindende Prinzipien ab Discovery**
+- `toolchain/templates/constitution.md` (neu): Template für nicht verhandelbare Prinzipien,
+  Qualitäts-Mindeststandards, harte Ausschlüsse, Änderungsverfahren und Konfliktregel.
+- `toolchain/agents/pm-agent.md`: PM erstellt CON-000001 während `/kickoff` zusätzlich zum
+  Stakeholder Brief — synthetisiert aus dem Interview, Schwerpunkt Runde 4+5.
+- `toolchain/agents/_base-agent.md`: neue Pflichtregel "Verbindlichkeit der Projekt-Constitution"
+  — jeder Agent eskaliert Konflikte mit CON-000001 als BLOCKER an PM, statt sie stillschweigend
+  aufzulösen. Neue Artefakt-Präfixe `CON` und `GAP` in der Referenztabelle.
+- `toolchain/workflows/full-sprint.md`: Gate 1 → 2 verlangt `CON-000001` im Status APPROVED.
+- `.claude/commands/kickoff.md`, `projects/_template/.toolchain.yml`: CON-Ablage und
+  `next-ids`-Zähler ergänzt.
+- Auswirkung: Jedes neue Projekt erhält ab Discovery einen einzigen, stabilen Satz an
+  Leitplanken, der über den gesamten Projektverlauf bindend ist — unabhängig von Tech-Stack
+  (ADR) und Feature-Priorisierung (SB).
+
+**Cross-Artefakt-Konsistenzgate `/analyze` (Gate 5.5, vor `/implement`)**
+- `.claude/commands/analyze.md` (neu), `toolchain/agents/orchestrator.md`: neuer
+  Analyze-Modus des Orchestrators — prüft REQ/US, ADR, UX, SP und CON-000001 strukturell
+  (`cross-ref`) und inhaltlich (`self-assertion`) auf Widersprüche, bevor Implementierungsaufwand
+  investiert wird. Löst Widersprüche nicht selbst, sondern ordnet sie BA/AR/UX/PM zu.
+  Neue `.phase`-Zwischenstufe `ANALYSIS` zwischen `REFINEMENT` und `IMPLEMENTATION`.
+- `toolchain/workflows/full-sprint.md`: neue Phase 5.5 mit eigenem Gate und Rollback-Regeln;
+  Full-Sprint-Workflow zählt jetzt 11 statt 10 Phasen.
+- `toolchain/PROCESS.md`, `toolchain/protocols/handoff-protocol.md`,
+  `.claude/commands/refine.md`, `.claude/commands/implement.md`,
+  `toolchain/agents/_base-agent.md`: Analyze-Schritt in Prozessdiagramm, Übergabe-Kette und
+  Standard-Phasenkette nachgezogen.
+- Auswirkung: Spec-Drift zwischen Requirements, Architektur, UX und Sprint-Planung wird vor
+  der Implementierung erkannt statt erst im Code Review.
+
+**Brownfield-Gap-Analyse `/converge`**
+- `toolchain/templates/gap-analysis.md` (neu), `toolchain/workflows/converge.md` (neu),
+  `.claude/commands/converge.md` (neu): neuer Converge-Modus des Architect-Agenten — scannt
+  eine bestehende Codebase, gleicht sie mit vorhandenen REQ/US/ADR ab (oder dokumentiert die
+  Ist-Architektur, falls noch keine Spezifikation existiert) und liefert `GAP-NNNNNN` mit
+  expliziter Empfehlung. Kein Code Review, kein automatischer Fix, kein Phasenwechsel.
+- `toolchain/agents/architect-agent.md`: dritter Modus neben Architektur- und Spike-Modus.
+- `toolchain/workflows/INDEX.md`, `projects/_template/.toolchain.yml`: Workflow registriert,
+  `GAP`-Zähler ergänzt.
+- Auswirkung: Altprojekte mit bestehendem Code lassen sich in die Tool Chain übernehmen, ohne
+  blind eine neue Spezifikation zu schreiben oder bereits vorhandene Arbeit zu wiederholen.
+
+**Sonstiges**
+- `CLAUDE.md`: Artefakt-Benennung, Projektordner-Struktur, Slash-Commands- und
+  Workflows-Tabellen um CON/GAP/`/analyze`/`/converge` ergänzt; veraltete Phasenzahl
+  ("9 Phasen") korrigiert.
+- `.agents/skills/coding-toolchain/SKILL.md`, `toolchain/scripts/validate-codex-compat.ps1`:
+  additive Codex-Schicht um `/analyze`, `/converge` und die neuen Artefakt-Präfixe ergänzt.
+- `toolchain/agents/agents_summary.md`, `toolchain/templates/templates_summary.md`,
+  `.claude/commands/commands_summary.md`, `toolchain/agents/INDEX.md`,
+  `toolchain/templates/INDEX.md`: konsolidierte Übersichten nachgezogen.
+
+---
+
 ## v2.0 — 2026-07-23
 
 ### Neu

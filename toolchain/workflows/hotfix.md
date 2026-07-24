@@ -48,6 +48,14 @@ HOTFIX-REVIEW
   [RV] — Fokussierter Review der Änderung, ausgeführt auf dem Hotfix-Branch
 ```
 
+## BUG-NNNNNN Format
+
+Vollständiges Template mit Header, allen Abschnitten (inkl. "Root-Cause", "Betroffene
+Komponenten", "Fix-Ansatz", "Regressionsrisiko") und Übergabe-Blöcken:
+`toolchain/templates/bug-report.md`. Im Hotfix-Workflow erstellt BA das Dokument direkt mit
+bereits befüllter Root-Cause-Analyse — es gibt keine separate QA-Symptom-Erfassungsphase wie
+im regulären Sprint-Workflow.
+
 ## Gate 1: Analysis → Implementation
 
 | Kriterium | Prüfung | Schwere |
@@ -71,7 +79,7 @@ HOTFIX-REVIEW
 |---|---|---|
 | `TR-NNNNNN` (Smoke Test) vorhanden | Datei vorhanden | BLOCKER |
 | Smoke-Test: kein neuer BLOCKER-Bug | TR-NNNNNN Bug-Liste enthält keine neuen BLOCKER-Einträge | BLOCKER |
-| Ursprünglicher Bug reproduzierbar getestet | TR-NNNNNN: expliziter Retest-Vermerk zum Original-Bug | BLOCKER |
+| Ursprünglicher Bug reproduzierbar getestet, `BUG-NNNNNN` Status auf `VERIFIZIERT` gesetzt | TR-NNNNNN: expliziter Retest-Vermerk; BUG-NNNNNN Status-Feld | BLOCKER |
 | Regressionstest durchgeführt | Abschnitt "Regressionstest" in TR-NNNNNN ausgefüllt | MAJOR |
 
 ## Gate 4: Review → Merge

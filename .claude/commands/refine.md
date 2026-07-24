@@ -24,7 +24,7 @@ Bereitet den Sprint Backlog vor: verfeinert User Stories, schätzt Aufwände und
 
 ## Nächster Schritt
 
-Nach Abschluss: `/implement`
+Nach Abschluss: `/analyze [projektname]` (Cross-Artefakt-Konsistenzprüfung vor der Implementierung)
 
 ---
 

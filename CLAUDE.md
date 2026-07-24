@@ -34,10 +34,10 @@ von der Stakeholder-Idee bis zum produktiven Release.
 
 | Kürzel | Rolle | Datei | Kernverantwortung |
 |--------|-------|-------|-------------------|
-| ORCH | Orchestrator | `toolchain/agents/orchestrator.md` | Projektzustand, Gates, Workflow-Steuerung |
-| PM | Product Manager | `toolchain/agents/pm-agent.md` | Stakeholder-Interviews, Priorisierung, Vision |
+| ORCH | Orchestrator | `toolchain/agents/orchestrator.md` | Projektzustand, Gates, Workflow-Steuerung, Cross-Artefakt-Konsistenz (`/analyze`) |
+| PM | Product Manager | `toolchain/agents/pm-agent.md` | Stakeholder-Interviews, Priorisierung, Vision, Projekt-Constitution |
 | BA | Business Analyst | `toolchain/agents/ba-agent.md` | Requirements, User Stories, Akzeptanzkriterien |
-| AR | Software Architect | `toolchain/agents/architect-agent.md` | Systemdesign, ADRs, Tech-Stack-Entscheidung |
+| AR | Software Architect | `toolchain/agents/architect-agent.md` | Systemdesign, ADRs, Tech-Stack-Entscheidung, Brownfield-Gap-Analyse (`/converge`) |
 | UX | UX Designer | `toolchain/agents/ux-agent.md` | User Journeys, Interaction Design, UX-Specs |
 | FE | Frontend Developer | `toolchain/agents/frontend-agent.md` | UI-Implementierung, Komponenten, Accessibility |
 | BE | Backend Developer | `toolchain/agents/backend-agent.md` | APIs, Business Logic, Datenschicht |
@@ -60,16 +60,18 @@ Alle Agenten erben die Basisregeln aus `toolchain/agents/_base-agent.md`.
 | `/sprint [projekt] [nr]` | Vollständigen Sprint orchestrieren (alle Phasen sequenziell) |
 | `/hotfix [projekt] [bug]` | Verkürzter Notfall-Fix-Workflow |
 | `/spike [projekt] [frage]` | Technische Erkundung ohne Implementierungsverpflichtung |
+| `/converge [projekt] [pfad]` | Bestandscode gegen Spezifikation prüfen (Brownfield-Übernahme) |
 
 ### Phasen-Commands (manuell oder durch `/sprint` aufgerufen)
 
 | Command | Phase | Agent | Primäres Artefakt |
 |---------|-------|-------|-------------------|
-| `/kickoff` | Discovery | PM | `SB-NNNNNN` |
+| `/kickoff` | Discovery | PM | `SB-NNNNNN`, `CON-000001` |
 | `/ba` | Requirements | BA | `REQ-NNNNNN`, `US-NNNNNN` |
 | `/architect` | Architektur | AR | `ADR-NNNNNN`, `STRUCTURE.md` |
 | `/ux` | UX Design | UX | `UX-NNNNNN` |
 | `/refine` | Refinement | BA+FE+BE | `SP-NNNNNN` |
+| `/analyze` | Cross-Artefakt-Konsistenz | ORCH | Gate-Bericht (kein Artefakt) |
 | `/implement` | Implementierung | FE, BE | Code + API-Kontrakt |
 | `/test-plan` | Testplan | QA | `TP-NNNNNN` |
 | `/test-run` | Testausführung | QA | `TR-NNNNNN` |
@@ -91,9 +93,10 @@ Alle Agenten erben die Basisregeln aus `toolchain/agents/_base-agent.md`.
 
 | Workflow | Command | Szenario | Phasen |
 |----------|---------|---------|--------|
-| Full Sprint | `/sprint` | Normaler Entwicklungssprint | 9 Phasen |
+| Full Sprint | `/sprint` | Normaler Entwicklungssprint | 11 Phasen (inkl. Phase 5.5 Analyse) |
 | Hotfix | `/hotfix` | Kritischer Produktionsfehler | 4 Phasen |
 | Spike | `/spike` | Tech-Evaluierung ohne Impl. | 3 Phasen |
+| Converge | `/converge` | Bestandscode gegen Spec prüfen (Brownfield) | 3 Phasen |
 
 Details: `toolchain/workflows/`
 
@@ -127,8 +130,10 @@ TODO-FORMAT:
 | Typ | Präfix | Beispiel |
 |-----|--------|---------|
 | Stakeholder Brief | `SB-NNNNNN` | `SB-000001-projektname.md` |
+| Projekt-Constitution | `CON-NNNNNN` | `CON-000001-projektname.md` (einmalig pro Projekt) |
 | Requirements | `REQ-NNNNNN` | `REQ-000001-auth.md` |
 | Architecture Decision Record | `ADR-NNNNNN` | `ADR-000001-tech-stack.md` |
+| Gap-Analyse (Converge) | `GAP-NNNNNN` | `GAP-000001-legacy-scan.md` |
 | User Story | `US-NNNNNN` | `US-000042-login.md` |
 | UX-Spec | `UX-NNNNNN` | `UX-000001-onboarding.md` |
 | Sprint Backlog | `SP-NNNNNN` | `SP-000001-sprint1.md` |
@@ -156,9 +161,9 @@ Jeder Artefakttyp hat einen definierten Unterordner:
 
 ```
 projects/<name>/
-  discovery/        SB-NNNNNN, DECISIONS.md
+  discovery/        SB-NNNNNN, CON-000001, DECISIONS.md
   requirements/     REQ-NNNNNN, US-NNNNNN
-  architecture/     ADR-NNNNNN, STRUCTURE.md
+  architecture/     ADR-NNNNNN, STRUCTURE.md, GAP-NNNNNN
   ux/               UX-NNNNNN
   sprints/          SP-NNNNNN
   testing/          TP-NNNNNN, TR-NNNNNN, BUG-NNNNNN, playwright-report/

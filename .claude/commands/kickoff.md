@@ -18,9 +18,11 @@ Ohne Argument wird nach dem Projektnamen gefragt.
    Teil des Toolchain-Repositorys; Root-`.gitignore` schließt `projects/*` entsprechend aus
 3. Aktiviert den PM-Agenten mit seinem System-Prompt (aus `toolchain/agents/pm-agent.md`)
 4. Führt ein strukturiertes Stakeholder-Interview durch (5 Runden, je 3–5 Fragen)
-5. Erstellt `projects/<projektname>/SB-000001-<projektname>.md`
-6. Aktualisiert `projects/<projektname>/INDEX.md`
-7. Gibt Übergabe-Zusammenfassung für `/ba` aus
+5. Erstellt `projects/<projektname>/discovery/SB-000001-<projektname>.md`
+6. Erstellt `projects/<projektname>/discovery/CON-000001-<projektname>.md` (Projekt-Constitution
+   — nicht verhandelbare Prinzipien und Qualitäts-Mindeststandards, bindend für alle Folgephasen)
+7. Aktualisiert `projects/<projektname>/INDEX.md`
+8. Gibt Übergabe-Zusammenfassung für `/ba` aus
 
 ## Vorbedingungen
 
@@ -33,6 +35,6 @@ Nach Abschluss: `/ba` aufrufen
 ---
 
 **Agent:** PM (Product Manager)
-**Output:** `SB-NNNNNN` Stakeholder Brief
-**Template:** `toolchain/templates/stakeholder-brief.md`
+**Output:** `SB-NNNNNN` Stakeholder Brief, `CON-000001` Projekt-Constitution
+**Template:** `toolchain/templates/stakeholder-brief.md`, `toolchain/templates/constitution.md`
 **Agent-Definition:** `toolchain/agents/pm-agent.md`

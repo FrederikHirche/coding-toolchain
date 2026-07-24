@@ -19,15 +19,19 @@ Aktiviert den **QA Engineer Agent (QA)** für die Testausführung und Ergebnisdo
      - Führt `npx playwright test` aus
      - Liest HTML-Report aus (Standard: `playwright-report/index.html`)
      - Kopiert/verlinkt Report nach `projects/<name>/testing/playwright-report/`
-3. Erfasst alle Fehler strukturiert als BUG-NNNNNN (in `projects/<name>/testing/`)
-   - Testname + Fehlermeldung
-   - Stack Trace
-   - Screenshot-Pfad (Playwright speichert automatisch)
-   - Reproduktionsschritte
-   - Schweregrad: BLOCKER / CRITICAL / MAJOR / MINOR
-4. Erstellt Testergebnis-Bericht (TR-NNNNNN) in `projects/<name>/testing/`
-5. Erstellt Test-Coverage-Report und notiert Prozentwerte
-6. Gibt Freigabe-Empfehlung: APPROVED / CONDITIONAL / REJECTED
+3. Erfasst alle neuen Fehler strukturiert als BUG-NNNNNN mit `toolchain/templates/bug-report.md`
+   (in `projects/<name>/testing/`)
+   - Testname + Fehlermeldung, Stack Trace, Screenshot-Pfad (Playwright speichert automatisch)
+   - Reproduktionsschritte, Schweregrad: BLOCKER / MAJOR / MINOR
+   - Abschnitt "Root-Cause" bleibt bewusst leer — das ist Aufgabe von FE/BE vor dem Fix
+4. Prüft jeden BUG-NNNNNN mit Status `BEHOBEN` aus einer vorherigen Runde erneut:
+   - Ursprüngliche Reproduktionsschritte wiederholen
+   - Root-Cause-Abschnitt und Regressionstest auf Vollständigkeit prüfen
+   - Bei Erfolg: Status auf `VERIFIZIERT` setzen; sonst zurück auf `OFFEN` an FE/BE
+5. Erstellt Testergebnis-Bericht (TR-NNNNNN) in `projects/<name>/testing/`
+6. Erstellt Test-Coverage-Report und notiert Prozentwerte
+7. Gibt Freigabe-Empfehlung: APPROVED / CONDITIONAL / REJECTED — Voraussetzung: kein
+   BUG-NNNNNN mit Schweregrad BLOCKER in einem Status außer VERIFIZIERT
 
 ## Playwright-Spezifika
 
@@ -64,5 +68,5 @@ Nach Abschluss: `/review [projektname] [sprint-nr]`
 
 **Agent:** QA (QA Engineer)
 **Input:** `TP-NNNNNN`, Code-Repository, `playwright.config.ts`
-**Output:** `TR-NNNNNN`, `BUG-NNNNNN` (bei Fehlern) — alle in `projects/<name>/testing/`
+**Output:** `TR-NNNNNN`, `BUG-NNNNNN` (bei Fehlern, Template: `toolchain/templates/bug-report.md`) — alle in `projects/<name>/testing/`
 **Agent-Definition:** `toolchain/agents/qa-agent.md`

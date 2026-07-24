@@ -3,7 +3,7 @@
 Konsolidierte Übersicht aller Artefakt-Templates.  
 Zweck: Einzelne Referenzdatei für NotebookLM-Analyse und schnelle Orientierung.
 
-**Letzte Aktualisierung:** 2026-07-20  
+**Letzte Aktualisierung:** 2026-07-24  
 **Pflege-Regel:** Diese Datei wird bei jedem Hinzufügen oder Ändern eines Templates aktualisiert.
 
 ---
@@ -43,6 +43,28 @@ was das Projekt ist, warum es existiert, für wen es gebaut wird und was Erfolg 
 - MVP-Definition: Minimum Viable Product — was muss minimal geliefert werden
 - Risiken: Top-3-Risiken mit Beschreibung
 - Offene Fragen: Was ist nach dem Interview ungeklärt geblieben
+
+---
+
+## CON — Projekt-Constitution (`constitution.md`)
+
+**Präfix:** `CON-000001` (einmalig pro Projekt)
+**Erstellt von:** PM (Product Manager) via `/kickoff`
+**Basiert auf:** `SB-000001`, Stakeholder-Interview (Schwerpunkt Runde 4+5)
+
+Die Projekt-Constitution legt fest, was über den gesamten Projektverlauf nicht zur Debatte
+steht — unabhängig von Phase oder Agent. Sie ist bewusst kurz und stabil, im Unterschied zu
+`SB-000001` (Priorisierung) und `ADR-NNNNNN` (Tech-Stack). Ab Status APPROVED bindend für
+alle nachfolgenden Agenten.
+
+**Kernabschnitte:**
+- Nicht verhandelbare Prinzipien: 3–7 konkrete, prüfbare Prinzipien mit Begründung
+- Qualitäts-Mindeststandards: Testabdeckung, Accessibility, Sicherheit, Performance als
+  prüfbare Untergrenzen (Zahl/Kriterium, keine Adjektive)
+- Harte Ausschlüsse: explizit negativ formulierte, unter keinen Umständen zulässige Praktiken
+- Geltungsbereich: Vorrang vor Bequemlichkeit/Geschwindigkeit einzelner Agenten
+- Änderungsverfahren: nur mit expliziter Nutzer-Freigabe, Version als MAJOR erhöht
+- Konfliktregel: Widerspruch wird als BLOCKER-Frage an PM eskaliert, nicht stillschweigend aufgelöst
 
 ---
 
@@ -111,6 +133,27 @@ und API-Stil, Datenhaltung, Hosting/Deployment, Auth, Observability.
 
 ---
 
+## GAP — Gap-Analyse (`gap-analysis.md`)
+
+**Präfix:** `GAP-NNNNNN`
+**Erstellt von:** AR (Software Architect) via `/converge`
+**Basiert auf:** vorhandene `SB-NNNNNN`/`REQ-NNNNNN`/`ADR-NNNNNN` (falls vorhanden), untersuchte Codebase
+
+Bestandsaufnahme einer bereits existierenden Codebase gegenüber der (falls vorhandenen)
+Spezifikation — für Brownfield-Übernahme in die Tool Chain oder bei Verdacht auf Spec-Drift.
+Kein Ersatz für Code Review (`RV-NNNNNN`) und kein automatischer Fix.
+
+**Kernabschnitte:**
+- Erfassungsumfang: untersuchter Code-Pfad, vorhandene Toolchain-Artefakte
+- Abdeckungsmatrix: REQ/US ↔ Code, mit Fundstelle und Abweichung (falls Spec existiert)
+- Architektur-Drift: ADR-Entscheidung ↔ tatsächlich verwendete Technologie (falls ADRs existieren)
+- Ist-Architektur: vorgefundene technische Basis (falls noch keine ADRs existieren)
+- Identifizierte technische Schulden mit vorgeschlagener DEBT-ID
+- Empfehlung: retroaktive Artefakte / US als DONE markieren / neue Backlog-Items — explizit
+- Nicht geprüfte Bereiche: explizite Abgrenzung
+
+---
+
 ## UX — UX-Spec (`ux-spec.md`)
 
 **Präfix:** `UX-NNNNNN`  
@@ -167,6 +210,33 @@ ausgeführt werden.
 - Priorisierung: P0 (Blocker — muss vor Release behoben), P1 (Kritisch), P2 (Normal)
 - Testumgebungs-Anforderungen: Was muss konfiguriert sein?
 - Automatisierungsgrad: Welche Tests werden automatisiert, welche manuell?
+
+---
+
+## BUG — Fehlerbericht (`bug-report.md`)
+
+**Präfix:** `BUG-NNNNNN`
+**Erstellt von:** QA via `/test-run` (Sprint-Workflow) — oder BA via `/hotfix` (Hotfix-Workflow)
+**Basiert auf:** `TP-NNNNNN`, `US-NNNNNN` (Sprint) — oder Produktionsvorfall (Hotfix)
+
+Domänenspezifischer Status-Verlauf (`OFFEN → IN_BEARBEITUNG → BEHOBEN → VERIFIZIERT`, siehe
+`toolchain/protocols/artifact-lifecycle.md`) statt des generischen DRAFT/APPROVED-Zyklus.
+Erzwingt Root-Cause-Analyse vor jedem Fix — verhindert Symptom-Patches, die im nächsten
+Sprint wiederkehren. Wird von zwei Rollen nacheinander befüllt: QA/BA erfasst Symptom und
+Reproduktionsschritte, FE/BE ergänzt Root-Cause und Fix-Ansatz vor der Code-Änderung.
+
+**Kernabschnitte:**
+- Symptom: erwartetes vs. tatsächliches Verhalten, Auswirkung
+- Reproduktionsschritte: Schritt-für-Schritt, Umgebung, Reproduzierbarkeit
+- Schweregrad (BLOCKER/MAJOR/MINOR) & Zuweisung (FE/BE/FE+BE)
+- Evidenz: Screenshot-/Trace-Pfad, Log-Auszug
+- Betroffene Komponenten
+- Root-Cause: direkte Ursache, zugrundeliegende (systemische) Ursache, andere betroffene
+  Stellen, ausgeschlossene Ursachen — Pflichtfeld vor Fix-Beginn
+- Fix-Ansatz: Bezug zur Root-Cause, nicht nur zum Symptom
+- Regressionsrisiko (Hoch/Mittel/Gering + Begründung)
+- Verifikation: erneute Reproduktion durch QA, Regressionstest-Nachweis
+- Zwei Übergabe-Blöcke (QA/BA → FE/BE, FE/BE → QA)
 
 ---
 

@@ -43,9 +43,9 @@ foreach ($requiredPath in $requiredPaths) {
 }
 
 $expectedCommands = @(
-    'architect', 'ba', 'coach', 'health-check', 'hotfix', 'impediment', 'implement',
-    'kickoff', 'manual', 'refine', 'retro', 'review', 'spike', 'sprint', 'status',
-    'test-plan', 'test-run', 'ux'
+    'analyze', 'architect', 'ba', 'coach', 'converge', 'health-check', 'hotfix',
+    'impediment', 'implement', 'kickoff', 'manual', 'refine', 'retro', 'review',
+    'spike', 'sprint', 'status', 'test-plan', 'test-run', 'ux'
 )
 
 foreach ($command in $expectedCommands) {

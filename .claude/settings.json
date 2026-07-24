@@ -34,7 +34,17 @@
       "PowerShell(python -m pip install --user mcp-server-fetch 2>&1)",
       "PowerShell(python -m mcp_server_fetch --help)",
       "PowerShell(git check-ignore -v .mcp.json)",
-      "PowerShell(git add -A)"
+      "PowerShell(git add -A)",
+      "PowerShell(git push origin main)",
+      "PowerShell(gh auth status)",
+      "PowerShell(pwsh -NoProfile -File toolchain/scripts/validate-codex-compat.ps1)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "PowerShell(git fetch origin)",
+      "PowerShell(git rebase origin/main)",
+      "PowerShell(git add .claude/settings.json)",
+      "PowerShell(git commit --amend --no-edit)"
     ]
-  }
+  },
+  "showThinkingSummaries": true,
+  "verbose": true
 }

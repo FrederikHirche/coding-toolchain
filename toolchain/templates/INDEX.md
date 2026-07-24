@@ -3,19 +3,22 @@
 Artefakt-Templates für alle Phasen der Tool Chain.
 Alle Templates sind technologieunabhängig und enthalten den Standard-Artefakt-Header.
 
-Letzte Aktualisierung: 2026-07-20
+Letzte Aktualisierung: 2026-07-24
 
 ## Inhalt
 
 | Datei | Artefakt-Präfix | Erstellt von | Phase |
 |-------|----------------|-------------|-------|
 | `stakeholder-brief.md` | `SB-NNNNNN` | PM | Discovery |
+| `constitution.md` | `CON-000001` | PM | Discovery (einmalig pro Projekt) |
 | `requirements.md` | `REQ-NNNNNN` | BA | Requirements |
 | `user-story.md` | `US-NNNNNN` | BA | Requirements |
 | `architecture-decision.md` | `ADR-NNNNNN` | AR | Architecture |
+| `gap-analysis.md` | `GAP-NNNNNN` | AR | Architecture (via `/converge`) |
 | `ux-spec.md` | `UX-NNNNNN` | UX | UX Design |
 | `sprint-backlog.md` | `SP-NNNNNN` | BA+FE+BE | Refinement |
 | `test-plan.md` | `TP-NNNNNN` | QA | Testing |
+| `bug-report.md` | `BUG-NNNNNN` | QA (BA im Hotfix) | Testing (auch `/hotfix`) |
 | `review-checklist.md` | `RV-NNNNNN` | RV | Review |
 | `tech-debt-registry.md` | `DEBT-REGISTRY` | RV | Review (einmalig pro Projekt) |
 | `decisions.md` | `DECISIONS.md` | ORCH | Alle Phasen (fortlaufend) |

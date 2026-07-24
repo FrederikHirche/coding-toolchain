@@ -1,6 +1,6 @@
 ---
 name: coding-toolchain
-description: Execute this repository's Claude-first AI Development Tool Chain in Codex. Use when the user invokes or discusses /kickoff, /status, /sprint, /ba, /architect, /ux, /refine, /implement, /test-plan, /test-run, /review, /manual, /hotfix, /spike, /retro, /health-check, /coach, /impediment, a named PM/BA/AR/UX/FE/BE/QA/RV/MW/AC role, project gates, .phase state, or SB/REQ/US/ADR/UX/SP/TP/TR/BUG/RV/DOC/RN/RETRO artifacts.
+description: Execute this repository's Claude-first AI Development Tool Chain in Codex. Use when the user invokes or discusses /kickoff, /status, /sprint, /ba, /architect, /ux, /refine, /analyze, /implement, /test-plan, /test-run, /review, /manual, /hotfix, /spike, /converge, /retro, /health-check, /coach, /impediment, a named PM/BA/AR/UX/FE/BE/QA/RV/MW/AC role, project gates, .phase state, or SB/CON/REQ/US/ADR/GAP/UX/SP/TP/TR/BUG/RV/DOC/RN/RETRO artifacts.
 ---
 
 # Coding Toolchain
@@ -31,10 +31,10 @@ its activation model to Codex.
 
 | Command family | Canonical sources |
 |---|---|
-| `/status`, `/sprint` | command file, `orchestrator.md`, selected workflow |
-| `/kickoff` | command file, `pm-agent.md`, stakeholder-brief template |
+| `/status`, `/sprint`, `/analyze` | command file, `orchestrator.md`, selected workflow |
+| `/kickoff` | command file, `pm-agent.md`, stakeholder-brief and constitution templates |
 | `/ba`, `/refine` | command file, `ba-agent.md`, requirements/story/backlog templates |
-| `/architect`, `/spike` | command file, `architect-agent.md`, ADR/spike templates |
+| `/architect`, `/spike`, `/converge` | command file, `architect-agent.md`, ADR/spike/gap-analysis templates |
 | `/ux` | command file, `ux-agent.md`, UX template |
 | `/implement` | command file, frontend/backend agent definitions |
 | `/test-plan`, `/test-run` | command file, `qa-agent.md`, testing templates |

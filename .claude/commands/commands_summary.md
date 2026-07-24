@@ -3,7 +3,7 @@
 Konsolidierte Übersicht aller Slash Commands.  
 Zweck: Einzelne Referenzdatei für NotebookLM-Analyse und schnelle Orientierung.
 
-**Letzte Aktualisierung:** 2026-07-20  
+**Letzte Aktualisierung:** 2026-07-24 (v2.2 — Root-Cause-Disziplin bei Bugfixes)  
 **Pflege-Regel:** Diese Datei wird bei jedem Hinzufügen oder Ändern eines Commands aktualisiert.
 
 ---
@@ -15,7 +15,7 @@ definierte Phase. Commands können manuell nacheinander aufgerufen werden (manue
 oder durch `/sprint` automatisch orchestriert werden (Sprint-Variante).
 
 Standard-Reihenfolge Full-Sprint:
-`/kickoff` → `/ba` → `/architect` → `/ux` → `/refine` → `/implement` → `/test-plan` → `/test-run` → `/review` → `/manual`
+`/kickoff` → `/ba` → `/architect` → `/ux` → `/refine` → `/analyze` → `/implement` → `/test-plan` → `/test-run` → `/review` → `/manual`
 
 ---
 
@@ -59,14 +59,24 @@ Standard-Reihenfolge Full-Sprint:
 
 ---
 
+### /converge — Brownfield-Gap-Analyse
+
+**Aktiviert:** Software Architect (AR) — Converge-Modus
+**Wann nutzen:** Ein Projekt mit bereits existierendem Code wird in die Tool Chain übernommen, oder es besteht Verdacht auf Drift zwischen Spezifikation und tatsächlichem Code.
+**Was passiert:** 3 Phasen: SCAN (Codebase untersuchen) → MATCH (Abgleich mit REQ/US/ADR, oder Ist-Architektur-Dokumentation falls keine Spec existiert) → REPORT (Gap-Analyse: GAP-NNNNNN mit expliziter Empfehlung). Kein Code Review, kein automatischer Fix, kein Phasenwechsel.
+**Verwendung:** `/converge [projektname] [pfad-zu-code]`
+**Output:** `GAP-NNNNNN` Gap-Analyse
+
+---
+
 ## Phasen-Commands (manuell oder durch /sprint aufgerufen)
 
 ### /kickoff — Discovery Phase
 
 **Aktiviert:** PM (Product Manager)  
 **Wann nutzen:** Start eines neuen Projekts. Kein Vorgänger nötig — das ist der Einstiegspunkt der Tool Chain.  
-**Was passiert:** Projektordner wird als Kopie von `projects/_template/` angelegt und erhält ein eigenes Git-Repository (`git init`) — getrennt vom Toolchain-Repo. Strukturiertes Stakeholder-Interview in 5 Runden (Problemraum, Nutzer, Scope, Erfolgskriterien, Constraints). Nach dem Interview wird der Stakeholder Brief (SB-000001) erstellt, MoSCoW-Priorisierung festgelegt und die Top-3-Risiken benannt. INDEX.md und `.phase`-Datei sind bereits aus der Vorlage vorhanden.  
-**Output:** `SB-NNNNNN` Stakeholder Brief  
+**Was passiert:** Projektordner wird als Kopie von `projects/_template/` angelegt und erhält ein eigenes Git-Repository (`git init`) — getrennt vom Toolchain-Repo. Strukturiertes Stakeholder-Interview in 5 Runden (Problemraum, Nutzer, Scope, Erfolgskriterien, Constraints). Nach dem Interview wird der Stakeholder Brief (SB-000001) erstellt, die Projekt-Constitution (CON-000001 — nicht verhandelbare Prinzipien und Qualitäts-Mindeststandards) synthetisiert, MoSCoW-Priorisierung festgelegt und die Top-3-Risiken benannt. INDEX.md und `.phase`-Datei sind bereits aus der Vorlage vorhanden.  
+**Output:** `SB-NNNNNN` Stakeholder Brief, `CON-000001` Projekt-Constitution  
 **Nächste Phase:** `/ba [projektname]`
 
 ---
@@ -76,7 +86,7 @@ Standard-Reihenfolge Full-Sprint:
 **Aktiviert:** BA (Business Analyst)  
 **Wann nutzen:** Nach Abschluss des Stakeholder Briefs.  
 **Was passiert:** Analysiert den Stakeholder Brief, leitet funktionale und nicht-funktionale Anforderungen ab, erstellt User Stories im "Als [Rolle] möchte ich [Ziel], damit [Nutzen]"-Format mit Given/When/Then-Akzeptanzkriterien. Erstellt Story-Map mit Abhängigkeiten.  
-**Vorbedingung:** `SB-NNNNNN` im Status APPROVED  
+**Vorbedingung:** `SB-NNNNNN` und `CON-000001` im Status APPROVED  
 **Output:** `REQ-NNNNNN` Requirements-Dokument, `US-NNNNNN` User Stories  
 **Nächste Phase:** `/architect [projektname]`
 
@@ -111,7 +121,19 @@ Standard-Reihenfolge Full-Sprint:
 **Was passiert:** Verfeinert User Stories mit Subtasks, Story-Point-Schätzungen und Abhängigkeiten. Erstellt Sprint-Backlog-Dokument mit Sprint-Ziel, Abnahmekriterien und technischen Voraussetzungen.  
 **Vorbedingung:** `UX-NNNNNN` vorhanden, `ADR-000001` APPROVED  
 **Output:** `SP-NNNNNN` Sprint Backlog  
-**Nächste Phase:** `/implement [fe|be|all] [projektname]`
+**Nächste Phase:** `/analyze [projektname]`
+
+---
+
+### /analyze — Cross-Artefakt-Konsistenzprüfung
+
+**Aktiviert:** ORCH (Orchestrator) — Analyze-Modus  
+**Wann nutzen:** Automatisch als Gate 5.5 zwischen `/refine` und `/implement` — oder jederzeit manuell bei Verdacht auf Spec-Drift.  
+**Was passiert:** Liest alle APPROVED REQ/US, ADR, UX, SP und CON-000001 (falls vorhanden). Prüft Referenz-Vollständigkeit (`cross-ref`) und inhaltliche Widersprüche (`self-assertion`) zwischen den Artefakten — insbesondere gegen ADR-Entscheidungen und gegen die Projekt-Constitution. Löst gefundene Widersprüche nicht selbst auf, sondern ordnet sie dem zuständigen Agenten zu (BA/AR/UX/PM).  
+**Vorbedingung:** `SP-NNNNNN` vorhanden  
+**Output:** Gate-Bericht + `INDEX.md` Gate-History-Eintrag (kein eigenständiges Artefakt)  
+**Nächste Phase (PASS):** `/implement [fe|be|all] [projektname]`  
+**Nächste Phase (FAIL):** zurück zum fundverursachenden Agenten, danach `/analyze` erneut
 
 ---
 
@@ -119,10 +141,11 @@ Standard-Reihenfolge Full-Sprint:
 
 **Aktiviert:** FE (Frontend Developer) und/oder BE (Backend Developer)  
 **Verwendung:** `/implement fe`, `/implement be`, oder `/implement all`  
-**Wann nutzen:** Nach Refinement — tatsächliche Code-Implementierung.  
+**Wann nutzen:** Nach bestandenem Analyze-Gate — tatsächliche Code-Implementierung.  
 **Was passiert (BE):** API-First: Erst API-Kontrakt (OpenAPI/GraphQL) erstellen, dann Datenschicht → Business Logic → API-Layer implementieren. Vollständige Code-Kommentierung nach Standard.  
 **Was passiert (FE):** Komponenten Bottom-Up implementieren (Atome → Moleküle → Seiten), basierend auf UX-Spec und API-Kontrakt. Accessibility-Attribute, Unit-Tests.  
-**Vorbedingung:** `SP-NNNNNN` vorhanden, UX-Specs vorhanden  
+**Vorbedingung:** `SP-NNNNNN` vorhanden, UX-Specs vorhanden, Gate 5.5 (`/analyze`) bestanden  
+**Bugfix-Rückläufer:** Wird `/implement` mit einem offenen `BUG-NNNNNN` aufgerufen (Rollback aus Gate 7), ist Root-Cause-Analyse vor jeder Code-Änderung Pflicht — siehe `toolchain/templates/bug-report.md`.  
 **Output:** Code + API-Kontrakt  
 **Nächste Phase:** `/test-plan [projektname] [sprint-nr]`
 
@@ -143,7 +166,7 @@ Standard-Reihenfolge Full-Sprint:
 
 **Aktiviert:** QA (QA Engineer)  
 **Wann nutzen:** Nach Abschluss des Testplans.  
-**Was passiert:** Führt automatisierte Tests aus (Unit → Integration → E2E mit Playwright). Für E2E: prüft `playwright.config.ts`, führt `npx playwright test --reporter=html` aus, speichert HTML-Report in `projects/<name>/testing/playwright-report/`. Erfasst Fehler als BUG-NNNNNN (inkl. Screenshot- und Trace-Pfad aus Playwright). Erstellt Coverage-Report und Freigabe-Empfehlung: APPROVED / CONDITIONAL / REJECTED.  
+**Was passiert:** Führt automatisierte Tests aus (Unit → Integration → E2E mit Playwright). Für E2E: prüft `playwright.config.ts`, führt `npx playwright test --reporter=html` aus, speichert HTML-Report in `projects/<name>/testing/playwright-report/`. Erfasst neue Fehler als BUG-NNNNNN mit `toolchain/templates/bug-report.md` (Symptom + Reproduktionsschritte; Root-Cause bleibt für FE/BE offen). Prüft zurückgemeldete BUG-NNNNNN (Status BEHOBEN) erneut und setzt sie auf VERIFIZIERT oder zurück auf OFFEN. Erstellt Coverage-Report und Freigabe-Empfehlung: APPROVED / CONDITIONAL / REJECTED.  
 **Vorbedingung:** `TP-NNNNNN` APPROVED, Testumgebung konfiguriert, App erreichbar für Playwright  
 **Output:** `TR-NNNNNN`, ggf. `BUG-NNNNNN`, Playwright HTML-Report — alle in `projects/<name>/testing/`  
 **Nächste Phase:** `/review [projektname] [sprint-nr]`

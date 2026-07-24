@@ -18,6 +18,8 @@ Der PM-Agent ist der erste Ansprechpartner für alle Stakeholder-seitigen Eingab
 - Geschäftsziele in messbare Outcomes überführen
 - Initiale Priorisierung (MoSCoW oder WSJF)
 - Stakeholder Brief (`SB-NNNNNN`) erstellen und pflegen
+- Projekt-Constitution (`CON-000001`) mit nicht verhandelbaren Prinzipien und
+  Qualitäts-Mindeststandards erstellen — bindend für alle nachfolgenden Agenten
 - Requirements-Übergabe an BA-Agent vorbereiten
 
 ## Inputs
@@ -37,6 +39,7 @@ werden mit Quellen-URL im Stakeholder Brief referenziert.
 | Artefakt | Präfix | Template |
 |----------|--------|---------|
 | Stakeholder Brief | `SB-NNNNNN` | `toolchain/templates/stakeholder-brief.md` |
+| Projekt-Constitution | `CON-000001` | `toolchain/templates/constitution.md` |
 | Priorisierungsmatrix | (Teil von SB) | — |
 
 ## System-Prompt-Template
@@ -93,10 +96,15 @@ INTERVIEW-REGELN:
 
 NACH DEM INTERVIEW:
 1. Erstelle SB-000001 vollständig nach Template
-2. Erstelle initiale MoSCoW-Priorisierung mit Begründung für jede Einordnung
-3. Identifiziere die Top-3-Risiken und benenne sie explizit
-4. Liste alle offenen Fragen, die im Interview nicht geklärt wurden
-5. Gib Übergabe-Zusammenfassung für BA-Agenten aus
+2. Erstelle CON-000001 (Projekt-Constitution) nach toolchain/templates/constitution.md —
+   synthetisiert aus allen 5 Runden, mit Schwerpunkt Runde 5 (Constraints & Risiken) für
+   die harten Ausschlüsse und Runde 4 (Erfolgskriterien) für die Qualitäts-Mindeststandards.
+   Nicht mit SB verwechseln: CON enthält keine Feature-Priorisierung, sondern nur
+   Prinzipien/Mindeststandards/Ausschlüsse, die über den gesamten Projektverlauf bindend sind.
+3. Erstelle initiale MoSCoW-Priorisierung mit Begründung für jede Einordnung
+4. Identifiziere die Top-3-Risiken und benenne sie explizit
+5. Liste alle offenen Fragen, die im Interview nicht geklärt wurden
+6. Gib Übergabe-Zusammenfassung für BA-Agenten aus
 
 ABSCHLUSS-PFLICHT:
 Schließe die Antwort IMMER mit diesem Block ab — exakter Befehl inkl. Projektname:
@@ -107,6 +115,7 @@ Schließe die Antwort IMMER mit diesem Block ab — exakter Befehl inkl. Projekt
 ABLAGE-REGELN (zwingend):
 - Projektordner: projects/<projektname>/   ← alle Artefakte des Projekts landen hier
 - Stakeholder Brief: projects/<projektname>/discovery/SB-000001-<projektname>.md
+- Projekt-Constitution: projects/<projektname>/discovery/CON-000001-<projektname>.md
 - Projektindex: projects/<projektname>/INDEX.md   ← beim ersten Mal anlegen
 - Phasendatei: projects/<projektname>/.phase      ← beim ersten Mal anlegen
 - NIEMALS Artefakte im Projekt-Root ablegen — nur im zugehörigen Unterordner (hier: discovery/)
@@ -134,6 +143,7 @@ Format nach `toolchain/protocols/handoff-protocol.md`, eingefügt am Ende des SB
 | Artefakt-ID | Status | Pfad | Hinweise |
 |-------------|--------|------|---------|
 | SB-000001 | APPROVED | `projects/<projektname>/discovery/SB-000001-<projektname>.md` | Priorisierte Features (MoSCoW), Erfolgskriterien, MVP-Definition |
+| CON-000001 | APPROVED | `projects/<projektname>/discovery/CON-000001-<projektname>.md` | Nicht verhandelbare Prinzipien und Qualitäts-Mindeststandards — bindend für BA und alle Folgephasen |
 
 ### Kritische Informationen für Empfänger
 
@@ -169,6 +179,9 @@ Format nach `toolchain/protocols/handoff-protocol.md`, eingefügt am Ende des SB
 - [ ] Top-3-Risiken benannt
 - [ ] Alle offenen Fragen protokolliert
 - [ ] SB-000001 liegt unter projects/<projektname>/discovery/SB-000001-<projektname>.md
+- [ ] CON-000001 liegt unter projects/<projektname>/discovery/CON-000001-<projektname>.md, Status APPROVED
+- [ ] CON-000001 enthält ≥ 3 nicht verhandelbare Prinzipien mit Begründung
+- [ ] CON-000001 enthält prüfbare Qualitäts-Mindeststandards (keine Adjektive ohne Zahl/Kriterium)
 - [ ] projects/<projektname>/INDEX.md existiert und ist aktuell
 - [ ] projects/<projektname>/.phase angelegt
 - [ ] projects/REGISTRY.md aktualisiert

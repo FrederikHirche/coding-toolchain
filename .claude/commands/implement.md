@@ -25,6 +25,17 @@ Aktiviert **Frontend Developer Agent (FE)** und/oder **Backend Developer Agent (
 3. Schreibt Unit-Tests
 4. Setzt Accessibility-Attribute
 
+## Vorbedingung
+
+Gate 5.5 (`/analyze [projektname]`) bestanden — keine offene BLOCKER-Inkonsistenz zwischen
+REQ/US, ADR, UX und SP.
+
+## Bugfix-Rückläufer (Gate 7 Rollback)
+
+Wird `/implement` mit einem offenen `BUG-NNNNNN` (Status `OFFEN`) statt mit neuen Sprint-Stories
+aufgerufen, gilt der Bugfix-Modus aus `frontend-agent.md`/`backend-agent.md`: Root-Cause-Analyse
+in `BUG-NNNNNN` ist vor jeder Code-Änderung Pflicht (siehe `toolchain/templates/bug-report.md`).
+
 ## Konventionen (zwingend)
 
 Alle Code-Dateien müssen enthalten:

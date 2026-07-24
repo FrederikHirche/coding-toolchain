@@ -8,9 +8,10 @@ Letzte Aktualisierung: 2026-07-20
 
 | Datei | ID | Szenario | Phasen |
 |-------|-----|---------|--------|
-| `full-sprint.md` | WF-FULL-SPRINT | Vollständiger Sprint (Discovery → Release) | 10 Phasen |
+| `full-sprint.md` | WF-FULL-SPRINT | Vollständiger Sprint (Discovery → Release) | 11 Phasen (inkl. Phase 5.5 Analyse) |
 | `hotfix.md` | WF-HOTFIX | Kritischer Produktionsfehler | 4 Phasen (vereinfacht) |
 | `spike.md` | WF-SPIKE | Technische Erkundung ohne Implementierung | 3 Phasen |
+| `converge.md` | WF-CONVERGE | Brownfield-Gap-Analyse (bestehender Code gegen Spec) | 3 Phasen |
 
 ## Auswahl des richtigen Workflows
 
@@ -18,6 +19,7 @@ Letzte Aktualisierung: 2026-07-20
 Neues Feature / neues Projekt?       → full-sprint.md  (/sprint)
 Produktionsfehler, kein Scope-Wechsel? → hotfix.md     (/hotfix)
 Technologiefrage ungeklärt?           → spike.md        (/spike)
+Bestehender Code, Spec unklar/fehlt?  → converge.md     (/converge)
 ```
 
 ## Workflow-Aufbau
