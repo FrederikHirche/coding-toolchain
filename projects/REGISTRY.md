@@ -8,7 +8,7 @@ Letzte Aktualisierung: 2026-07-25
 
 | Projekt | Phase | Sprint | Letzter Agent | Letztes Update | Pfad |
 |---------|-------|--------|--------------|----------------|------|
-| campaignworld | DONE | 1 | MW | 2026-07-25 | `projects/campaignworld/` |
+| campaignworld | REFINEMENT | 2 | BA | 2026-07-25 | `projects/campaignworld/` |
 | stellaris-mcp | DISCOVERY | 1 | PM | 2026-07-23 | `projects/stellaris-mcp/` |
 
 ## Abgeschlossene Projekte
