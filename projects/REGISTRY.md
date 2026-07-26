@@ -2,13 +2,13 @@
 
 Zentrale Übersicht aller Projekte, die die AI Development Tool Chain verwenden.
 
-Letzte Aktualisierung: 2026-07-25
+Letzte Aktualisierung: 2026-07-26
 
 ## Aktive Projekte
 
 | Projekt | Phase | Sprint | Letzter Agent | Letztes Update | Pfad |
 |---------|-------|--------|--------------|----------------|------|
-| campaignworld | DONE | 2 | MW | 2026-07-25 | `projects/campaignworld/` |
+| campaignworld | DONE | 3 | MW | 2026-07-26 | `projects/campaignworld/` |
 | stellaris-mcp | DISCOVERY | 1 | PM | 2026-07-23 | `projects/stellaris-mcp/` |
 
 ## Abgeschlossene Projekte
