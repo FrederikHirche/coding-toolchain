@@ -9,6 +9,30 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 
 ---
 
+## v2.6 — 2026-07-27
+
+### Geändert
+
+**Automatische Codebase-Memory-Graph-Aktualisierung am Ende von `/implement`**
+- `toolchain/agents/backend-agent.md` (v1.3): Neuer VORGEHEN-Schritt 8 — `index_repository`
+  (`mode='fast'`) gegen den Projektpfad ausführen, aber nur wenn kein anschließender FE-Schritt
+  folgt (BE-Solo-Modus bzw. FE bereits fertig), um einen doppelten Lauf zu vermeiden.
+- `toolchain/agents/frontend-agent.md` (v1.1): Neuer VORGEHEN-Schritt 7 — dieselbe
+  Graph-Aktualisierung, da FE üblicherweise der letzte Schritt vor `/test-plan`/`/review` ist.
+- `.claude/commands/implement.md`: Beide Modi ("Was passiert (BE-Modus)"/"(FE-Modus)") um den
+  neuen Schritt ergänzt.
+- `toolchain/agents/agents_summary.md`, `.claude/commands/commands_summary.md`: FE-/BE-
+  Abschnitte nachgezogen.
+- Auswirkung: Der Codebase-Memory-Graph (siehe CLAUDE.md „Codebase-Intelligenz") bleibt
+  innerhalb desselben Sprints aktuell für `/test-plan`, `/review` und `/converge`, statt erst
+  bei der nächsten manuellen Indizierung nachzuziehen. Ausgelöst durch eine Beobachtung im
+  campaignworld-Projekt: der Graph war nach einem umfangreichen `/implement`-Lauf gegenüber dem
+  Arbeitsstand veraltet (zeigte noch den letzten Commit, nicht die neuen unkommittierten
+  Dateien). Kein neuer Command — bewusst als Hook in den bestehenden Agenten-Ablauf integriert,
+  nicht als separates `/reindex`-Kommando.
+
+---
+
 ## v2.5 — 2026-07-25
 
 ### Neu

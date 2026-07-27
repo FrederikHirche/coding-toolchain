@@ -16,7 +16,9 @@ Aktiviert **Frontend Developer Agent (FE)** und/oder **Backend Developer Agent (
 2. Erstellt API-Kontrakt (OpenAPI / GraphQL Schema) — vor Code
 3. Implementiert: Datenschicht → Business Logic → API-Layer
 4. Schreibt Integration-Tests
-5. Gibt Übergabe an FE-Agenten aus
+5. Aktualisiert den Codebase-Memory-Graph (`index_repository`, `mode='fast'`) — **nur wenn kein
+   FE-Schritt mehr folgt**, sonst übernimmt das FE am Ende
+6. Gibt Übergabe an FE-Agenten aus
 
 ## Was passiert (FE-Modus)
 
@@ -24,6 +26,8 @@ Aktiviert **Frontend Developer Agent (FE)** und/oder **Backend Developer Agent (
 2. Implementiert Komponenten: Bottom-Up (Atome → Moleküle → Seiten)
 3. Schreibt Unit-Tests
 4. Setzt Accessibility-Attribute
+5. Aktualisiert den Codebase-Memory-Graph (`index_repository`, `mode='fast'`) — hält den Graphen
+   für `/test-plan`/`/review` aktuell (siehe CLAUDE.md „Codebase-Intelligenz")
 
 ## Vorbedingung
 

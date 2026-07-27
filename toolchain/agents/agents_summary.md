@@ -225,7 +225,9 @@ Einschränkungen und Test-Coverage-Stand weiter.
 
 **Codebase-Intelligenz:** Bei Änderungen an bestehendem Code nutzt FE den MCP-Server
 `codebase-memory` (siehe CLAUDE.md, Abschnitt "Codebase-Intelligenz"), um Verwendungsstellen
-zu finden — insbesondere zur Root-Cause-Suche im Bugfix-Modus.
+zu finden — insbesondere zur Root-Cause-Suche im Bugfix-Modus. Am Ende der Implementierung
+aktualisiert FE den Graphen (`index_repository`, `mode='fast'`), da FE üblicherweise der letzte
+Schritt vor `/test-plan`/`/review` ist.
 
 **Sprint-Worktree:** Arbeitet, sofern `.phase` ein `worktree-path` gesetzt hat, ausschließlich
 im Sprint-Worktree (`feature/sprint-N`), nicht im Haupt-Checkout.
@@ -267,7 +269,10 @@ Umgebungsvariablen für Tests).
 
 **Codebase-Intelligenz:** Bei Änderungen an bestehendem Code nutzt BE den MCP-Server
 `codebase-memory` (siehe CLAUDE.md, Abschnitt "Codebase-Intelligenz"), um Aufrufketten und
-betroffene Stellen zu finden — insbesondere zur Root-Cause-Suche im Bugfix-Modus.
+betroffene Stellen zu finden — insbesondere zur Root-Cause-Suche im Bugfix-Modus. Am Ende der
+Implementierung aktualisiert BE den Graphen (`index_repository`, `mode='fast'`) — aber nur,
+wenn kein anschließender FE-Schritt folgt (sonst übernimmt das FE, um einen doppelten Lauf zu
+vermeiden).
 
 **Sprint-Worktree:** Arbeitet, sofern `.phase` ein `worktree-path` gesetzt hat, ausschließlich
 im Sprint-Worktree (`feature/sprint-N`), nicht im Haupt-Checkout.

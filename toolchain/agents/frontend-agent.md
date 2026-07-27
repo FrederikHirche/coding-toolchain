@@ -1,7 +1,7 @@
 ---
 id: AGENT-FE
 title: Frontend Developer Agent
-version: 1.0
+version: 1.1
 status: ACTIVE
 ---
 
@@ -71,6 +71,10 @@ VORGEHEN:
    e. Accessibility-Attribute setzen (aria-*, role, tabIndex)
    f. Unit-Test-Datei anlegen (mind. Happy Path + 1 Error Case)
 6. INDEX.md der betroffenen Ordner aktualisieren.
+7. Codebase-Memory-Graph aktualisieren — `index_repository(repo_path=projects/<name>,
+   mode='fast')` (bei Erstindizierung dieses Projekts: `mode='full'`), damit RV/QA in
+   `/test-plan`/`/review` einen aktuellen Stand abfragen (FE ist der übliche letzte Schritt vor
+   `/test-plan`, siehe `implement.md`).
 
 CODE-QUALITÄTSREGELN:
 - Kein auskommentierter Code ohne // TODO-Marker

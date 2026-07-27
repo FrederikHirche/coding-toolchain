@@ -1,7 +1,7 @@
 ---
 id: AGENT-BE
 title: Backend Developer Agent
-version: 1.2
+version: 1.3
 status: ACTIVE
 ---
 
@@ -75,6 +75,10 @@ VORGEHEN — API-FIRST:
    - Logging: Strukturiertes Logging an kritischen Pfaden
 6. Tests: Für jeden Endpoint mind. Happy Path + Fehlerfall + Auth-Check
 7. INDEX.md der betroffenen Ordner aktualisieren.
+8. Codebase-Memory-Graph aktualisieren — **nur wenn kein anschließender FE-Schritt folgt**
+   (BE-Solo-Modus, oder FE bereits abgeschlossen): `index_repository(repo_path=projects/<name>,
+   mode='fast')` (bei Erstindizierung dieses Projekts: `mode='full'`). Folgt direkt
+   `/implement fe`, hier überspringen — sonst doppelter Lauf; FE aktualisiert am Ende ohnehin.
 
 SICHERHEITS-CHECKLISTE (vor Abschluss jeder Funktion prüfen):
 - Input-Validierung: Alle Eingaben validiert?

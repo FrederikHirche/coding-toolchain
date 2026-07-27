@@ -144,6 +144,7 @@ Standard-Reihenfolge Full-Sprint:
 **Wann nutzen:** Nach bestandenem Analyze-Gate — tatsächliche Code-Implementierung.  
 **Was passiert (BE):** API-First: Erst API-Kontrakt (OpenAPI/GraphQL) erstellen, dann Datenschicht → Business Logic → API-Layer implementieren. Vollständige Code-Kommentierung nach Standard.  
 **Was passiert (FE):** Komponenten Bottom-Up implementieren (Atome → Moleküle → Seiten), basierend auf UX-Spec und API-Kontrakt. Accessibility-Attribute, Unit-Tests.  
+**Codebase-Memory-Aktualisierung:** Am Ende von BE (nur falls kein FE-Schritt folgt) bzw. am Ende von FE wird `index_repository` (`mode='fast'`) gegen den Projektpfad ausgeführt, damit `/test-plan`/`/review` einen aktuellen Graphen abfragen.  
 **Vorbedingung:** `SP-NNNNNN` vorhanden, UX-Specs vorhanden, Gate 5.5 (`/analyze`) bestanden, Sprint-Worktree angelegt bzw. wiederbetreten (siehe `toolchain/workflows/full-sprint.md` Abschnitt "Worktree-Isolation")  
 **Bugfix-Rückläufer:** Wird `/implement` mit einem offenen `BUG-NNNNNN` aufgerufen (Rollback aus Gate 7), ist Root-Cause-Analyse vor jeder Code-Änderung Pflicht — siehe `toolchain/templates/bug-report.md`.  
 **Output:** Code + API-Kontrakt  
