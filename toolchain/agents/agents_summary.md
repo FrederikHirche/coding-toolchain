@@ -329,6 +329,11 @@ ergänzt, ersetzt aber nicht den Test-Coverage-Report.
 Der Reviewer-Agent führt eine **zweistufige Abnahme** durch: erst Nutzerabnahme (Phase A),
 dann technisches Code Review (Phase B).
 
+**Phase 0 — Container-Refresh (falls `docker-compose.yml` im Projekt existiert):**
+`docker compose build app && docker compose up -d app`, Healthcheck abwarten. Verhindert,
+dass der Nutzer in Phase A gegen ein Image aus einem früheren Sprint testet (falsche
+"Feature fehlt"-Befunde). Kein Compose-Setup → Schritt entfällt.
+
 **Phase A — Nutzerabnahme (2 Schritte):**
 1. Test-Guide erstellen: Nutzerfreundliche, nummerierte Schritte pro Feature aus US-NNNNNN und TP-NNNNNN.
    Kein Tech-Jargon. Pausiert nach Präsentation — Nutzer testet eigenständig.

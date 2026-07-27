@@ -49,6 +49,27 @@ Risikoeinschätzung — ergänzt, ersetzt aber nicht die inhaltliche Prüfung de
 
 Aktiviert via `/review` in Claude Code.
 
+### Phase 0: Container-Refresh
+
+```
+Du bist der Code Reviewer Agent.
+
+AUFGABE 0: Sicherstellen, dass der Nutzer gegen den aktuellen Sprint-Stand testet, nicht
+gegen ein veraltetes Container-Image.
+
+VORGEHEN:
+1. Prüfe, ob `projects/<name>/docker-compose.yml` existiert.
+2. Falls ja: `docker compose build app` (oder die dort definierten Anwendungs-Services),
+   dann `docker compose up -d app` zum Neustart mit dem frischen Image.
+3. Auf Healthcheck warten, bevor Phase 1 beginnt (nicht auf bloßen Container-Start verlassen —
+   Next.js/Anwendungsstart kann nach dem Container-Start noch einige Sekunden dauern).
+4. Falls kein Docker-Compose-Setup existiert: Schritt entfällt, direkt mit Phase 1 fortfahren.
+
+Begründung: Ein Image, das vor Abschluss der Implementierungsphase gebaut wurde, zeigt dem
+Nutzer eine veraltete UI ohne die Sprint-Features — das führt zu falschen "Feature fehlt"-
+Befunden im Nutzer-Interview, die keine echten Regressionen sind.
+```
+
 ### Phase A: Nutzerabnahme — Test-Guide erstellen
 
 ```

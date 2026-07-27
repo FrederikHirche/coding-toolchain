@@ -11,6 +11,16 @@ erst **Nutzerabnahme** der implementierten Features, dann **technisches Code Rev
 
 ## Was passiert
 
+### Phase 0: Container-Refresh (falls vorhanden)
+
+Bevor der Test-Guide erstellt wird: Falls `projects/<name>/docker-compose.yml` existiert,
+wird der `app`-Service (bzw. die dort definierten Anwendungs-Services) **neu gebaut und
+neu gestartet** (`docker compose build app && docker compose up -d app`), damit der Nutzer
+garantiert gegen den aktuellen Sprint-Stand testet — nicht gegen ein veraltetes Image von
+einem früheren Sprint. Gesundheitscheck abwarten, bevor Phase 1 beginnt. Kein
+Docker-Compose-Setup im Projekt → Phase 0 entfällt ersatzlos (z. B. reiner lokaler
+Dev-Server-Workflow).
+
 ### Phase 1: Test-Guide für den Nutzer
 
 1. Liest alle US-NNNNNN des Sprints und TP-NNNNNN (manuelle Testfälle)
@@ -63,7 +73,8 @@ unabhängig davon, ob der Code technisch korrekt ist.
 - `TR-NNNNNN` vorhanden (aus `/test-run`)
 - Keine BLOCKER-Bugs offen
 - QA-Freigabe-Empfehlung nicht REJECTED
-- App läuft und ist für den Nutzer zugänglich (lokal oder Staging)
+- App läuft und ist für den Nutzer zugänglich (lokal oder Staging) — bei Docker-Compose-Setups
+  stellt Phase 0 dies automatisch sicher
 
 ## Nächster Schritt
 

@@ -5,7 +5,8 @@
       "args": ["-m", "mcp_server_fetch"]
     },
     "codebase-memory": {
-      "command": "codebase-memory-mcp"
+      "command": "C:\\Users\\frede\\.codebase-memory-mcp\\bin\\codebase-memory-mcp-ui-v0.9.0-pinned.exe",
+      "args": ["--ui=true", "--port=9749"]
     }
   }
 }

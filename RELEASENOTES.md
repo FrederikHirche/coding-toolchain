@@ -11,6 +11,33 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 
 ## v2.6 — 2026-07-27
 
+### Neu
+
+**`/review` baut Docker-Container jetzt automatisch neu (Phase 0)**
+- `.claude/commands/review.md`: Neue „Phase 0: Container-Refresh" vor dem Test-Guide — falls
+  `projects/<name>/docker-compose.yml` existiert, wird `docker compose build app && docker
+  compose up -d app` ausgeführt und der Healthcheck abgewartet, bevor der Nutzer zum Testen
+  aufgefordert wird. Kein Compose-Setup im Projekt → Phase entfällt ersatzlos.
+- `toolchain/agents/reviewer-agent.md` (v2.0 → Phase-0-Ergänzung): Neuer System-Prompt-Block
+  „Phase 0: Container-Refresh" mit Vorgehen und Begründung.
+- `toolchain/agents/agents_summary.md`, `.claude/commands/commands_summary.md`: RV-Abschnitte
+  um Phase 0 ergänzt.
+- Auswirkung: Verhindert falsche „Feature fehlt"-Befunde im Nutzer-Interview, wenn der
+  Anwendungscontainer seit einem früheren Sprint nicht neu gebaut wurde. Ausgelöst durch einen
+  konkreten Vorfall bei campaignworld Sprint 4: Container-Image war vom 2026-07-26, die
+  Adventure-UI aus Sprint 4 wurde erst am 2026-07-27 implementiert — der Nutzer fand beim
+  manuellen Test kein Adventure-Dropdown, weil er gegen den alten Image-Stand testete.
+
+**3D-Graph-Visualisierung des `codebase-memory`-MCP-Servers aktiviert**
+- `.mcp.json`: `codebase-memory`-Server um `"args": ["--ui=true", "--port=9749"]` ergänzt.
+- `CLAUDE.md` (Abschnitt „Codebase-Intelligenz (MCP `codebase-memory`)"): neuer Absatz
+  „3D-Graph-Visualisierung (optional)" — Zugriff über `http://localhost:9749`, verwaltet vom
+  gemeinsamen Coordination-Daemon (keine doppelten HTTP-Server bei parallelen Sessions).
+- Auswirkung: Kein separater Build/Download nötig — die installierte npm-Distribution von
+  `codebase-memory-mcp` (Version 0.9.0) enthält die Browser-3D-Ansicht bereits als
+  Konfigurationsoption; sie war nur nicht aktiviert. Rein explorativ, kein neues Tool und
+  keine Änderung an den bestehenden MCP-Tool-Calls.
+
 ### Geändert
 
 **Automatische Codebase-Memory-Graph-Aktualisierung am Ende von `/implement`**

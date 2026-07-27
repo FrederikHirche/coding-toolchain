@@ -178,7 +178,10 @@ Standard-Reihenfolge Full-Sprint:
 
 **Aktiviert:** RV (Code Reviewer)  
 **Wann nutzen:** Nach bestandenem Test-Lauf, vor dem Merge.  
-**Was passiert (3 Phasen):**
+**Was passiert (4 Phasen):**
+0. **Container-Refresh:** Falls `projects/<name>/docker-compose.yml` existiert: `app`-Service
+   neu bauen und neu starten, Healthcheck abwarten — sonst testet der Nutzer versehentlich
+   gegen ein veraltetes Image aus einem früheren Sprint. Kein Compose-Setup → entfällt.
 1. **Test-Guide erstellen:** RV-Agent erstellt nutzerfreundlichen Test-Guide (klare Schritte, kein Tech-Jargon) aus US-NNNNNN und TP-NNNNNN — dann ⏸ pausieren, Nutzer testet.
 2. **Nutzer-Interview:** Wenn Nutzer zurückkommt: strukturiertes Interview pro Feature (funktioniert? unerwartetes? UX-Eindruck?). Ergibt Nutzer-Befund: ACCEPTED / CONDITIONAL / REJECTED.
 3. **Technisches Code Review:** 6 Dimensionen (Korrektheit → Sicherheit → ADR-Konformität → Code-Qualität → Testabdeckung → Performance). Gesamtentscheidung kombiniert Nutzer + Technik.  

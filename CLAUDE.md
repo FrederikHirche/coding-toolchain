@@ -254,6 +254,25 @@ fachliches Verständnis, Code Review oder Testausführung. Vor dem ersten Einsat
 Projekt einmalig `index_repository` gegen den Projektpfad ausführen; ein Background-Watcher
 hält den Index danach automatisch aktuell.
 
+**Bekanntes Windows-Problem (Pin):** Die offiziell über npm ausgelieferte Windows-Binary
+von v0.9.0 hat einen Bug in `--ui=true` (Graph-UI startet nicht zuverlässig). `.mcp.json`
+zeigt deshalb absichtlich nicht auf den npm-Befehl `codebase-memory-mcp`, sondern auf eine
+fest gepinnte, funktionierende Binary unter
+`C:\Users\frede\.codebase-memory-mcp\bin\codebase-memory-mcp-ui-v0.9.0-pinned.exe` (außerhalb
+von `node_modules`, überlebt daher jedes `npm install/update -g`). Sobald ein Release den Fix
+enthält, `.mcp.json` wieder auf `"command": "codebase-memory-mcp"` zurückstellen und den Pin
+entfernen.
+
+**3D-Graph-Visualisierung (optional):** `codebase-memory-mcp` bringt eine browserbasierte
+3D-Visualisierung des Code-Graphen mit (Multi-Galaxy-Layout über mehrere indizierte
+Projekte hinweg). Sie ist über `--ui=true --port=9749` in `.mcp.json` aktiviert und läuft
+als HTTP-Server unter `http://localhost:9749`, sobald eine Claude-Code-Session den
+`codebase-memory`-Server startet — verwaltet vom gemeinsamen Coordination-Daemon, sodass
+mehrere parallele Sessions keine doppelten HTTP-Server öffnen. Rein explorativ (Menschen im
+Browser), kein Tool-Call und kein Ersatz für die MCP-Werkzeuge oben; nützlich, um sich vor
+`/architect`- oder `/converge`-Sessions einen visuellen Überblick über eine Bestandscodebase
+zu verschaffen.
+
 ---
 
 ## Additive Codex-Kompatibilität
