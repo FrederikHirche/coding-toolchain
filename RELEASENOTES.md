@@ -9,6 +9,47 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 
 ---
 
+## v2.8 — 2026-07-28
+
+### Neu
+
+**Thinking-Zusammenfassungen standardmäßig sichtbar in allen Projekten**
+- `projects/_template/.claude/settings.json` (neu): `alwaysThinkingEnabled`,
+  `showThinkingSummaries`, `verbose` auf `true` — wird bei jedem neuen Projekt aus der
+  Vorlage übernommen.
+- `projects/campaignworld/.claude/settings.json`, `projects/stellaris-mcp/.claude/
+  settings.json`: rückwirkend mit denselben drei Keys ergänzt (Bestandsprojekte).
+- `CLAUDE.md`: neuer Abschnitt „Thinking-Transparenz" in „Globale Konventionen" —
+  dokumentiert die Settings-Keys, ihren Zweck und die Tastenkombinationen zum
+  Ausklappen/Lesen der Zusammenfassung in laufenden Sessions (`Ctrl+O`/`Ctrl+E`, `Alt+T`).
+- Auswirkung: Nutzerwunsch, dass alle Projekte (nicht nur der Toolchain-Root, wo diese
+  Keys bereits gesetzt waren) die Möglichkeit haben, Claude Codes Thinking-Prozess
+  einzusehen. Da jedes `projects/<name>/` ein eigenes Git-Repository ist, wirkte die
+  bisherige Root-`.claude/settings.json` nicht auf Projekt-Sessions — dieser Fix schließt
+  die Lücke strukturell über die Vorlage statt nur punktuell.
+
+---
+
+## v2.7 — 2026-07-28
+
+### Geändert
+
+**Review-Checkliste um worldId-Scoping-Prüfpunkt ergänzt (campaignworld DEBT-000013)**
+- `toolchain/templates/review-checklist.md`: Dimension 2 (Sicherheit) um den Prüfpunkt
+  „worldId-Scoping pro betroffener Beziehungskette, nicht nur pro Funktion" ergänzt — jede
+  Query, die zwei oder mehr per-id referenzierte Entitäten verknüpft, muss beide Seiten gegen
+  dasselbe `worldId` prüfen, nicht nur die zuerst genannte.
+- `toolchain/templates/templates_summary.md`: RV-Abschnitt entsprechend ergänzt.
+- Auswirkung: Das automatisierte `require-server-action-guard`-ESLint-Gate (v2.x, aus
+  campaignworld DEBT-000002) prüft nur, ob ein Autorisierungs-Guard überhaupt aufgerufen wird —
+  nicht, ob er die fachlich richtige Dimension abdeckt. Ein realer Cross-Tenant-Fund
+  (campaignworld K-001/S-001, `RV-000004`) blieb trotz aktivem Gate unentdeckt, weil die
+  aufgerufene Prüfung die falsche Scope-Dimension traf. Die Checkliste schließt diese Lücke für
+  jedes künftige `/review`, bis eine strukturelle Lösung (z. B. via `codebase-memory`-Traversal)
+  entschieden wird.
+
+---
+
 ## v2.6 — 2026-07-27
 
 ### Neu

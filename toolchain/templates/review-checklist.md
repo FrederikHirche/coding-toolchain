@@ -83,6 +83,7 @@ superseded-by: —
 | Input-Validierung für alle Endpoints | ✅ / ❌ | |
 | Keine hardcodierten Secrets/Credentials | ✅ / ❌ | |
 | Auth/Authz korrekt implementiert | ✅ / ❌ | |
+| worldId-Scoping pro betroffener Beziehungskette, nicht nur pro Funktion — jede neue/geänderte Query, die zwei oder mehr per-id referenzierte Entitäten verknüpft (z. B. Endpunkt A + Endpunkt B einer Relation, Parent+Child, altes+neues Ziel bei einem Replace), muss **beide** Seiten gegen dasselbe `worldId` prüfen, nicht nur die zuerst genannte (DEBT-000013 — ein automatisiertes Lint-Gate prüft nur die *Anwesenheit* eines Guard-Aufrufs, nie ob er die fachlich richtige Dimension abdeckt; K-001/S-001 aus `RV-000004` blieb trotz aktivem Gate unentdeckt) | ✅ / ❌ | |
 | SQL/NoSQL-Injection-Schutz | ✅ / ❌ | |
 | Sensible Daten nicht geloggt | ✅ / ❌ | |
 | OWASP Top 10 berücksichtigt | ✅ / ❌ / N/A | |

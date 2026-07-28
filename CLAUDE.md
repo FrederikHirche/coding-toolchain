@@ -210,6 +210,37 @@ Kein Template und kein Agent setzt eine Technologie voraus. Technologieentscheid
 werden projektspezifisch in `ADR-000001-tech-stack.md` festgehalten und sind ab APPROVED
 für alle nachfolgenden Agenten verbindlich.
 
+### Thinking-Transparenz (Claude-Code-Session-Einstellungen)
+
+Jedes Projekt (`projects/_template/.claude/settings.json`, von dort in jedes neue Projekt
+übernommen) aktiviert standardmäßig:
+
+```json
+{
+  "alwaysThinkingEnabled": true,
+  "showThinkingSummaries": true,
+  "verbose": true
+}
+```
+
+`alwaysThinkingEnabled` sorgt dafür, dass Claude Code in jeder Session Extended Thinking
+nutzt — ohne aktives Thinking gibt es keine Zusammenfassung, die sich anzeigen ließe.
+`showThinkingSummaries`/`verbose` machen diese Zusammenfassung sichtbar statt sie zu
+unterdrücken.
+
+**Ausklappen/Lesen in der laufenden Session:** `Ctrl+O` öffnet den Transcript Viewer (zeigt
+Tool-Aufrufe inkl. Zeitstempel und genutztem Modell zu jeder Assistant-Nachricht); darin
+schaltet `Ctrl+E` auf „vollständigen Inhalt anzeigen" um, was die komplette Thinking-
+Zusammenfassung statt nur eines Kurzauszugs offenlegt. `Alt+T` (Windows/Linux) bzw.
+`Option+T` (macOS) schaltet Extended Thinking für die laufende Session komplett an/aus,
+unabhängig von der Projekt-Voreinstellung.
+
+Gilt projektweit, da jedes `projects/<name>/` ein eigenes Git-Repository ist — `.claude/
+settings.json` muss daher pro Projekt (nicht nur im Toolchain-Root) committet werden, um für
+alle Mitwirkenden zu greifen. Scope-Präzedenz von Claude Code: Managed (`managed-settings.
+json`) > Local (`settings.local.json`, gitignored, pro Maschine) > Project (`settings.json`,
+committet, gilt für alle) > User (`~/.claude/settings.json`, nur lokal).
+
 ### Externe Recherche (MCP `fetch`)
 
 Für Recherche-lastige Phasen steht der MCP-Server `fetch` zur Verfügung (registriert in

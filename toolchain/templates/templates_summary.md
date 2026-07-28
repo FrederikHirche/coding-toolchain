@@ -3,7 +3,7 @@
 Konsolidierte Übersicht aller Artefakt-Templates.  
 Zweck: Einzelne Referenzdatei für NotebookLM-Analyse und schnelle Orientierung.
 
-**Letzte Aktualisierung:** 2026-07-24  
+**Letzte Aktualisierung:** 2026-07-28  
 **Pflege-Regel:** Diese Datei wird bei jedem Hinzufügen oder Ändern eines Templates aktualisiert.
 
 ---
@@ -251,7 +251,9 @@ finale Merge-Entscheidung.
 
 **Kernabschnitte:**
 - Korrektheit: Implementierung vs. Akzeptanzkriterien, API-Kontrakt-Konformität
-- Sicherheit: Input-Validierung, Secrets, Auth, Injection-Schutz
+- Sicherheit: Input-Validierung, Secrets, Auth, Injection-Schutz, worldId-Scoping pro betroffener
+  Beziehungskette (nicht nur pro Funktion — ein Lint-Gate prüft nur Anwesenheit eines Guard-Aufrufs,
+  nie ob er die fachlich richtige Dimension abdeckt, campaignworld DEBT-000013)
 - ADR-Konformität: Tech-Stack und Architekturentscheidungen eingehalten?
 - Code-Qualität: Kommentierungsstandard, Datei-Header, keine Magic Numbers
 - Testabdeckung: Unit-Tests, Happy Path + Error Case abgedeckt?
