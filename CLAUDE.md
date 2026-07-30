@@ -318,6 +318,12 @@ der Tool Chain. Die Codex-Integration ist ausschließlich additiv:
 | `.codex/config.toml` | Registrierung der Codex-Rollenadapter |
 | `.codex/agents/` | Codex-Agenten, die auf die kanonischen Definitionen unter `toolchain/agents/` verweisen |
 | `projects/_template/AGENTS.md` | Codex-Anweisungen für eigenständige Projekt-Repositories |
+| `projects/_template/.agents/skills/coding-toolchain/` | Projektlokaler Skill, damit eigenständige Codex-Sitzungen alle Toolchain-Commands erkennen |
+
+Codex unterstützt keine repository-definierten nackten Slash-Commands. In einer
+Codex-Sitzung wird deshalb die portable Skill-Syntax
+`$coding-toolchain /<command>` verwendet, beispielsweise `$coding-toolchain /ba`.
+Natürliche Anfragen wie „Führe /ba aus“ können denselben Skill implizit aktivieren.
 
 Codex-spezifische Dateien dürfen Commands, Rollen, Templates, Protokolle oder Prioritäten
 von Claude Code nicht überschreiben. Konsistenzprüfung:

@@ -8,6 +8,22 @@ Dieses Projekt wird von der Claude-first AI Development Tool Chain verwaltet.
 Lies `.toolchain.yml` und verwende `toolchain-path`, um den Toolchain-Root zu bestimmen.
 In der Standardstruktur ist dies `../../`.
 
+## Commands in Codex
+
+Codex unterstützt keine repository-definierten, nackten Slash-Commands. Verwende den
+projektlokalen Skill und hänge den kanonischen Command an:
+
+```text
+$coding-toolchain /ba
+$coding-toolchain /architect
+$coding-toolchain /test-plan
+```
+
+Das gilt für alle Commands aus `CLAUDE.md`. Der Skill wird aus
+`.agents/skills/coding-toolchain/` geladen und ermittelt Projektname sowie Toolchain-Pfad
+selbst. Natürliche Formulierungen wie „Führe /ba aus“ sollen denselben Skill implizit
+aktivieren.
+
 Vor einem Toolchain-Command vollständig lesen:
 
 1. `<toolchain-path>/CLAUDE.md`

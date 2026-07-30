@@ -9,6 +9,30 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 
 ---
 
+## v2.9 — 2026-07-30
+
+### Behoben
+
+**Toolchain-Commands sind in eigenständigen Codex-Projektsitzungen auffindbar**
+- `projects/_template/.agents/skills/coding-toolchain/SKILL.md` (neu): projektlokaler
+  Codex-Skill routet alle 20 kanonischen Commands und löst den Toolchain-Root über
+  `.toolchain.yml` auf.
+- `projects/_template/AGENTS.md`: dokumentiert die Codex-native Syntax
+  `$coding-toolchain /<command>` und die Plattformgrenze für repository-definierte
+  Slash-Commands.
+- `CLAUDE.md`: additive Codex-Kompatibilitätsübersicht um den projektlokalen Skill und
+  dessen Aufrufsyntax ergänzt.
+- `toolchain/scripts/validate-codex-compat.ps1`, `toolchain/scripts/INDEX.md`: Validator
+  prüft nun den projektlokalen Skill, `toolchain-path` und jede einzelne Command-Route.
+- `projects/second-brain/.agents/skills/coding-toolchain/SKILL.md`,
+  `projects/second-brain/AGENTS.md`: bestehendes Projekt rückwirkend korrigiert.
+- Auswirkung: Eine direkt in einem Projekt-Repository gestartete Codex-Sitzung entdeckt
+  die Toolchain jetzt selbst. `/ba` wird in Codex portabel als
+  `$coding-toolchain /ba` aufgerufen; natürliche Anfragen können den Skill implizit
+  aktivieren.
+
+---
+
 ## v2.8 — 2026-07-28
 
 ### Neu

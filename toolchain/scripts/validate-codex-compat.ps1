@@ -32,6 +32,7 @@ $requiredPaths = @(
     '.agents\skills\coding-toolchain\SKILL.md',
     '.agents\skills\coding-toolchain\agents\openai.yaml',
     'projects\_template\AGENTS.md',
+    'projects\_template\.agents\skills\coding-toolchain\SKILL.md',
     'toolchain\agents\_base-agent.md',
     'toolchain\protocols\gate-protocol.md',
     'toolchain\protocols\handoff-protocol.md',
@@ -115,6 +116,28 @@ if (Test-Path -LiteralPath $skillPath) {
     }
     if ($skillContent -match '\[TODO') {
         $script:failures.Add('Der Skill enthält noch TODO-Platzhalter.')
+    }
+}
+
+$projectSkillPath = Join-Path $repositoryRoot 'projects\_template\.agents\skills\coding-toolchain\SKILL.md'
+if (Test-Path -LiteralPath $projectSkillPath) {
+    $projectSkillContent = Get-Content -LiteralPath $projectSkillPath -Raw
+
+    $script:checks++
+    if ($projectSkillContent -notmatch '(?m)^name:\s*coding-toolchain\s*$') {
+        $script:failures.Add('Der projektlokale Skill besitzt keinen gültigen Namen.')
+    }
+
+    $script:checks++
+    if ($projectSkillContent -notmatch 'toolchain-path') {
+        $script:failures.Add('Der projektlokale Skill löst toolchain-path nicht auf.')
+    }
+
+    foreach ($command in $expectedCommands) {
+        $script:checks++
+        if ($projectSkillContent -notmatch [regex]::Escape("/$command")) {
+            $script:failures.Add("Der projektlokale Skill routet /$command nicht.")
+        }
     }
 }
 
