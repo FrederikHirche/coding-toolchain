@@ -182,7 +182,12 @@ Standard-Reihenfolge Full-Sprint:
 0. **Container-Refresh:** Falls `projects/<name>/docker-compose.yml` existiert: `app`-Service
    neu bauen und neu starten, Healthcheck abwarten — sonst testet der Nutzer versehentlich
    gegen ein veraltetes Image aus einem früheren Sprint. Kein Compose-Setup → entfällt.
-1. **Test-Guide erstellen:** RV-Agent erstellt nutzerfreundlichen Test-Guide (klare Schritte, kein Tech-Jargon) aus US-NNNNNN und TP-NNNNNN — dann ⏸ pausieren, Nutzer testet.
+1. **Sprint-Übersicht + Test-Guide:** RV-Agent benennt unmittelbar vor dem manuellen Test
+   alle Sprint-User-Stories (Titel + Nutzen), Defects (Symptom + Status, auch behobene) und
+   MINOR-Befunde (Inhalt + Status) kurz aus SP/US/TR/BUG sowie bei Re-Reviews aus früheren
+   RV-Berichten; leere Gruppen erscheinen als „Keine“. Direkt danach folgt der
+   nutzerfreundliche Test-Guide aus US-NNNNNN und TP-NNNNNN — dann ⏸ pausieren, Nutzer
+   testet.
 2. **Nutzer-Interview:** Wenn Nutzer zurückkommt: strukturiertes Interview pro Feature (funktioniert? unerwartetes? UX-Eindruck?). Ergibt Nutzer-Befund: ACCEPTED / CONDITIONAL / REJECTED.
 3. **Technisches Code Review:** 6 Dimensionen (Korrektheit → Sicherheit → ADR-Konformität → Code-Qualität → Testabdeckung → Performance). Gesamtentscheidung kombiniert Nutzer + Technik.  
 **Vorbedingung:** `TR-NNNNNN` vorhanden, keine BLOCKER-Bugs offen, App zugänglich  

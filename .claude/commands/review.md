@@ -23,13 +23,28 @@ Dev-Server-Workflow).
 
 ### Phase 1: Test-Guide für den Nutzer
 
-1. Liest alle US-NNNNNN des Sprints und TP-NNNNNN (manuelle Testfälle)
+1. Liest `SP-NNNNNN`, alle US-NNNNNN des Sprints, TP-NNNNNN (manuelle Testfälle),
+   TR-NNNNNN, alle dem Sprint zugeordneten BUG-NNNNNN und bei einem Re-Review frühere
+   RV-NNNNNN desselben Sprints
 2. Erstellt einen **nutzerfreundlichen Test-Guide** pro Feature:
    - Klare, nummerierte Schritte ohne Tech-Jargon
    - Genaue Startbedingung ("Starte die App, navigiere zu ...")
    - Erwartetes Ergebnis nach jedem Schritt
    - Max. 5–7 Schritte pro Feature, max. 3 Features pro Guide-Abschnitt
-3. Präsentiert den Test-Guide und weist den Nutzer an, die App zu öffnen und die Features durchzutesten
+3. Präsentiert **unmittelbar vor dem Test-Guide** eine kurze inhaltliche
+   **Sprint-Übersicht** mit drei Gruppen:
+   - **User Stories:** ID, Titel und Nutzen in einem kurzen Satz
+   - **Defects:** ID, Symptom und aktueller Status — einschließlich bereits behobener
+     Defects, sofern sie Teil des Sprints waren
+   - **MINORs:** ID bzw. Fundstelle, kurze inhaltliche Benennung und Status aller
+     MINOR-Bugs/-Befunde des Sprints
+   Quellen sind `SP-NNNNNN` (geplanter Scope), `TR-NNNNNN` und sprintzugeordnete
+   `BUG-NNNNNN` (im Sprint entstandene Befunde) sowie bei einem Re-Review frühere
+   `RV-NNNNNN` desselben Sprints (bereits dokumentierte MINOR-Anmerkungen). Einträge werden
+   dedupliziert; eine leere Gruppe wird ausdrücklich als **„Keine“** ausgewiesen. Keine
+   Befunde erfinden.
+4. Präsentiert direkt danach den Test-Guide und weist den Nutzer an, die App zu öffnen und
+   die Features durchzutesten
 
 **⏸ Pausiert hier — Nutzer führt die Tests eigenständig durch**
 
@@ -85,7 +100,7 @@ unabhängig davon, ob der Code technisch korrekt ist.
 ---
 
 **Agent:** RV (Code Reviewer)
-**Input:** Code-Diff, `TR-NNNNNN`, `TP-NNNNNN`, ADRs, `US-NNNNNN`
+**Input:** Code-Diff, `SP-NNNNNN`, `TR-NNNNNN`, `TP-NNNNNN`, `BUG-NNNNNN`, frühere `RV-NNNNNN` desselben Sprints, ADRs, `US-NNNNNN`
 **Output:** `RV-NNNNNN` (in `projects/<name>/reviews/`)
 **Template:** `toolchain/templates/review-checklist.md`
 **Agent-Definition:** `toolchain/agents/reviewer-agent.md`

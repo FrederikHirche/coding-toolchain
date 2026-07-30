@@ -9,6 +9,27 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 
 ---
 
+## v2.10 — 2026-07-30
+
+### Geändert
+
+**`/review` benennt den vollständigen Sprint-Inhalt vor dem manuellen Test**
+- `.claude/commands/review.md`, `toolchain/agents/reviewer-agent.md`: Der RV-Agent
+  präsentiert unmittelbar vor dem Test-Guide eine kompakte, deduplizierte Übersicht aller
+  Sprint-User-Stories, Defects und MINOR-Befunde mit kurzer Inhaltsangabe und Status.
+  Geplanter Scope stammt aus `SP-NNNNNN`; `TR-NNNNNN` und sprintzugeordnete
+  `BUG-NNNNNN` ergänzen im Sprint entstandene Befunde; bei Re-Reviews liefern frühere
+  `RV-NNNNNN` desselben Sprints bereits dokumentierte MINOR-Anmerkungen. Leere Gruppen
+  werden ausdrücklich als „Keine“ ausgewiesen; auch bereits behobene Sprint-Defects
+  bleiben sichtbar.
+- `.claude/commands/commands_summary.md`, `toolchain/agents/agents_summary.md`: Ablauf und
+  Inputs konsistent nachgezogen.
+- Auswirkung: Der Nutzer kennt vor Beginn der manuellen Abnahme den vollständigen
+  fachlichen Sprint-Umfang und die relevanten Qualitätsbefunde, ohne die Artefakte selbst
+  durchsuchen zu müssen.
+
+---
+
 ## v2.9 — 2026-07-30
 
 ### Behoben

@@ -335,8 +335,12 @@ dass der Nutzer in Phase A gegen ein Image aus einem früheren Sprint testet (fa
 "Feature fehlt"-Befunde). Kein Compose-Setup → Schritt entfällt.
 
 **Phase A — Nutzerabnahme (2 Schritte):**
-1. Test-Guide erstellen: Nutzerfreundliche, nummerierte Schritte pro Feature aus US-NNNNNN und TP-NNNNNN.
-   Kein Tech-Jargon. Pausiert nach Präsentation — Nutzer testet eigenständig.
+1. Sprint-Übersicht + Test-Guide: Unmittelbar vor dem manuellen Test alle Sprint-User-Stories
+   (Titel + Nutzen), Defects (Symptom + Status, auch behobene) und MINOR-Befunde
+   (Inhalt + Status) kurz aus SP/US/TR/BUG sowie bei Re-Reviews aus früheren RV-Berichten
+   benennen, deduplizieren und leere Gruppen als „Keine“ ausweisen. Direkt danach
+   nutzerfreundliche, nummerierte Schritte pro Feature aus US-NNNNNN und TP-NNNNNN
+   präsentieren. Kein Tech-Jargon. Pausiert anschließend — Nutzer testet eigenständig.
 2. Nutzer-Interview: Strukturierte Befragung pro Feature (funktioniert? unerwartetes Verhalten?
    UX-Eindruck? Änderungswünsche?). Ergibt Befund: ACCEPTED / CONDITIONAL / REJECTED.
 

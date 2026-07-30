@@ -2,13 +2,14 @@
 
 Zentrale Übersicht aller Projekte, die die AI Development Tool Chain verwenden.
 
-Letzte Aktualisierung: 2026-07-28
+Letzte Aktualisierung: 2026-07-30
 
 ## Aktive Projekte
 
 | Projekt | Phase | Sprint | Letzter Agent | Letztes Update | Pfad |
 |---------|-------|--------|--------------|----------------|------|
-| campaignworld | DONE (Sprint 7 abgeschlossen) | 7 | MW | 2026-07-28 | `projects/campaignworld/` |
+| second-brain | REQUIREMENTS — Discovery Gate 1 bestanden, nächster Schritt `/ba` | 1 | PM | 2026-07-30 | `projects/second-brain/` |
+| campaignworld | TESTING (Sprint 9, test-run) abgeschlossen — APPROVED, nächster Schritt `/review` | 9 | QA | 2026-07-30 | `projects/campaignworld/` |
 | stellaris-mcp | DISCOVERY | 1 | PM | 2026-07-23 | `projects/stellaris-mcp/` |
 
 ## Abgeschlossene Projekte
