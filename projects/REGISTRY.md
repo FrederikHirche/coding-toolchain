@@ -8,7 +8,7 @@ Letzte Aktualisierung: 2026-07-31
 
 | Projekt | Phase | Sprint | Letzter Agent | Letztes Update | Pfad |
 |---------|-------|--------|--------------|----------------|------|
-| second-brain | DONE — Sprint 2 dokumentiert und Gate 9 PASS; Release/Merge von `feature/sprint-2` ausstehend; RN-000002 | 2 | MW | 2026-07-31 | `projects/second-brain/` |
+| second-brain | RELEASED — Sprint 2 lokal nach `main` gemergt und als `v0.2.0` markiert; Remote-Push und Worktree-Cleanup warten auf Bestätigung; RN-000002 | 2 | ORCH | 2026-07-31 | `projects/second-brain/` |
 | campaignworld | TESTING (Sprint 10, test-plan) abgeschlossen — TP-000010 v1.1 APPROVED für automatisierbaren Umfang; 13 P0/P1-Testfälle (Live-LLM) dauerhaft außerhalb des Testumfangs dieses Projekts (kein ANTHROPIC_API_KEY/OPENAI_API_KEY verfügbar, Nutzer-Entscheidung 2026-07-30), nächster Schritt `/test-run campaignworld 10` (automatisierte Ebenen) | 10 | QA | 2026-07-30 | `projects/campaignworld/` |
 | stellaris-mcp | DISCOVERY | 1 | PM | 2026-07-23 | `projects/stellaris-mcp/` |
 
