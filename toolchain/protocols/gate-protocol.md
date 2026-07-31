@@ -20,13 +20,19 @@ Gates sind Übergangspunkte zwischen Phasen. Sie sichern, dass kein Artefakt-Man
 ## Gate-Ausführung durch den Orchestrator
 
 ```
-1. Gate-Kriterien aus workflows/full-sprint.md (oder hotfix.md) laden
-2. Für jedes Kriterium:
+1. Eindeutige REVIEW-Artefakte der unmittelbar vorherigen Phase mit ID und Version anzeigen
+2. Gate-Kriterien aus workflows/full-sprint.md (oder hotfix.md) laden
+3. Für jedes Kriterium:
    a. Prüfung durchführen (Datei lesen, Feld prüfen, zählen)
    b. Ergebnis: PASS | FAIL | NOT-APPLICABLE
-3. Ergebnis-Zusammenfassung ausgeben
-4. Entscheidung nach Schwere-Logik
+4. Ergebnis-Zusammenfassung ausgeben
+5. Entscheidung nach Schwere-Logik:
+   - BLOCKER oder MAJOR offen: STOP; REVIEW bleibt unverändert
+   - PASS: REVIEW → APPROVED; Freigabequelle in .phase protokollieren
 ```
+
+Der Folge-Command ist damit Freigabe und Phasenstart in einer Handlung. Separate
+Freigabefragen vor einem bereits explizit gestarteten Folge-Command entfallen.
 
 ## Gate-Ausgabe-Format
 
@@ -91,6 +97,13 @@ Wenn dasselbe Gate nach Reparatur-Versuch zweimal fehlschlägt:
 1. Orchestrator eskaliert an PM-Agenten
 2. PM bewertet: Ist das ein Scope-Problem, ein Qualitätsproblem, oder ein Ressourcenproblem?
 3. Entscheidung: Phase neu starten, Scope reduzieren, oder Projekt pausieren
+
+## Delta-basierte Rückläufe
+
+Ein fehlgeschlagenes Gate übergibt konkrete Fund-IDs. Beim Korrekturlauf werden diese Funde,
+ihre abhängigen Kriterien und notwendige Regressionen erneut geprüft. Die gesamte Phase wird
+nur wiederholt, wenn Scope oder Artefaktstruktur betroffen sind; rein lokale Funde erzwingen
+keine vollständige Neuabnahme unbetroffener Kriterien.
 
 ## Gate-Protokoll im Artefakt
 

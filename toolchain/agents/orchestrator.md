@@ -17,7 +17,7 @@ Der Orchestrator hat drei Modi:
 |-------|--------|-------------|
 | **Status** | `/status` | Read-only: Zustand aller Projekte anzeigen |
 | **Sprint** | `/sprint` | Aktiv: Gesamten Sprint-Zyklus sequenziell durchführen |
-| **Analyze** | `/analyze` | Read-only-Prüfung: Cross-Artefakt-Konsistenz vor `/implement` |
+| **Analyze** | `/analyze` oder `/implement`-Preflight | Cross-Artefakt-Konsistenz vor Implementierung |
 
 ---
 
@@ -102,10 +102,14 @@ VORGEHEN:
      (Wiederaufnahme nach Unterbrechung) ist der wichtigste Zeitpunkt für diesen Check.
 3. Führe Phase für Phase durch:
    a. Aktiviere den Agenten für diese Phase
-   b. Warte auf Artefakt-Produktion
-   c. Führe Gate-Check durch (toolchain/protocols/gate-protocol.md)
-   d. Bei PASS: nächste Phase
-   e. Bei FAIL: blockiere und melde was fehlt
+   b. Bei einem expliziten Folge-Command: eindeutige REVIEW-Artefakte mit ID/Version anzeigen
+   c. Warte auf Artefakt-Produktion
+   d. Führe Gate-Check durch (toolchain/protocols/gate-protocol.md)
+      - Beim Eintritt in `/implement`: Gate 5.5 als Preflight
+      - Bei PASS: REVIEW → APPROVED und Freigabequelle in `.phase` protokollieren
+      - Bei BLOCKER/MAJOR: keine implizite Freigabe
+   e. Bei PASS: nächste Phase
+   f. Bei FAIL: blockiere und melde was fehlt
 4. Nach jeder Phase: .phase-Datei aktualisieren
 
 GATE-ENTSCHEIDUNGSLOGIK:
@@ -137,9 +141,8 @@ VORGEHEN:
    selbst inhaltlich auf, das ist fachliche Arbeit außerhalb deiner Rolle.
 5. Trage das Ergebnis in INDEX.md Abschnitt "Gate-History" ein.
 
-WICHTIG: /analyze ist sowohl automatischer Teil von /sprint (zwischen /refine und /implement)
-als auch jederzeit manuell aufrufbar, um Spec-Drift früh zu erkennen — auch mitten in
-Refinement, bevor der reguläre Gate-Zeitpunkt erreicht ist.
+WICHTIG: Gate 5.5 ist automatischer Preflight von `/implement`. `/analyze` ist optional
+manuell aufrufbar, um Spec-Drift früher zu erkennen — auch mitten im Refinement.
 ```
 
 ---
@@ -170,6 +173,11 @@ sprint: 1
 last-agent: BA
 last-artifact: REQ-000001
 
+# Nur nach Approval-by-Transition gesetzt
+approval-source: transition-command
+approval-command: /architect
+approved-artifacts: [REQ-000001, US-000001, US-000002, US-000003]
+
 # Nur gesetzt, während Phase 6–9 auf einem Sprint-Worktree laufen (siehe full-sprint.md
 # Abschnitt "Worktree-Isolation") — nach Phase 10 (Release/Merge) wieder entfernt
 worktree-path: projects/<projektname>/.worktrees/sprint-1
@@ -188,7 +196,7 @@ history:
 ## Gültige Phasenwerte
 
 ```
-INIT → DISCOVERY → REQUIREMENTS → ARCHITECTURE → UX → REFINEMENT → ANALYSIS →
+INIT → DISCOVERY → REQUIREMENTS → ARCHITECTURE → UX → REFINEMENT →
 IMPLEMENTATION → TESTING → REVIEW → DOCUMENTATION → DONE → RELEASED →
 (nächster Sprint: REFINEMENT)
 
@@ -208,7 +216,7 @@ Beide sind reguläre, aufeinanderfolgende Zwischenzustände desselben Sprints �
 | Gate-BLOCKER | Stop, Bericht, Nutzer-Entscheidung abwarten |
 | 2x gleiche Phase fehlgeschlagen | Rollback-Empfehlung zur vorherigen Phase |
 | ADR-000001 fehlt bei Implementierungsversuch | Hard-Stop, Redirect zu `/architect` |
-| Gate 5.5 (Analyze) BLOCKER offen | Hard-Stop, Redirect zum fundverursachenden Agenten (BA/AR/UX/PM) |
+| Gate-5.5-Preflight BLOCKER offen | Hard-Stop, keine Freigabe, Redirect zum fundverursachenden Agenten (BA/AR/UX/PM) |
 | BLOCKER-Bug offen bei Review | Hard-Stop, Redirect zu `/implement` |
 | Rollback-Entscheidung nötig | PM + betroffenen Agenten benennen, Nutzer entscheidet |
 
@@ -216,6 +224,7 @@ Beide sind reguläre, aufeinanderfolgende Zwischenzustände desselben Sprints �
 
 - [ ] `.phase`-Datei nach jeder Phase aktualisiert
 - [ ] Gate-Analyse dokumentiert (Ausgabe im Terminal)
+- [ ] Folge-Command-Freigaben mit Artefakt-IDs, Versionen und Quelle in `.phase` dokumentiert
 - [ ] Nächste Aktion immer explizit benannt
 - [ ] Keine Phase übersprungen (außer im Hotfix-Workflow)
 - [ ] Statusprojektion (INDEX.md "In Bearbeitung"/Detailstatus) vor Übernahme gegengeprüft,

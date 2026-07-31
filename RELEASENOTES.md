@@ -9,6 +9,33 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 
 ---
 
+## v2.11 — 2026-07-31
+
+### Geändert
+
+**Folge-Command bestätigt Vorphasen-Artefakte; Gate 5.5 läuft im Implementierungs-Preflight**
+
+- `toolchain/agents/_base-agent.md`, `toolchain/protocols/artifact-lifecycle.md`,
+  `toolchain/protocols/gate-protocol.md`: Ein expliziter, logisch nächster Phasen-Command
+  gibt eindeutig zugeordnete `REVIEW`-Artefakte nach bestandenem Gate frei. Offene
+  `BLOCKER` oder `MAJOR` stoppen ohne Statusänderung; `.phase` protokolliert Command,
+  Freigabequelle sowie Artefakt-IDs.
+- `.claude/commands/implement.md`, `.claude/commands/analyze.md`,
+  `toolchain/workflows/full-sprint.md`, `toolchain/agents/orchestrator.md`: Gate 5.5 ist
+  verpflichtender `/implement`-Preflight. `/analyze` bleibt als optionaler, vorgezogener
+  Diagnosebefehl erhalten.
+- `toolchain/protocols/gate-protocol.md`: Rückläufe werden anhand konkreter Fund-IDs und
+  notwendiger Regressionen geprüft; unbetroffene Phasenteile müssen nicht pauschal
+  wiederholt werden.
+- `CLAUDE.md`, `toolchain/PROCESS.md`, `toolchain/workflows/INDEX.md`,
+  `.claude/commands/commands_summary.md`, `toolchain/agents/agents_summary.md`: Ablauf und
+  Zusammenfassungen konsistent aktualisiert.
+- Auswirkung: Der Nutzer bestätigt Artefakte und startet die nächste Phase in einer
+  Handlung, ohne die Schutzwirkung der Gates zu verlieren. Umgesetzt aus
+  `second-brain/PC-000001`.
+
+---
+
 ## v2.10 — 2026-07-30
 
 ### Geändert

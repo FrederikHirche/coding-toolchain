@@ -37,7 +37,8 @@ ORCH → PM → BA → AR → UX → (BA+FE+BE Refine) → ORCH[Analyze] → (FE
 
 FE und BE können parallel arbeiten sobald AR und UX abgeschlossen sind.
 Der ORCH schließt jeden Sprint-Zyklus mit Gate-Auswertung und .phase-Update, und prüft vor
-`/implement` zusätzlich die Cross-Artefakt-Konsistenz (`/analyze`, Gate 5.5).
+`/implement` zusätzlich die Cross-Artefakt-Konsistenz als Gate-5.5-Preflight; `/analyze`
+bleibt als optionaler Diagnosebefehl verfügbar.
 AC wird nicht automatisch aktiviert — nur durch `/retro`, `/health-check` oder `/coach`.
 AR kann zusätzlich außerhalb der Sprint-Sequenz über `/converge` aktiviert werden (Brownfield-
 Gap-Analyse, kein Phasenwechsel).

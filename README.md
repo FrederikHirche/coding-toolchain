@@ -63,13 +63,13 @@ Die Toolchain folgt dem Prinzip der Technologie-Agnostizität. Sie erzwingt ein 
 4. Operative Exzellenz: Workflows und Slash Commands
 Standardisierte Befehlsabfolgen, die sogenannten Slash Commands, reduzieren den kognitiven Overhead und eliminieren Entscheidungslähmung. Sie führen den Nutzer und die KI durch vordefinierte Pfade, die für unterschiedliche Szenarien optimiert sind.
 Die Commands kategorisieren sich wie folgt:
-Standard-Sprint: Der reguläre Zyklus umfasst 11 Phasen von /kickoff (Discovery) über /ba, /architect, /ux, /refine, /analyze bis hin zur Implementierung, Qualitätssicherung und dem Abschluss durch /manual.
+Standard-Sprint: Der reguläre Zyklus umfasst 10 Nutzerphasen von /kickoff (Discovery) über /ba, /architect, /ux und /refine bis hin zur Implementierung, Qualitätssicherung und dem Abschluss durch /manual. Gate 5.5 läuft dabei automatisch als Preflight von /implement.
 Spezialszenarien:
 /hotfix: Ein verkürzter Workflow für kritische Fehler, der Geschwindigkeit vor umfassende Dokumentation stellt.
 /spike: Ermöglicht zeitlich begrenzte technische Forschung ohne Implementierungszwang.
 /converge: Ein strategisch entscheidendes Werkzeug für die Brownfield-Adoption. Es scannt bestehende Codebasen und gleicht sie mit der Spezifikation ab, um Altsysteme strukturiert in die Toolchain zu integrieren.
 Prozess-Optimierung: Der Agile Coach steuert via /retro (Nachbereitung) oder /health-check (Mustererkennung nach 3+ Sprints) die kontinuierliche Verbesserung.
-Ein kritisches Kontrollinstrument ist der Befehl /analyze (Gate 5.5). Diese Cross-Artefakt-Konsistenzprüfung erfolgt unmittelbar vor der Implementierung. Sie gleicht Requirements, Architektur, UX und Constitution gegeneinander ab. Dieser Mechanismus erkennt "Spec-Drift" und logische Widersprüche frühzeitig und verhindert so kostspielige Fehlentwicklungen in der Codierungsphase.
+Ein kritisches Kontrollinstrument ist Gate 5.5. Diese Cross-Artefakt-Konsistenzprüfung läuft unmittelbar vor der Implementierung automatisch im /implement-Preflight. Sie gleicht Requirements, Architektur, UX und Constitution gegeneinander ab. Der optionale Befehl /analyze kann dieselbe Prüfung vorgezogen ausführen. So bleibt der Schutz vor "Spec-Drift" erhalten, ohne eine eigene Pflichtphase zu erzeugen.
 5. Qualitätssicherung und Verlässlichkeit (Gates & Worktrees)
 Qualität in KI-Projekten darf kein Zufallsprodukt sein, sondern muss durch überprüfbare Übergänge (Gates) technisch garantiert werden. Die Toolchain misstraut der reinen Selbstauskunft und fordert objektive Evidenz.
 Das Gate-System arbeitet mit drei Schweregraden:

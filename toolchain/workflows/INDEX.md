@@ -8,7 +8,7 @@ Letzte Aktualisierung: 2026-07-20
 
 | Datei | ID | Szenario | Phasen |
 |-------|-----|---------|--------|
-| `full-sprint.md` | WF-FULL-SPRINT | Vollständiger Sprint (Discovery → Release) | 11 Phasen (inkl. Phase 5.5 Analyse) |
+| `full-sprint.md` | WF-FULL-SPRINT | Vollständiger Sprint (Discovery → Release) | 10 Nutzerphasen; Gate 5.5 als Implementierungs-Preflight |
 | `hotfix.md` | WF-HOTFIX | Kritischer Produktionsfehler | 4 Phasen (vereinfacht) |
 | `spike.md` | WF-SPIKE | Technische Erkundung ohne Implementierung | 3 Phasen |
 | `converge.md` | WF-CONVERGE | Brownfield-Gap-Analyse (bestehender Code gegen Spec) | 3 Phasen |

@@ -12,9 +12,12 @@ in eine möglicherweise inkonsistente Spezifikation investiert wird.
 
 ## Wann verwenden
 
-- Automatisch als Gate 5.5 im Full-Sprint-Workflow, zwischen `/refine` und `/implement`
-- Manuell jederzeit, wenn Verdacht auf Spec-Drift besteht (z. B. UX-Spec wurde nach ADR-Erstellung
-  geändert, oder eine User Story wurde nachträglich angepasst)
+- Optional jederzeit, wenn Verdacht auf Spec-Drift besteht (z. B. UX-Spec wurde nach
+  ADR-Erstellung geändert oder eine User Story wurde nachträglich angepasst)
+- Vorgezogen, wenn die Konsistenzprüfung bewusst vor dem Implementierungsstart gewünscht ist
+
+Im Standardworkflow ist kein eigener `/analyze`-Aufruf nötig: `/implement` führt Gate 5.5
+als verpflichtenden Preflight aus.
 
 ## Was passiert
 
@@ -40,8 +43,10 @@ Gate-History-Eintrag. Es trifft keine fachliche Entscheidung und ändert keine A
 
 ## Nächster Schritt
 
-Bei PASS: `/implement`
-Bei FAIL: zurück zum fundverursachenden Agenten, danach `/analyze` erneut aufrufen
+Bei PASS: `/implement` (führt den Preflight erneut nur aus, wenn sich Eingabeartefakte seit
+dem Analyze-Lauf geändert haben)
+Bei FAIL: zurück zum fundverursachenden Agenten; danach optional `/analyze` oder direkt
+`/implement` mit integriertem Preflight
 
 ---
 

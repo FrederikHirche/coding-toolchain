@@ -31,8 +31,11 @@ Aktiviert **Frontend Developer Agent (FE)** und/oder **Backend Developer Agent (
 
 ## Vorbedingung
 
-Gate 5.5 (`/analyze [projektname]`) bestanden — keine offene BLOCKER-Inkonsistenz zwischen
-REQ/US, ADR, UX und SP.
+`SP-NNNNNN` vorhanden. Beim ersten Eintritt in die Implementierung führt `/implement`
+Gate 5.5 automatisch als Preflight aus. Es prüft REQ/US, ADR, UX, SP und CON-000001 nach
+`toolchain/workflows/full-sprint.md`. Bei offenen BLOCKER- oder MAJOR-Inkonsistenzen:
+Hard-Stop, keine Implementierung und keine implizite Freigabe. Bei PASS gilt der Aufruf
+zugleich als Freigabe eindeutiger `REVIEW`-Artefakte aus dem Refinement.
 
 Sprint-Worktree angelegt bzw. (nach Unterbrechung) wiederbetreten — FE/BE arbeiten bis Gate 9
 auf `feature/sprint-N`, nicht im Haupt-Checkout (siehe `toolchain/workflows/full-sprint.md`

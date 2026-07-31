@@ -42,14 +42,20 @@ Agent als nächstes aktiv wird.
   Statusbericht mit nächster empfohlener Aktion aus. Keine Artefakt-Produktion.
 - *Sprint-Modus* (`/sprint`): Orchestriert den vollständigen Sprint-Zyklus Phase für Phase.
   Aktiviert jeden Agenten, prüft Gates, stoppt bei BLOCKER und wartet auf Nutzer-Entscheidung.
-- *Analyze-Modus* (`/analyze`): Cross-Artefakt-Konsistenzprüfung zwischen REQ/US, ADR, UX, SP
-  und CON-000001 — Gate 5.5, zwischen `/refine` und `/implement`. Prüft strukturell (`cross-ref`)
+- *Analyze-Modus* (`/analyze` optional; automatisch als `/implement`-Preflight):
+  Cross-Artefakt-Konsistenzprüfung zwischen REQ/US, ADR, UX, SP und CON-000001 — Gate 5.5.
+  Prüft strukturell (`cross-ref`)
   und lässt Artefakte inhaltlich Selbstauskunft geben (`self-assertion`); löst Widersprüche
   nicht selbst auf, sondern ordnet sie dem zuständigen Agenten zu (BA/AR/UX/PM).
 
 **Eskalationslogik:** BLOCKER → Stop. MAJOR → Warnung + Nutzer-Bestätigung. MINOR → als TODO
 in nächste Phase übernehmen. ADR-000001 fehlt bei Implementierung → Hard-Stop zu `/architect`.
-Gate 5.5 BLOCKER offen → Hard-Stop zum fundverursachenden Agenten.
+Gate-5.5-Preflight BLOCKER offen → Hard-Stop ohne implizite Freigabe zum
+fundverursachenden Agenten.
+
+Beim expliziten Start des logisch nächsten Commands werden eindeutige `REVIEW`-Artefakte
+nach bestandenem Gate auf `APPROVED` gesetzt; `.phase` protokolliert Command und
+Freigabequelle.
 
 **Statusprojektion gegenprüfen:** Vor Übernahme von INDEX.md-Freitextstatus in einen
 Statusbericht prüft ORCH die konkret prüfbaren Behauptungen darin gegen Primärevidenz

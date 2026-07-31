@@ -71,7 +71,7 @@ Alle Agenten erben die Basisregeln aus `toolchain/agents/_base-agent.md`.
 | `/architect` | Architektur | AR | `ADR-NNNNNN`, `STRUCTURE.md` |
 | `/ux` | UX Design | UX | `UX-NNNNNN` |
 | `/refine` | Refinement | BA+FE+BE | `SP-NNNNNN` |
-| `/analyze` | Cross-Artefakt-Konsistenz | ORCH | Gate-Bericht (kein Artefakt) |
+| `/analyze` | Optionale, vorgezogene Cross-Artefakt-Konsistenzprüfung | ORCH | Gate-Bericht (kein Artefakt) |
 | `/implement` | Implementierung | FE, BE | Code + API-Kontrakt |
 | `/test-plan` | Testplan | QA | `TP-NNNNNN` |
 | `/test-run` | Testausführung | QA | `TR-NNNNNN` |
@@ -93,7 +93,7 @@ Alle Agenten erben die Basisregeln aus `toolchain/agents/_base-agent.md`.
 
 | Workflow | Command | Szenario | Phasen |
 |----------|---------|---------|--------|
-| Full Sprint | `/sprint` | Normaler Entwicklungssprint | 11 Phasen (inkl. Phase 5.5 Analyse) |
+| Full Sprint | `/sprint` | Normaler Entwicklungssprint | 10 Nutzerphasen; Gate 5.5 als `/implement`-Preflight |
 | Hotfix | `/hotfix` | Kritischer Produktionsfehler | 4 Phasen |
 | Spike | `/spike` | Tech-Evaluierung ohne Impl. | 3 Phasen |
 | Converge | `/converge` | Bestandscode gegen Spec prüfen (Brownfield) | 3 Phasen |
@@ -189,6 +189,11 @@ DRAFT → REVIEW → APPROVED → ACTIVE → SUPERSEDED | ARCHIVED
 ```
 
 Details: `toolchain/protocols/artifact-lifecycle.md`
+
+Der explizite Start des logisch nächsten Phasen-Commands gilt nach erfolgreichem Gate als
+Freigabe der eindeutigen `REVIEW`-Artefakte aus der unmittelbar vorherigen Phase. Offene
+`BLOCKER` oder `MAJOR` verhindern Freigabe und Phasenwechsel. Gate 5.5 wird im
+Standardworkflow durch `/implement` ausgeführt; `/analyze` bleibt optional.
 
 ### Ordner-Indizierung
 

@@ -24,7 +24,8 @@ Bereitet den Sprint Backlog vor: verfeinert User Stories, schätzt Aufwände und
 
 ## Nächster Schritt
 
-Nach Abschluss: `/analyze [projektname]` (Cross-Artefakt-Konsistenzprüfung vor der Implementierung)
+Nach Abschluss: `/implement [modus] [projektname]` — der Implementierungs-Command führt die
+Cross-Artefakt-Konsistenzprüfung (Gate 5.5) als Preflight aus.
 
 ---
 

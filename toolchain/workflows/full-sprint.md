@@ -26,11 +26,11 @@ Der Standard-Workflow für einen vollständigen Entwicklungssprint — von Disco
 └─────────────────────────────────────────────────────────────────┘
          ↓
 ┌─────────────────────────────────────────────────────────────────┐
-│  5. REFINEMENT   5.5 ANALYSE     6. IMPLEMENT     7. TEST       │
-│  /refine    ──▶  /analyze   ──▶  /implement  ──▶  /test-plan    │
-│  [BA+FE+BE]      [ORCH]          [FE ∥ BE]        /test-run     │
-│                                                    [QA]          │
-│  ──── GATE ────  ──── GATE ────  ──── GATE ────   ──── GATE ── │
+│  5. REFINEMENT                    6. IMPLEMENT     7. TEST       │
+│  /refine       ────────────────▶  /implement  ──▶  /test-plan    │
+│  [BA+FE+BE]                       [FE ∥ BE]        /test-run     │
+│                                  [Gate 5.5 Preflight] [QA]       │
+│  ──── GATE ─────────────────────  ──── GATE ────   ──── GATE ── │
 └─────────────────────────────────────────────────────────────────┘
          ↓
 ┌─────────────────────────────────────────────────────────────────┐
@@ -201,13 +201,15 @@ nachdem Gate 8 (Review) und Gate 9 (Dokumentation) bestanden sind.
 | Technische Voraussetzungen gelistet | Abschnitt im SP | MAJOR |
 | Keine ungelösten Tech-Blocker | Selbstauskunft BA+FE+BE: SP-NNNNNN Abschnitt "Risiken & Unsicherheiten" — keine offenen Blocker-Einträge | MAJOR |
 
-**Bei PASS:** `.phase` auf `ANALYSIS` setzen
+**Bei PASS:** Refinement ist bereit für `/implement`. Der explizite `/implement`-Aufruf
+bestätigt eindeutige `REVIEW`-Artefakte und führt Gate 5.5 als Preflight aus.
 
 ---
 
-## Phase 5.5: Analyse
+## Gate 5.5: Analyse-Preflight
 
-**Befehl:** `/analyze`
+**Standard-Auslöser:** `/implement`
+**Optionaler Diagnosebefehl:** `/analyze`
 **Agent:** ORCH
 **Ergebnis:** Gate-Report (kein eigenständiges Artefakt) + Eintrag in `INDEX.md` Abschnitt "Gate-History"
 
@@ -230,10 +232,13 @@ Rollback-Regeln).
 | UX-Flows widersprechen keiner User-Story-Akzeptanzkriterien | self-assertion: UX ↔ US | MAJOR |
 | Qualitäts-Mindeststandards aus `CON-000001` Abschnitt 3 sind in SP/TP-Planung berücksichtigt | self-assertion | MAJOR |
 
-**Bei PASS:** `.phase` auf `IMPLEMENTATION` setzen
+**Bei PASS:** eindeutige Refinement-Artefakte `REVIEW → APPROVED`, Freigabequelle in
+`.phase` protokollieren, Sprint-Worktree anlegen beziehungsweise wiederbetreten und
+`.phase` auf `IMPLEMENTATION` setzen.
 **Bei FAIL:** Kein Rollback zu einer festen Phase — Zielagent hängt vom konkreten Fund ab
-(REQ/US-Lücke → BA, ADR-Konflikt → AR, UX-Lücke → UX, Constitution-Konflikt → PM). `/analyze`
-nach Korrektur erneut aufrufen.
+(REQ/US-Lücke → BA, ADR-Konflikt → AR, UX-Lücke → UX, Constitution-Konflikt → PM).
+Nach Korrektur `/implement` erneut aufrufen; `/analyze` bleibt als optionaler vorgezogener
+Diagnoselauf verfügbar.
 
 ---
 
@@ -245,6 +250,10 @@ nach Korrektur erneut aufrufen.
 **Voraussetzung:** Sprint-Worktree angelegt bzw. wiederbetreten (siehe Abschnitt
 "Worktree-Isolation" oben) — FE/BE arbeiten ab hier bis Gate 9 auf `feature/sprint-<N>`,
 nicht im Haupt-Checkout.
+
+Vor jeder erstmaligen Implementierung führt `/implement` Gate 5.5 aus. Bei unveränderten
+Eingabeartefakten darf ein bereits bestandener optionaler `/analyze`-Lauf wiederverwendet
+werden; bei Änderungen wird der Preflight erneut ausgeführt.
 
 ### Gate 6 → Phase 7
 

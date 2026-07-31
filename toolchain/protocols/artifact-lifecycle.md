@@ -23,7 +23,7 @@ Eine Löschung erfolgt ausschließlich auf direkten, expliziten Userbefehl (sieh
          ┌─────────┐
          │ REVIEW  │ ← Bereit zur Freigabe
          └────┬────┘
-              │ Freigegeben (manuell oder durch Gate-PASS)
+              │ Freigegeben (manuell, Gate-PASS oder Folge-Command)
               ▼
          ┌──────────┐
          │ APPROVED │ ← Verbindlich für alle nachfolgenden Agenten
@@ -54,6 +54,21 @@ Tabelle — dort gilt der domänenspezifische Verlauf, nicht der generische oben
 |---|---|---|
 | `IMPD-NNNNNN` | `DRAFT → ACTIVE → RESOLVED` | Ein Impediment ist ein Zustand, kein Freigabe-Dokument. |
 | `BUG-NNNNNN` | `OFFEN → IN_BEARBEITUNG → BEHOBEN → VERIFIZIERT` | Ein Bug durchläuft zwei Rollen (QA/BA → FE/BE → QA) statt einer Freigabekette; "offen" im Sinne der Gate-Kriterien heißt "Status ≠ VERIFIZIERT". |
+
+## REVIEW → APPROVED durch Folge-Command
+
+Ein explizit gestarteter Folge-Command ist eine handlungswirksame Freigabe der Artefakte aus
+der unmittelbar vorherigen Phase. Das gilt nur, wenn:
+
+- die Artefakte im Status `REVIEW` stehen und eindeutig Projekt, Sprint und Vorphase
+  zugeordnet sind,
+- der Command IDs und Versionen vor der Änderung sichtbar ausgibt,
+- das Übergangs-Gate keine offenen `BLOCKER` oder `MAJOR` enthält.
+
+Bei PASS setzt der empfangende Command die Artefakte auf `APPROVED` und dokumentiert
+`approval-source: transition-command` sowie `approval-command` in `.phase`. Bei FAIL bleibt
+der Status `REVIEW`. Ein bloß erwähnter, vorgeschlagener oder mehrdeutiger Command ist keine
+Freigabe.
 
 ## Versionierung
 

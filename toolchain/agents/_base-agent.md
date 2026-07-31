@@ -64,7 +64,7 @@ Vorgehen (zwingend, in dieser Reihenfolge):
 
 1. **Status-Scan:** Welche Artefakte existieren im Projektordner? In welchem Status (DRAFT / APPROVED / …)?
 2. **Kette prüfen** (Standardreihenfolge Full-Sprint):
-   `/kickoff` → `/ba` → `/architect` → `/ux` → `/refine` → `/analyze` → `/implement` → `/test-plan` → `/test-run` → `/review` → `/manual`
+   `/kickoff` → `/ba` → `/architect` → `/ux` → `/refine` → `/implement` → `/test-plan` → `/test-run` → `/review` → `/manual`
 3. **Erste offene Phase** identifizieren: Was fehlt noch? Was ist die logisch nächste Aktion?
 4. **Ausgabe:** Als allerletzter Block der Chat-Antwort — zusätzlich zum Artefakt-Handoff-Block — immer:
 
@@ -83,6 +83,25 @@ Verbindliche Regeln für diesen Abschluss-Block:
 ### Gate-Selbstprüfung
 
 Vor Abschluss führt jeder Agent eine Selbstprüfung seiner Definition-of-Done-Checkliste durch. Nicht erfüllte Kriterien werden explizit als `OFFEN` markiert — der Agent schließt nicht ab ohne diesen Abschnitt.
+
+### Freigabe durch Folge-Command (Approval-by-Transition)
+
+Der explizite Aufruf des logisch nächsten Phasen-Commands gilt zugleich als Freigabe der
+unmittelbar vorherigen Phasenartefakte im Status `REVIEW`. Eine separate Bestätigung vor dem
+Folge-Command ist nicht erforderlich.
+
+Vor der Statusänderung muss der empfangende Command:
+
+1. IDs und Versionen der betroffenen `REVIEW`-Artefakte sichtbar nennen,
+2. prüfen, dass sie zum aktuellen Projekt, Sprint und unmittelbar vorherigen Phasenschritt
+   gehören,
+3. das Gate einschließlich aller vorgeschalteten Preflight-Prüfungen ausführen,
+4. bei offenen `BLOCKER`- oder `MAJOR`-Funden stoppen — ohne implizite Freigabe,
+5. bei PASS die Artefakte auf `APPROVED` setzen und in `.phase` protokollieren:
+   `approval-source: transition-command` und `approval-command: /<command>`.
+
+Bei mehrdeutiger Zuordnung oder nicht unmittelbar aufeinanderfolgenden Phasen bleibt eine
+explizite Nutzerfreigabe erforderlich. `MINOR`-Funde werden wie bisher als TODO vererbt.
 
 ### Statusnarrative sind Projektionen, keine Quelle der Wahrheit
 

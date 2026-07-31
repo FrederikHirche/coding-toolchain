@@ -15,7 +15,11 @@ definierte Phase. Commands können manuell nacheinander aufgerufen werden (manue
 oder durch `/sprint` automatisch orchestriert werden (Sprint-Variante).
 
 Standard-Reihenfolge Full-Sprint:
-`/kickoff` → `/ba` → `/architect` → `/ux` → `/refine` → `/analyze` → `/implement` → `/test-plan` → `/test-run` → `/review` → `/manual`
+`/kickoff` → `/ba` → `/architect` → `/ux` → `/refine` → `/implement` → `/test-plan` → `/test-run` → `/review` → `/manual`
+
+Der Start des logisch nächsten Commands gilt nach erfolgreichem Gate zugleich als Freigabe
+der eindeutigen `REVIEW`-Artefakte der Vorphase. Gate 5.5 läuft als `/implement`-Preflight;
+`/analyze` bleibt optional.
 
 ---
 
@@ -121,19 +125,19 @@ Standard-Reihenfolge Full-Sprint:
 **Was passiert:** Verfeinert User Stories mit Subtasks, Story-Point-Schätzungen und Abhängigkeiten. Erstellt Sprint-Backlog-Dokument mit Sprint-Ziel, Abnahmekriterien und technischen Voraussetzungen.  
 **Vorbedingung:** `UX-NNNNNN` vorhanden, `ADR-000001` APPROVED  
 **Output:** `SP-NNNNNN` Sprint Backlog  
-**Nächste Phase:** `/analyze [projektname]`
+**Nächste Phase:** `/implement [modus] [projektname]` (führt Gate 5.5 als Preflight aus)
 
 ---
 
 ### /analyze — Cross-Artefakt-Konsistenzprüfung
 
 **Aktiviert:** ORCH (Orchestrator) — Analyze-Modus  
-**Wann nutzen:** Automatisch als Gate 5.5 zwischen `/refine` und `/implement` — oder jederzeit manuell bei Verdacht auf Spec-Drift.  
+**Wann nutzen:** Optional und vorgezogen bei Verdacht auf Spec-Drift. Im Standardworkflow führt `/implement` Gate 5.5 selbst aus.
 **Was passiert:** Liest alle APPROVED REQ/US, ADR, UX, SP und CON-000001 (falls vorhanden). Prüft Referenz-Vollständigkeit (`cross-ref`) und inhaltliche Widersprüche (`self-assertion`) zwischen den Artefakten — insbesondere gegen ADR-Entscheidungen und gegen die Projekt-Constitution. Löst gefundene Widersprüche nicht selbst auf, sondern ordnet sie dem zuständigen Agenten zu (BA/AR/UX/PM).  
 **Vorbedingung:** `SP-NNNNNN` vorhanden  
 **Output:** Gate-Bericht + `INDEX.md` Gate-History-Eintrag (kein eigenständiges Artefakt)  
 **Nächste Phase (PASS):** `/implement [fe|be|all] [projektname]`  
-**Nächste Phase (FAIL):** zurück zum fundverursachenden Agenten, danach `/analyze` erneut
+**Nächste Phase (FAIL):** zurück zum fundverursachenden Agenten, danach optional `/analyze` oder direkt `/implement`
 
 ---
 
@@ -141,11 +145,11 @@ Standard-Reihenfolge Full-Sprint:
 
 **Aktiviert:** FE (Frontend Developer) und/oder BE (Backend Developer)  
 **Verwendung:** `/implement fe`, `/implement be`, oder `/implement all`  
-**Wann nutzen:** Nach bestandenem Analyze-Gate — tatsächliche Code-Implementierung.  
+**Wann nutzen:** Nach Refinement — Gate 5.5 wird vor dem ersten Code als Preflight ausgeführt.
 **Was passiert (BE):** API-First: Erst API-Kontrakt (OpenAPI/GraphQL) erstellen, dann Datenschicht → Business Logic → API-Layer implementieren. Vollständige Code-Kommentierung nach Standard.  
 **Was passiert (FE):** Komponenten Bottom-Up implementieren (Atome → Moleküle → Seiten), basierend auf UX-Spec und API-Kontrakt. Accessibility-Attribute, Unit-Tests.  
 **Codebase-Memory-Aktualisierung:** Am Ende von BE (nur falls kein FE-Schritt folgt) bzw. am Ende von FE wird `index_repository` (`mode='fast'`) gegen den Projektpfad ausgeführt, damit `/test-plan`/`/review` einen aktuellen Graphen abfragen.  
-**Vorbedingung:** `SP-NNNNNN` vorhanden, UX-Specs vorhanden, Gate 5.5 (`/analyze`) bestanden, Sprint-Worktree angelegt bzw. wiederbetreten (siehe `toolchain/workflows/full-sprint.md` Abschnitt "Worktree-Isolation")  
+**Vorbedingung:** `SP-NNNNNN` und UX-Specs vorhanden; `/implement` führt Gate 5.5 aus, gibt eindeutige `REVIEW`-Artefakte bei PASS implizit frei und legt den Sprint-Worktree an beziehungsweise betritt ihn wieder.
 **Bugfix-Rückläufer:** Wird `/implement` mit einem offenen `BUG-NNNNNN` aufgerufen (Rollback aus Gate 7), ist Root-Cause-Analyse vor jeder Code-Änderung Pflicht — siehe `toolchain/templates/bug-report.md`.  
 **Output:** Code + API-Kontrakt  
 **Nächste Phase:** `/test-plan [projektname] [sprint-nr]`

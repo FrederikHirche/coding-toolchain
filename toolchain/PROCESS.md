@@ -22,7 +22,8 @@ Detaillierter Ablauf der AI Development Tool Chain — von der Idee bis zum Merg
 │  PHASE 5          PHASE 5.5        PHASE 6          PHASE 7  │
 │  Refinement       Analyse          Implementierung  Test     │
 │                                                              │
-│  /refine     ──▶  /analyze   ──▶  /implement  ──▶  /test-plan │
+│  /refine     ────────────────▶  /implement  ──▶  /test-plan │
+│                                Gate 5.5 Preflight              │
 │  [BA+FE+BE]       [ORCH]          [FE ∥ BE]        [QA]      │
 │                                                              │
 │  SP-NNNNNN        Gate-Report      Code + Tests     TP-NNNNNN │
@@ -158,7 +159,7 @@ Phase 4 (UX) und Phase 5/6 (Refinement/BE) können parallelisiert werden. BE kan
 4. Sprint-Backlog-Dokument (`SP-NNNNNN.md`) erstellen
 5. Technische Voraussetzungen identifizieren
 
-### Gate-Kriterien (weiter zu Phase 5.5)
+### Gate-Kriterien (bereit für Implementierungs-Preflight)
 
 - [ ] Sprint-Ziel klar formuliert
 - [ ] Alle Sprint-Stories geschätzt
@@ -167,7 +168,7 @@ Phase 4 (UX) und Phase 5/6 (Refinement/BE) können parallelisiert werden. BE kan
 
 ---
 
-## Phase 5.5: Analyse (`/analyze`)
+## Gate 5.5: Analyse-Preflight (`/implement`; optional `/analyze`)
 
 **Agent:** Orchestrator (ORCH)
 **Ziel:** Sicherstellen, dass REQ/US, ADR, UX und SP widerspruchsfrei zueinander stehen, bevor
@@ -193,7 +194,8 @@ Implementierungsaufwand investiert wird.
 
 Fund abhängig vom Widerspruch: REQ/US-Lücke → zurück zu Phase 2 (BA). ADR-Konflikt → zurück zu
 Phase 3 (AR). UX-Lücke → zurück zu Phase 4 (UX). Constitution-Konflikt → zurück zu Phase 1 (PM).
-Nach Korrektur: `/analyze` erneut aufrufen.
+Nach Korrektur: `/implement` erneut aufrufen; `/analyze` ist als vorgezogener
+Diagnosebefehl optional.
 
 ---
 

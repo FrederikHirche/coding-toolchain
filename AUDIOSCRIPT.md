@@ -197,7 +197,8 @@ orchestrieren zu lassen.
 Wer lieber die Kontrolle behält, ruft die Phasen-Befehle einzeln auf, in dieser Standard-Reihenfolge:
 `/kickoff` für die Discovery-Phase mit dem Product Manager, `/ba` für Requirements mit dem
 Business Analyst, `/architect` für Architekturentscheidungen, `/ux` für das Design, `/refine`
-für die gemeinsame Sprint-Planung von Analyst und Entwicklern, `/analyze` für eine automatische
+für die gemeinsame Sprint-Planung von Analyst und Entwicklern, den in `/implement`
+integrierten Gate-5.5-Preflight für eine automatische
 Konsistenzprüfung, `/implement` für die eigentliche Programmierung, `/test-plan` gefolgt von
 `/test-run` für die Qualitätssicherung, `/review` für die Abnahme, und zuletzt `/manual` für die
 Endnutzer-Dokumentation. Jeder dieser Befehle aktiviert die passende Rolle, liest automatisch
@@ -281,7 +282,8 @@ User Story mindestens einen Verweis im Code" — und nicht bloß eine Selbstausk
 gerade selbst geliefert hat.
 
 Ein besonders wichtiges Gate liegt zwischen Sprint-Planung und Implementierung: eine
-Cross-Artefakt-Konsistenzprüfung, aktivierbar über `/analyze`. Der Orchestrator liest dabei
+Cross-Artefakt-Konsistenzprüfung. Sie läuft standardmäßig beim Start von `/implement` und
+kann optional vorgezogen über `/analyze` aktiviert werden. Der Orchestrator liest dabei
 Requirements, User Stories, Architekturentscheidungen, UX-Spezifikationen und Sprint-Backlog
 gemeinsam und prüft, ob sie sich widersprechen — verletzt eine geplante Sprint-Story eine bereits
 getroffene Architekturentscheidung? Widerspricht ein UX-Fluss den Akzeptanzkriterien der
