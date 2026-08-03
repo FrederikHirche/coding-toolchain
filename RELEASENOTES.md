@@ -9,6 +9,70 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 
 ---
 
+## v3.0 — 2026-08-03
+
+### Neu
+
+**Optionaler GitHub-Project-Board-Sync (`US`/`BUG`/`DEBT`/`IMPD` ↔ GitHub Issues)**
+
+- `toolchain/protocols/github-board-sync.md` (neu, `PROTO-GITHUB-BOARD`): Vollständiges
+  Protokoll für additiven, opt-in Sync zwischen Tool-Chain-Artefakten und einem GitHub
+  Project (v2) Board — Geltungsbereich, ID-Zuordnung (`github-issue`-Feld), zwei Sync-Modi
+  (`push`/`reconcile`), Status-Mapping, Provisionierung, Auth-Modi (`gh-cli`/`env-var`),
+  Fehlertoleranz (best-effort, blockiert nie ein Gate). Tool-Chain-Gates bleiben immer die
+  alleinige fachliche Quelle der Wahrheit — das Board ist reine Ansicht.
+- `toolchain/scripts/github-board-sync.ps1` / `.sh` (neu): Ausführbare Implementierung für
+  Windows/PowerShell und Bash. Löst die für `gh project item-edit` nötigen GraphQL-Node-IDs
+  (Projekt-ID, Status-Feld-ID, Status-Options-ID, Board-Item-ID) zur Laufzeit über
+  `gh project view/field-list/item-list` auf, statt Klartextnamen oder die Issue-Nummer
+  direkt zu übergeben — reine Namens-/Nummernübergabe an diese `gh`-Flags schlägt fehl, da
+  sie Node-IDs erwarten.
+- `toolchain/agents/orchestrator.md`: Ruft `reconcile` vor und `push` nach jeder Phase auf
+  (Schritt 0 und 3e), sofern `github.enabled`; übersprungene Läufe werden im Statusbericht
+  vermerkt, nie gate-blockierend.
+- `toolchain/agents/pm-agent.md`, `.claude/commands/kickoff.md`: `/kickoff` fragt nach
+  Runde 5 explizit, ob ein Board gewünscht ist, und provisioniert es bei Zustimmung
+  (`gh project create`, `.toolchain.yml` befüllen).
+- `toolchain/workflows/full-sprint.md`: Abschnitt „GitHub-Board-Sync" mit Geltungsbereich
+  und Aktivierungshinweis ergänzt.
+- `toolchain/templates/user-story.md`, `bug-report.md`, `impediment.md`,
+  `tech-debt-registry.md`: `github-issue`-Feld (Frontmatter bzw. Tabellenspalte) ergänzt.
+- `projects/_template/.toolchain.yml`: Neuer `github:`-Block (`enabled`, `repo`,
+  `project-number`, `auth-mode`, `auth-env-var`, `synced-artifacts`), Default
+  `enabled: false` — bestehende Projekte sind unberührt, bis explizit aktiviert.
+- `.claude/commands/commands_summary.md`, `toolchain/agents/agents_summary.md`,
+  `toolchain/protocols/INDEX.md`, `toolchain/scripts/INDEX.md`: konsistent aktualisiert.
+- Auswirkung: Projekte können ihr Backlog optional in einem echten GitHub Project Board
+  sichtbar machen, ohne dass GitHub zur zweiten Quelle der Wahrheit wird. Ohne Opt-in
+  (`github.enabled: true`) ändert sich am bestehenden Verhalten nichts.
+
+---
+
+## v2.12 — 2026-08-02
+
+### Neu
+
+**`/manual` schließt Sprint verbindlich mit Git-Commit + Push ab**
+
+- `.claude/commands/manual.md`: Neuer Schritt 10 „Git-Abschluss" — nach REGISTRY.md/`.phase`-
+  Aktualisierung staged, committed (`feat(sprint-N): ...`) und pusht MW den vollständigen
+  Sprint-Stand zum Remote des Projekt-eigenen Repositories. Ausnahme bei erkennbaren
+  Fremdständen oder explizitem Nutzerwiderspruch: MW pausiert vor dem Push und fragt nach.
+- `toolchain/agents/manual-writer-agent.md`: Vorgehen (Schritt 10–11), Abschluss-Pflicht-Block
+  und Übergabeprotokoll um den Git-Abschluss ergänzt.
+- `toolchain/workflows/full-sprint.md`: Gate 9 um das Kriterium „Sprint-Stand committed und
+  gepusht" (MAJOR) ergänzt; ausdrücklich von Phase 10 (strategischer Merge/Tag gemäß
+  Branching-ADR) abgegrenzt — Phase 9 committet/pusht den Sprint-Stand auf dem
+  Arbeits-Branch, Phase 10 entscheidet separat über Merge in den Ziel-Branch.
+- `.claude/commands/commands_summary.md`, `toolchain/agents/agents_summary.md`: Konsistent
+  aktualisiert.
+- Auswirkung: Sprint-Arbeit landet ab sofort ohne manuellen Zusatzschritt nach jedem
+  `/manual`-Lauf auf GitHub — verhindert das bisherige Muster mehrsprintig uncommitteten
+  Stands. Umgesetzt aus campaignworld `RETRO-000002` / `PC-000002` (direkte Nutzeranweisung
+  in der Sprint-13-Retrospektive).
+
+---
+
 ## v2.11 — 2026-07-31
 
 ### Geändert

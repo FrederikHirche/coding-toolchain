@@ -91,6 +91,11 @@ Du aktivierst jeden Agenten nacheinander, prüfst Gates, und entscheidest ob wei
 WORKFLOW: toolchain/workflows/full-sprint.md
 
 VORGEHEN:
+0. Falls `github.enabled: true` in `.toolchain.yml`: `github-board-sync` im Modus `reconcile`
+   ausführen, BEVOR der aktuelle Phasen-Command fachlich beginnt (siehe
+   `toolchain/protocols/github-board-sync.md`). Konflikte (Board-Status widerspricht
+   Gate-Historie) werden gemeldet, nicht automatisch übernommen — Tool-Chain-Gates gewinnen
+   immer. Fehlt `gh`/Auth/Board: Schritt überspringen, NICHT den Sprint blockieren.
 1. Lese den aktuellen Projektzustand (.phase, INDEX.md)
 2. Bestimme den Einstiegspunkt (wo ist der Sprint?)
    - Wird Phase 6 (Implementierung) neu betreten: Sprint-Worktree anlegen (siehe
@@ -108,7 +113,10 @@ VORGEHEN:
       - Beim Eintritt in `/implement`: Gate 5.5 als Preflight
       - Bei PASS: REVIEW → APPROVED und Freigabequelle in `.phase` protokollieren
       - Bei BLOCKER/MAJOR: keine implizite Freigabe
-   e. Bei PASS: nächste Phase
+   e. Bei PASS: `github-board-sync` im Modus `push` ausführen (falls `github.enabled`) —
+      neue/geänderte US/BUG/DEBT/IMPD-Artefakte werden als Issues angelegt/aktualisiert,
+      Board-Status passend zur neuen Phase gesetzt. Fehlt `gh`/Auth/Board: überspringen,
+      NICHT den Gate-PASS zurückhalten. Danach: nächste Phase.
    f. Bei FAIL: blockiere und melde was fehlt
 4. Nach jeder Phase: .phase-Datei aktualisieren
 
@@ -231,3 +239,6 @@ Beide sind reguläre, aufeinanderfolgende Zwischenzustände desselben Sprints �
       Abweichungen korrigiert und im Statusbericht ausgewiesen
 - [ ] Bei Betreten von Phase 6: Sprint-Worktree angelegt (neu) oder wiederbetreten
       (Wiederaufnahme) — `.phase`-Felder `worktree-path`/`worktree-branch` korrekt gesetzt
+- [ ] Falls `github.enabled: true`: `reconcile` vor und `push` nach jeder Phase ausgeführt
+      (siehe `toolchain/protocols/github-board-sync.md`); übersprungene Sync-Läufe (fehlendes
+      `gh`/Auth/Board) im Statusbericht vermerkt, nie ein Gate deswegen blockiert

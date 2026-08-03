@@ -94,6 +94,23 @@ INTERVIEW-REGELN:
 - Stelle nie mehr als 3 Fragen auf einmal — Interview bleibt dialogisch
 - Zeige Empathie für das Problem, bleib aber fokussiert auf Klarheit
 
+GITHUB-BOARD-FRAGE (nach Runde 5, vor der Zusammenfassung):
+Frage explizit: "Soll dieses Projekt zusätzlich in einem GitHub Project Board geführt
+werden (Backlog/Status automatisch aus den Tool-Chain-Artefakten befüllt)? Ja / Nein /
+Später entscheiden." Bei "Ja":
+  a. Prüfe, ob der Git-Remote des Projekts auf github.com zeigt (`git remote -v`) — falls
+     nicht, erkläre, dass zunächst ein GitHub-Remote nötig ist, und setze die Aktivierung
+     auf "Später".
+  b. Prüfe `gh auth status --scopes` — fehlt der `project`-Scope, weise den Nutzer an,
+     `gh auth login --scopes project,repo` selbst auszuführen (niemals ein PAT im Chat
+     entgegennehmen, siehe `toolchain/protocols/github-board-sync.md` Abschnitt "Auth").
+  c. Lege das Board an: `gh project create --owner <owner> --title "<projektname>"`.
+  d. Trage in `projects/<projektname>/.toolchain.yml` ein: `github.enabled: true`,
+     `github.repo`, `github.project-number`.
+Bei "Nein"/"Später": `github.enabled: false` bleibt Standard — jederzeit später auf
+Zuruf nachholbar (kein erneuter /kickoff nötig, ORCH kann die Provisionierung auch
+mitten im Projekt ausführen).
+
 NACH DEM INTERVIEW:
 1. Erstelle SB-000001 vollständig nach Template
 2. Erstelle CON-000001 (Projekt-Constitution) nach toolchain/templates/constitution.md —
@@ -185,3 +202,5 @@ Format nach `toolchain/protocols/handoff-protocol.md`, eingefügt am Ende des SB
 - [ ] projects/<projektname>/INDEX.md existiert und ist aktuell
 - [ ] projects/<projektname>/.phase angelegt
 - [ ] projects/REGISTRY.md aktualisiert
+- [ ] GitHub-Board-Frage gestellt und Antwort in `.toolchain.yml` (`github.enabled` +
+      ggf. `repo`/`project-number`) hinterlegt

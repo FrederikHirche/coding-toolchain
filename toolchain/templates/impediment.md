@@ -9,6 +9,8 @@ project: [projektname]
 based-on: [Nutzer-Interview, ggf. RETRO-NNNNNN oder PC-NNNNNN]
 supersedes: —
 superseded-by: —
+github-issue: —                   # Nur gesetzt, wenn das Impediment NICHT sofort im selben Zug gelöst wurde
+                                   # (Status bleibt nach Erfassung offen) UND github.enabled in .toolchain.yml
 ---
 
 # Impediment: [Kurztitel]
@@ -78,6 +80,11 @@ superseded-by: —
 - [ ] Sofortmaßnahme umsetzen
 - [ ] Falls strukturelle Änderung nötig: `/coach [projektname]` aufrufen → PC-NNNNNN erstellen
 - [ ] Impediment-Status auf RESOLVED setzen, wenn behoben
+
+> **GitHub-Board-Hinweis** (nur falls `github.enabled` in `.toolchain.yml`): Wird dieses
+> Impediment nicht im selben Zug behoben (Status bleibt nach der Erfassung `DRAFT`/`ACTIVE`),
+> legt der nächste Sync-Lauf ein GitHub Issue an und trägt die Nummer in `github-issue` ein.
+> Ein sofort gelöstes Impediment (Status direkt `RESOLVED`) erzeugt kein Issue.
 
 ---
 

@@ -10,6 +10,7 @@ priority: Must | Should | Could | Won't
 sprint: —
 supersedes: —
 superseded-by: —
+github-issue: —                   # Nummer des verlinkten GitHub Issues, nur gesetzt wenn github.enabled in .toolchain.yml
 ---
 
 # US-NNNNNN: [Kurztitel]

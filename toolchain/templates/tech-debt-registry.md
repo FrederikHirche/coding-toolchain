@@ -19,9 +19,11 @@ Einträge werden NIE gelöscht — nur auf `RESOLVED` gesetzt.
 
 ## Offene Schulden
 
-| ID | Titel | Priorität | Kategorie | Sprint | Agent | Status |
-|----|-------|----------|----------|--------|-------|--------|
-| DEBT-000001 | [Kurztitel] | Hoch | [Kategorie] | 1 | FE | OFFEN |
+| ID | Titel | Priorität | Kategorie | Sprint | Agent | Status | GitHub Issue |
+|----|-------|----------|----------|--------|-------|--------|-------------|
+| DEBT-000001 | [Kurztitel] | Hoch | [Kategorie] | 1 | FE | OFFEN | — |
+
+*Spalte "GitHub Issue" nur gepflegt, wenn `github.enabled` in `.toolchain.yml` — sonst „—".*
 
 ---
 
@@ -59,7 +61,8 @@ z. B. "Skaliert nicht über 1000 gleichzeitige Nutzer", "Erhöhte Fehlerrate bei
 - Wird durch US-NNNNNN automatisch adressiert
 
 **Status:** OFFEN | IN BEARBEITUNG | RESOLVED  
-**Resolved in:** Sprint NNNNNN (wenn behoben)
+**Resolved in:** Sprint NNNNNN (wenn behoben)  
+**GitHub Issue:** — (Nummer, nur gesetzt wenn `github.enabled` in `.toolchain.yml`)
 
 ---
 
@@ -78,9 +81,9 @@ z. B. "Skaliert nicht über 1000 gleichzeitige Nutzer", "Erhöhte Fehlerrate bei
 
 ## Erledigte Schulden
 
-| ID | Titel | Resolved in | Lösung |
-|----|-------|------------|--------|
-| _(leer)_ | | | |
+| ID | Titel | Resolved in | Lösung | GitHub Issue |
+|----|-------|------------|--------|-------------|
+| _(leer)_ | | | | |
 
 ---
 

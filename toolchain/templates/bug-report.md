@@ -11,6 +11,7 @@ severity: BLOCKER | MAJOR | MINOR
 assigned-to: FE | BE | FE+BE
 supersedes: —
 superseded-by: —
+github-issue: —                   # Nummer des verlinkten GitHub Issues, nur gesetzt wenn github.enabled in .toolchain.yml
 ---
 
 # Bug: [Kurzbeschreibung des Fehlers]

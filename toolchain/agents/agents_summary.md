@@ -97,6 +97,10 @@ nachfolgenden Agenten ab Status APPROVED.
 **Externe Recherche:** Kann für Wettbewerbs-/Marktanalyse den MCP-Server `fetch` nutzen
 (siehe CLAUDE.md, Abschnitt "Externe Recherche").
 
+**GitHub-Board (optional):** Fragt explizit, ob das Projekt in einem GitHub Project Board
+geführt werden soll; bei Zustimmung Provisionierung (`gh project create`, `.toolchain.yml`
+befüllen) — siehe `toolchain/protocols/github-board-sync.md`.
+
 ---
 
 ## BA — Business Analyst
@@ -386,7 +390,14 @@ neuen Features, Getting-Started-Guide beim ersten Sprint, FAQ ab Sprint 2 bzw. b
 Bedarf. Screenshot-Platzhalter setzen wo nötig. Zuarbeit zum projektweiten `DECISIONS.md`
 (Terminologie- und Dokumentationsentscheidungen).
 
-**Übergabe an:** Orchestrator (Sprint-Abschluss) — Sprint wird in REGISTRY.md als DONE markiert.
+**Git-Abschluss (seit PC-000002):** Letzter Schritt vor der Übergabe — REGISTRY.md/`.phase`
+aktualisieren, dann `git add`/`commit -m "feat(sprint-N): ..."`/`push` für den Sprint-Stand
+im Projekt-eigenen Repository. Bei erkennbaren Fremdständen im Arbeitsverzeichnis oder
+explizitem Nutzerwiderspruch vor dem Push anhalten und nachfragen, statt automatisch zu
+pushen. Getrennt von Phase 10 (strategischer Merge/Tag gemäß Branching-ADR).
+
+**Übergabe an:** Orchestrator (Sprint-Abschluss) — Sprint wird in REGISTRY.md als DONE markiert,
+Git-Stand ist committed und gepusht.
 
 ---
 

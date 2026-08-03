@@ -65,7 +65,13 @@
       "PowerShell(codebase-memory-mcp --help 2>&1)",
       "PowerShell(codebase-memory-mcp cli 2>&1)",
       "PowerShell(codebase-memory-mcp cli get_architecture '{\"project\":\"C-Users-frede-coding-toolchain-projects-campaignworld\",\"aspects\":[\"all\"]}' 2>&1)",
-      "PowerShell(git add -A -- .claude .mcp.json CLAUDE.md RELEASENOTES.md projects/_template/.gitignore toolchain)"
+      "PowerShell(git add -A -- .claude .mcp.json CLAUDE.md RELEASENOTES.md projects/_template/.gitignore toolchain)",
+      "Bash(chmod +x \"toolchain/scripts/github-board-sync.sh\")",
+      "Bash(git -C /c/Users/frede/coding-toolchain diff --stat --no-index /dev/null \"toolchain/scripts/github-board-sync.sh\")",
+      "PowerShell($null = [System.Management.Automation.Language.Parser]::ParseFile\\(\"C:\\\\Users\\\\frede\\\\coding-toolchain\\\\toolchain\\\\scripts\\\\github-board-sync.ps1\", [ref]$null, [ref]$errors\\); if \\($errors\\) { $errors } else { \"OK - no parse errors\" })",
+      "Bash(bash -n toolchain/scripts/github-board-sync.sh)",
+      "Bash(pwsh -NoProfile -File toolchain/scripts/validate-codex-compat.ps1)",
+      "Bash(git add *)"
     ]
   },
   "showThinkingSummaries": true,

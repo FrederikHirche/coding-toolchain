@@ -98,6 +98,24 @@ nachdem Gate 8 (Review) und Gate 9 (Dokumentation) bestanden sind.
 
 ---
 
+## GitHub-Board-Sync (optional, opt-in)
+
+**Standard-Mechanismus, sofern aktiviert** (`github.enabled: true` in `.toolchain.yml`,
+siehe `toolchain/protocols/github-board-sync.md`): ORCH führt zu Beginn jedes
+Phasen-Commands `github-board-sync -Mode reconcile` aus (Board-Stand lesen, Konflikte mit
+Gate-Historie melden) und nach jedem Gate-PASS `github-board-sync -Mode push`
+(neue/geänderte `US`/`BUG`/`DEBT`/`IMPD`-Artefakte als Issues anlegen/aktualisieren).
+
+**Geltungsbereich:** Alle Phasen 1–10, sofern `github.enabled`. Tool-Chain-Gates
+entscheiden immer über den fachlichen Fortschritt — ein Board ist eine Ansicht, kein
+zweiter Entscheider (siehe Konfliktregel im Protokoll). Fehlt `gh`, Auth oder Board:
+Sync-Schritt wird übersprungen, kein Gate wird dadurch blockiert oder verzögert.
+
+**Aktivierung:** Bei `/kickoff` fragt PM explizit nach dem Wunsch (siehe `pm-agent.md`);
+bei Zustimmung provisioniert ORCH Board und Konfiguration.
+
+---
+
 ## Phase 1: Discovery
 
 **Befehl:** `/kickoff`  
@@ -332,8 +350,13 @@ werden; bei Änderungen wird der Preflight erneut ausgeführt.
 | Screenshot-Platzhalter gesetzt | `[SCREENSHOT: ...]`-Marker | MINOR |
 | `DECISIONS.md` aktualisiert | Neue Einträge wenn Terminologieentscheid | MINOR |
 | `docs/INDEX.md` aktualisiert | Datei vorhanden und vollständig | MINOR |
+| Sprint-Stand committed und gepusht | `git log`/`git status` im Projekt-Repository: kein offener Sprint-Diff, Remote auf aktuellem Stand | MAJOR |
 
-**Bei PASS:** `.phase` auf `DONE` setzen, Sprint als abgeschlossen markieren
+**Bei PASS:** `.phase` auf `DONE` setzen, Sprint als abgeschlossen markieren. MW führt als
+letzten Schritt von Phase 9 automatisch `git add`/`commit`/`push` für den Sprint-Stand im
+Projekt-eigenen Repository aus (verbindlich seit `PC-000002`, campaignworld `RETRO-000002`) —
+getrennt von Phase 10, die den strategischen Merge in den Ziel-Branch gemäß Branching-ADR
+behandelt.
 
 ---
 

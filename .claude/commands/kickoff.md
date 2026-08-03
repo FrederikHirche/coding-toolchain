@@ -21,8 +21,12 @@ Ohne Argument wird nach dem Projektnamen gefragt.
 5. Erstellt `projects/<projektname>/discovery/SB-000001-<projektname>.md`
 6. Erstellt `projects/<projektname>/discovery/CON-000001-<projektname>.md` (Projekt-Constitution
    — nicht verhandelbare Prinzipien und Qualitäts-Mindeststandards, bindend für alle Folgephasen)
-7. Aktualisiert `projects/<projektname>/INDEX.md`
-8. Gibt Übergabe-Zusammenfassung für `/ba` aus
+7. Fragt, ob das Projekt zusätzlich in einem GitHub Project Board geführt werden soll
+   (Backlog/Status automatisch aus den Tool-Chain-Artefakten befüllt) — bei Zustimmung wird
+   das Board provisioniert und `github:`-Block in `.toolchain.yml` befüllt (siehe
+   `toolchain/protocols/github-board-sync.md`); jederzeit auch später nachholbar
+8. Aktualisiert `projects/<projektname>/INDEX.md`
+9. Gibt Übergabe-Zusammenfassung für `/ba` aus
 
 ## Vorbedingungen
 

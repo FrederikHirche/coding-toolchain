@@ -2,7 +2,7 @@
 
 Formale Verträge und Standards, die alle Agenten verbindlich einhalten.
 
-Letzte Aktualisierung: 2026-06-19
+Letzte Aktualisierung: 2026-08-03
 
 ## Inhalt
 
@@ -12,6 +12,7 @@ Letzte Aktualisierung: 2026-06-19
 | `gate-protocol.md` | PROTO-GATE | Qualitäts-Gate-Schweregrade, -Ausgabe und -Entscheidungslogik |
 | `artifact-lifecycle.md` | PROTO-LIFECYCLE | Artefakt-Statusübergänge, Versionierung, Archivierung |
 | `SECURITY-GUIDELINES.md` | PROTO-SECURITY | Vertrauensstufen, Umgang mit externen Inhalten und Agenten |
+| `github-board-sync.md` | PROTO-GITHUB-BOARD | Optionaler bidirektionaler Sync zwischen Tool-Chain-Artefakten und einem GitHub Project (v2) Board |
 
 ## Hierarchie
 

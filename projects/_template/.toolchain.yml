@@ -103,3 +103,18 @@ hooks:
 
   post-commit:
     index-reminder: true            # INDEX.md-Update-Erinnerung?
+
+# ─────────────────────────────────────
+# GitHub Project Board Sync (optional, opt-in)
+# ─────────────────────────────────────
+# Siehe toolchain/protocols/github-board-sync.md für das vollständige Protokoll.
+# Wird bei /kickoff erfragt (oder später per Nutzerwunsch) und dann vom Orchestrator
+# befüllt/provisioniert — nicht manuell vorausfüllen, außer ein Board existiert bereits.
+
+github:
+  enabled: false                    # true, sobald ein Board gewünscht und provisioniert wurde
+  repo: ~                           # owner/repo, z. B. octocat/hello-world
+  project-number: ~                 # Nummer des GitHub Project (v2) Boards
+  auth-mode: gh-cli                 # gh-cli | env-var — siehe github-board-sync.md Abschnitt "Auth"
+  auth-env-var: ~                   # nur bei auth-mode: env-var — Name der vom Nutzer gesetzten Variable
+  synced-artifacts: [US, BUG, DEBT, IMPD]  # welche Artefakttypen als Issues geführt werden

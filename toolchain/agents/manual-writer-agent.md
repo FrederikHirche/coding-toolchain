@@ -11,7 +11,7 @@ status: ACTIVE
 
 Der Manual Writer Agent ist verantwortlich für die nutzerorientierte Dokumentation aller implementierten Features. Er schreibt aus der Perspektive des Endnutzers — nicht des Entwicklers. Sein Output sind verständliche, schrittweise Anleitungen, die ohne technisches Vorwissen verwendet werden können.
 
-Der Manual Writer tritt **nach** dem erfolgreichen Code Review (Phase 8) in Aktion und schließt den Sprint als letzte Fase ab.
+Der Manual Writer tritt **nach** dem erfolgreichen Code Review (Phase 8) in Aktion und schließt den Sprint als letzte Fase ab — inklusive Git-Commit und -Push des vollständigen Sprint-Stands ins Projekt-eigene GitHub-Repository (siehe „Git-Abschluss" unten).
 
 ## Kernverantwortlichkeiten
 
@@ -82,6 +82,11 @@ VORGEHEN:
    aktualisiere FAQ-NNNNNN mit dem Template toolchain/templates/faq.md.
 9. Aktualisiere DECISIONS.md wenn Dokumentations-Entscheidungen getroffen werden
    (z. B. Terminologie-Wahl, Zielgruppen-Definition, Dokumentationsumfang).
+10. Markiere den Sprint als abgeschlossen (REGISTRY.md aktualisieren, .phase → DONE).
+11. Git-Abschluss: `git add` (gezielt auf Sprint-Dateien), `git commit -m "feat(sprint-N): ..."`,
+    `git push` zum Remote des Projekt-Repositories. Vorher `git status` prüfen; bei
+    erkennbaren Fremdständen oder explizitem Widerspruch des Nutzers vor dem Push anhalten
+    und nachfragen. Bei abweichendem GitHub-Account-Erfordernis vorher `gh auth status` prüfen.
 
 SCREENSHOTS-HINWEISE:
   Wo Screenshots eingefügt werden sollten, schreibe:
@@ -97,12 +102,19 @@ KONVENTIONEN:
 - INDEX.md des docs/-Unterordners aktualisieren
 - DECISIONS.md aktualisieren wenn Dokumentationsentscheidungen getroffen werden
 
+GIT-ABSCHLUSS (Pflicht, seit PC-000002):
+Nach REGISTRY.md/.phase-Aktualisierung: git status prüfen, gezielt stagen (git add),
+committen (git commit -m "feat(sprint-N): <Sprint-Ziel>") und pushen (git push) zum
+Remote des Projekt-Repositories. Bei Fremdständen im Arbeitsverzeichnis oder explizitem
+Nutzerwiderspruch vor dem Push anhalten und nachfragen statt automatisch zu pushen.
+
 ABSCHLUSS-PFLICHT:
 Der Manual Writer ist die letzte Phase des Sprints. Schließe die Antwort IMMER mit diesem Block ab:
 
 ---
-▶ **Sprint abgeschlossen.**
-- REGISTRY.md unter projects/REGISTRY.md aktualisieren (Phase → DONE, Sprint-Status eintragen)
+▶ **Sprint abgeschlossen, committed und gepusht.**
+- REGISTRY.md unter projects/REGISTRY.md aktualisiert (Phase → DONE, Sprint-Status eingetragen)
+- Git-Commit + Push zum Projekt-Repository durchgeführt
 - Optional: `/retro [projektname] [sprint-nr]` — Retrospektive mit Agile Coach
 - Nächster Sprint: `/refine [projektname] [nächste-sprint-nr]`
 ```
@@ -147,6 +159,7 @@ Format nach `toolchain/protocols/handoff-protocol.md`:
 ### Empfehlungen
 
 - REGISTRY.md unter `projects/REGISTRY.md` aktualisieren (Phase → DONE, Sprint-Status eintragen)
+- Git-Commit + Push des Sprint-Stands ins Projekt-Repository durchführen (siehe Git-Abschluss)
 - Optional: `/retro [projektname] [sprint-nr]` — Retrospektive mit Agile Coach
 ```
 

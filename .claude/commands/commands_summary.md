@@ -79,7 +79,7 @@ der eindeutigen `REVIEW`-Artefakte der Vorphase. Gate 5.5 läuft als `/implement
 
 **Aktiviert:** PM (Product Manager)  
 **Wann nutzen:** Start eines neuen Projekts. Kein Vorgänger nötig — das ist der Einstiegspunkt der Tool Chain.  
-**Was passiert:** Projektordner wird als Kopie von `projects/_template/` angelegt und erhält ein eigenes Git-Repository (`git init`) — getrennt vom Toolchain-Repo. Strukturiertes Stakeholder-Interview in 5 Runden (Problemraum, Nutzer, Scope, Erfolgskriterien, Constraints). Nach dem Interview wird der Stakeholder Brief (SB-000001) erstellt, die Projekt-Constitution (CON-000001 — nicht verhandelbare Prinzipien und Qualitäts-Mindeststandards) synthetisiert, MoSCoW-Priorisierung festgelegt und die Top-3-Risiken benannt. INDEX.md und `.phase`-Datei sind bereits aus der Vorlage vorhanden.  
+**Was passiert:** Projektordner wird als Kopie von `projects/_template/` angelegt und erhält ein eigenes Git-Repository (`git init`) — getrennt vom Toolchain-Repo. Strukturiertes Stakeholder-Interview in 5 Runden (Problemraum, Nutzer, Scope, Erfolgskriterien, Constraints). Nach dem Interview wird der Stakeholder Brief (SB-000001) erstellt, die Projekt-Constitution (CON-000001 — nicht verhandelbare Prinzipien und Qualitäts-Mindeststandards) synthetisiert, MoSCoW-Priorisierung festgelegt und die Top-3-Risiken benannt. Zusätzlich wird gefragt, ob das Projekt in einem GitHub Project Board geführt werden soll (opt-in, jederzeit später nachholbar) — bei Zustimmung provisioniert PM das Board und befüllt den `github:`-Block in `.toolchain.yml` (siehe `toolchain/protocols/github-board-sync.md`). INDEX.md und `.phase`-Datei sind bereits aus der Vorlage vorhanden.  
 **Output:** `SB-NNNNNN` Stakeholder Brief, `CON-000001` Projekt-Constitution  
 **Nächste Phase:** `/ba [projektname]`
 
@@ -208,8 +208,8 @@ der eindeutigen `REVIEW`-Artefakte der Vorphase. Gate 5.5 läuft als `/implement
 **Wann nutzen:** Nach erfolgreichem Code Review — letzte Phase des Sprints.  
 **Was passiert:** Erstellt nutzerorientierte Feature-Guides (DOC-NNNNNN) pro Feature-Gruppe — keine technischen Details, sondern schrittweise Anleitungen aus Nutzerperspektive. Erstellt Release Notes (RN-NNNNNN). Beim ersten Sprint: Getting-Started-Guide (GS-000001).  
 **Vorbedingung:** `RV-NNNNNN` mit APPROVED, keine offenen BLOCKER-Bugs  
-**Output:** `DOC-NNNNNN` Feature-Guides, `RN-NNNNNN` Release Notes, ggf. `GS-000001`  
-**Sprint-Abschluss:** REGISTRY.md aktualisieren, optional `/retro [projektname] [sprint-nr]`
+**Output:** `DOC-NNNNNN` Feature-Guides, `RN-NNNNNN` Release Notes, ggf. `GS-000001`, Git-Commit + Push  
+**Sprint-Abschluss:** REGISTRY.md aktualisieren, dann verbindlich `git add`/`commit`/`push` des Sprint-Stands ins Projekt-Repository (seit PC-000002), optional `/retro [projektname] [sprint-nr]`
 
 ---
 
