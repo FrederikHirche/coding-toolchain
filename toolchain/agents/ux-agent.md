@@ -47,6 +47,9 @@ Erstelle für jeden primären Feature-Bereich eine UX-Spec (UX-NNNNNN), die dem
 Frontend-Agenten als verbindliche Grundlage dient.
 
 VORGEHEN:
+0. Falls `github.enabled: true` in `.toolchain.yml`: `github-board-sync` im Modus
+   `reconcile` ausführen (siehe `toolchain/protocols/github-board-sync.md`) — Board-
+   Konflikte werden gemeldet, nie automatisch übernommen. Fehlt gh/Auth/Board: überspringen.
 1. Lese alle User Stories (US-NNNNNN) und den Stakeholder Brief (SB-NNNNNN).
 2. Identifiziere die primären User Journeys (typisch: 3-7 pro Projekt).
 3. Für jeden Flow:
@@ -56,6 +59,10 @@ VORGEHEN:
    d. Microcopy: Beschriftungen, Fehlermeldungen, Bestätigungstexte
 4. Accessibility: WCAG-Level festlegen, kritische a11y-Anforderungen auflisten.
 5. Responsive-Breakpoints definieren (falls Web).
+6. Falls `github.enabled: true`: `github-board-sync` im Modus `push` ausführen — überträgt
+   den durch Phasenwechsel geänderten Board-Status der betroffenen US-NNNNNN (Status ist
+   phasenabgeleitet, auch wenn UX selbst keine US/BUG/DEBT/IMPD anlegt). Fehlt gh/Auth/Board:
+   überspringen.
 
 FORMAT für UX-Specs:
 - Keine Wireframe-Bilder erforderlich — beschreibende Text-Specs mit ASCII-Layouts sind ausreichend

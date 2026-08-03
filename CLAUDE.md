@@ -135,6 +135,8 @@ TODO-FORMAT:
 | Architecture Decision Record | `ADR-NNNNNN` | `ADR-000001-tech-stack.md` |
 | Gap-Analyse (Converge) | `GAP-NNNNNN` | `GAP-000001-legacy-scan.md` |
 | User Story | `US-NNNNNN` | `US-000042-login.md` |
+| Epic | `EPIC-NNNNNN` | `EPIC-000001-login-onboarding.md` |
+| Roadmap / Release-Plan (Gesamtscope) | `RM-NNNNNN` | `RM-000001-roadmap.md` |
 | UX-Spec | `UX-NNNNNN` | `UX-000001-onboarding.md` |
 | Sprint Backlog | `SP-NNNNNN` | `SP-000001-sprint1.md` |
 | Testplan | `TP-NNNNNN` | `TP-000001-smoke.md` |
@@ -162,7 +164,7 @@ Jeder Artefakttyp hat einen definierten Unterordner:
 ```
 projects/<name>/
   discovery/        SB-NNNNNN, CON-000001, DECISIONS.md
-  requirements/     REQ-NNNNNN, US-NNNNNN
+  requirements/     REQ-NNNNNN, US-NNNNNN, EPIC-NNNNNN, RM-NNNNNN
   architecture/     ADR-NNNNNN, STRUCTURE.md, GAP-NNNNNN
   ux/               UX-NNNNNN
   sprints/          SP-NNNNNN

@@ -3,7 +3,7 @@
 Konsolidierte Übersicht aller Slash Commands.  
 Zweck: Einzelne Referenzdatei für NotebookLM-Analyse und schnelle Orientierung.
 
-**Letzte Aktualisierung:** 2026-07-24 (v2.4 — Statusprojektion-Gegenprüfung + Sprint-Worktree-Isolation)  
+**Letzte Aktualisierung:** 2026-08-03 (v4.0 — Full-Scope-Vorausplanung (Epics/Roadmap) + GitHub-Board-Sync in allen Phasen-Commands)  
 **Pflege-Regel:** Diese Datei wird bei jedem Hinzufügen oder Ändern eines Commands aktualisiert.
 
 ---
@@ -75,6 +75,14 @@ der eindeutigen `REVIEW`-Artefakte der Vorphase. Gate 5.5 läuft als `/implement
 
 ## Phasen-Commands (manuell oder durch /sprint aufgerufen)
 
+**GitHub-Board-Sync (falls `github.enabled: true`):** Jeder der folgenden Phasen-Commands —
+`/kickoff`, `/ba`, `/ux`, `/refine`, `/implement`, `/test-plan`, `/test-run`, `/review`,
+`/manual` — führt zu Beginn `github-board-sync -Mode reconcile` und am Ende
+`github-board-sync -Mode push` selbstständig aus, unabhängig davon ob über `/sprint` oder
+direkt aufgerufen (siehe `toolchain/protocols/github-board-sync.md`). Neue `BUG-NNNNNN`
+(`/test-run`) und `DEBT-NNNNNN` (`/review`) übernehmen dabei das `epic`-Feld der
+auslösenden Story, damit sie demselben GitHub-Milestone zugeordnet werden.
+
 ### /kickoff — Discovery Phase
 
 **Aktiviert:** PM (Product Manager)  
@@ -89,9 +97,9 @@ der eindeutigen `REVIEW`-Artefakte der Vorphase. Gate 5.5 läuft als `/implement
 
 **Aktiviert:** BA (Business Analyst)  
 **Wann nutzen:** Nach Abschluss des Stakeholder Briefs.  
-**Was passiert:** Analysiert den Stakeholder Brief, leitet funktionale und nicht-funktionale Anforderungen ab, erstellt User Stories im "Als [Rolle] möchte ich [Ziel], damit [Nutzen]"-Format mit Given/When/Then-Akzeptanzkriterien. Erstellt Story-Map mit Abhängigkeiten.  
+**Was passiert:** Analysiert den Stakeholder Brief, leitet funktionale und nicht-funktionale Anforderungen ab, erstellt User Stories im "Als [Rolle] möchte ich [Ziel], damit [Nutzen]"-Format mit Given/When/Then-Akzeptanzkriterien. Erstellt Story-Map mit Abhängigkeiten. Bildet Epics (EPIC-NNNNNN) aus zusammengehörigen Stories und erstellt eine Roadmap (RM-NNNNNN), die den GESAMTEN Projekt-Scope vorausplant — Priorität, Schätzung, Size, Iteration und Zeitrahmen für jede Story, nicht nur für Sprint 1. Bei aktiviertem GitHub-Board-Sync überträgt der erste `push`-Lauf danach automatisch den kompletten vorausgeplanten Backlog (Epics als Milestones, Stories mit allen Feldern) auf das Board.  
 **Vorbedingung:** `SB-NNNNNN` und `CON-000001` im Status APPROVED  
-**Output:** `REQ-NNNNNN` Requirements-Dokument, `US-NNNNNN` User Stories  
+**Output:** `REQ-NNNNNN` Requirements-Dokument, `US-NNNNNN` User Stories, `EPIC-NNNNNN`, `RM-NNNNNN`  
 **Nächste Phase:** `/architect [projektname]`
 
 ---
@@ -122,8 +130,8 @@ der eindeutigen `REVIEW`-Artefakte der Vorphase. Gate 5.5 läuft als `/implement
 
 **Aktiviert:** BA, FE, BE (gemeinsames Refinement)  
 **Wann nutzen:** Vor dem Implementierungs-Sprint — User Stories werden in umsetzbare Tasks aufgeteilt und geschätzt.  
-**Was passiert:** Verfeinert User Stories mit Subtasks, Story-Point-Schätzungen und Abhängigkeiten. Erstellt Sprint-Backlog-Dokument mit Sprint-Ziel, Abnahmekriterien und technischen Voraussetzungen.  
-**Vorbedingung:** `UX-NNNNNN` vorhanden, `ADR-000001` APPROVED  
+**Was passiert:** Verfeinert NUR die Stories der anstehenden Iteration mit Subtasks, Ist-Aufwand und Abhängigkeiten — die Grobschätzung/Iteration/Datumsplanung stammt bereits aus `RM-NNNNNN` (von `/ba`, deckt den Gesamtscope ab) und wird hier präzisiert statt neu erfunden. Erstellt Sprint-Backlog-Dokument mit Sprint-Ziel, Abnahmekriterien und technischen Voraussetzungen; schreibt Abweichungen zurück in `RM-NNNNNN`.  
+**Vorbedingung:** `UX-NNNNNN` vorhanden, `ADR-000001` APPROVED, `RM-NNNNNN` vorhanden  
 **Output:** `SP-NNNNNN` Sprint Backlog  
 **Nächste Phase:** `/implement [modus] [projektname]` (führt Gate 5.5 als Preflight aus)
 

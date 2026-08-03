@@ -117,4 +117,6 @@ github:
   project-number: ~                 # Nummer des GitHub Project (v2) Boards
   auth-mode: gh-cli                 # gh-cli | env-var — siehe github-board-sync.md Abschnitt "Auth"
   auth-env-var: ~                   # nur bei auth-mode: env-var — Name der vom Nutzer gesetzten Variable
-  synced-artifacts: [US, BUG, DEBT, IMPD]  # welche Artefakttypen als Issues geführt werden
+  synced-artifacts: [US, BUG, DEBT, IMPD, EPIC]  # welche Artefakttypen als Issues/Milestones geführt werden
+  iteration-length-days: 14         # Kadenz des Iteration-Feldes auf dem Board (Tage pro Sprint)
+  iteration-start-date: ~           # YYYY-MM-DD, Default: Kickoff-Datum, falls leer

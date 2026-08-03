@@ -101,10 +101,25 @@ nachdem Gate 8 (Review) und Gate 9 (Dokumentation) bestanden sind.
 ## GitHub-Board-Sync (optional, opt-in)
 
 **Standard-Mechanismus, sofern aktiviert** (`github.enabled: true` in `.toolchain.yml`,
-siehe `toolchain/protocols/github-board-sync.md`): ORCH führt zu Beginn jedes
-Phasen-Commands `github-board-sync -Mode reconcile` aus (Board-Stand lesen, Konflikte mit
-Gate-Historie melden) und nach jedem Gate-PASS `github-board-sync -Mode push`
-(neue/geänderte `US`/`BUG`/`DEBT`/`IMPD`-Artefakte als Issues anlegen/aktualisieren).
+siehe `toolchain/protocols/github-board-sync.md`): Sowohl ORCH im Sprint-Modus als auch
+JEDER einzelne Phasen-Agent führt `github-board-sync -Mode reconcile` zu Beginn seines
+eigenen Vorgehens aus (Board-Stand lesen, Konflikte mit Gate-Historie melden) und
+`github-board-sync -Mode push` an dessen Ende (neue/geänderte `US`/`BUG`/`DEBT`/`IMPD`/
+`EPIC`-Artefakte als Issues/Milestones anlegen/aktualisieren). Das gilt unabhängig davon,
+ob die Phase über `/sprint` oder direkt (`/ba`, `/ux`, `/refine`, `/implement`,
+`/test-plan`, `/test-run`, `/review`, `/manual`) aufgerufen wird — jeder dieser Commands
+ist damit für den Board-Sync eigenständig funktionsfähig, ein Aufruf über ORCH ist keine
+Voraussetzung. Der Sync ist idempotent: ein zusätzlicher Lauf durch ORCH im Sprint-Modus
+ändert nichts, wenn der Phasen-Agent den Sync bereits selbst ausgeführt hat.
+
+**Vorausplanung des Gesamtscopes:** `/ba` erzeugt beim ersten `push`-Lauf Milestones für
+alle `EPIC-NNNNNN` und überträgt Estimate/Size/Priority/Iteration/Start-/Zieldatum für
+JEDE Story im kompletten Backlog (`RM-NNNNNN`) — nicht nur für Sprint 1.
+
+**Bugs/Tech-Schulden aus der Umsetzung:** Neue `BUG-NNNNNN` (QA in `/test-run`) und neue
+`DEBT-NNNNNN` (RV in `/review`) übernehmen das `epic`-Feld der auslösenden Story, damit sie
+beim Sync demselben GitHub-Milestone zugeordnet werden wie die zugehörige Story — kein
+unverknüpftes Issue im Board.
 
 **Geltungsbereich:** Alle Phasen 1–10, sofern `github.enabled`. Tool-Chain-Gates
 entscheiden immer über den fachlichen Fortschritt — ein Board ist eine Ansicht, kein
@@ -112,7 +127,7 @@ zweiter Entscheider (siehe Konfliktregel im Protokoll). Fehlt `gh`, Auth oder Bo
 Sync-Schritt wird übersprungen, kein Gate wird dadurch blockiert oder verzögert.
 
 **Aktivierung:** Bei `/kickoff` fragt PM explizit nach dem Wunsch (siehe `pm-agent.md`);
-bei Zustimmung provisioniert ORCH Board und Konfiguration.
+bei Zustimmung provisioniert PM Board, Custom Fields und Konfiguration.
 
 ---
 
@@ -144,7 +159,8 @@ bei Zustimmung provisioniert ORCH Board und Konfiguration.
 
 **Befehl:** `/ba`  
 **Agent:** BA  
-**Ergebnis:** `REQ-NNNNNN`, `US-NNNNNN` (mehrere)
+**Ergebnis:** `REQ-NNNNNN`, `US-NNNNNN` (mehrere), `EPIC-NNNNNN` (mehrere), `RM-NNNNNN`
+(Roadmap — Vorausplanung des GESAMTEN Scopes)
 
 ### Gate 2 → Phase 3
 
@@ -153,11 +169,14 @@ bei Zustimmung provisioniert ORCH Board und Konfiguration.
 | `REQ-NNNNNN` status `APPROVED` | Header prüfen | BLOCKER |
 | Alle Must-Have-Features haben ≥1 US | Zählen | BLOCKER |
 | Jede US hat ≥3 Akzeptanzkriterien | Given/When/Then-Blöcke zählen | BLOCKER |
+| `RM-NNNNNN` deckt jede Story im Gesamtscope ab (nicht nur Sprint 1) | Zeilenabgleich RM ↔ alle US | BLOCKER |
 | Non-Functional Requirements dokumentiert | Abschnitt 2 in REQ | MAJOR |
 | Story-Map erstellt | Abschnitt 3 in REQ | MAJOR |
+| Jede Story einem Epic zugeordnet oder bewusst epic-los | Frontmatter-Feld `epic` je US | MAJOR |
 | Edge Cases dokumentiert | Abschnitt 4 in REQ | MINOR |
 
-**Bei PASS:** `.phase` auf `ARCHITECTURE` setzen
+**Bei PASS:** `.phase` auf `ARCHITECTURE` setzen. Falls `github.enabled`: erster `push`-Lauf
+synchronisiert den gesamten vorausgeplanten Backlog (siehe Abschnitt "GitHub-Board-Sync").
 
 ---
 
@@ -207,7 +226,8 @@ bei Zustimmung provisioniert ORCH Board und Konfiguration.
 
 **Befehl:** `/refine`  
 **Agenten:** BA + FE + BE  
-**Ergebnis:** `SP-NNNNNN` (Sprint Backlog)
+**Ergebnis:** `SP-NNNNNN` (Sprint Backlog) — verfeinert die in `RM-NNNNNN` bereits
+vorausgeplante Iteration (Subtasks, Ist-Aufwand), ersetzt die Grobplanung nicht
 
 ### Gate 5 → Phase 6
 
@@ -217,6 +237,7 @@ bei Zustimmung provisioniert ORCH Board und Konfiguration.
 | Alle Sprint-Stories geschätzt | Keine leere Schätzung | BLOCKER |
 | Sprint-Ziel definiert | Abschnitt im SP | MAJOR |
 | Technische Voraussetzungen gelistet | Abschnitt im SP | MAJOR |
+| Abweichungen zur RM-NNNNNN-Grobschätzung dokumentiert | Abschnitt "Ist-Abweichungen" in RM-NNNNNN | MINOR |
 | Keine ungelösten Tech-Blocker | Selbstauskunft BA+FE+BE: SP-NNNNNN Abschnitt "Risiken & Unsicherheiten" — keine offenen Blocker-Einträge | MAJOR |
 
 **Bei PASS:** Refinement ist bereit für `/implement`. Der explizite `/implement`-Aufruf

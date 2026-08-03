@@ -5,12 +5,18 @@ version: 1.0
 status: DRAFT
 author-agent: BA (Business Analyst)
 date: YYYY-MM-DD
-epic: [Epic-Name]
+epic: EPIC-NNNNNN                 # Referenz auf zugehöriges Epic, sofern zugeordnet
 priority: Must | Should | Could | Won't
 sprint: —
 supersedes: —
 superseded-by: —
 github-issue: —                   # Nummer des verlinkten GitHub Issues, nur gesetzt wenn github.enabled in .toolchain.yml
+github-milestone: —                # Aus dem Epic gespiegelt, nur informativ, nur gesetzt wenn github.enabled
+estimate: —                       # Story Points (Fibonacci: 1/2/3/5/8/13), aus RM-NNNNNN
+size: —                           # XS | S | M | L | XL, aus RM-NNNNNN
+iteration: —                      # Geplante Sprint-Nr. aus RM-NNNNNN
+start-date: —                     # YYYY-MM-DD, aus RM-NNNNNN
+target-date: —                    # YYYY-MM-DD, aus RM-NNNNNN
 ---
 
 # US-NNNNNN: [Kurztitel]

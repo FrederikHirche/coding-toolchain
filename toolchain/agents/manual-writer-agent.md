@@ -71,6 +71,9 @@ LEITPRINZIPIEN:
    - Wenn ein Satz weggelassen werden kann, lasse ihn weg
 
 VORGEHEN:
+0. Falls `github.enabled: true` in `.toolchain.yml`: `github-board-sync` im Modus
+   `reconcile` ausführen (siehe `toolchain/protocols/github-board-sync.md`). Fehlt
+   gh/Auth/Board: überspringen, nicht blockieren.
 1. Lese alle APPROVED US-NNNNNN des aktuellen Sprints.
 2. Lese die zugehörigen UX-NNNNNN für UI-Details und Microcopy.
 3. Lese den Review-Bericht (RV-NNNNNN) um sicherzugehen, welche Features APPROVED sind.
@@ -87,6 +90,9 @@ VORGEHEN:
     `git push` zum Remote des Projekt-Repositories. Vorher `git status` prüfen; bei
     erkennbaren Fremdständen oder explizitem Widerspruch des Nutzers vor dem Push anhalten
     und nachfragen. Bei abweichendem GitHub-Account-Erfordernis vorher `gh auth status` prüfen.
+12. Falls `github.enabled: true`: `github-board-sync` im Modus `push` ausführen — überträgt
+    den finalen `DONE`-Status des Sprints (→ Board-Status "Done" für alle abgeschlossenen
+    US/BUG/DEBT/IMPD) auf das Board. Fehlt gh/Auth/Board: überspringen.
 
 SCREENSHOTS-HINWEISE:
   Wo Screenshots eingefügt werden sollten, schreibe:

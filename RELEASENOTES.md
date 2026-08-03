@@ -9,6 +9,65 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 
 ---
 
+## v4.0 — 2026-08-03
+
+### Neu
+
+**Full-Scope-Backlog-Vorausplanung (Epics, Roadmap) + vollständige GitHub-Projects-Feldnutzung**
+
+- Neue Artefakttypen `EPIC-NNNNNN` (`toolchain/templates/epic.md`) und `RM-NNNNNN`
+  (`toolchain/templates/roadmap.md`, Roadmap/Release-Plan): BA plant während `/ba` — nach
+  Abschluss aller Stories — den **gesamten** Projekt-Scope vor (nicht nur den nächsten
+  Sprint): Epics als Gruppierung, Priorität/Schätzung/Size/Iteration/Zeitrahmen für JEDE
+  Story im Backlog. `/refine` verfeinert danach nur noch die anstehende Iteration und
+  schreibt Ist-Abweichungen zurück in `RM-NNNNNN`, statt die Grobplanung zu ersetzen.
+- `toolchain/templates/user-story.md`, `bug-report.md`, `impediment.md`,
+  `tech-debt-registry.md`: einheitliche neue Felder `epic`, `estimate`, `size`,
+  `iteration`, `start-date`, `target-date`, `github-milestone` — für ALLE synchronisierten
+  Issue-Typen, nicht nur User Stories.
+- `toolchain/protocols/github-board-sync.md` (v2.0, grundlegend erweitert): Epics werden
+  als GitHub-**Milestones** geführt; Board-Felder Estimate/Size/Priority (MoSCoW→P0–P3)/
+  Iteration/Start-/Zieldatum werden synchronisiert; Relationships (Epic-Zuordnung,
+  Blocks/Blocked-by) best-effort über GitHub-APIs plus garantiertem Text-Fallback im
+  Issue-Body; Issue-Body wird bei jedem `push` vollständig aus dem Artefakt gerendert
+  (User-Story-Satz, alle Akzeptanzkriterien, Nicht-Ziele, Abhängigkeiten, Metadaten) statt
+  des bisherigen Platzhaltertexts.
+- `toolchain/scripts/github-board-sync.ps1`/`.sh`: Board-Kontext löst nun alle Custom-Field-
+  IDs (Estimate/Size/Priority/Iteration/Start-/Zieldatum) und Milestone-Zuordnungen auf;
+  neue Milestone-Sync-Funktion für Epics; vollständiges Issue-Body-Rendering aus den
+  "---"-getrennten Template-Abschnitten; DEBT-REGISTRY-Parsing auf spaltennamen-basiert
+  (statt positionsfest) umgestellt, damit die zusätzlichen Spalten robust erkannt werden.
+  Nebenbei behoben: ein Parser-Bug in `Get-Scalar`/`Set-FrontmatterField` (`$Key:` wurde
+  von PowerShell als ungültige Laufwerksreferenz interpretiert — betraf bereits das
+  v3.0-Skript, ist jetzt über `${Key}:` korrigiert).
+- **GitHub-Board-Sync jetzt in JEDEM Phasen-Command, nicht nur im Sprint-Modus:**
+  `/kickoff`, `/ba`, `/ux`, `/refine`, `/implement` (FE+BE, inkl. Bugfix-Modus),
+  `/test-plan`, `/test-run`, `/review`, `/manual` führen `reconcile` zu Beginn und `push`
+  am Ende jetzt selbstständig aus (`toolchain/agents/*.md`) — unabhängig davon, ob die
+  Phase über `/sprint` oder direkt aufgerufen wird. Bisher war dieser Schritt nur in
+  `orchestrator.md` (Sprint-Modus) verankert und griff daher nicht bei direktem
+  Einzel-Command-Aufruf.
+- **Bugs/Tech-Schulden aus der Umsetzung jetzt Epic-verknüpft:** QA (`/test-run`, neue
+  `BUG-NNNNNN`) und RV (`/review`, neue `DEBT-NNNNNN`) übernehmen das `epic`-Feld der
+  auslösenden Story, damit sie beim Sync demselben GitHub-Milestone zugeordnet werden statt
+  unverknüpft im Board zu landen.
+- `pm-agent.md`: Board-Provisionierung legt jetzt zusätzlich die Custom Fields
+  (Estimate/Size/Priority/Iteration/Start-/Zieldatum) auf dem Board an.
+- `CLAUDE.md` (Artefakt-Tabelle, Ordnerstruktur), `projects/_template/.toolchain.yml`
+  (`github.synced-artifacts` um `EPIC` erweitert, neue Keys `iteration-length-days`/
+  `iteration-start-date`), `commands_summary.md`, `agents_summary.md`,
+  `templates_summary.md`, `templates/INDEX.md`, `protocols/INDEX.md`, `scripts/INDEX.md`:
+  konsistent aktualisiert.
+- Auswirkung: Projekte planen ihren Backlog beim Setup vollständig voraus statt nur
+  sprintweise, und dieser Plan landet — sofern das Board aktiviert ist — vollständig samt
+  Meilensteinen, Schätzungen, Iterationen und lesbaren Issue-Beschreibungen auf GitHub,
+  unabhängig davon, welcher einzelne Phasen-Command gerade läuft. Ohne Opt-in
+  (`github.enabled: true`) ändert sich am bestehenden Verhalten nichts.
+- Versioniert als v4.0 (Major) — grundlegende Erweiterung, die praktisch jeden
+  Phasen-Agenten und mehrere Templates gleichzeitig betrifft.
+
+---
+
 ## v3.0 — 2026-08-03
 
 ### Neu
@@ -45,6 +104,28 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 - Auswirkung: Projekte können ihr Backlog optional in einem echten GitHub Project Board
   sichtbar machen, ohne dass GitHub zur zweiten Quelle der Wahrheit wird. Ohne Opt-in
   (`github.enabled: true`) ändert sich am bestehenden Verhalten nichts.
+
+---
+
+## v3.1 — 2026-08-03
+
+### Behoben
+
+**`toolchain/scripts/github-board-sync.ps1` scheiterte bei jedem Aufruf (PowerShell-Parserfehler + falsch-positive Scope-Prüfung)**
+
+- Zwei Vorkommen von `$Key:` in doppelt gequoteten Regex-Strings (`Get-ToolchainConfig` Zeile
+  37, `Set-FrontmatterField` Zeile 129) wurden von PowerShell als laufwerksqualifizierte
+  Variablenreferenz (`$var:...`) fehlinterpretiert und brachen mit `ParserError` ab, bevor
+  überhaupt ein Sync-Schritt lief — auf `${Key}:` umgestellt.
+- `Test-GhReady` prüfte den `project`-Scope mit `$status -notmatch 'project'` auf dem
+  mehrzeiligen Array-Output von `gh auth status`; `-notmatch` filtert Array-Elemente statt den
+  Gesamttext zu testen, wodurch das nicht-leere Ergebnis-Array selbst bei vorhandenem Scope
+  immer als "wahr" galt und der Sync fälschlich übersprungen wurde. Fix: Zeilen vor der Prüfung
+  mit `-join "`n"` zusammenführen.
+- Erkannt beim nachträglichen Provisionieren des Boards für `projects/campaignworld` (erster
+  produktiver `push`-Lauf über den Sync-Pfad seit Einführung in v3.0).
+- Auswirkung: `-Mode push`/`-Mode reconcile` sind jetzt tatsächlich lauffähig unter Windows/
+  PowerShell; zuvor brach jeder Aufruf ab, unabhängig vom Projekt oder Auth-Zustand.
 
 ---
 

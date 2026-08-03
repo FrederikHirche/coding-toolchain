@@ -3,7 +3,7 @@
 Artefakt-Templates für alle Phasen der Tool Chain.
 Alle Templates sind technologieunabhängig und enthalten den Standard-Artefakt-Header.
 
-Letzte Aktualisierung: 2026-07-24
+Letzte Aktualisierung: 2026-08-03
 
 ## Inhalt
 
@@ -13,6 +13,8 @@ Letzte Aktualisierung: 2026-07-24
 | `constitution.md` | `CON-000001` | PM | Discovery (einmalig pro Projekt) |
 | `requirements.md` | `REQ-NNNNNN` | BA | Requirements |
 | `user-story.md` | `US-NNNNNN` | BA | Requirements |
+| `epic.md` | `EPIC-NNNNNN` | BA | Requirements (Gruppierung über Gesamtscope) |
+| `roadmap.md` | `RM-NNNNNN` | BA | Requirements (Vorausplanung Gesamtscope, einmalig) |
 | `architecture-decision.md` | `ADR-NNNNNN` | AR | Architecture |
 | `gap-analysis.md` | `GAP-NNNNNN` | AR | Architecture (via `/converge`) |
 | `ux-spec.md` | `UX-NNNNNN` | UX | UX Design |

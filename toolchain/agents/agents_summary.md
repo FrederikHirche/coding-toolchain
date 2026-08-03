@@ -3,7 +3,7 @@
 Konsolidierte Übersicht aller Agenten-Rollen.  
 Zweck: Einzelne Referenzdatei für NotebookLM-Analyse und schnelle Orientierung.
 
-**Letzte Aktualisierung:** 2026-07-24  
+**Letzte Aktualisierung:** 2026-08-03  
 **Pflege-Regel:** Diese Datei wird bei jedem Hinzufügen oder Ändern einer Agenten-Datei aktualisiert.
 
 ---
@@ -21,6 +21,14 @@ Alle Agenten erben die Basisregeln aus `_base-agent.md`. Diese Basisregeln defin
   Statusabschnitte in INDEX.md (z. B. "In Bearbeitung") gelten als ungeprüfte Behauptung, nicht
   als Fakt, und müssen vor Weiterverwendung gegen Primärevidenz (git log/status, Dateien,
   DoD-Checkboxen) gegengeprüft werden
+
+**GitHub-Board-Sync (optional, `github.enabled: true`):** PM, BA, UX, FE, BE, QA, RV und MW
+führen zu Beginn ihres jeweiligen Vorgehens `github-board-sync -Mode reconcile` und an
+dessen Ende `-Mode push` selbstständig aus (siehe `toolchain/protocols/github-board-sync.md`)
+— unabhängig davon, ob die Phase über `/sprint` oder direkt aufgerufen wird. QA (`/test-run`)
+und RV (`/review`) übertragen beim Anlegen neuer `BUG-NNNNNN`/`DEBT-NNNNNN` zusätzlich das
+`epic`-Feld der auslösenden Story, damit neue Fehler/Schulden demselben GitHub-Milestone
+zugeordnet werden wie die zugehörige Story.
 
 Kein Agent setzt eine Technologie voraus — alle Entscheidungen werden in `ADR-000001-tech-stack.md`
 dokumentiert und sind ab APPROVED verbindlich für alle nachfolgenden Agenten.
@@ -108,23 +116,34 @@ befüllen) — siehe `toolchain/protocols/github-board-sync.md`.
 **Datei:** `ba-agent.md`  
 **Kürzel:** BA  
 **Aktiviert durch:** `/ba`, `/refine`  
-**Primäre Artefakte:** `REQ-NNNNNN` (Requirements), `US-NNNNNN` (User Stories)
+**Primäre Artefakte:** `REQ-NNNNNN` (Requirements), `US-NNNNNN` (User Stories),
+`EPIC-NNNNNN` (Epics), `RM-NNNNNN` (Roadmap/Release-Plan)
 
 Der BA-Agent übersetzt den Stakeholder Brief in entwicklungsfähige Anforderungen. Er ist die
 Brücke zwischen fachlicher Vision und technischer Umsetzung.
 
 **Kernaufgaben:** Requirements-Dokument aus Stakeholder Brief ableiten, User Stories mit
 Given/When/Then-Akzeptanzkriterien formulieren, Story-Map mit Abhängigkeiten erstellen,
-Edge Cases und Ausnahmeflüsse explizit dokumentieren.
+Edge Cases und Ausnahmeflüsse explizit dokumentieren. Bildet zusätzlich Epics aus
+zusammengehörigen Stories und plant in `RM-NNNNNN` den GESAMTEN Projekt-Scope voraus
+(Priorität, Schätzung, Size, Iteration, Zeitrahmen je Story — nicht nur für den nächsten
+Sprint).
 
 **Qualitätscheck:** Jede Story braucht ≥ 3 Akzeptanzkriterien, eine "damit"-Clause (Nutzen)
-und muss von den Must-Have-Einträgen aus der MoSCoW-Priorisierung abgedeckt sein.
+und muss von den Must-Have-Einträgen aus der MoSCoW-Priorisierung abgedeckt sein. Jede
+Story ist einem Epic zugeordnet (oder bewusst epic-los); `RM-NNNNNN` deckt jede Story im
+Gesamtscope ab.
 
 **Übergabe an:** Architect-Agent — gibt Requirements, User Stories, kritische NFRs und
 Priorisierungsreihenfolge weiter.
 
 **Externe Recherche:** Kann für fachliche Standards/Domänen-Referenzen den MCP-Server
 `fetch` nutzen (siehe CLAUDE.md, Abschnitt "Externe Recherche").
+
+**GitHub-Board-Sync (optional):** Führt `reconcile` zu Beginn und `push` am Ende aus (siehe
+`toolchain/protocols/github-board-sync.md`) — der `push`-Lauf nach `/ba` überträgt den
+GESAMTEN vorausgeplanten Backlog (Epics als Milestones, Stories mit allen Feldern) auf das
+Board, nicht nur Sprint 1.
 
 ---
 

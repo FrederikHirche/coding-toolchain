@@ -11,6 +11,13 @@ supersedes: —
 superseded-by: —
 github-issue: —                   # Nur gesetzt, wenn das Impediment NICHT sofort im selben Zug gelöst wurde
                                    # (Status bleibt nach Erfassung offen) UND github.enabled in .toolchain.yml
+epic: —                           # EPIC-NNNNNN, sofern das Impediment einem laufenden Epic zugeordnet werden kann
+github-milestone: —                # Aus dem Epic gespiegelt, nur informativ, nur gesetzt wenn github.enabled
+estimate: —                       # Story Points, sofern die Behebung aufwändig genug für eine Schätzung ist
+size: —                           # XS | S | M | L | XL
+iteration: —                      # Geplante Sprint-Nr. für die Behebung
+start-date: —                     # YYYY-MM-DD
+target-date: —                    # YYYY-MM-DD
 ---
 
 # Impediment: [Kurztitel]

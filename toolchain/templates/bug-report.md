@@ -12,6 +12,13 @@ assigned-to: FE | BE | FE+BE
 supersedes: —
 superseded-by: —
 github-issue: —                   # Nummer des verlinkten GitHub Issues, nur gesetzt wenn github.enabled in .toolchain.yml
+epic: —                           # EPIC-NNNNNN, sofern der Bug auf ein laufendes Epic einzahlt
+github-milestone: —                # Aus dem Epic gespiegelt, nur informativ, nur gesetzt wenn github.enabled
+estimate: —                       # Story Points, sofern der Fix aufwändig genug für eine Schätzung ist
+size: —                           # XS | S | M | L | XL
+iteration: —                      # Geplante Sprint-Nr. für den Fix
+start-date: —                     # YYYY-MM-DD
+target-date: —                    # YYYY-MM-DD
 ---
 
 # Bug: [Kurzbeschreibung des Fehlers]

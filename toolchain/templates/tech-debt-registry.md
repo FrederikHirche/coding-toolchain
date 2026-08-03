@@ -19,11 +19,13 @@ Einträge werden NIE gelöscht — nur auf `RESOLVED` gesetzt.
 
 ## Offene Schulden
 
-| ID | Titel | Priorität | Kategorie | Sprint | Agent | Status | GitHub Issue |
-|----|-------|----------|----------|--------|-------|--------|-------------|
-| DEBT-000001 | [Kurztitel] | Hoch | [Kategorie] | 1 | FE | OFFEN | — |
+| ID | Titel | Priorität | Kategorie | Epic | Sprint | Agent | Status | Estimate | Size | Iteration | Start | Ziel | GitHub Issue | GitHub Milestone |
+|----|-------|----------|----------|------|--------|-------|--------|----------|------|-----------|-------|------|-------------|-----------------|
+| DEBT-000001 | [Kurztitel] | Hoch | [Kategorie] | EPIC-NNNNNN | 1 | FE | OFFEN | 3 | M | 1 | YYYY-MM-DD | YYYY-MM-DD | — | — |
 
-*Spalte "GitHub Issue" nur gepflegt, wenn `github.enabled` in `.toolchain.yml` — sonst „—".*
+*Spalten "GitHub Issue"/"GitHub Milestone" nur gepflegt, wenn `github.enabled` in
+`.toolchain.yml` — sonst „—". "Epic"/"Estimate"/"Size"/"Iteration"/"Start"/"Ziel" nur
+gepflegt, sofern die Schuld bewusst vorausgeplant statt ad-hoc erfasst wurde.*
 
 ---
 
@@ -54,7 +56,12 @@ z. B. "Skaliert nicht über 1000 gleichzeitige Nutzer", "Erhöhte Fehlerrate bei
 **Behebungsansatz:**  
 [Wie würde eine saubere Lösung aussehen?]
 
-**Aufwandsschätzung:** [S / M / L / XL]
+**Aufwandsschätzung (Size):** [XS / S / M / L / XL]
+**Estimate (Story Points):** — [Fibonacci: 1/2/3/5/8/13, sofern vorausgeplant]
+**Epic:** — [EPIC-NNNNNN, sofern zugeordnet]
+**Iteration:** — [Geplante Sprint-Nr.]
+**Start:** — YYYY-MM-DD
+**Ziel:** — YYYY-MM-DD
 
 **Abhängigkeiten:**  
 - Muss vor DEBT-NNNNNN behoben werden
@@ -63,6 +70,7 @@ z. B. "Skaliert nicht über 1000 gleichzeitige Nutzer", "Erhöhte Fehlerrate bei
 **Status:** OFFEN | IN BEARBEITUNG | RESOLVED  
 **Resolved in:** Sprint NNNNNN (wenn behoben)  
 **GitHub Issue:** — (Nummer, nur gesetzt wenn `github.enabled` in `.toolchain.yml`)
+**GitHub Milestone:** — (aus Epic gespiegelt, nur informativ)
 
 ---
 

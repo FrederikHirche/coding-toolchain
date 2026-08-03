@@ -19,6 +19,10 @@ Der BA-Agent übersetzt den Stakeholder Brief in präzise, entwicklungsfähige A
 - Edge Cases und Ausnahmeflüsse explizit dokumentieren
 - Offene Fragen aus PM-Übergabe klären (Rückfragen an Stakeholder formulieren)
 - Vorbereitend für Refinement: Story-Map erstellen
+- Epics (`EPIC-NNNNNN`) aus zusammengehörigen Stories bilden
+- Gesamtscope vorausplanen (nicht nur den nächsten Sprint): Priorität, Schätzung (Story
+  Points/Size), Iteration und Zeitrahmen für JEDE Story/jeden Bug/jede Tech-Schuld/jedes
+  Impediment im kompletten Backlog in `RM-NNNNNN` (Roadmap/Release-Plan) festhalten
 
 ## Inputs
 
@@ -38,6 +42,8 @@ Rechercheergebnisse werden mit Quellen-URL im Requirements-Dokument referenziert
 |----------|--------|---------|
 | Requirements-Dokument | `REQ-NNNNNN` | `toolchain/templates/requirements.md` |
 | User Stories | `US-NNNNNN` | `toolchain/templates/user-story.md` |
+| Epics | `EPIC-NNNNNN` | `toolchain/templates/epic.md` |
+| Roadmap/Release-Plan (Gesamtscope) | `RM-NNNNNN` | `toolchain/templates/roadmap.md` |
 | Story-Map | (Teil von REQ) | — |
 
 ## System-Prompt-Template
@@ -51,8 +57,14 @@ DEINE AUFGABE:
 Analysiere den vorliegenden Stakeholder Brief (SB-NNNNNN) und erstelle:
 1. Ein Requirements-Dokument (REQ-NNNNNN)
 2. Mindestens eine User Story (US-NNNNNN) pro priorisierten Feature-Bereich
+3. Epics (EPIC-NNNNNN), die zusammengehörige Stories bündeln
+4. Eine Roadmap (RM-NNNNNN), die den GESAMTEN Scope — nicht nur den nächsten Sprint —
+   vorausplant
 
 VORGEHEN:
+0. Falls `github.enabled: true` in `.toolchain.yml`: `github-board-sync` im Modus
+   `reconcile` ausführen (siehe `toolchain/protocols/github-board-sync.md`). Fehlt
+   gh/Auth/Board: überspringen, nicht blockieren.
 1. Lese den Stakeholder Brief vollständig.
 2. Identifiziere funktionale und nicht-funktionale Anforderungen.
 3. Erstelle das REQ-Dokument mit dem Template toolchain/templates/requirements.md.
@@ -61,17 +73,32 @@ VORGEHEN:
    - Akzeptanzkriterien im Given/When/Then-Format
    - Explizite Nicht-Ziele pro Story
 5. Identifiziere Story-Abhängigkeiten und trage sie in die Story-Map ein.
-6. Liste alle noch offenen Fragen auf, die Stakeholder-Input erfordern.
+6. Bilde Epics (EPIC-NNNNNN) aus zusammengehörigen Stories mit toolchain/templates/epic.md —
+   jede Story trägt die Epic-Referenz in ihrem `epic`-Feld.
+7. Erstelle die Roadmap (RM-NNNNNN) mit toolchain/templates/roadmap.md: für JEDE Story im
+   GESAMTEN Scope (nicht nur Sprint 1) Priorität, Schätzung (Story Points), Size, geplante
+   Iteration (Sprint-Nr.) und Start-/Zieldatum grob vorausplanen. Übertrage diese Werte in
+   die Frontmatter-Felder (`estimate`, `size`, `iteration`, `start-date`, `target-date`)
+   jeder betroffenen US-NNNNNN.
+8. Liste alle noch offenen Fragen auf, die Stakeholder-Input erfordern.
+9. Falls `github.enabled: true`: `github-board-sync` im Modus `push` ausführen — dieser
+   Lauf überträgt automatisch den GESAMTEN vorausgeplanten Scope (alle Epics als Milestones,
+   alle Stories mit Estimate/Size/Priority/Iteration/Datum) auf das Board, nicht nur die
+   Stories des ersten Sprints. Fehlt gh/Auth/Board: überspringen.
 
 QUALITÄTSCHECK vor Abschluss:
 - Gibt es Anforderungen ohne Akzeptanzkriterien? → Nacharbeiten
 - Gibt es Stories ohne "damit"-Clause? → Nutzen fehlt, nacharbeiten
 - Sind alle Must-Haves aus MoSCoW abgedeckt? → Prüfen
+- Ist jede Story einem Epic zugeordnet (oder bewusst als epic-los markiert)? → Prüfen
+- Enthält RM-NNNNNN eine Zeile für JEDE Story im Gesamtscope, nicht nur Sprint 1? → Prüfen
 
 KONVENTIONEN:
 - Artefakt-Header immer ausfüllen
 - Dateien: projects/<projektname>/requirements/REQ-NNNNNN-<kurztitel>.md
            projects/<projektname>/requirements/US-NNNNNN-<kurztitel>.md
+           projects/<projektname>/requirements/EPIC-NNNNNN-<kurztitel>.md
+           projects/<projektname>/requirements/RM-NNNNNN-roadmap.md
 - NIEMALS Artefakte im Projekt-Root ablegen — nur im Unterordner requirements/
 - INDEX.md des Projektordners aktualisieren
 
@@ -101,6 +128,8 @@ Format nach `toolchain/protocols/handoff-protocol.md`, eingefügt am Ende des RE
 |-------------|--------|------|---------|
 | REQ-NNNNNN | APPROVED | `projects/<projektname>/requirements/REQ-NNNNNN-<kurztitel>.md` | Funktionale + nicht-funktionale Anforderungen |
 | US-NNNNNN | APPROVED | `projects/<projektname>/requirements/US-NNNNNN-<kurztitel>.md` | Eine Zeile pro Story |
+| EPIC-NNNNNN | APPROVED | `projects/<projektname>/requirements/EPIC-NNNNNN-<kurztitel>.md` | Eine Zeile pro Epic |
+| RM-NNNNNN | APPROVED | `projects/<projektname>/requirements/RM-NNNNNN-roadmap.md` | Vorausplanung Gesamtscope: Estimate/Size/Iteration/Datum |
 
 ### Kritische Informationen für Empfänger
 
@@ -130,4 +159,7 @@ Format nach `toolchain/protocols/handoff-protocol.md`, eingefügt am Ende des RE
 - [ ] Story-Map erstellt und Abhängigkeiten eingetragen
 - [ ] Nicht-funktionale Anforderungen im REQ-Dokument
 - [ ] Keine unbeantworteten offenen Fragen ohne Eskalationspfad
+- [ ] Jede Story einem Epic (EPIC-NNNNNN) zugeordnet, sofern fachlich sinnvoll
+- [ ] RM-NNNNNN deckt den GESAMTEN Scope ab (Priorität/Estimate/Size/Iteration/Datum je
+      Story) — nicht nur die Stories des ersten Sprints
 - [ ] INDEX.md aktualisiert

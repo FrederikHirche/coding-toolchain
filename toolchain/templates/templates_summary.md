@@ -3,7 +3,7 @@
 Konsolidierte Übersicht aller Artefakt-Templates.  
 Zweck: Einzelne Referenzdatei für NotebookLM-Analyse und schnelle Orientierung.
 
-**Letzte Aktualisierung:** 2026-07-28  
+**Letzte Aktualisierung:** 2026-08-03  
 **Pflege-Regel:** Diese Datei wird bei jedem Hinzufügen oder Ändern eines Templates aktualisiert.
 
 ---
@@ -107,6 +107,52 @@ Pro Feature-Bereich werden mehrere User Stories erstellt.
 - Nicht-Ziele: Was diese Story explizit NICHT abdeckt
 - Story-Punkte / T-Shirt-Größe (wird im Refinement ergänzt)
 - Abhängigkeiten: Welche anderen Stories müssen vorher abgeschlossen sein
+
+**Vorausplanungs-Felder** (Frontmatter, befüllt von BA in `RM-NNNNNN` während `/ba` — nicht
+erst im Refinement): `epic` (EPIC-NNNNNN-Referenz), `estimate` (Story Points), `size`
+(XS–XL), `iteration` (geplante Sprint-Nr.), `start-date`/`target-date`. Bei aktiviertem
+GitHub-Board-Sync werden diese Felder auf die gleichnamigen Board-Felder übertragen (siehe
+`toolchain/protocols/github-board-sync.md`). Dieselben Felder existieren auch in
+`bug-report.md`, `impediment.md` (Frontmatter) und `tech-debt-registry.md`
+(Tabellenspalten) — nicht nur in User Stories.
+
+---
+
+## EPIC — Epic (`epic.md`)
+
+**Präfix:** `EPIC-NNNNNN`  
+**Erstellt von:** BA (Business Analyst) via `/ba`  
+**Basiert auf:** `SB-NNNNNN`, `REQ-NNNNNN`
+
+Bündelt mehrere zusammengehörige Stories (und ggf. Bugs/Tech-Schulden/Impediments, die auf
+dasselbe Ziel einzahlen) zu einem größeren Vorhaben. Wird während `/ba` aus dem
+GESAMTEN Scope gebildet — nicht sprintweise. Entspricht in GitHub Projects einem
+repo-weiten **Milestone** (kein eigenes Issue).
+
+**Kernabschnitte:**
+- Zielbild: Outcome und Abgrenzung
+- Zugehörige Artefakte: Liste aller US/BUG/DEBT-IDs, die auf dieses Epic einzahlen
+- Grober Zeitrahmen: Ziel-Iteration/-Datum
+
+---
+
+## RM — Roadmap / Release-Plan (`roadmap.md`)
+
+**Präfix:** `RM-NNNNNN`  
+**Erstellt von:** BA (Business Analyst) via `/ba`, verfeinert (nicht ersetzt) in `/refine`  
+**Basiert auf:** `REQ-NNNNNN`, alle `EPIC-NNNNNN` und `US-NNNNNN`
+
+Grobplanung des **gesamten** Projekt-Scopes — nicht nur des nächsten Sprints. Enthält für
+jede Story/jeden Bug/jede Tech-Schuld/jedes Impediment im kompletten Backlog Priorität,
+Schätzung, Size, geplante Iteration und Start-/Zieldatum. Ist die Quelle, aus der die
+Vorausplanungs-Felder der einzelnen Artefakte stammen und die der GitHub-Board-Sync auf
+Estimate-/Size-/Iteration-/Datumsfelder des Boards überträgt.
+
+**Kernabschnitte:**
+- Gesamtscope-Übersicht: Epics mit Priorität, Ziel-Iteration, Ziel-Datum
+- Vollständiger Backlog mit Vorausplanung: eine Zeile pro Artefakt im Gesamtscope
+- Iterationskadenz: Iterationslänge, Start der ersten Iteration
+- Ist-Abweichungen: wird pro Sprint durch `/refine` nachgetragen
 
 ---
 

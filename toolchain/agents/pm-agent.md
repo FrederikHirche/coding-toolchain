@@ -105,7 +105,13 @@ Später entscheiden." Bei "Ja":
      `gh auth login --scopes project,repo` selbst auszuführen (niemals ein PAT im Chat
      entgegennehmen, siehe `toolchain/protocols/github-board-sync.md` Abschnitt "Auth").
   c. Lege das Board an: `gh project create --owner <owner> --title "<projektname>"`.
-  d. Trage in `projects/<projektname>/.toolchain.yml` ein: `github.enabled: true`,
+  d. Lege die Custom Fields an (best-effort — überspringen, wenn bereits vorhanden, z. B.
+     bei Wiederverwendung eines bestehenden Boards): `Estimate` (NUMBER), `Size`
+     (SINGLE_SELECT: XS,S,M,L,XL), `Priority` (SINGLE_SELECT: P0,P1,P2,P3), `Iteration`
+     (ITERATION), `Start date` (DATE), `Target date` (DATE) — siehe
+     `toolchain/protocols/github-board-sync.md` Abschnitt "Provisionierung" für die exakten
+     `gh project field-create`-Aufrufe.
+  e. Trage in `projects/<projektname>/.toolchain.yml` ein: `github.enabled: true`,
      `github.repo`, `github.project-number`.
 Bei "Nein"/"Später": `github.enabled: false` bleibt Standard — jederzeit später auf
 Zuruf nachholbar (kein erneuter /kickoff nötig, ORCH kann die Provisionierung auch

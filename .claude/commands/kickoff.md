@@ -23,10 +23,14 @@ Ohne Argument wird nach dem Projektnamen gefragt.
    — nicht verhandelbare Prinzipien und Qualitäts-Mindeststandards, bindend für alle Folgephasen)
 7. Fragt, ob das Projekt zusätzlich in einem GitHub Project Board geführt werden soll
    (Backlog/Status automatisch aus den Tool-Chain-Artefakten befüllt) — bei Zustimmung wird
-   das Board provisioniert und `github:`-Block in `.toolchain.yml` befüllt (siehe
+   das Board samt Custom Fields (Estimate/Size/Priority/Iteration/Start-/Zieldatum)
+   provisioniert und der `github:`-Block in `.toolchain.yml` befüllt (siehe
    `toolchain/protocols/github-board-sync.md`); jederzeit auch später nachholbar
 8. Aktualisiert `projects/<projektname>/INDEX.md`
-9. Gibt Übergabe-Zusammenfassung für `/ba` aus
+9. Falls `github.enabled: true` (Board bereits vorhanden, z. B. bei erneutem `/kickoff` auf
+   einem laufenden Projekt): `github-board-sync` im Modus `push` ausführen — bei einem
+   frischen Projekt ohne vorausgeplanten Backlog ist dieser Lauf ein No-Op
+10. Gibt Übergabe-Zusammenfassung für `/ba` aus
 
 ## Vorbedingungen
 

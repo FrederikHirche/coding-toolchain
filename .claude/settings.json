@@ -75,7 +75,10 @@
       "Bash(git commit -m ' *)",
       "Bash(git push *)",
       "Bash(git fetch *)",
-      "Bash(git pull *)"
+      "Bash(git pull *)",
+      "PowerShell($errs=$null; [System.Management.Automation.Language.Parser]::ParseFile\\(\"C:\\\\Users\\\\frede\\\\coding-toolchain\\\\toolchain\\\\scripts\\\\github-board-sync.ps1\", [ref]$null, [ref]$errs\\) | Out-Null; if \\($errs.Count -gt 0\\) { $errs } else { \"OK - no parse errors\" })",
+      "PowerShell($errs=$null; [System.Management.Automation.Language.Parser]::ParseFile\\(\"C:\\\\Users\\\\frede\\\\coding-toolchain\\\\toolchain\\\\scripts\\\\github-board-sync.ps1\", [ref]$null, [ref]$errs\\) | Out-Null; if \\($errs.Count -gt 0\\) { $errs } else { \"OK - ps1 no parse errors\" })",
+      "Bash(grep -n \"^0\\\\.\\\\|^11\\\\.\\\\|^1\\\\.\\\\|f\\\\. \\\\`epic\\\\`\" toolchain/agents/qa-agent.md)"
     ]
   },
   "showThinkingSummaries": true,

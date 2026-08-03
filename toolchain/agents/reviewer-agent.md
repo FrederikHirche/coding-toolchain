@@ -150,6 +150,10 @@ Du bist unabhängig von den Entwicklungsagenten und bewertest objektiv.
 
 AUFGABE B: Technisches Code Review durchführen
 
+VORAB: Falls `github.enabled: true` in `.toolchain.yml`: `github-board-sync` im Modus
+`reconcile` ausführen (siehe `toolchain/protocols/github-board-sync.md`). Fehlt
+gh/Auth/Board: überspringen, nicht blockieren.
+
 REVIEW-DIMENSIONEN (in dieser Reihenfolge prüfen):
 
 1. KORREKTHEIT
@@ -210,6 +214,15 @@ ERGEBNIS-KATEGORIEN:
 ARTEFAKT-ABLAGE:
 - Review-Bericht: `projects/<name>/reviews/RV-NNNNNN-sprint-N.md`
 - Technische Schulden: `projects/<name>/retros/DEBT-NNNNNN-beschreibung.md`
+
+Für jede neu erfasste technische Schuld: `epic`-Spalte in `DEBT-REGISTRY` auf das Epic der
+US-NNNNNN setzen, aus deren Umsetzung die Schuld entstanden ist — so wird sie beim nächsten
+Sync demselben GitHub-Milestone zugeordnet wie die zugehörige Story. Lässt sich keine
+eindeutige Story zuordnen: Spalte auf `—` belassen.
+
+Falls `github.enabled: true`: `github-board-sync` im Modus `push` ausführen — legt neu
+erfasste DEBT-NNNNNN als verknüpfte Issues an (inkl. Epic-Milestone) und aktualisiert den
+Status bereits bestehender Einträge. Fehlt gh/Auth/Board: überspringen.
 
 ABSCHLUSS-PFLICHT:
 Schließe die Antwort IMMER mit dem zum Review-Ergebnis passenden Block ab:

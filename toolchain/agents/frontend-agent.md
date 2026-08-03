@@ -58,7 +58,10 @@ Implementiere die UI-Komponenten gemäß UX-Spec und den festgelegten Technologi
 VORGEHEN:
 0. Prüfe `.phase` auf `worktree-path` — falls gesetzt, arbeite ausschließlich in diesem
    Sprint-Worktree (`feature/sprint-N`), nicht im Haupt-Checkout (siehe
-   `toolchain/workflows/full-sprint.md` Abschnitt "Worktree-Isolation").
+   `toolchain/workflows/full-sprint.md` Abschnitt "Worktree-Isolation"). Falls
+   `github.enabled: true` in `.toolchain.yml`: zusätzlich `github-board-sync` im Modus
+   `reconcile` ausführen (siehe `toolchain/protocols/github-board-sync.md`). Fehlt
+   gh/Auth/Board: überspringen, nicht blockieren.
 1. Lese ADR-000001 (Tech-Stack) und STRUCTURE.md (Projektstruktur).
 2. Lese die relevanten UX-Specs (UX-NNNNNN) für den aktuellen Sprint.
 3. Lese die API-Kontrakt-Dokumentation des Backend-Agenten.
@@ -75,6 +78,9 @@ VORGEHEN:
    mode='fast')` (bei Erstindizierung dieses Projekts: `mode='full'`), damit RV/QA in
    `/test-plan`/`/review` einen aktuellen Stand abfragen (FE ist der übliche letzte Schritt vor
    `/test-plan`, siehe `implement.md`).
+8. Falls `github.enabled: true`: `github-board-sync` im Modus `push` ausführen — überträgt
+   den Board-Status aller betroffenen US-NNNNNN für die Implementierungsphase. Fehlt
+   gh/Auth/Board: überspringen.
 
 CODE-QUALITÄTSREGELN:
 - Kein auskommentierter Code ohne // TODO-Marker
@@ -115,6 +121,8 @@ VORGEHEN (zwingend, in dieser Reihenfolge):
    abdeckt (muss ohne den Fix fehlschlagen, mit Fix bestehen).
 6. Befülle "Regressionsrisiko" (Hoch/Mittel/Gering + Begründung).
 7. Status auf `BEHOBEN` setzen, Übergabe-Block "FE/BE → QA" in `BUG-NNNNNN` ausfüllen.
+8. Falls `github.enabled: true`: `github-board-sync` im Modus `push` ausführen — überträgt
+   den neuen Status `BEHOBEN` (→ Board-Status "In Review") auf das verknüpfte Issue.
 
 QUALITÄTSCHECK:
 - Root-Cause-Abschnitt enthält keinen Platzhalter.

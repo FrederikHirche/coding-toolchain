@@ -107,6 +107,9 @@ AUFGABE A: Manuellen Testplan erstellen
 ARTEFAKT-ABLAGE: `projects/<name>/testing/TP-NNNNNN-sprint-N.md`
 
 VORGEHEN:
+0. Falls `github.enabled: true` in `.toolchain.yml`: `github-board-sync` im Modus
+   `reconcile` ausführen (siehe `toolchain/protocols/github-board-sync.md`). Fehlt
+   gh/Auth/Board: überspringen, nicht blockieren.
 1. Lese alle User Stories (US-NNNNNN) aus `projects/<name>/requirements/`.
 2. Lese die UX-Specs (UX-NNNNNN) aus `projects/<name>/ux/` für alle UI-Flows.
 3. Erstelle den Testplan (TP-NNNNNN) mit Template toolchain/templates/test-plan.md
@@ -120,6 +123,8 @@ VORGEHEN:
    f. Performanz- und Reaktionszeit-Anforderungen als explizite Testfälle aufnehmen
 5. Priorisierung der Testfälle: P0 (blocker), P1 (kritisch), P2 (normal)
 6. Testumgebungs-Anforderungen dokumentieren.
+7. Falls `github.enabled: true`: `github-board-sync` im Modus `push` ausführen. Fehlt
+   gh/Auth/Board: überspringen.
 
 QUALITÄTSCHECK:
 - Jede Akzeptanzkriterium ≥ 1 Testfall
@@ -141,6 +146,9 @@ AUFGABE B: Automatisierte Tests ausführen und Ergebnisse dokumentieren
 ARTEFAKT-ABLAGE: Alle Artefakte in `projects/<name>/testing/`
 
 VORGEHEN:
+0. Falls `github.enabled: true` in `.toolchain.yml`: `github-board-sync` im Modus
+   `reconcile` ausführen (siehe `toolchain/protocols/github-board-sync.md`). Fehlt
+   gh/Auth/Board: überspringen, nicht blockieren.
 1. Lese TP-NNNNNN aus `projects/<name>/testing/` und ermittle Test-Befehle aus STRUCTURE.md / ADR-000001.
 2. Führe Unit-Tests aus (Befehl aus ADR-000001). Protokolliere: Passed / Failed / Skipped.
 3. Führe Integration-Tests aus. Protokolliere Ergebnisse.
@@ -173,6 +181,10 @@ VORGEHEN:
    d. Abschnitt "Root-Cause" NICHT befüllen — das ist Aufgabe von FE/BE vor dem Fix (Abschnitt
       "Root-Cause" ist Pflicht, bevor FE/BE Code ändert, siehe bug-report.md)
    e. Status auf OFFEN setzen, Übergabe-Block "QA/BA → FE/BE" ausfüllen
+   f. `epic`-Feld im Frontmatter auf das `epic`-Feld der US-NNNNNN übertragen, die den Fehler
+      verursacht hat bzw. bei der er auftrat — so wird der Bug beim nächsten Sync demselben
+      GitHub-Milestone zugeordnet wie die zugehörige Story, statt unverknüpft im Board zu
+      landen. Lässt sich keine eindeutige Story zuordnen: `epic`-Feld auf `—` belassen.
 7. Für jeden BUG-NNNNNN mit Status BEHOBEN aus einer vorherigen Runde (Rücksprung aus Gate 7):
    a. Ursprüngliche Reproduktionsschritte (Abschnitt 2) erneut ausführen
    b. Prüfen: Abschnitt "Root-Cause" ohne Platzhalter ausgefüllt? Regressionstest vorhanden?
@@ -182,6 +194,10 @@ VORGEHEN:
 9. Testergebnis-Bericht (TR-NNNNNN) in `projects/<name>/testing/` erstellen.
 10. Freigabe-Empfehlung: APPROVED / CONDITIONAL / REJECTED (mit Begründung) — Voraussetzung:
     kein BUG-NNNNNN mit Schweregrad BLOCKER in einem Status außer VERIFIZIERT
+11. Falls `github.enabled: true`: `github-board-sync` im Modus `push` ausführen — legt neu
+    erstellte BUG-NNNNNN als verknüpfte Issues an (inkl. Epic-Milestone, falls Schritt 6f
+    ein Epic zugeordnet hat) und aktualisiert den Status bereits bestehender Bugs. Fehlt
+    gh/Auth/Board: überspringen.
 
 ABSCHLUSS-PFLICHT:
 Schließe die Antwort IMMER mit dem passenden Block ab — abhängig von der Freigabe-Empfehlung:
