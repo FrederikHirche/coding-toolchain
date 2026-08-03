@@ -71,7 +71,8 @@
       "PowerShell($null = [System.Management.Automation.Language.Parser]::ParseFile\\(\"C:\\\\Users\\\\frede\\\\coding-toolchain\\\\toolchain\\\\scripts\\\\github-board-sync.ps1\", [ref]$null, [ref]$errors\\); if \\($errors\\) { $errors } else { \"OK - no parse errors\" })",
       "Bash(bash -n toolchain/scripts/github-board-sync.sh)",
       "Bash(pwsh -NoProfile -File toolchain/scripts/validate-codex-compat.ps1)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ]
   },
   "showThinkingSummaries": true,
