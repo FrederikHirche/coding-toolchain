@@ -72,7 +72,10 @@
       "Bash(bash -n toolchain/scripts/github-board-sync.sh)",
       "Bash(pwsh -NoProfile -File toolchain/scripts/validate-codex-compat.ps1)",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(git fetch *)",
+      "Bash(git pull *)"
     ]
   },
   "showThinkingSummaries": true,
