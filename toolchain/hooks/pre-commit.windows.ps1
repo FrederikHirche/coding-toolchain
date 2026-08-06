@@ -44,27 +44,13 @@ if (Test-Path $ConfigFile) {
     }
 }
 
-# CHECK 2: File header present (code files) - warning only
+# CHECKS 2-4: single pass over staged files, ONE `git show` subprocess per file
+# (IMPD-000001: the original code called `git show ":$file"` separately in each of
+# CHECK 2/3/4 — up to 3 subprocess spawns per file, ~165 for a 55-file commit. On this
+# Windows environment that measurably turned an instant check into an 11+ minute
+# near-idle-CPU stall. One fetch per file, reused by all three checks below, cuts
+# subprocess count ~3x regardless of the exact root cause of the per-spawn cost.)
 $CodeExtensions = @('ts', 'tsx', 'js', 'jsx', 'py', 'go', 'java', 'cs', 'rs', 'rb', 'php')
-$MissingHeaders = @()
-
-foreach ($file in $StagedFiles) {
-    $ext = ($file -split '\.')[-1]
-    if ($CodeExtensions -contains $ext) {
-        $firstLine = (git show ":$file" 2>$null) -split "`n" | Select-Object -First 1
-        if ($firstLine -notmatch '^(//|#|/\*)') {
-            $MissingHeaders += $file
-        }
-    }
-}
-
-if ($MissingHeaders.Count -gt 0) {
-    Write-Output "  Missing file headers in:"
-    foreach ($f in $MissingHeaders) { Write-Output "     - $f" }
-    Write-Output "  Reminder: every code file should start with a header comment block."
-}
-
-# CHECK 3: No secrets/credentials - blocking
 $SecretPatterns = @(
     "password\s*=\s*['""][^'""]{4,}",
     "secret\s*=\s*['""][^'""]{8,}",
@@ -74,10 +60,37 @@ $SecretPatterns = @(
     "ghp_[A-Za-z0-9]{36}",
     "sk-[A-Za-z0-9]{40,}"
 )
+$Roles = 'PM|BA|AR|UX|FE|BE|QA|RV'
+$MissingHeaders = @()
+$BadTodos = @()
 
 foreach ($file in $StagedFiles) {
+    $ext = ($file -split '\.')[-1]
+    $isCode = $CodeExtensions -contains $ext
+    if (-not $isCode) {
+        # Secret scan (CHECK 3) still applies to every file, code or not.
+        $content = git show ":$file" 2>$null
+        if (-not $content) { continue }
+        foreach ($pattern in $SecretPatterns) {
+            if ($content -match $pattern) {
+                Write-Output "  Possible secret in: $file (pattern: $pattern)"
+                Write-Output "  Commit aborted. Secrets belong in environment variables, not code."
+                exit 1
+            }
+        }
+        continue
+    }
+
     $content = git show ":$file" 2>$null
     if (-not $content) { continue }
+
+    # CHECK 2: file header present — warning only
+    $firstLine = ($content -split "`n")[0]
+    if ($firstLine -notmatch '^(//|#|/\*)') {
+        $MissingHeaders += $file
+    }
+
+    # CHECK 3: no secrets/credentials — blocking
     foreach ($pattern in $SecretPatterns) {
         if ($content -match $pattern) {
             Write-Output "  Possible secret in: $file (pattern: $pattern)"
@@ -85,20 +98,17 @@ foreach ($file in $StagedFiles) {
             exit 1
         }
     }
+
+    # CHECK 4: TODO marker format — warning only
+    if (($content -match 'TODO') -and ($content -notmatch "TODO\(($Roles)\):")) {
+        $BadTodos += $file
+    }
 }
 
-# CHECK 4: TODO marker format - warning only
-$Roles = 'PM|BA|AR|UX|FE|BE|QA|RV'
-$BadTodos = @()
-
-foreach ($file in $StagedFiles) {
-    $ext = ($file -split '\.')[-1]
-    if ($CodeExtensions -contains $ext) {
-        $content = git show ":$file" 2>$null
-        if ($content -and ($content -match 'TODO') -and ($content -notmatch "TODO\(($Roles)\):")) {
-            $BadTodos += $file
-        }
-    }
+if ($MissingHeaders.Count -gt 0) {
+    Write-Output "  Missing file headers in:"
+    foreach ($f in $MissingHeaders) { Write-Output "     - $f" }
+    Write-Output "  Reminder: every code file should start with a header comment block."
 }
 
 if ($BadTodos.Count -gt 0) {

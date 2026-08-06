@@ -2,7 +2,7 @@
 
 Git Hooks für automatisierte Qualitätssicherung in Projekten, die die Tool Chain verwenden.
 
-Letzte Aktualisierung: 2026-07-22
+Letzte Aktualisierung: 2026-08-06
 
 ## Inhalt
 
@@ -27,6 +27,21 @@ Bash-Dateien zu kopieren. Diese nutzen bewusst **Windows PowerShell 5.1**
 `pwsh` (PowerShell 7) — Details dazu im Kopf-Kommentar von `pre-commit.windows.ps1`.
 `setup-hooks.sh` (Linux/Mac/WSL/echtes Git-Bash) installiert weiterhin die Bash-Variante
 unverändert.
+
+**Performance-Fix (2026-08-06, `campaignworld` IMPD-000002/PC-000004):** `pre-commit` und
+`pre-commit.windows.ps1` riefen `git show ":$file"` bislang separat in CHECK 2 (Datei-Header),
+CHECK 3 (Secret-Scan) und CHECK 4 (TODO-Format) auf — die Bash-Variante sogar einmal PRO
+Secret-Pattern PRO Datei in CHECK 3. Bei einem Commit mit 55 Dateien bedeutete das ~165
+(PowerShell) bzw. mehrere hundert (Bash) Git-Subprozess-Spawns, statt der eigentlich nötigen
+55. Beide Varianten lesen den Dateiinhalt jetzt einmal pro Datei und führen alle drei Checks
+gegen diesen einen Fetch aus. Die genaue Ursache der beobachteten Verzögerung (mehrminütiger,
+CPU-nahezu-idler Stillstand bei einem realen 55-Dateien-Commit in dieser Windows-Umgebung)
+ist nicht abschließend isoliert — Kandidaten sind der wiederholte Subprozess-Spawn selbst,
+Antivirus-Echtzeitprüfung pro Spawn, und/oder Ressourcenkontention durch andere zeitgleich
+laufende Prozesse in derselben Sitzung; die Konsolidierung reduziert die Angriffsfläche in
+jedem Fall strukturell. Empfehlung bei einem größeren Commit unabhängig davon: den Commit im
+Hintergrund ausführen und per Monitor/Polling auf Fertigstellung warten, statt synchron mit
+kurzem Timeout zu blockieren — siehe `IMPD-000002` für Details.
 
 ## Installation
 

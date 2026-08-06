@@ -32,17 +32,45 @@ if [ -f "$REPO_ROOT/.toolchain-config" ]; then
 fi
 
 # ─────────────────────────────────────
-# CHECK 2: Datei-Header vorhanden (Code-Dateien)
+# CHECKS 2-4: ein Durchlauf über alle staged Dateien, EIN `git show`-Subprozess je Datei
+# (IMPD-000001: die ursprüngliche Fassung rief `git show ":$FILE"` separat in CHECK 2/3/4
+# UND in CHECK 3 zusätzlich einmal PRO Secret-Pattern auf — bis zu ~9 Subprozess-Spawns
+# je Datei, mehrere hundert bei einem größeren Commit. Ein Fetch pro Datei, von allen drei
+# Checks wiederverwendet, senkt das unabhängig von der genauen Ursache der Spawn-Kosten.)
 # ─────────────────────────────────────
-MISSING_HEADERS=()
 CODE_EXTENSIONS="ts|tsx|js|jsx|py|go|java|cs|rs|rb|php"
+SECRET_PATTERNS=(
+  "password\s*=\s*['\"][^'\"]{4,}"
+  "secret\s*=\s*['\"][^'\"]{8,}"
+  "api[_-]?key\s*=\s*['\"][^'\"]{8,}"
+  "private[_-]?key\s*=\s*['\"][^'\"]{8,}"
+  "BEGIN (RSA|EC|DSA|OPENSSH) PRIVATE KEY"
+  "ghp_[A-Za-z0-9]{36}"
+  "sk-[A-Za-z0-9]{40,}"
+)
+ROLES="PM|BA|AR|UX|FE|BE|QA|RV"
+MISSING_HEADERS=()
+BAD_TODOS=()
 
 for FILE in $STAGED_FILES; do
+  CONTENT=$(git show ":$FILE" 2>/dev/null) || continue
+  [ -z "$CONTENT" ] && continue
+
+  for PATTERN in "${SECRET_PATTERNS[@]}"; do
+    if echo "$CONTENT" | grep -iEq "$PATTERN"; then
+      echo "  ❌ Mögliches Secret in: $FILE (Pattern: $PATTERN)"
+      echo "  Commit abgebrochen. Secrets gehören in Umgebungsvariablen, nicht in den Code."
+      exit 1
+    fi
+  done
+
   if echo "$FILE" | grep -qE "\.(${CODE_EXTENSIONS})$"; then
-    # Prüft ob die erste Zeile einen Kommentar enthält (Header)
-    FIRST_LINE=$(git show ":$FILE" 2>/dev/null | head -1)
+    FIRST_LINE=$(echo "$CONTENT" | head -1)
     if ! echo "$FIRST_LINE" | grep -qE "^(//|#|/\*|\"|'\"\"\")" ; then
       MISSING_HEADERS+=("$FILE")
+    fi
+    if echo "$CONTENT" | grep -iE "TODO" | grep -qvE "TODO\((${ROLES})\):"; then
+      BAD_TODOS+=("$FILE")
     fi
   fi
 done
@@ -56,45 +84,6 @@ if [ ${#MISSING_HEADERS[@]} -gt 0 ]; then
   echo "  Standard: toolchain/agents/CLAUDE.md → 'Code-Kommentierung'"
   # Warning, kein Abort (um Produktivität nicht zu blockieren)
 fi
-
-# ─────────────────────────────────────
-# CHECK 3: Keine Secrets/Credentials
-# ─────────────────────────────────────
-SECRET_PATTERNS=(
-  "password\s*=\s*['\"][^'\"]{4,}"
-  "secret\s*=\s*['\"][^'\"]{8,}"
-  "api[_-]?key\s*=\s*['\"][^'\"]{8,}"
-  "private[_-]?key\s*=\s*['\"][^'\"]{8,}"
-  "BEGIN (RSA|EC|DSA|OPENSSH) PRIVATE KEY"
-  "ghp_[A-Za-z0-9]{36}"
-  "sk-[A-Za-z0-9]{40,}"
-)
-
-for FILE in $STAGED_FILES; do
-  for PATTERN in "${SECRET_PATTERNS[@]}"; do
-    if git show ":$FILE" 2>/dev/null | grep -iEq "$PATTERN"; then
-      echo "  ❌ Mögliches Secret in: $FILE (Pattern: $PATTERN)"
-      echo "  Commit abgebrochen. Secrets gehören in Umgebungsvariablen, nicht in den Code."
-      exit 1
-    fi
-  done
-done
-
-# ─────────────────────────────────────
-# CHECK 4: TODO-Marker-Format
-# ─────────────────────────────────────
-# Erlaubt: // TODO(PM|BA|AR|UX|FE|BE|QA|RV): Beschreibung — YYYY-MM-DD
-# Warnt bei: // TODO ohne Klammer (kein Verantwortlichen)
-ROLES="PM|BA|AR|UX|FE|BE|QA|RV"
-BAD_TODOS=()
-
-for FILE in $STAGED_FILES; do
-  if echo "$FILE" | grep -qE "\.(${CODE_EXTENSIONS})$"; then
-    if git show ":$FILE" 2>/dev/null | grep -iE "TODO" | grep -qvE "TODO\((${ROLES})\):"; then
-      BAD_TODOS+=("$FILE")
-    fi
-  fi
-done
 
 if [ ${#BAD_TODOS[@]} -gt 0 ]; then
   echo "  ⚠️  Nicht-standardisierte TODO-Marker in:"
