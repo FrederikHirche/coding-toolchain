@@ -2,14 +2,14 @@
 
 Zentrale Übersicht aller Projekte, die die AI Development Tool Chain verwenden.
 
-Letzte Aktualisierung: 2026-08-02
+Letzte Aktualisierung: 2026-08-08
 
 ## Aktive Projekte
 
 | Projekt | Phase | Sprint | Letzter Agent | Letztes Update | Pfad |
 |---------|-------|--------|--------------|----------------|------|
 | second-brain | REFINEMENT — Sprint 4 mit US-000014 und SP-000005 im REVIEW; Sprint 3 lokal als `v0.3.0`, Push/Cleanup ausstehend | 4 | BA+FE+BE | 2026-07-31 | `projects/second-brain/` |
-| campaignworld | DONE (Sprint 15) — `DEBT-000027` (Typ-Switcher-Tabs jetzt alphabetisch sortiert, DE/EN je korrekt) behoben; DEBT-REGISTRY vollständig leer; bereit für nächsten Sprint | 15 | MW | 2026-08-03 | `projects/campaignworld/` |
+| campaignworld | DONE (Sprint 17+18) — US-000023 (Wissensjournal), US-000026 (Sichtbarkeit & eigene Figur), US-000029 (Konflikterkennung), US-000041 (KI-Zugang/API-Token), US-000042 (Improvisationshilfen) dokumentiert; RV-000017 v2.0 + RV-000018 v1.0 beide APPROVED nach gemeinsamer Nutzerabnahme/Review; BUG-000023 (MAJOR)/BUG-000024 (MINOR) offen, kein Blocker; DEBT-000031 TEILWEISE BEHOBEN, DEBT-000032 neu. Beide Sprints noch auf eigenen Feature-Branches (`feature/sprint-17`/`feature/sprint-18`), Merge zu `master` (Phase 10) aussteht — blockiert auf fehlender Branching-Strategie-ADR | 18 | MW | 2026-08-08 | `projects/campaignworld/` |
 | stellaris-mcp | DISCOVERY | 1 | PM | 2026-07-23 | `projects/stellaris-mcp/` |
 
 ## Abgeschlossene Projekte
