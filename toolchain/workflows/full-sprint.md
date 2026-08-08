@@ -401,10 +401,12 @@ nichts Strategisches, sondern führt das vereinbarte Protokoll aus.
 | `REGISTRY.md` aktualisiert | Sprint als RELEASED markiert | MAJOR |
 | Release Notes verlinkt | `RN-NNNNNN` in REGISTRY-Eintrag | MAJOR |
 | `.phase` auf `RELEASED` gesetzt | Header prüfen | MAJOR |
+| GitHub-Board-Sync ausgeführt (falls `github.enabled: true`) | `github-board-sync -Mode push` lief nach dem Merge, betroffene Issues zeigen Board-Status `Done` | MAJOR |
 
 ### Release-Checkliste (ORCH führt aus)
 
 ```
+0. github-board-sync -Mode reconcile         # nur falls github.enabled: true (.toolchain.yml) — Board-Stand vor dem Merge lesen, Abweichungen melden
 1. git checkout <merge-target-branch>       # gemäß ADR, im Haupt-Checkout (nicht im Worktree)
 2. git merge --no-ff feature/<sprint>       # kein Fast-Forward für History
 3. git tag -a v<sprint> -m "Sprint N: <sprint-ziel>"
@@ -413,7 +415,16 @@ nichts Strategisches, sondern führt das vereinbarte Protokoll aus.
    git branch -d feature/sprint-<N>          # optional — nur wenn Branch-History nicht separat benötigt
 6. .phase: worktree-path/worktree-branch entfernen, Phase auf RELEASED setzen
 7. REGISTRY.md: Sprint-Status auf RELEASED + Datum
+8. github-board-sync -Mode push              # nur falls github.enabled: true — erst NACH Schritt 6/7, damit der Sync den finalen RELEASED-Stand liest, nicht einen Zwischenstand; setzt Issues auf Board-Status `Done` (Status-Mapping, `github-board-sync.md`)
 ```
+
+**Warum Schritt 0/8 hier und nicht nur in den einzelnen Phasen-Commands:** Die allgemeine
+Board-Sync-Regel ("jeder Phasen-Agent synct an Anfang/Ende") deckt `/manual` (Gate 9) ab, aber
+`Done` im Status-Mapping ist explizit an "nach Gate 9" geknüpft — der tatsächliche
+RELEASED-Zustand (Merge+Tag+Push) entsteht erst in Phase 10 selbst, die keinen eigenen
+Slash-Command hat und daher sonst übersprungen würde. Ohne Schritt 8 bleibt das Board auf dem
+Zwischenstand von `/manual` stehen, auch wenn der Code längst gemergt ist — in der Praxis
+beobachtet (campaignworld Sprint 17+18, Board zeigte nach `/manual` weiterhin `In Review`).
 
 **Hinweis:** Cherry-Picking (selektive Commit-Übernahme) ist eine Ausnahme-Operation
 und erfordert explizite Nutzeranweisung mit Begründung — kein automatischer Schritt.
@@ -422,7 +433,9 @@ und erfordert explizite Nutzeranweisung mit Begründung — kein automatischer S
 Entfernung) sind schreibend gegen geteilten bzw. schwer reversiblen Zustand — ORCH führt diese
 konkreten Schritte nicht ohne explizite Nutzerbestätigung im Sitzungsverlauf aus, auch wenn
 Gate 10 vollständig PASS ist. Schritte 1–3 (lokaler Merge, Tag) sowie 6–7 (Metadaten) sind
-unkritisch und erfordern keine gesonderte Bestätigung.
+unkritisch und erfordern keine gesonderte Bestätigung. Schritt 8 (`push`-Modus) schreibt gegen
+GitHub (externer, geteilter Zustand) — dieselbe Bestätigungspflicht wie Schritt 4 gilt daher
+auch hier, auch wenn es sich technisch nur um Issue-Metadaten statt Code handelt.
 
 **Bei PASS:** Sprint vollständig abgeschlossen (`RELEASED`)  
 **Bei FAIL (kein ADR):** Hard-Stop → `/architect` zur Branching-Entscheidung

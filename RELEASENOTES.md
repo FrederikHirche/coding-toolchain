@@ -9,6 +9,212 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 
 ---
 
+## v4.5 — 2026-08-08
+
+### Behoben
+
+**Phase 10 (Release) führte keinen GitHub-Board-Sync aus — Board blieb nach `/manual` auf einem Zwischenstand stehen**
+
+- `toolchain/workflows/full-sprint.md`: Die allgemeine Board-Sync-Regel ("jeder Phasen-Agent
+  synct an Anfang/Ende") deckt `/manual` (Gate 9) ab, aber das Status-Mapping setzt `Done`
+  explizit erst "nach Gate 9" — der tatsächliche `RELEASED`-Zustand (Merge+Tag+Push) entsteht
+  erst in Phase 10, die keinen eigenen Slash-Command hat und dadurch in der Praxis vom
+  Board-Sync übersprungen wurde. In `campaignworld` Sprint 17+18 dadurch beobachtet: Board
+  zeigte nach abgeschlossenem `/manual` weiterhin `In Review`, obwohl die Dokumentation
+  bereits fertig war.
+- Release-Checkliste um Schritt 0 (`github-board-sync -Mode reconcile`, vor dem Merge) und
+  Schritt 8 (`github-board-sync -Mode push`, NACH `.phase`/`REGISTRY.md`-Aktualisierung —
+  bewusst so spät, damit der Sync den finalen `RELEASED`-Stand liest, nicht einen
+  Zwischenstand) ergänzt. Beide Schritte nur, wenn `github.enabled: true` in
+  `.toolchain.yml`. Gate 10 um ein entsprechendes MAJOR-Kriterium ergänzt.
+- Schritt 8 unterliegt derselben Bestätigungspflicht wie Schritt 4 (`git push`) — schreibt
+  gegen geteilten, externen Zustand (GitHub), auch wenn es sich nur um Issue-Metadaten statt
+  Code handelt.
+
+**Betroffene Dateien:** `toolchain/workflows/full-sprint.md`
+
+**Auswirkung:** Projekte mit aktiviertem GitHub-Board-Sync (`github.enabled: true`) sehen den
+Board-Stand künftig auch nach einem tatsächlichen Release (Phase 10) korrekt auf `Done`
+aktualisiert, statt auf dem `/manual`-Zwischenstand hängen zu bleiben.
+
+---
+
+## v4.4 — 2026-08-04
+
+### Behoben
+
+**GitHub-Board `Iteration`-Feld wurde nie befüllt — zwei unabhängige Bugs (`IMPD-000001`, `campaignworld`)**
+
+- `toolchain/scripts/github-board-sync.ps1`/`.sh`: `gh project field-list` liefert für ein
+  `ProjectV2IterationField` — anders als für Single-Select-Felder mit `.options` — keine
+  `configuration.iterations`/`completedIterations`. Die bisherige Iteration-Auflösung griff
+  auf dieses (nie vorhandene) Datenfeld zu und lieferte seit Einführung in `v4.0` immer
+  `null`, ohne Warnung. Behoben durch einen zusätzlichen `gh api graphql`-Aufruf direkt gegen
+  die Feld-ID.
+- Zusätzlich gefunden während des Fixes: eine PowerShell-Variable `$config` überschrieb
+  case-insensitiv den Funktionsparameter `$Config` in `Get-BoardContext`, wodurch
+  `item-list`/Milestone-Auflösung ab dem Iteration-Block still fehlschlugen. Behoben durch
+  Umbenennung (`$iterConfiguration`).
+- Die Sprint-Nr.-zu-Zyklus-Zuordnung war zusätzlich strukturell falsch: sie behandelte
+  `iteration: N` als 1-basierten Array-Index über alle materialisierten Board-Zyklen
+  („Sprint N → N-ter Zyklus"), was voraussetzt, dass Board-Zyklen exakt ab Sprint 1
+  durchnummeriert sind. Boards werden aber oft später oder wiederverwendet provisioniert
+  (siehe `github-board-sync.md` „Ein Board pro Projekt") — die Zuordnung ist jetzt
+  datumsbasiert: `iteration-start-date`/`iteration-start-sprint`/`iteration-length-days`
+  übersetzen die Sprint-Nr. in ein Zieldatum, das gegen die tatsächlichen
+  `[startDate, startDate+duration)`-Fenster der Zyklen gematcht wird (best-effort
+  nächstliegender Zyklus außerhalb des materialisierten Bereichs, mit Warnung).
+- `projects/_template/.toolchain.yml`: neuer Config-Key `github.iteration-start-sprint`
+  (Default `1`) neben den bestehenden `iteration-length-days`/`iteration-start-date`.
+- `toolchain/protocols/github-board-sync.md`: neuer Abschnitt „Iteration-Feld" dokumentiert
+  die GraphQL-Notwendigkeit und die datumsbasierte Zuordnung inkl. Anker-Konfiguration.
+- Auswirkung: Das Iteration-Feld auf einem GitHub-Project-Board kann jetzt tatsächlich
+  befüllt werden — vorher war es unabhängig vom Frontmatter-Wert immer leer, unabhängig
+  davon, welches Projekt/Board betroffen war (kein campaignworld-spezifischer Bug, sondern
+  ein Tool-Chain-weiter). Projekte mit bereits laufendem Sync müssen `github.iteration-
+  start-sprint` einmalig auf den Sprint setzen, ab dem ihr Board-Iteration-Feld tatsächlich
+  zu laufen begann (siehe `IMPD-000001`/`PC-000003` in `projects/campaignworld/retros/` als
+  Referenzbeispiel für die Diagnose und das konkrete Vorgehen).
+
+---
+
+## v4.3 — 2026-08-03
+
+### Behoben
+
+**`Get-BoardStatus`/`board_status_for` setzte bei JEDEM Phasenwechsel den Board-Status ALLER `US-NNNNNN` zurück, nicht nur der Story des laufenden Sprints**
+
+- Ursache: Der Status einer `US-NNNNNN` wird nicht aus einem eigenen Story-Feld abgeleitet,
+  sondern aus der globalen `.phase`-Datei (`current-phase`). Diese Datei beschreibt aber den
+  Projektzustand insgesamt, nicht den Zustand jeder einzelnen Story — beim ersten
+  produktiven `/refine`-Lauf (Sprint 16) wurden dadurch alle 37 bereits abgeschlossenen
+  Stories aus den Sprints 1–14 fälschlich von `Done` auf `Backlog` zurückgesetzt, weil
+  `current-phase` global auf `REFINEMENT` stand.
+- `toolchain/scripts/github-board-sync.ps1`/`.sh`: `Get-BoardStatus`/`board_status_for`
+  (US-Fall) leitet den Status jetzt nur noch dann aus `current-phase` ab, wenn das
+  Story-eigene `sprint`-Feld mit dem aktuell laufenden Sprint (`.phase` Feld `sprint`)
+  übereinstimmt — sonst wird das Status-Feld für diesen Lauf unangetastet gelassen
+  (`$null`/leerer String, `Set-BoardFieldValue`/`set_board_field_value` überspringen das
+  Update wie bei jedem anderen leeren Wert). `reconcile` überspringt den Konfliktabgleich
+  ebenfalls, wenn kein Zielstatus abgeleitet werden konnte.
+- **Schaden auf dem produktiv genutzten `campaignworld`-Board manuell korrigiert:** Alle 36
+  betroffenen Issues (#1–16, #18–37) per `gh project item-edit` zurück auf `Done` gesetzt;
+  `US-000017` (tatsächlich Sprint-16-Story) korrekt bei `Backlog`/`Todo` belassen.
+- Auswirkung: `/refine`, `/implement`, `/test-plan` etc. können künftig beliebig oft
+  Phasenwechsel durchlaufen, ohne den Board-Status bereits abgeschlossener Stories aus
+  früheren Sprints zu verfälschen — nur die Story(s), deren `sprint`-Feld tatsächlich dem
+  aktuell laufenden Sprint entspricht, folgt der phasenabgeleiteten Status-Logik.
+
+---
+
+## v4.2 — 2026-08-03
+
+### Neu
+
+**Status-Feld-Alias-Fallback + campaignworld-Board-Konsolidierung**
+
+- `toolchain/scripts/github-board-sync.ps1`/`.sh`: Neue Alias-Auflösung für das `Status`-
+  Feld (`Resolve-StatusOptionId`/`resolve_status_option_id`). Boards mit nur den
+  GitHub-Standardoptionen (`Todo`/`In Progress`/`Done`, ohne `Backlog`/`In Review`) erhalten
+  jetzt trotzdem ein sinnvolles Status-Update statt eines stumm übersprungenen (`Backlog`→
+  `Todo`, `In Review`→`In Progress`, jeweils mit weiteren Alias-Stufen). `resolve_option_id`
+  (Bash) vergleicht Optionsnamen jetzt zusätzlich case-insensitiv (`ascii_downcase`), da
+  manche Boards Standardoptionen mit abweichender Schreibweise mitbringen (z. B.
+  "In progress" statt "In Progress").
+- `projects/campaignworld/.toolchain.yml`: `github.project-number` von `3` auf `2`
+  geändert. Ursache: Beim ersten `/kickoff`-Nachtrag war unbekannt, dass GitHub für dieses
+  Repo bereits automatisch ein repo-verlinktes Standard-Board ("@campaignworld Kanban",
+  Projekt #2, mit Auto-Add-Workflow für neue Issues) angelegt hatte. Der Sync verwaltete
+  bis hierhin ein zweites, separat erstelltes Board (#3), während #2 durch den GitHub-
+  eigenen Auto-Add-Mechanismus parallel und unkontrolliert befüllt wurde — jedes Issue
+  landete dadurch auf zwei Boards, aber nur eines (#3) hatte je gepflegte Custom-Field-
+  Werte, was in der GitHub-UI wie ein komplett ungepflegtes Board aussah, je nachdem
+  welche der beiden Projekt-Karten man aufklappte.
+- Projekt #3 ("campaignworld", separat erstelltes Board) gelöscht — Board #2 ist jetzt das
+  einzige und alleinig gepflegte Board für `campaignworld`. #2 bringt bereits ein
+  vollständiges Custom-Field-Set aus dem GitHub-Kanban-Template mit, inklusive eines
+  funktionierenden `Iteration`-Feldes (das auf #3 mangels `gh`-CLI-Unterstützung für
+  `--data-type ITERATION` nicht anlegbar war) — die in v4.1 dokumentierte Einschränkung
+  entfällt dadurch für `campaignworld`.
+- Auswirkung: Ein produktiv genutztes Repo kann bereits ein repo-verlinktes Standard-Board
+  mit Auto-Add-Workflow haben, bevor `/kickoff` ein eigenes Board provisioniert — die
+  Provisionierung sollte künftig zuerst `gh api graphql` gegen
+  `repository.projectsV2` prüfen, ob bereits ein repo-verlinktes Board existiert, und
+  dieses vorschlagen statt blind ein neues über `gh project create` anzulegen (noch nicht
+  in `pm-agent.md`/`github-board-sync.md` nachgezogen — vorerst nur für `campaignworld`
+  manuell korrigiert, siehe TODO unten).
+
+### TODO (nicht in diesem Release)
+
+- `toolchain/agents/pm-agent.md` Board-Provisionierung sollte vor `gh project create`
+  prüfen, ob das Ziel-Repo bereits ein repo-verlinktes GitHub-Project (v2) Board hat
+  (`gh api graphql` gegen `repository.projectsV2`), und dieses zur Wiederverwendung
+  vorschlagen, statt automatisch ein zweites, unverlinktes Board anzulegen.
+
+---
+
+## v4.1 — 2026-08-03
+
+### Neu
+
+**Nachziehen des v4.0-Gesamtscopes: Blocks/Blocked-by-Relationships implementiert, campaignworld nachprovisioniert**
+
+- `toolchain/scripts/github-board-sync.ps1`/`.sh`: v4.0 hatte die "Blocks/Blocked-by"-
+  Relationship in Protokoll und Doku angekündigt, aber in den Skripten noch nicht
+  implementiert. Neue Funktionen `Sync-IssueDependencies`/`sync_issue_dependencies` parsen
+  die `## Abhängigkeiten`-Tabelle einer `US-NNNNNN` ("Blockiert durch"/"Blockiert" +
+  Referenz), lösen die referenzierte Artefakt-ID auf ihre `github-issue`-Nummer auf und
+  verknüpfen best-effort über `gh api .../issues/<n>/dependencies/blocked_by`. Schlägt der
+  API-Aufruf fehl (Beta-Feature, nicht auf jedem Plan/Repo verfügbar): stiller Abbruch, der
+  bereits bestehende Text-Fallback im Issue-Body bleibt in jedem Fall bestehen.
+- `projects/campaignworld/.toolchain.yml`: `github`-Block nachgezogen auf das aktuelle
+  Schema — `synced-artifacts` um `EPIC` ergänzt, `iteration-length-days`/
+  `iteration-start-date` ergänzt (fehlten, weil das Board vor der v4.0-Erweiterung
+  provisioniert wurde).
+- GitHub-Project-Board von `campaignworld` (Board #3) nachträglich um die in v4.0
+  spezifizierten Custom Fields ergänzt: `Estimate` (Number), `Size`, `Priority` (Single
+  Select), `Start date`, `Target date` (Date) erfolgreich angelegt. `Iteration` (Iteration-
+  Typ) ließ sich über `gh project field-create` NICHT anlegen — die installierte
+  `gh`-CLI-Version (2.94.0) unterstützt `ITERATION` nicht als `--data-type`-Wert für diesen
+  Befehl. Genau der in `github-board-sync.md` Abschnitt "Fehlertoleranz" vorgesehene Fall:
+  Iteration-Feld-Updates werden vom Sync-Skript übersprungen und als Warnung vermerkt,
+  nichts blockiert.
+- Auswirkung: Der in v4.0 dokumentierte Gesamtscope ist jetzt tatsächlich lückenlos
+  implementiert (bis auf die extern limitierte Iteration-Feld-Anlage), und das erste real
+  genutzte Projekt (`campaignworld`) ist auf den aktuellen Konfigurations-/Board-Stand
+  gebracht statt auf dem Stand vor v4.0 zu verharren.
+
+### Behoben
+
+**Zwei Regressionen, durch die v4.0-Skript-Neufassung (unabhängig von der vorherigen
+v3.1-Bugfix-Version) erneut eingeführt:**
+
+- `Test-GhReady` (`github-board-sync.ps1`): Die v3.1-Korrektur (`-join "`n"` vor dem
+  Scope-Test, siehe dortiger Eintrag) war in der v4.0-Neufassung des Skripts nicht mehr
+  enthalten — vermutlich weil die Neufassung auf einer älteren Zwischenversion aufsetzte.
+  `$status -notmatch 'project'` prüfte dadurch wieder elementweise über ein Zeilen-Array
+  statt über den Gesamttext und meldete fälschlich fehlenden `project`-Scope, obwohl
+  vorhanden — Sync brach bei jedem Lauf sofort ab. Erneut auf `-join "`n"` vor dem Test
+  umgestellt.
+- `Sync-DebtRegistry`/`sync_debt_registry`: Die Header-Erkennung (`^\|\s*ID\s*\|`) traf auf
+  JEDE Tabelle mit einer "ID"-Spalte — in `DEBT-REGISTRY-campaignworld.md` existieren zwei
+  solche Tabellen: die aktiv getrackte Registry (mit `Status`-Spalte) und eine separate
+  "## Erledigte Schulden"-Verlaufstabelle (nur `ID`/`Titel`/`Resolved in`/`Lösung`, ohne
+  `Status`). Da die Registry-Tabelle aktuell keine offenen Einträge hat, traf die Erkennung
+  stattdessen die Verlaufstabelle und legte für 12 längst `RESOLVED`e historische Schulden
+  (`DEBT-000001`–`DEBT-000012`) neue GitHub-Issues an — bei jedem weiteren `push`-Lauf
+  erneut, da die Verlaufstabelle keine `GitHub Issue`-Spalte zum Zwischenspeichern hat
+  (Issue-Spam ohne Idempotenz). Fix: Header-Erkennung verlangt jetzt zusätzlich eine
+  `Status`-Spalte in derselben Zeile. Die 12 fälschlich angelegten Issues (`campaignworld`
+  #47–#58) wurden mit Erklärung geschlossen; `DEBT-REGISTRY-campaignworld.md` selbst blieb
+  inhaltlich unverändert (Zeilen wurden zwar neu geschrieben, aber mit identischen Werten).
+- Auswirkung: Beide Regressionen betrafen ausschließlich den Sync-Pfad (nie ein Gate) und
+  sind vor jedem produktiven Nachfolgelauf entdeckt und behoben worden — kein Datenverlust,
+  aber ein Hinweis, künftige Full-Rewrites von `github-board-sync.*` auf Basis des
+  jeweils aktuellsten Diffs statt einer möglicherweise älteren Zwischenkopie vorzunehmen.
+
+---
+
 ## v4.0 — 2026-08-03
 
 ### Neu
