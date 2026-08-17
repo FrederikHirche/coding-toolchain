@@ -3,7 +3,7 @@
 Konsolidierte Übersicht aller Slash Commands.  
 Zweck: Einzelne Referenzdatei für NotebookLM-Analyse und schnelle Orientierung.
 
-**Letzte Aktualisierung:** 2026-08-03 (v4.0 — Full-Scope-Vorausplanung (Epics/Roadmap) + GitHub-Board-Sync in allen Phasen-Commands)  
+**Letzte Aktualisierung:** 2026-08-17 (v4.8 — Decompose-Modus AR + `/decompose`)  
 **Pflege-Regel:** Diese Datei wird bei jedem Hinzufügen oder Ändern eines Commands aktualisiert.
 
 ---
@@ -70,6 +70,26 @@ der eindeutigen `REVIEW`-Artefakte der Vorphase. Gate 5.5 läuft als `/implement
 **Was passiert:** 3 Phasen: SCAN (Codebase untersuchen) → MATCH (Abgleich mit REQ/US/ADR, oder Ist-Architektur-Dokumentation falls keine Spec existiert) → REPORT (Gap-Analyse: GAP-NNNNNN mit expliziter Empfehlung). Kein Code Review, kein automatischer Fix, kein Phasenwechsel.
 **Verwendung:** `/converge [projektname] [pfad-zu-code]`
 **Output:** `GAP-NNNNNN` Gap-Analyse
+
+---
+
+### /decompose — Kopplungs-/Grenzenanalyse für Service-Aufspaltung
+
+**Aktiviert:** Software Architect (AR) — Decompose-Modus
+**Wann nutzen:** Verdacht, dass ein Modul/eine Komponente zu monolithisch gewachsen ist; vor einer größeren Architekturentscheidung, wenn unklar ist, ob eine Aufspaltung technisch sinnvoll wäre; nach mehreren Sprints, um gewachsene de-facto-Modulgrenzen zu prüfen.
+**Was passiert:** 4 Phasen: SCAN (Cluster/Cohesion via `get_architecture` erfassen) → ANALYZE (Fan-in/Fan-out, Cross-Cluster-Kopplung und Zyklen über `search_graph`/`query_graph` ermitteln, jeden Cluster explizit als Kandidat oder Noch-nicht-bereit einstufen) → DRAFT (vollständigen ADR-Entwurf pro Kandidat verfassen, Status DRAFT) → REPORT (Decomposition-Analyse: DCP-NNNNNN). Kein automatischer Refactor, kein Code-Change, kein Phasenwechsel. Der ADR-Entwurf wird erst durch `/architect` zu einer bindenden ADR-NNNNNN.
+**Verwendung:** `/decompose [projektname] [pfad-optional]`
+**Output:** `DCP-NNNNNN` Decomposition-Analyse inkl. ADR-Entwurf/-Entwürfen, ggf. `DEBT-NNNNNN`
+
+---
+
+### /harden — Konsolidierung / Hardening
+
+**Aktiviert:** Consolidator (CN)
+**Wann nutzen:** Vor einem Release, nach mehreren Sprints bei vermuteter Anhäufung toter Pfade/Duplikate, oder bei explizitem Wunsch nach einer Cleanup-Runde außerhalb des Sprint-Rhythmus.
+**Was passiert:** 5 Phasen: SCAN (Git-Tree-Sauberkeit prüfen, Codebase über `codebase-memory` durchsuchen) → PLAN (jeden Kandidaten mit Beweis — 0 Aufrufer — belegen und als SICHER/UNSICHER einstufen) → HARDEN (nur SICHER-Fixes anwenden, ein einziger benannter Commit, kein Push) → VERIFY (Testsuite vor/nach ausführen, bei Fehlschlag Änderung revertieren und als DEBT-NNNNNN loggen) → REPORT (Konsolidierungsbericht CNS-NNNNNN). Startet nur auf sauberem Git-Tree; UNSICHER eingestufte Funde werden nie angefasst, nur als DEBT-NNNNNN vorgeschlagen. Kein Ersatz für `/review` (kein Sprint-Diff) oder `/converge` (ändert Code direkt statt nur zu reporten). Kein Phasenwechsel.
+**Verwendung:** `/harden [projektname] [pfad-optional]`
+**Output:** `CNS-NNNNNN` Konsolidierungsbericht, ggf. `DEBT-NNNNNN`, ein ungepushter Git-Commit
 
 ---
 

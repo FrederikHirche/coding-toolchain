@@ -3,7 +3,7 @@
 Artefakt-Templates für alle Phasen der Tool Chain.
 Alle Templates sind technologieunabhängig und enthalten den Standard-Artefakt-Header.
 
-Letzte Aktualisierung: 2026-08-03
+Letzte Aktualisierung: 2026-08-17
 
 ## Inhalt
 
@@ -17,12 +17,14 @@ Letzte Aktualisierung: 2026-08-03
 | `roadmap.md` | `RM-NNNNNN` | BA | Requirements (Vorausplanung Gesamtscope, einmalig) |
 | `architecture-decision.md` | `ADR-NNNNNN` | AR | Architecture |
 | `gap-analysis.md` | `GAP-NNNNNN` | AR | Architecture (via `/converge`) |
+| `decomposition-analysis.md` | `DCP-NNNNNN` | AR | Architecture (via `/decompose`) |
 | `ux-spec.md` | `UX-NNNNNN` | UX | UX Design |
 | `sprint-backlog.md` | `SP-NNNNNN` | BA+FE+BE | Refinement |
 | `test-plan.md` | `TP-NNNNNN` | QA | Testing |
 | `bug-report.md` | `BUG-NNNNNN` | QA (BA im Hotfix) | Testing (auch `/hotfix`) |
 | `review-checklist.md` | `RV-NNNNNN` | RV | Review |
 | `tech-debt-registry.md` | `DEBT-REGISTRY` | RV | Review (einmalig pro Projekt) |
+| `consolidation-report.md` | `CNS-NNNNNN` | CN | Ad-hoc (via `/harden`) |
 | `decisions.md` | `DECISIONS.md` | ORCH | Alle Phasen (fortlaufend) |
 | `feature-guide.md` | `DOC-NNNNNN` | MW | Dokumentation |
 | `release-notes.md` | `RN-NNNNNN` | MW | Dokumentation |

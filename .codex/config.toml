@@ -45,3 +45,7 @@ config_file = "./agents/manual-writer.toml"
 [agents.agile_coach]
 description = "Moderiert Retrospektiven und Prozessverbesserungen gemäß AC-Agent."
 config_file = "./agents/agile-coach.toml"
+
+[agents.consolidator]
+description = "Härtet Bestandscode — toter Code, Duplikate, Vereinfachung — gemäß CN-Agent."
+config_file = "./agents/consolidator.toml"

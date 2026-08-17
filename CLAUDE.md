@@ -37,7 +37,7 @@ von der Stakeholder-Idee bis zum produktiven Release.
 | ORCH | Orchestrator | `toolchain/agents/orchestrator.md` | Projektzustand, Gates, Workflow-Steuerung, Cross-Artefakt-Konsistenz (`/analyze`) |
 | PM | Product Manager | `toolchain/agents/pm-agent.md` | Stakeholder-Interviews, Priorisierung, Vision, Projekt-Constitution |
 | BA | Business Analyst | `toolchain/agents/ba-agent.md` | Requirements, User Stories, Akzeptanzkriterien |
-| AR | Software Architect | `toolchain/agents/architect-agent.md` | Systemdesign, ADRs, Tech-Stack-Entscheidung, Brownfield-Gap-Analyse (`/converge`) |
+| AR | Software Architect | `toolchain/agents/architect-agent.md` | Systemdesign, ADRs, Tech-Stack-Entscheidung, Brownfield-Gap-Analyse (`/converge`), Service-Boundary-Analyse (`/decompose`) |
 | UX | UX Designer | `toolchain/agents/ux-agent.md` | User Journeys, Interaction Design, UX-Specs |
 | FE | Frontend Developer | `toolchain/agents/frontend-agent.md` | UI-Implementierung, Komponenten, Accessibility |
 | BE | Backend Developer | `toolchain/agents/backend-agent.md` | APIs, Business Logic, Datenschicht |
@@ -45,6 +45,7 @@ von der Stakeholder-Idee bis zum produktiven Release.
 | RV | Code Reviewer | `toolchain/agents/reviewer-agent.md` | Code Review, Qualitäts-Gates, Merge-Entscheidung |
 | MW | Manual Writer | `toolchain/agents/manual-writer-agent.md` | Nutzerorientierte Dokumentation, Feature-Guides, Release Notes |
 | AC | Agile Coach | `toolchain/agents/agile-coach-agent.md` | Prozessreflexion, Retrospektiven, Tool-Chain-Verbesserung |
+| CN | Consolidator | `toolchain/agents/consolidator-agent.md` | Härtung von Bestandscode — toten Code entfernen, deduplizieren, vereinfachen (`/harden`) |
 
 Alle Agenten erben die Basisregeln aus `toolchain/agents/_base-agent.md`.
 
@@ -61,6 +62,8 @@ Alle Agenten erben die Basisregeln aus `toolchain/agents/_base-agent.md`.
 | `/hotfix [projekt] [bug]` | Verkürzter Notfall-Fix-Workflow |
 | `/spike [projekt] [frage]` | Technische Erkundung ohne Implementierungsverpflichtung |
 | `/converge [projekt] [pfad]` | Bestandscode gegen Spezifikation prüfen (Brownfield-Übernahme) |
+| `/decompose [projekt] [pfad]` | Bestandscode auf Microservice-Kandidaten (Kopplung/Kohäsion) prüfen |
+| `/harden [projekt] [pfad]` | Bestandscode härten — toten Code entfernen, deduplizieren, vereinfachen |
 
 ### Phasen-Commands (manuell oder durch `/sprint` aufgerufen)
 
@@ -97,6 +100,8 @@ Alle Agenten erben die Basisregeln aus `toolchain/agents/_base-agent.md`.
 | Hotfix | `/hotfix` | Kritischer Produktionsfehler | 4 Phasen |
 | Spike | `/spike` | Tech-Evaluierung ohne Impl. | 3 Phasen |
 | Converge | `/converge` | Bestandscode gegen Spec prüfen (Brownfield) | 3 Phasen |
+| Decompose | `/decompose` | Kopplungs-/Grenzenanalyse für Service-Aufspaltung | 4 Phasen |
+| Harden | `/harden` | Bestandscode härten (toter Code, Duplikate, Vereinfachung) | 5 Phasen |
 
 Details: `toolchain/workflows/`
 
@@ -134,6 +139,7 @@ TODO-FORMAT:
 | Requirements | `REQ-NNNNNN` | `REQ-000001-auth.md` |
 | Architecture Decision Record | `ADR-NNNNNN` | `ADR-000001-tech-stack.md` |
 | Gap-Analyse (Converge) | `GAP-NNNNNN` | `GAP-000001-legacy-scan.md` |
+| Decomposition-Analyse (Decompose) | `DCP-NNNNNN` | `DCP-000001-payments-modul.md` |
 | User Story | `US-NNNNNN` | `US-000042-login.md` |
 | Epic | `EPIC-NNNNNN` | `EPIC-000001-login-onboarding.md` |
 | Roadmap / Release-Plan (Gesamtscope) | `RM-NNNNNN` | `RM-000001-roadmap.md` |
@@ -144,6 +150,7 @@ TODO-FORMAT:
 | Fehlerbericht | `BUG-NNNNNN` | `BUG-000001-login-crash.md` |
 | Review-Bericht | `RV-NNNNNN` | `RV-000001-sprint-1.md` |
 | Technische Schuld | `DEBT-NNNNNN` | `DEBT-000001-n+1-queries.md` |
+| Konsolidierungsbericht | `CNS-NNNNNN` | `CNS-000001-dead-code-sweep.md` |
 | Spike Report | `SRP-NNNNNN` | `SRP-000001-db-eval.md` |
 | Feature-Guide | `DOC-NNNNNN` | `DOC-000001-login.md` |
 | Release Notes | `RN-NNNNNN` | `RN-000001-sprint-1.md` |
@@ -165,13 +172,14 @@ Jeder Artefakttyp hat einen definierten Unterordner:
 projects/<name>/
   discovery/        SB-NNNNNN, CON-000001, DECISIONS.md
   requirements/     REQ-NNNNNN, US-NNNNNN, EPIC-NNNNNN, RM-NNNNNN
-  architecture/     ADR-NNNNNN, STRUCTURE.md, GAP-NNNNNN
+  architecture/     ADR-NNNNNN, STRUCTURE.md, GAP-NNNNNN, DCP-NNNNNN
   ux/               UX-NNNNNN
   sprints/          SP-NNNNNN
   testing/          TP-NNNNNN, TR-NNNNNN, BUG-NNNNNN, playwright-report/
   reviews/          RV-NNNNNN
   docs/             DOC-NNNNNN, RN-NNNNNN, GS-NNNNNN
   retros/           RETRO-NNNNNN, IMPD-NNNNNN, PC-NNNNNN, DEBT-NNNNNN, SRP-NNNNNN
+  consolidation/    CNS-NNNNNN (ad-hoc via /harden)
   INDEX.md
   .phase
   .toolchain.yml
@@ -281,6 +289,10 @@ Werkzeuge (Auszug): `index_repository`, `search_graph`, `trace_path`, `query_gra
 Genutzt von:
 - **AR** (`/architect`, `/converge`) — Ist-Architektur erfassen (`get_architecture`),
   Gap-Analyse gegen Spezifikation (`detect_changes`, `search_graph`, `trace_path`)
+- **AR** (`/decompose`) — Service-Boundary-/Kopplungsanalyse: de-facto-Module mit
+  Cohesion-Score (`get_architecture` mit `aspects: clusters,boundaries,layers`),
+  Fan-in/Fan-out-Hotspots (`search_graph` mit `min_degree`/`max_degree`),
+  Cross-Cluster-Kopplung und zyklische Abhängigkeiten (`query_graph`, Cypher)
 - **BE/FE** (`/implement`) — Aufrufketten und betroffene Stellen in bestehendem Code
   nachvollziehen (`trace_path`, `search_code`, `query_graph`) statt breitem Grep
 - **RV** (`/review`) — Change-Impact eines Diffs vor der Merge-Entscheidung einschätzen
@@ -303,13 +315,25 @@ entfernen.
 
 **3D-Graph-Visualisierung (optional):** `codebase-memory-mcp` bringt eine browserbasierte
 3D-Visualisierung des Code-Graphen mit (Multi-Galaxy-Layout über mehrere indizierte
-Projekte hinweg). Sie ist über `--ui=true --port=9749` in `.mcp.json` aktiviert und läuft
-als HTTP-Server unter `http://localhost:9749`, sobald eine Claude-Code-Session den
+Projekte hinweg). Sie ist über `--ui=true --port=8749` in `.mcp.json` aktiviert und läuft
+als HTTP-Server unter `http://localhost:8749`, sobald eine Claude-Code-Session den
 `codebase-memory`-Server startet — verwaltet vom gemeinsamen Coordination-Daemon, sodass
 mehrere parallele Sessions keine doppelten HTTP-Server öffnen. Rein explorativ (Menschen im
 Browser), kein Tool-Call und kein Ersatz für die MCP-Werkzeuge oben; nützlich, um sich vor
 `/architect`- oder `/converge`-Sessions einen visuellen Überblick über eine Bestandscodebase
 zu verschaffen.
+
+**Portwahl 8749 statt 9749:** Windows reserviert TCP-Portbereiche dynamisch für Hyper-V/WSL-NAT
+(sichtbar über `netsh int ipv4 show excludedportrange protocol=tcp`); Port 9749 fiel in einen
+solchen Bereich (`9712–9811`), wodurch der UI-Server nie binden konnte (`ui.unavailable ...
+reason=in_use`, ohne Eintrag in `netstat`/`Get-NetTCPConnection`). Da diese Bereiche nach
+Neustarts variieren können, empfiehlt sich zusätzlich eine dauerhafte Reservierung des
+gewählten Ports (Administrator-PowerShell):
+```
+netsh int ipv4 add excludedportrange protocol=tcp startport=8749 numberofports=1 store=persistent
+```
+Das entzieht Port 8749 dem dynamischen Vergabepool, sodass Hyper-V/WSL ihn künftig nicht
+belegen kann.
 
 ---
 

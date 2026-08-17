@@ -44,8 +44,8 @@ foreach ($requiredPath in $requiredPaths) {
 }
 
 $expectedCommands = @(
-    'analyze', 'architect', 'ba', 'coach', 'converge', 'health-check', 'hotfix',
-    'impediment', 'implement', 'kickoff', 'manual', 'refine', 'retro', 'review',
+    'analyze', 'architect', 'ba', 'coach', 'converge', 'decompose', 'harden', 'health-check',
+    'hotfix', 'impediment', 'implement', 'kickoff', 'manual', 'refine', 'retro', 'review',
     'spike', 'sprint', 'status', 'test-plan', 'test-run', 'ux'
 )
 
@@ -65,6 +65,7 @@ $agentMappings = [ordered]@{
     'reviewer' = 'reviewer-agent.md'
     'manual-writer' = 'manual-writer-agent.md'
     'agile-coach' = 'agile-coach-agent.md'
+    'consolidator' = 'consolidator-agent.md'
 }
 
 foreach ($adapterName in $agentMappings.Keys) {

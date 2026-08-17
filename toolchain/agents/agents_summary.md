@@ -3,7 +3,7 @@
 Konsolidierte Übersicht aller Agenten-Rollen.  
 Zweck: Einzelne Referenzdatei für NotebookLM-Analyse und schnelle Orientierung.
 
-**Letzte Aktualisierung:** 2026-08-03  
+**Letzte Aktualisierung:** 2026-08-17  
 **Pflege-Regel:** Diese Datei wird bei jedem Hinzufügen oder Ändern einer Agenten-Datei aktualisiert.
 
 ---
@@ -151,7 +151,7 @@ Board, nicht nur Sprint 1.
 
 **Datei:** `architect-agent.md`  
 **Kürzel:** AR  
-**Aktiviert durch:** `/architect`, `/spike`, `/converge`  
+**Aktiviert durch:** `/architect`, `/spike`, `/converge`, `/decompose`  
 **Primäre Artefakte:** `ADR-NNNNNN` (Architecture Decision Records), `STRUCTURE.md`
 
 Der Architect-Agent definiert die technische Grundlage. Alle seine Entscheidungen werden
@@ -193,6 +193,16 @@ oder bei Verdacht auf Spec-Drift. Scannt Code, gleicht mit REQ/US (Abdeckungsmat
 (Architektur-Drift) ab und liefert `GAP-NNNNNN` mit expliziter Empfehlung (retroaktive
 Artefakte anlegen / Stories als DONE markieren / Drift auflösen). Kein Code Review, kein
 automatischer Fix. `.phase` wird nach Abschluss zurückgesetzt — kein Phasenwechsel.
+
+**Decompose-Modus (`/decompose`):** Kopplungs-/Kohäsionsanalyse einer bereits existierenden
+Codebase, um belegte Kandidaten für eine Aufspaltung in eigenständige Services zu
+identifizieren — anders als Converge keine Spec-Abdeckung, sondern reine Code-Struktur.
+Nutzt `get_architecture` (Leiden-Cluster mit Cohesion-Score), `search_graph` (Fan-in/
+Fan-out) und `query_graph` (Cross-Cluster-Kopplung, Zyklen), stuft jeden Cluster explizit
+als Kandidat oder Noch-nicht-bereit ein und liefert `DCP-NNNNNN` mit einem vollständigen
+ADR-Entwurf (Status DRAFT) pro Kandidat — bindend wird der Entwurf erst nach Ratifizierung
+via `/architect`. Kein automatischer Refactor. `.phase` wird nach Abschluss zurückgesetzt —
+kein Phasenwechsel.
 
 **Externe Recherche:** Kann für Tech-Stack-Evaluierung und Spike-Recherche den MCP-Server
 `fetch` nutzen (siehe CLAUDE.md, Abschnitt "Externe Recherche").
@@ -443,3 +453,37 @@ Inhalte. Er hat keine fachliche Meinung, analysiert aber wie die Tool Chain arbe
 
 **Haltung:** Kein Dogmatismus — Prozesse dienen Menschen, nicht umgekehrt. Die beste
 Verbesserung ist die, die tatsächlich umgesetzt wird.
+
+---
+
+## CN — Consolidator
+
+**Datei:** `consolidator-agent.md`
+**Kürzel:** CN
+**Aktiviert durch:** `/harden` (ad-hoc, kein Phasenwechsel)
+**Primäre Artefakte:** `CNS-NNNNNN` (Konsolidierungsbericht, in `projects/<name>/consolidation/`), ggf. `DEBT-NNNNNN`
+
+Der Consolidator-Agent härtet bestehenden Code — er entfernt toten Code, dedupliziert und
+vereinfacht — unabhängig vom Sprint-Zyklus. Anders als AR im Converge-Modus (reiner
+Report) **ändert CN Code direkt**; anders als RV (Diff-Scope des aktuellen Sprints) prüft
+CN die **gesamte bestehende Codebase**.
+
+**Sicherheitsleitplanken:** Startet nur auf sauberem Git-Tree (BLOCKER sonst). Jede
+Löschung ist durch `search_graph`/`trace_path`/`detect_changes` belegt (0 Aufrufer
+projektweit) — keine Löschung auf Verdacht. Nur risikoarme (SICHER eingestufte) Funde
+werden direkt angewendet; alles Mehrdeutige (mögliche Public API, Feature-Flag-Pfade,
+TODO-markierter Code) wird als `DEBT-NNNNNN` vorgeschlagen statt angefasst. Alle Fixes
+landen in einem einzigen, benannten Commit (kein Push/Force/Amend). Testsuite (falls
+konfiguriert) muss vor und nach den Änderungen grün sein — schlägt sie danach fehl, wird
+genau diese Änderung revertiert und stattdessen als DEBT-NNNNNN geloggt.
+
+**Phasen:** SCAN (Git-Tree-Check + codebase-memory-Scan) → PLAN (Beweis + Risikoeinstufung)
+→ HARDEN (Fixes anwenden + Commit) → VERIFY (Testsuite vor/nach) → REPORT (CNS-NNNNNN).
+
+**Abgrenzung:** Kein Ersatz für `/review` (kein Sprint-Diff-Review) und kein `/converge`
+(ändert Code direkt statt nur zu reporten). `.phase` wird nach Abschluss zurückgesetzt —
+kein Phasenwechsel, analog Converge/Spike.
+
+**Codebase-Intelligenz:** Nutzt für SCAN und Beweisführung den MCP-Server
+`codebase-memory` (siehe CLAUDE.md, Abschnitt "Codebase-Intelligenz") — jede Löschung
+erfordert eine belegte Aufruferzahl von 0, kein Grep-Verdacht.

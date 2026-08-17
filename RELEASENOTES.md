@@ -9,6 +9,118 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 
 ---
 
+## v4.8 — 2026-08-17
+
+### Neu
+
+**Decompose-Modus (AR) + `/decompose` — Kopplungs-/Grenzenanalyse für Service-Aufspaltung**
+
+- Lücke: Kein bestehender Agent prüfte, wo Bestandscode zu monolithisch gewachsen ist und
+  sich sinnvoll in eigenständige Services aufspalten ließe — `/converge` prüft nur
+  Spec-Abdeckung/Drift, `/architect` trifft die Microservices-vs-Monolith-Entscheidung nur
+  für neue Projekte auf Basis von Requirements, nicht rückwirkend anhand tatsächlicher
+  Kopplungsdaten.
+- Neuer dritter Modus im bestehenden Architect-Agent (AR) — kein neuer Agent, kein neues
+  Projekt-Unterverzeichnis, `architecture/` wird mitgenutzt (analog Converge/Spike):
+  `toolchain/agents/architect-agent.md` um `### Decompose-Modus (\`/decompose\`)` ergänzt
+  (SCAN → ANALYZE → DRAFT → REPORT), inkl. Inputs-/Outputs-Zeile, Übergabeprotokoll-Verweis
+  und eigener Definition-of-Done-Checkliste.
+- Der Decompose-Modus führt eine reine Kopplungs-/Kohäsionsanalyse durch — kein Abgleich
+  gegen Spezifikation. Methodik neu eingeführt (bislang kein Kopplungs-Vokabular in der Tool
+  Chain): `get_architecture` mit `aspects: clusters,boundaries,layers` (Leiden-Clustering,
+  Cohesion-Score) für de-facto-Module, `search_graph` mit `min_degree`/`max_degree` für
+  Fan-in/Fan-out-Hotspots, `query_graph` (Cypher) für Cross-Cluster-Kopplung und zyklische
+  Abhängigkeiten. Jeder Cluster wird explizit als **Kandidat** oder **Noch nicht bereit**
+  eingestuft — nie "es kommt darauf an".
+- Abweichend vom Converge-Muster (nur Empfehlung, ADR separat) liefert der Bericht pro
+  Kandidat direkt einen vollständigen ADR-Entwurf (Status `DRAFT`, Struktur wie
+  `architecture-decision.md`) — bindend wird er erst durch Ratifizierung via `/architect`.
+- Neuer Ad-hoc-Command `/decompose [projektname] [pfad-optional]`
+  (`.claude/commands/decompose.md`), neuer Workflow `toolchain/workflows/decompose.md`
+  (SCAN → ANALYZE → DRAFT → REPORT, kein Phasenwechsel), neues Template
+  `toolchain/templates/decomposition-analysis.md`, neuer Artefakt-Präfix `DCP-NNNNNN`
+  (kein neuer Projekt-Unterordner nötig).
+- `CLAUDE.md` (Agenten-Rollen, Orchestrierungs-Commands, Workflows-Tabelle,
+  Artefakt-Benennung, Projektordner-Struktur, Codebase-Intelligenz „Genutzt von"),
+  `toolchain/agents/INDEX.md`, `toolchain/agents/_base-agent.md`,
+  `toolchain/workflows/INDEX.md`, `toolchain/templates/INDEX.md`,
+  `projects/_template/.toolchain.yml` sowie alle drei `*_summary.md`-Dateien entsprechend
+  ergänzt.
+- Codex-Kompatibilitätsschicht additiv erweitert: `.codex/agents/architect.toml`
+  (`developer_instructions` nennt jetzt explizit alle vier Command-Dateien — schließt
+  dabei nebenbei eine bereits bestehende Lücke, `converge.md` war dort nie genannt),
+  `.agents/skills/coding-toolchain/SKILL.md`, `projects/_template/.agents/skills/
+  coding-toolchain/SKILL.md` und `toolchain/scripts/validate-codex-compat.ps1`
+  (Command `decompose` ergänzt — kein neues Agent-Mapping nötig, AR ist bereits
+  registriert).
+- Auswirkung: Projekte können jetzt gezielt prüfen, ob und wo sich ein gewachsener
+  Monolith mit belegter Kopplungs-/Kohäsionsanalyse in Services aufspalten lässt, und
+  erhalten dafür direkt einen ratifizierbaren ADR-Entwurf statt nur einer vagen
+  Empfehlung — ohne die Trennung zwischen Befund und bindender Entscheidung aufzugeben.
+
+## v4.7 — 2026-08-16
+
+### Neu
+
+**Konsolidierungs-Agent (CN) + `/harden` — Hardening/Dead-Code-Removal für Bestandscode**
+
+- Lücke: Kein bestehender Agent führte eine repo-weite Härtungsrunde durch — RV
+  (`/review`) prüft nur den Sprint-Diff, AR (`/converge`) liefert nur einen Report ohne
+  Fix, DEBT-Einträge akkumulieren ohne erzwungenes Payback-Gate.
+- Neuer Agent `toolchain/agents/consolidator-agent.md` (CN — Consolidator): scannt
+  Bestandscode über `codebase-memory` auf toten Code, Duplikate und unnötige Komplexität,
+  wendet nur beweisbasiert (0 Aufrufer projektweit) und risikoarm eingestufte Fixes direkt
+  an, mit Git-Sicherheitsnetz (nur auf sauberem Tree, ein einzelner ungepushter Commit)
+  und Test-Gate vor/nach den Änderungen. Mehrdeutige Funde werden nicht angefasst, sondern
+  als `DEBT-NNNNNN` vorgeschlagen.
+- Neuer Ad-hoc-Command `/harden [projektname] [pfad-optional]` (`.claude/commands/harden.md`),
+  neuer Workflow `toolchain/workflows/harden.md` (SCAN → PLAN → HARDEN → VERIFY → REPORT,
+  kein Phasenwechsel — analog `/converge`/`/spike`), neues Template
+  `toolchain/templates/consolidation-report.md`, neuer Artefakt-Präfix `CNS-NNNNNN` und
+  neuer Projekt-Unterordner `consolidation/`.
+- `CLAUDE.md` (Agenten-Rollen, Orchestrierungs-Commands, Artefakt-Benennung,
+  Projektordner-Struktur, Workflows-Tabelle), `toolchain/agents/INDEX.md`,
+  `toolchain/agents/_base-agent.md`, `toolchain/workflows/INDEX.md`,
+  `toolchain/templates/INDEX.md`, `projects/_template/.toolchain.yml` sowie alle drei
+  `*_summary.md`-Dateien entsprechend ergänzt.
+- Codex-Kompatibilitätsschicht additiv erweitert: `.codex/agents/consolidator.toml`,
+  `.codex/config.toml` (`[agents.consolidator]`), `AGENTS.md`, `.agents/skills/coding-toolchain/SKILL.md`
+  und `toolchain/scripts/validate-codex-compat.ps1` (Command `harden` und Agent-Mapping
+  `consolidator` ergänzt).
+- Projektvorlage nachgezogen: `projects/_template/consolidation/.gitkeep` ergänzt, analog zu
+  den bestehenden Platzhaltern für `architecture/`, `discovery/`, `retros/` etc. — jedes neue
+  Projekt hat den Unterordner ab Anlage bereit, statt dass ihn CN erst bei erstem `/harden`
+  selbst anlegen muss.
+- `AUDIOSCRIPT.md` (NotebookLM-Quelldokument) nachgezogen: Abschnitt 4 zählt jetzt zwölf statt
+  elf Rollen und beschreibt den Consolidator; neuer Abschnitt 5.5 „Wenn Bestandscode aufräumen
+  soll — Harden" zwischen Converge und Hotfix (Folgeabschnitte umnummeriert auf 5.6–5.8);
+  Abschnitt 10 (Vorteile) erwähnt Harden neben Hotfix/Spike/Converge als weiteren
+  abgekürzten, aber strukturierten Weg.
+- Auswirkung: Projekte können jetzt jederzeit — insbesondere vor einem Release — eine
+  kontrollierte Hardening-Runde anstoßen, die tote Code-Pfade tatsächlich entfernt statt
+  sie nur als technische Schuld zu protokollieren, ohne den bestehenden Diff-Review- oder
+  Gap-Analyse-Scope zu verwässern. Die Doku-Basis (Codex-Adapter, NotebookLM-Skript,
+  Projektvorlage) zieht vollständig mit, statt nachträglich inkonsistent zu bleiben.
+
+## v4.6 — 2026-08-12
+
+### Behoben
+
+**3D-Graph-Visualisierung (`codebase-memory`-MCP) unter `http://localhost:9749` nicht erreichbar**
+
+- Ursache: Windows reserviert TCP-Port 9749 dynamisch für Hyper-V/WSL-NAT (Bereich
+  `9712–9811`, sichtbar über `netsh int ipv4 show excludedportrange protocol=tcp`). Der
+  UI-Server der gepinnten Binary konnte den Port dadurch nie binden
+  (`ui.unavailable port=9749 reason=in_use`), ohne dass dies in `netstat`/
+  `Get-NetTCPConnection` sichtbar wurde — der Port erschien frei, war es aber nicht.
+- `.mcp.json`: `codebase-memory`-Server-Argument `--port=9749` auf `--port=8749` geändert.
+- `CLAUDE.md` (Abschnitt „Codebase-Intelligenz (MCP `codebase-memory`)"): URL-Referenzen auf
+  `8749` aktualisiert, neuer Absatz „Portwahl 8749 statt 9749" mit Erklärung und optionalem
+  `netsh`-Reservierungsbefehl für dauerhaften Schutz vor künftigen Hyper-V-Portkonflikten.
+- Auswirkung: 3D-Graph-UI ist nach Neustart der Claude-Code-Session (MCP-Server-Neustart)
+  unter `http://localhost:8749` erreichbar. Betroffene Nutzer sollten laufende
+  `codebase-memory-mcp*`-Prozesse beenden, damit sie mit dem neuen Port neu starten.
+
 ## v4.5 — 2026-08-08
 
 ### Behoben

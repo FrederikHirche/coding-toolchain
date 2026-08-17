@@ -95,7 +95,7 @@ Arbeitsbereich für laufende Sprints hat.
 
 ---
 
-## 4. Die elf Rollen — ein Entwicklungsteam aus einer Feder
+## 4. Die zwölf Rollen — ein Entwicklungsteam aus einer Feder
 
 Die Tool Chain modelliert ein vollständiges, technologieneutrales Entwicklungsteam. Jede Rolle
 hat eine klar abgegrenzte Verantwortung, eigene Eingaben, eigene Ausgaben und ein eigenes
@@ -167,6 +167,19 @@ nie für Entwickler: Feature-Guides mit nummerierten Schritt-für-Schritt-Anleit
 Notes, beim allerersten Sprint einen Getting-Started-Guide und ab dem zweiten Sprint bei Bedarf
 eine FAQ.
 
+Der **Consolidator** ist die jüngste Rolle und arbeitet, anders als alle bisher genannten,
+nicht an einem neuen Sprint, sondern rückwirkend an bereits existierendem Code — ausgelöst
+durch `/harden`, etwa vor einem Release oder wenn sich über mehrere Sprints technische
+Schuld angesammelt hat. Er scannt die Codebasis über den Codebase-Intelligenz-Server auf
+toten Code, exakte Duplikate und unnötige Komplexität, verlangt aber für jede einzelne
+Löschung einen Beweis — null Aufrufer projektweit, nicht Verdacht. Nur was sich so
+zweifelsfrei belegen lässt, wird direkt behoben, in einem einzigen, klar benannten Commit,
+mit einer Testsuite, die davor und danach grün sein muss; alles Mehrdeutige, etwa eine
+mögliche öffentliche API oder ein bewusst mit TODO markierter Codepfad, wird nicht
+angefasst, sondern nur als technische Schuld vorgeschlagen. Anders als der Architekt im
+Converge-Modus ändert der Consolidator also tatsächlich Code — aber nur innerhalb dieser
+engen, beweispflichtigen Leitplanken.
+
 Der **Agile Coach** ist die einzige Rolle, die nicht an Inhalten, sondern am Prozess selbst
 arbeitet. Er moderiert Retrospektiven nach Sprintabschluss, erkennt nach mehreren Sprints
 systemische Muster in einem übergreifenden Health-Check, berät ad hoc bei bereits benannten
@@ -234,7 +247,22 @@ expliziten Handlungsempfehlung — nie ein vages "kommt darauf an". Wichtig ist,
 bewusst NICHT ist: kein Code-Review und kein automatischer Fix. Es ändert keinen Code, sondern
 liefert nur die ehrliche Bestandsaufnahme, auf der die nächste Entscheidung aufbaut.
 
-### 5.5 Wenn es schnell gehen muss — Hotfix
+### 5.5 Wenn Bestandscode aufräumen soll — Harden
+
+Ähnlich ad-hoc wie Converge, aber mit einem entscheidenden Unterschied: `/harden
+<projektname> <pfad-optional>` ändert Code tatsächlich, statt nur zu berichten. Der
+Consolidator prüft zuerst, ob der Git-Arbeitsbaum wirklich sauber ist — uncommittete
+Änderungen führen zum sofortigen Abbruch, bevor überhaupt gescannt wird. Danach identifiziert
+er über den Codebase-Intelligenz-Server Kandidaten für toten Code, Duplikate und unnötige
+Komplexität und stuft jeden einzeln ein: nur was mit null Aufrufern projektweit zweifelsfrei
+belegt ist, gilt als sicher genug für eine direkte Behebung; alles andere wird nicht
+angefasst, sondern als technische Schuld vorgeschlagen. Die angewendeten Fixes landen in
+genau einem benannten, ungepushten Commit, flankiert von einer Testsuite, die vor und nach
+der Änderung grün sein muss — schlägt sie danach fehl, wird exakt diese eine Änderung wieder
+zurückgenommen. Harden ist kein Ersatz für ein Review und kein Phasenwechsel im Sprint-Zyklus,
+sondern eine bewusst eigenständige Hygiene-Runde über die gesamte Codebasis.
+
+### 5.6 Wenn es schnell gehen muss — Hotfix
 
 Für kritische Produktionsfehler gibt es einen bewusst verkürzten Weg: `/hotfix <projektname>
 <bug-beschreibung>` überspringt Discovery, Architektur und UX komplett und durchläuft nur vier
@@ -243,7 +271,7 @@ einen Smoke-Test statt eines vollständigen Testlaufs, und ein fokussiertes Revi
 ist nur zulässig, wenn sich weder Architektur noch Scope ändern — sonst greift wieder der
 normale Sprint-Prozess.
 
-### 5.6 Wenn Unsicherheit vor Verpflichtung steht — Spike
+### 5.7 Wenn Unsicherheit vor Verpflichtung steht — Spike
 
 Für technische Fragen, die zu unsicher für eine direkte Architekturentscheidung sind — etwa "ist
 Bibliothek X für unseren Anwendungsfall geeignet?" — gibt es den `/spike`-Befehl. Er erzeugt
@@ -251,7 +279,7 @@ keine Implementierungsverpflichtung: Eine Fragestellung wird geschärft, eine st
 festgelegt, recherchiert und im Zweifel ein minimaler Prototyp gebaut, und am Ende steht eine
 klare, unausweichliche Empfehlung — kein "es kommt darauf an".
 
-### 5.7 Nach dem Sprint — Prozessreflexion
+### 5.8 Nach dem Sprint — Prozessreflexion
 
 Optional, aber empfohlen, schließt sich nach jedem Sprint eine Retrospektive mit dem Agile Coach
 an. Nach mehreren Sprints kann ein übergreifender Health-Check systemische Muster erkennen, und
@@ -437,8 +465,9 @@ denselben Personen erledigt, die den Code geschrieben haben.
 
 Der vierte Vorteil ist die eingebaute Flexibilität für unterschiedliche Dringlichkeitsstufen.
 Nicht jede Änderung braucht den vollen Zehn-Phasen-Zyklus — Hotfix- und Spike-Workflow erlauben
-bewusst abgekürzte, aber trotzdem strukturierte Wege, und Converge erlaubt sogar den nachträglichen
-Einstieg bei bereits existierendem Code.
+bewusst abgekürzte, aber trotzdem strukturierte Wege, Converge erlaubt sogar den nachträglichen
+Einstieg bei bereits existierendem Code, und Harden erlaubt eine ad-hoc-Hygiene-Runde über
+Bestandscode, ganz ohne dafür einen neuen Sprint anzustoßen.
 
 Der fünfte Vorteil ist Technologieneutralität. Die Tool Chain legt sich nicht auf ein
 bestimmtes Ökosystem fest — sie funktioniert für ein Python-Backend genauso wie für eine

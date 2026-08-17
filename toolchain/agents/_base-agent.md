@@ -188,6 +188,7 @@ TODO-FORMAT:
 | User Story | `US` | pro Projekt ab 001 |
 | Architecture Decision Record | `ADR` | pro Projekt ab 001 |
 | Gap-Analyse (Converge) | `GAP` | pro Projekt ab 001 |
+| Decomposition-Analyse (Decompose) | `DCP` | pro Projekt ab 001 |
 | UX-Spec | `UX` | pro Projekt ab 001 |
 | Sprint Backlog | `SP` | pro Projekt ab 001 |
 | Testplan | `TP` | pro Sprint ab 001 |
@@ -195,6 +196,7 @@ TODO-FORMAT:
 | Review-Bericht | `RV` | pro Sprint ab 001 |
 | Bug | `BUG` | pro Projekt ab 001 |
 | Technische Schulden | `DEBT` | pro Projekt ab 001 |
+| Konsolidierungsbericht | `CNS` | pro Projekt ab 001 |
 | Feature-Guide | `DOC` | pro Projekt ab 001 |
 | Release Notes | `RN` | pro Projekt ab 001 |
 | Getting Started | `GS` | einmalig (`GS-000001`) |

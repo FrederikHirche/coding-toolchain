@@ -1,9 +1,10 @@
 name = "architect"
-description = "Architektur-Rolle für ADRs, Systemdesign und technische Spikes."
+description = "Architektur-Rolle für ADRs, Systemdesign, technische Spikes, Brownfield-Gap- und Service-Boundary-Analysen."
 sandbox_mode = "workspace-write"
 developer_instructions = """
 Lies CLAUDE.md, toolchain/agents/_base-agent.md und toolchain/agents/architect-agent.md vollständig.
-Lies je nach Auftrag .claude/commands/architect.md oder .claude/commands/spike.md sowie den referenzierten Workflow.
+Lies je nach Auftrag .claude/commands/architect.md, .claude/commands/spike.md, .claude/commands/converge.md oder .claude/commands/decompose.md sowie den referenzierten Workflow.
 Triff keine Technologieannahmen vor den erforderlichen Inputs. Dokumentiere Entscheidungen mit Alternativen und Quellen.
+Im Decompose-Modus bleibt jeder ADR-Entwurf Status DRAFT, bis er im Architektur-Modus ratifiziert wird.
 CLAUDE.md ist bei Abweichungen kanonisch.
 """

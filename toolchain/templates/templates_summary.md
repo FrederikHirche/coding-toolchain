@@ -3,7 +3,7 @@
 Konsolidierte Übersicht aller Artefakt-Templates.  
 Zweck: Einzelne Referenzdatei für NotebookLM-Analyse und schnelle Orientierung.
 
-**Letzte Aktualisierung:** 2026-08-03  
+**Letzte Aktualisierung:** 2026-08-17  
 **Pflege-Regel:** Diese Datei wird bei jedem Hinzufügen oder Ändern eines Templates aktualisiert.
 
 ---
@@ -200,6 +200,29 @@ Kein Ersatz für Code Review (`RV-NNNNNN`) und kein automatischer Fix.
 
 ---
 
+## DCP — Decomposition-Analyse (`decomposition-analysis.md`)
+
+**Präfix:** `DCP-NNNNNN`
+**Erstellt von:** AR (Software Architect) via `/decompose`
+**Basiert auf:** `ADR-NNNNNN` (falls vorhanden), untersuchte Codebase
+
+Kopplungs-/Kohäsionsanalyse einer bereits existierenden Codebase, um belegte Kandidaten
+für eine Aufspaltung in eigenständige Services zu identifizieren. Anders als `GAP-NNNNNN`
+(Spec-Abdeckung/Drift) prüft dieser Bericht die strukturelle Kopplung des Codes selbst und
+liefert pro Kandidat einen ratifizierbaren ADR-Entwurf statt nur einer Empfehlung. Kein
+automatischer Refactor — ändert keinen Code.
+
+**Kernabschnitte:**
+- Erfassungsumfang: untersuchter Code-Pfad, Anlass
+- Cluster-/Grenzenanalyse: Leiden-Cluster mit Cohesion-Score (`get_architecture`)
+- Kopplungs-Hotspots: Fan-in/Fan-out (`search_graph`), zyklische Abhängigkeiten (`query_graph`)
+- Service-Kandidaten: Cluster → Kandidat/Noch nicht bereit, Cross-Cluster-Kopplung, Begründung
+- ADR-Entwurf: vollständiger Entwurf (Status DRAFT) pro Kandidat, Struktur wie `architecture-decision.md`
+- Konsequenzen/Migrationsrisiko: Betriebs-, Team-, Deployment-Auswirkungen
+- Nicht geprüfte Bereiche: explizite Abgrenzung
+
+---
+
 ## UX — UX-Spec (`ux-spec.md`)
 
 **Präfix:** `UX-NNNNNN`  
@@ -324,6 +347,27 @@ sondern fortlaufend ergänzt.
 - Impact (welche Konsequenzen hat sie?)
 - Aufwand zur Behebung (S/M/L)
 - Priorität und vorgeschlagenes Sprint-Ziel zur Behebung
+
+---
+
+## CNS — Konsolidierungsbericht (`consolidation-report.md`)
+
+**Präfix:** `CNS-NNNNNN`
+**Erstellt von:** CN (Consolidator) via `/harden`
+**Basiert auf:** `CON-000001`, `APPROVED` ADRs, `DEBT-REGISTRY` (falls vorhanden)
+
+Ad-hoc Härtungsbericht über die bestehende Codebase — anders als `GAP-NNNNNN` (reiner
+Report, kein Fix) dokumentiert dieser Bericht direkt angewendete Code-Änderungen inkl.
+Beweis und Test-Verifikation. Kein Ersatz für `RV-NNNNNN` (Diff-Review des Sprints).
+
+**Kernabschnitte:**
+- Umfang: untersuchter Code-Pfad, Git-Status vor Start (muss "clean" sein)
+- Gefundene Kandidaten: Fund, Beweis/Fundstelle (0 Aufrufer), Risikoeinstufung
+  (SICHER/UNSICHER), Entscheidung
+- Angewendete Fixes: nur SICHER-Kandidaten, mit Commit-Hash (ein Commit, ungepusht)
+- Zurückgestellt als technische Schuld: UNSICHER-Funde oder Testfehlschläge → DEBT-NNNNNN
+- Test-Verifikation: Testsuite-Ergebnis vor/nach (oder Begründung für Abwesenheit)
+- Nicht geprüfte Bereiche: explizite Abgrenzung
 
 ---
 

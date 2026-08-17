@@ -1,6 +1,6 @@
 ---
 name: coding-toolchain
-description: Run this project's Claude-first development toolchain in Codex. Use for /kickoff, /status, /sprint, /ba, /architect, /ux, /refine, /analyze, /implement, /test-plan, /test-run, /review, /manual, /hotfix, /spike, /converge, /retro, /health-check, /coach, and /impediment.
+description: Run this project's Claude-first development toolchain in Codex. Use for /kickoff, /status, /sprint, /ba, /architect, /ux, /refine, /analyze, /implement, /test-plan, /test-run, /review, /manual, /hotfix, /spike, /converge, /decompose, /harden, /retro, /health-check, /coach, and /impediment.
 ---
 
 # Coding Toolchain (project adapter)

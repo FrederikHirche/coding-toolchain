@@ -74,6 +74,7 @@ artifacts:
     US: 1
     ADR: 1
     GAP: 1
+    DCP: 1
     UX: 1
     SP: 1
     TP: 1
@@ -81,6 +82,7 @@ artifacts:
     RV: 1
     BUG: 1
     DEBT: 1
+    CNS: 1
     SRP: 1
     DOC: 1
     RN: 1
@@ -119,4 +121,5 @@ github:
   auth-env-var: ~                   # nur bei auth-mode: env-var — Name der vom Nutzer gesetzten Variable
   synced-artifacts: [US, BUG, DEBT, IMPD, EPIC]  # welche Artefakttypen als Issues/Milestones geführt werden
   iteration-length-days: 14         # Kadenz des Iteration-Feldes auf dem Board (Tage pro Sprint)
-  iteration-start-date: ~           # YYYY-MM-DD, Default: Kickoff-Datum, falls leer
+  iteration-start-date: ~           # YYYY-MM-DD, an dem der Board-Iteration-Zyklus Nr. 1 tatsächlich beginnt (nicht zwangsläufig Kickoff — je nachdem, wann das Board provisioniert/mit Iterationen bestückt wurde). Default beim ersten Sync-Lauf: heutiges Datum, falls leer
+  iteration-start-sprint: 1         # Sprint-Nummer, die iteration-start-date entspricht — iteration N auf dem Board wird relativ zu diesem Anker berechnet (siehe github-board-sync.md Abschnitt "Iteration-Feld")

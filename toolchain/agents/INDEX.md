@@ -3,7 +3,7 @@
 Dieses Verzeichnis enthält alle Agenten-Definitionen der Tool Chain.
 Alle Agenten erben die Basisregeln aus `_base-agent.md`.
 
-Letzte Aktualisierung: 2026-07-24
+Letzte Aktualisierung: 2026-08-17
 
 ## Basis-Template
 
@@ -26,6 +26,7 @@ Letzte Aktualisierung: 2026-07-24
 | `reviewer-agent.md` | RV | Code Reviewer | ACTIVE | 8 — Review |
 | `manual-writer-agent.md` | MW | Manual Writer | ACTIVE | 9 — Documentation |
 | `agile-coach-agent.md` | AC | Agile Coach | ACTIVE | Post-Sprint (optional) |
+| `consolidator-agent.md` | CN | Consolidator | ACTIVE | Ad-hoc (kein Phasenwechsel) |
 
 ## Aktivierungsreihenfolge (Full Sprint)
 
@@ -40,8 +41,10 @@ Der ORCH schließt jeden Sprint-Zyklus mit Gate-Auswertung und .phase-Update, un
 `/implement` zusätzlich die Cross-Artefakt-Konsistenz als Gate-5.5-Preflight; `/analyze`
 bleibt als optionaler Diagnosebefehl verfügbar.
 AC wird nicht automatisch aktiviert — nur durch `/retro`, `/health-check` oder `/coach`.
-AR kann zusätzlich außerhalb der Sprint-Sequenz über `/converge` aktiviert werden (Brownfield-
-Gap-Analyse, kein Phasenwechsel).
+AR kann zusätzlich außerhalb der Sprint-Sequenz über `/converge` (Brownfield-Gap-Analyse)
+oder `/decompose` (Kopplungs-/Grenzenanalyse für Service-Aufspaltung) aktiviert werden —
+beides kein Phasenwechsel. CN kann zusätzlich außerhalb der Sprint-Sequenz über
+`/harden` aktiviert werden (Konsolidierung/Hardening, kein Phasenwechsel).
 
 ## Jede Agenten-Datei enthält
 

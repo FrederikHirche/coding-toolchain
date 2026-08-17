@@ -21,7 +21,8 @@ additiv unter `.codex/`, `.agents/` oder in `AGENTS.md`.
 
 Behandle Eingaben wie `/kickoff`, `/status`, `/sprint`, `/ba`, `/architect`, `/ux`,
 `/refine`, `/implement`, `/test-plan`, `/test-run`, `/review`, `/manual`, `/hotfix`,
-`/spike`, `/retro`, `/health-check`, `/coach` und `/impediment` als Toolchain-Commands.
+`/spike`, `/converge`, `/harden`, `/retro`, `/health-check`, `/coach` und `/impediment`
+als Toolchain-Commands.
 
 Für jeden Command:
 
