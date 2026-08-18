@@ -1,7 +1,7 @@
 ---
 id: AGENT-BASE
 title: Basis-Agent-Template
-version: 1.0
+version: 1.1
 status: ACTIVE
 note: Dieses Dokument wird von allen Agenten-Definitionen geerbt. Nicht direkt aktivieren.
 ---
@@ -131,6 +131,17 @@ Freitext-Notiz unhinterfragt in eine neue Entscheidung einfließt.
 Abschnitt "Keine Veränderungen") melden eine gefundene Abweichung als Befund, korrigieren
 INDEX.md aber nicht selbst — die Korrektur bleibt dem nächsten ohnehin schreibenden Agenten
 oder einer expliziten Nutzeranweisung vorbehalten.
+
+### Fortschrittsmeldung bei lange laufenden Prozessen
+
+Startet ein Agent einen Prozess, dessen Abschluss erfahrungsgemäß mehrere Minuten überschreitet
+(z. B. eine volle Playwright-Suite, ein voller Integrationstest-Lauf) — insbesondere im
+Hintergrund weiterlaufend, während der Agent selbst wartet — meldet er dem Nutzer periodisch
+den Zwischenfortschritt, statt nur das Endergebnis. Für Playwright-Läufe konkret: alle ~20
+abgeschlossene Testfälle eine kurze Chat-Meldung ("X von Y Playwright-Tests gelaufen"). Bei
+anderen langen Prozessen ohne vergleichbaren Zähler: eine sinngemäße Zeit-/Phasen-basierte
+Zwischenmeldung in ähnlichem Abstand. Diese Regel ersetzt keine abschließende Dokumentation
+(`TR-NNNNNN` etc.), sie ergänzt nur die Sichtbarkeit während der Laufzeit (`PC-000011`).
 
 ### Rückfragen-Protokoll
 

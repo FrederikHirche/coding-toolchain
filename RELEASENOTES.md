@@ -9,6 +9,115 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 
 ---
 
+## v4.11 — 2026-08-18
+
+### Neu
+
+**Alle Agenten — Fortschrittsmeldung bei lange laufenden Prozessen (PC-000011)**
+
+- Auslöser: `/impediment campaignworld` — während eines vollen Playwright-Laufs (aktuell
+  117 Testfälle, historisch 90–120+ Minuten) meldete der ausführende Agent nichts, bis der
+  Lauf vollständig abgeschlossen war; der Nutzer musste explizit nachfragen, ob überhaupt
+  Fortschritt gemacht wird.
+- `toolchain/agents/_base-agent.md` (v1.1): neuer Abschnitt „Fortschrittsmeldung bei lange
+  laufenden Prozessen" unter „Pflicht-Verhalten aller Agenten" — jeder Agent, der einen
+  erfahrungsgemäß mehrminütigen (insbesondere im Hintergrund weiterlaufenden) Prozess startet,
+  meldet periodisch Zwischenfortschritt statt nur das Endergebnis. Für Playwright-Läufe konkret:
+  alle ~20 abgeschlossene Testfälle eine kurze Chat-Meldung ("X von Y Playwright-Tests
+  gelaufen"). Gilt damit für jeden Agenten, der Playwright ausführt — nicht nur QA, auch FE/BE
+  während `/implement`s eigener E2E-Verifikation (Präzedenz `IMPD-000003`).
+- `toolchain/agents/qa-agent.md` (v1.3): neuer Schritt 4b in Phase B (`/test-run`) konkretisiert
+  die allgemeine Regel für den Playwright-Ausführungsschritt; neuer DoD-Punkt entsprechend
+  ergänzt.
+- `toolchain/agents/agents_summary.md`: Architektur-Prinzip- und QA-Abschnitt entsprechend
+  aktualisiert.
+- Auswirkung: Nutzer erhält während jedes langen Playwright-Laufs laufende
+  Fortschrittsmeldungen, ohne selbst nachfragen zu müssen — gilt toolchain-weit, nicht nur für
+  `/test-run`.
+
+---
+
+## v4.10 — 2026-08-18
+
+### Behoben
+
+**QA/BE/FE — Doppellauf-Vermeidung für Unit-/Integrationstests zwischen /implement und /test-run (PC-000010)**
+
+- Auslöser: `/impediment campaignworld` — der vollständige Unit-/Integrationstest-Lauf wird
+  während `/implement` (BE/FE-eigene Verifikation) UND unbedingt erneut während `/test-run`
+  (`qa-agent.md` Phase B, Schritt 2/3) ausgeführt, obwohl sich der Code-Stand dazwischen nicht
+  ändert — reine Wiederholung ohne neuen Erkenntnisgewinn, generalisiert das bereits für E2E
+  gelöste Muster aus `IMPD-000003` (Sprint 20) auf Unit-/Integrationstests.
+- `toolchain/agents/backend-agent.md` (v1.4), `toolchain/agents/frontend-agent.md` (v1.2):
+  BE→QA-/FE→QA-Übergabeprotokoll erhält ein neues Pflichtfeld „Bereits ausgeführte
+  Verifikation" — exakter Befehl, Zeitpunkt, Passed/Failed-Zahlen jedes während `/implement`
+  bereits gelaufenen Unit-/Integrationstest/Typecheck/Lint-Laufs.
+- `toolchain/agents/qa-agent.md` (v1.2): neuer Schritt 1b in Phase B (`/test-run`) — prüft das
+  Übergabeprotokoll auf bereits dokumentierte, unveränderte grüne Ergebnisse; nur bei fehlender
+  Dokumentation, Abweichung oder Unklarheit bleibt der volle Neu-Lauf Pflicht (sicherer
+  Normalfall). Neuer DoD-Punkt entsprechend ergänzt.
+- `.claude/commands/test-run.md` (und `~/.claude/commands/test-run.md`-Mirror): Schritt 1b
+  gespiegelt.
+- `.claude/commands/commands_summary.md`, `toolchain/agents/agents_summary.md`: entsprechend
+  aktualisiert.
+- Auswirkung: Ein unveränderter, bereits grüner Unit-/Integrationstest-Lauf wird nicht mehr
+  blind ein zweites Mal ausgeführt — unabhängige QA-Verifikation bleibt der sichere Normalfall
+  bei jeder Abweichung/Unklarheit, nur der reine Wiederholungsfall entfällt.
+
+**CLAUDE.md — user-level Command-Mirror aus Wartungspflichten ergänzt**
+
+- Auslöser: Im Projekt campaignworld fehlten die Commands `/converge`, `/decompose` und
+  `/harden` sowie `/analyze`, weil das Projekt als eigener Workspace-Root ohne eigenes
+  `.claude/commands/` geöffnet wurde und Claude Code auf den user-level Mirror
+  `~/.claude/commands/` zurückfiel — dieser war seit dem 2025-07-10-Sync nicht mehr
+  aktualisiert worden (fehlende neue Commands, veraltete Inhalte u. a. in `sprint.md`,
+  verwaistes `agile-coach.md`).
+- Sofortmaßnahme: `~/.claude/commands/` einmalig aus `.claude/commands/` neu synchronisiert
+  und verwaiste Dateien (`agile-coach.md`, `RELEASENOTES.md`) entfernt.
+- `CLAUDE.md`: neuer Abschnitt „User-Level Command-Mirror synchron halten" unter
+  Pflege-Pflichten — verpflichtet künftige Änderungen an `.claude/commands/` zu einem
+  begleitenden Sync von `~/.claude/commands/`, damit eigenständige Projekt-Repositories nicht
+  erneut hinter dem Toolchain-Root zurückfallen.
+
+---
+
+## v4.9 — 2026-08-17
+
+### Geändert
+
+**RV/AR/QA — fünf Health-Check-Prozessverbesserungen aus campaignworld (PC-000005 – PC-000009)**
+
+- Auslöser: `/health-check campaignworld` (Sprints 1–20) identifizierte fünf strukturelle
+  Prozesslücken mit belegter, mehrfacher Wiederholung. Alle fünf Vorschläge vom Nutzer
+  freigegeben und umgesetzt, zusammen mit dem seit Sprint 9 offenen `PC-000001`.
+- `toolchain/agents/reviewer-agent.md` (v2.0 → v2.1):
+  - `PC-000001`: neuer "Vorab-Selbstcheck" vor Phase 0 — prüft, ob die geladene
+    Command-Vorlage alle erwarteten Phasen vollständig enthält.
+  - `PC-000005`: Dimension "Sicherheit" (Phase B) um einen verpflichtenden Coverage-Check
+    ergänzt — listet über `codebase-memory` alle Aufrufstellen eines Guard-Musters, nicht nur
+    die im Diff geänderte Stelle. Adressiert die häufigste BLOCKER-Kategorie des gesamten
+    Projekts (u. a. RV-000010, RV-000016, RV-000017, RV-000019).
+  - `PC-000007`: Nutzer-Interview (Phase A) um einen Wiederholungs-Check gegen
+    `DECISIONS.md`/frühere RV-Dokumente ergänzt — bei zweiter thematischer Wiederholung
+    verpflichtend eine BA-Story vorschlagen (macht eine bereits in `RETRO-000002` benannte,
+    unimplementierte Beobachtung wirksam).
+- `toolchain/agents/architect-agent.md` (v1.2 → v1.3): `PC-000006` — neuer
+  Zweitflächen-Check vor ADR-Erstellung bei UI-/Navigations-Stories (`codebase-memory`
+  `search_graph`/`get_architecture`), verhindert die zweimal aufgetretene "übersehene zweite
+  Oberfläche" (Sprint 14 `ADR-000011`, Sprint 20 `RV-000020`).
+- `toolchain/agents/qa-agent.md` (v1.0 → v1.1):
+  - `PC-000008`: neue Entscheidungsregel für scope-fremde BLOCKER in `/test-run` — QA legt die
+    Scope-Frage explizit dem Nutzer vor, statt sie selbst zu entscheiden oder CONDITIONAL
+    unentschieden stehen zu lassen.
+  - `PC-000009`: verpflichtende isolierte Re-Verifikation, bevor ein E2E-Fehlschlag als
+    "Ressourcenkontention" abgewertet wird, statt als BUG-NNNNNN erfasst zu werden — diese
+    Erklärung tauchte in 10 von 21 campaignworld-Testberichten auf.
+- `toolchain/agents/agents_summary.md` entsprechend nachgezogen (AR/QA/RV-Abschnitte).
+- Auswirkung: Alle fünf Änderungen sind rein additiv zu bestehenden Phasen-Workflows — kein
+  neuer Command, kein neuer Agent, keine Breaking Changes an Artefaktformaten.
+
+---
+
 ## v4.8 — 2026-08-17
 
 ### Neu

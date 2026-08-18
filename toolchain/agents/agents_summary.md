@@ -3,7 +3,7 @@
 Konsolidierte Übersicht aller Agenten-Rollen.  
 Zweck: Einzelne Referenzdatei für NotebookLM-Analyse und schnelle Orientierung.
 
-**Letzte Aktualisierung:** 2026-08-17  
+**Letzte Aktualisierung:** 2026-08-18  
 **Pflege-Regel:** Diese Datei wird bei jedem Hinzufügen oder Ändern einer Agenten-Datei aktualisiert.
 
 ---
@@ -21,6 +21,10 @@ Alle Agenten erben die Basisregeln aus `_base-agent.md`. Diese Basisregeln defin
   Statusabschnitte in INDEX.md (z. B. "In Bearbeitung") gelten als ungeprüfte Behauptung, nicht
   als Fakt, und müssen vor Weiterverwendung gegen Primärevidenz (git log/status, Dateien,
   DoD-Checkboxen) gegengeprüft werden
+- die Fortschrittsmeldung bei lange laufenden Prozessen (`PC-000011`) — startet ein Agent einen
+  Prozess mit erfahrungsgemäß mehrminütiger Laufzeit (z. B. eine volle Playwright-Suite),
+  meldet er periodisch den Zwischenfortschritt statt nur das Endergebnis; für Playwright
+  konkret alle ~20 abgeschlossene Testfälle
 
 **GitHub-Board-Sync (optional, `github.enabled: true`):** PM, BA, UX, FE, BE, QA, RV und MW
 führen zu Beginn ihres jeweiligen Vorgehens `github-board-sync -Mode reconcile` und an
@@ -167,6 +171,12 @@ Standardpräferenz Architekturschema: **Microservices vor Monolith** — ein Mon
 expliziter Begründung der Abweichung (z. B. kleines Team, kein Ops für verteilte Systeme,
 kleiner Scope) im ADR zulässig.
 
+**Zweitflächen-Check (PC-000006):** Bei Stories mit UI-/Navigationsbezug sucht der AR-Agent vor
+der ADR-Erstellung über `codebase-memory` (`search_graph`/`get_architecture`) systematisch nach
+ALLEN Oberflächen, an denen die betroffene Entität/Information bereits dargestellt oder
+navigierbar ist — nicht nur der vom Stakeholder/BA genannten Stelle — und listet sie explizit
+im ADR unter "Betroffene Oberflächen".
+
 **Container-Prinzip:** Bei Containerisierung legt der AR-Agent Base-Image-Strategie und
 Größenbudget im ADR fest (Distroless/Alpine/Slim, Multi-Stage-Builds als Standard) — bindend
 für den BE-Agenten. Kein eigener Agent dafür; Umsetzung erfolgt über AR (Vorgabe) und BE
@@ -260,7 +270,10 @@ dokumentierte direkte und systemische Ursache. Ein Regressionstest, der den ursp
 Fehler abdeckt, ist Teil des Fixes, nicht optional.
 
 **Übergabe an:** QA-Agent — gibt implementierte Stories, Komponenten-Übersicht, bekannte
-Einschränkungen und Test-Coverage-Stand weiter.
+Einschränkungen und Test-Coverage-Stand weiter. Dokumentiert zusätzlich jeden bereits während
+`/implement` gelaufenen Unit-/Integrationstest/Typecheck/Lint-Lauf (Befehl, Zeitpunkt,
+Passed/Failed-Zahlen) unter "Bereits ausgeführte Verifikation" — verhindert, dass `/test-run`
+denselben unveränderten Lauf blind wiederholt (PC-000010).
 
 **Codebase-Intelligenz:** Bei Änderungen an bestehendem Code nutzt FE den MCP-Server
 `codebase-memory` (siehe CLAUDE.md, Abschnitt "Codebase-Intelligenz"), um Verwendungsstellen
@@ -304,7 +317,10 @@ dokumentierte direkte und systemische Ursache. Ein Regressionstest, der den ursp
 Fehler abdeckt, ist Teil des Fixes, nicht optional.
 
 **Übergabe an:** FE-Agent (API-Kontrakt) und QA-Agent (implementierte Stories, Migrationen,
-Umgebungsvariablen für Tests).
+Umgebungsvariablen für Tests). Dokumentiert zusätzlich jeden bereits während `/implement`
+gelaufenen Unit-/Integrationstest/Typecheck/Lint-Lauf (Befehl, Zeitpunkt, Passed/Failed-Zahlen)
+unter "Bereits ausgeführte Verifikation" — verhindert, dass `/test-run` denselben unveränderten
+Lauf blind wiederholt (PC-000010).
 
 **Codebase-Intelligenz:** Bei Änderungen an bestehendem Code nutzt BE den MCP-Server
 `codebase-memory` (siehe CLAUDE.md, Abschnitt "Codebase-Intelligenz"), um Aufrufketten und
@@ -334,14 +350,33 @@ Priorisierung in P0 (blocker), P1 (kritisch), P2 (normal). Enthält Playwright E
 (Sektion 3.3): Testdateien, Page Objects, benötigte `data-testid` Attribute, Voraussetzungen,
 und explizit Browser-Clickpfade. Performanztestfälle stehen in einer eigenen Sektion 3.4.
 
+**Doppellauf-Vermeidung (PC-000010):** Bevor Unit-/Integrationstests laufen, prüft QA das
+FE/BE-Übergabeprotokoll auf den Abschnitt "Bereits ausgeführte Verifikation" — sind dort für
+denselben Befehl bereits vollständig grüne Ergebnisse auf unverändertem Code-Stand dokumentiert,
+wird nicht blind erneut ausgeführt, sondern das dokumentierte Ergebnis im TR referenziert; bei
+jeder Abweichung/Unklarheit bleibt der volle Lauf Pflicht. Generalisiert das bereits für E2E
+etablierte Prinzip (IMPD-000003).
+
 **Phase B — Testausführung:** Unit → Integration → E2E (Playwright) → Performanztests ausführen.
 Playwright-spezifisch: `playwright.config.ts` prüfen, `npx playwright test --reporter=html`
 in einem Durchlauf ausführen — wichtige UI-Clickpfade bevorzugt im Browser-View bzw. im
 headed/UI-Modus, sonst headless mit dokumentierter Begründung —, HTML-Report nach
-`projects/<name>/testing/playwright-report/` ablegen.
+`projects/<name>/testing/playwright-report/` ablegen. Läuft der Testprozess lange im
+Hintergrund, meldet QA alle ~20 abgeschlossene Testfälle den Zwischenfortschritt im Chat
+(PC-000011, generalisiert über `_base-agent.md` auf jeden lange laufenden Agenten-Prozess).
 Fehler als BUG-NNNNNN erfassen (inkl. Screenshot- und Trace-Pfad), Coverage-Report generieren,
 Performanz-Metriken gegen dokumentierte Zielwerte erfassen und Freigabe-Empfehlung
 (APPROVED / CONDITIONAL / REJECTED) dokumentieren.
+
+**Flakiness-Re-Verifikation (PC-000009):** Bevor ein nicht reproduzierbarer E2E-Fehlschlag als
+reine Umgebungs-/Ressourcenkontention eingestuft und NICHT als BUG-NNNNNN erfasst wird, führt
+QA den Test isoliert erneut aus und dokumentiert das Ergebnis im TR — nur ein bestandener
+isolierter Lauf verifiziert die Flakiness-Einstufung.
+
+**Scope-fremder BLOCKER (PC-000008):** Ein BLOCKER außerhalb des Sprint-/Story-Scopes wird
+regulär als BUG-NNNNNN erfasst, QA trifft aber nicht selbst die Entscheidung, ob er das
+`/review`-Gate blockiert — diese Scope-Frage wird dem Nutzer explizit vorgelegt, bevor die
+finale Freigabe-Empfehlung abgegeben wird.
 
 **Bug-Erfassung & Re-Verifikation:** Neue Fehler werden als `BUG-NNNNNN` mit
 `toolchain/templates/bug-report.md` erfasst — Symptom, Reproduktionsschritte und Evidenz durch
@@ -368,6 +403,10 @@ ergänzt, ersetzt aber nicht den Test-Coverage-Report.
 Der Reviewer-Agent führt eine **zweistufige Abnahme** durch: erst Nutzerabnahme (Phase A),
 dann technisches Code Review (Phase B).
 
+**Vorab-Selbstcheck (PC-000001):** Vor Phase 0 prüft der RV-Agent, ob die ihm vorliegende
+Command-Beschreibung alle erwarteten Phasen vollständig enthält — fehlt eine, weist er den
+Nutzer aktiv darauf hin statt sie stillschweigend zu überspringen.
+
 **Phase 0 — Container-Refresh (falls `docker-compose.yml` im Projekt existiert):**
 `docker compose build app && docker compose up -d app`, Healthcheck abwarten. Verhindert,
 dass der Nutzer in Phase A gegen ein Image aus einem früheren Sprint testet (falsche
@@ -382,10 +421,17 @@ dass der Nutzer in Phase A gegen ein Image aus einem früheren Sprint testet (fa
    präsentieren. Kein Tech-Jargon. Pausiert anschließend — Nutzer testet eigenständig.
 2. Nutzer-Interview: Strukturierte Befragung pro Feature (funktioniert? unerwartetes Verhalten?
    UX-Eindruck? Änderungswünsche?). Ergibt Befund: ACCEPTED / CONDITIONAL / REJECTED.
+   **Wiederholungs-Check (PC-000007):** Jedes Feedback-Item wird gegen `DECISIONS.md` und
+   frühere RV-Dokumente auf thematische Wiederholung geprüft — bei der zweiten
+   übereinstimmenden Rückmeldung wird verpflichtend eine BA-Story vorgeschlagen, statt sie
+   erneut nur zu protokollieren.
 
 **Phase B — Technisches Code Review (6 Dimensionen):**
 1. Korrektheit — Alle Akzeptanzkriterien implementiert? API-Kontrakt eingehalten?
 2. Sicherheit — Input-Validierung, keine Secrets, Auth korrekt, Injection-Schutz?
+   **Coverage-Check (PC-000005):** Bei geschützten Ressourcen/Aktionen listet RV über
+   `codebase-memory` ALLE Aufrufstellen des betroffenen Guard-Musters im Gesamtcode und
+   markiert jede ungeschützte Stelle als Finding — auch außerhalb des aktuellen Diffs.
 3. ADR-Konformität — Tech-Stack und alle weiteren ADRs eingehalten?
 4. Code-Qualität — Kommentierungsstandard, Datei-Header, keine Magic Numbers?
 5. Testabdeckung — Unit-Tests, E2E (Playwright), Happy Path + Fehlerfall?

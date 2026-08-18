@@ -1,7 +1,7 @@
 ---
 id: AGENT-QA
 title: QA Engineer Agent
-version: 1.0
+version: 1.3
 status: ACTIVE
 ---
 
@@ -150,8 +150,22 @@ VORGEHEN:
    `reconcile` ausführen (siehe `toolchain/protocols/github-board-sync.md`). Fehlt
    gh/Auth/Board: überspringen, nicht blockieren.
 1. Lese TP-NNNNNN aus `projects/<name>/testing/` und ermittle Test-Befehle aus STRUCTURE.md / ADR-000001.
-2. Führe Unit-Tests aus (Befehl aus ADR-000001). Protokolliere: Passed / Failed / Skipped.
-3. Führe Integration-Tests aus. Protokolliere Ergebnisse.
+1b. UNIT-/INTEGRATIONSTEST-DOPPELLAUF-VERMEIDUNG (PC-000010, IMPD-000004 — generalisiert das
+    E2E-Prinzip aus IMPD-000003 auf Unit-/Integrationstests): Prüfe das Übergabeprotokoll von
+    FE/BE auf den Abschnitt "Bereits ausgeführte Verifikation" (siehe `backend-agent.md`/
+    `frontend-agent.md`). Sind dort für GENAU denselben Befehl (aus STRUCTURE.md/ADR-000001)
+    bereits vollständig grüne Ergebnisse dokumentiert UND zeigt `git status`/`git diff` seit
+    diesem dokumentierten Zeitpunkt keine Code-Änderung an den betroffenen Packages: Schritte
+    2/3 entfallen als vollständiger Neu-Lauf — referenziere im TR-NNNNNN stattdessen das
+    dokumentierte Ergebnis (Befehl, Zeitpunkt, Passed/Failed-Zahlen) als QA-Nachweis. Fehlt die
+    Dokumentation, ist sie unvollständig, zeigt sie einen Fehlschlag, oder hat sich der
+    Code-Stand seither geändert: Schritte 2/3 regulär und vollständig ausführen — das bleibt der
+    sichere Normalfall bei jeder Unklarheit, unabhängig verifiziert wird hier nicht ersetzt,
+    sondern nur nicht sinnlos dupliziert, wenn nichts Neues zu verifizieren ist.
+2. Führe Unit-Tests aus (Befehl aus ADR-000001), sofern nicht laut Schritt 1b bereits durch
+   FE/BE-Ergebnis abgedeckt. Protokolliere: Passed / Failed / Skipped.
+3. Führe Integration-Tests aus, sofern nicht laut Schritt 1b bereits abgedeckt. Protokolliere
+   Ergebnisse.
 4. Führe E2E-Tests mit Playwright aus:
    a. Prüfe ob `playwright.config.ts` im Projektroot vorhanden ist.
       Falls nicht: dokumentiere als BUG-NNNNNN (MAJOR) und überspringe E2E.
@@ -161,6 +175,10 @@ VORGEHEN:
       Ist Browser-View/UI-Modus technisch nicht möglich (z. B. reines Headless-CI-Environment),
       ist dies mit Begründung im TR-NNNNNN zu dokumentieren — ein stillschweigendes
       Überspringen ohne Dokumentation ist nicht zulässig.
+   4b. FORTSCHRITTSMELDUNG (PC-000011): Läuft der Testprozess im Hintergrund weiter (lange
+       Laufzeit), prüfe periodisch den laufenden Output und melde alle ~20 abgeschlossene
+       Testfälle den Fortschritt im Chat ("X von Y Playwright-Tests gelaufen") — nicht erst am
+       Ende (siehe `_base-agent.md` „Fortschrittsmeldung bei lange laufenden Prozessen").
    c. Lies den Output: Anzahl Passed / Failed / Skipped, Testlaufzeit.
    d. Notiere den Pfad des HTML-Reports (Standard: `playwright-report/`).
       Weise darauf hin, dass er nach `projects/<name>/testing/playwright-report/` verschoben werden soll.
@@ -169,6 +187,13 @@ VORGEHEN:
       - Fehlermeldung (Expected vs. Received)
       - Screenshot-Pfad falls vorhanden (Playwright speichert automatisch)
       - Trace-Pfad für `npx playwright show-trace`
+   f. FLAKINESS-RE-VERIFIKATION (verpflichtend, PC-000009): Bevor ein nicht reproduzierbarer
+      Fehlschlag als reine Umgebungs-/Ressourcenkontention eingestuft und NICHT als
+      BUG-NNNNNN erfasst wird, führe den betroffenen Test isoliert (einzeln, nicht als Teil
+      der vollen Suite) mindestens einmal erneut aus. Dokumentiere im TR-Dokument: Testname,
+      isoliertes Ergebnis (bestanden/fehlgeschlagen), Zeitstempel. Nur wenn der isolierte
+      Lauf besteht, gilt die Flakiness-Einstufung als verifiziert. Besteht der isolierte Lauf
+      ebenfalls nicht, ist ein BUG-NNNNNN zu erfassen statt die Einstufung beizubehalten.
 5. Führe explizit Performanztests aus (z. B. Ladezeiten, Interaktionslatenz, API-Reaktionszeit, Ressourcenverbrauch) und dokumentiere Ergebnisse.
    Zielwerte stammen aus den Non-Functional Requirements (REQ-NNNNNN) oder aus `ADR-000001`
    (Performance-Budget). Ist kein Budget definiert, ist dies explizit zu vermerken
@@ -185,6 +210,12 @@ VORGEHEN:
       verursacht hat bzw. bei der er auftrat — so wird der Bug beim nächsten Sync demselben
       GitHub-Milestone zugeordnet wie die zugehörige Story, statt unverknüpft im Board zu
       landen. Lässt sich keine eindeutige Story zuordnen: `epic`-Feld auf `—` belassen.
+   g. SCOPE-FREMDER BLOCKER (PC-000008): Liegt ein BLOCKER außerhalb des aktuellen Sprint-/
+      Story-Scopes (z. B. eine Regression ohne zuordenbare Code-Änderung im Diff): erfasse
+      ihn regulär als BUG-NNNNNN, lege dem Nutzer aber explizit die Entscheidung vor: "Soll
+      dieser BLOCKER das /review-Gate dieses Sprints blockieren, oder als unabhängiger Track
+      (eigener Hotfix/nächster Sprint) weiterlaufen?" — triff diese Scope-Entscheidung nicht
+      selbst. Gib erst NACH der Nutzer-Antwort die finale Freigabe-Empfehlung ab.
 7. Für jeden BUG-NNNNNN mit Status BEHOBEN aus einer vorherigen Runde (Rücksprung aus Gate 7):
    a. Ursprüngliche Reproduktionsschritte (Abschnitt 2) erneut ausführen
    b. Prüfen: Abschnitt "Root-Cause" ohne Platzhalter ausgefüllt? Regressionstest vorhanden?
@@ -193,7 +224,9 @@ VORGEHEN:
 8. Test-Coverage-Report generieren falls Tool verfügbar.
 9. Testergebnis-Bericht (TR-NNNNNN) in `projects/<name>/testing/` erstellen.
 10. Freigabe-Empfehlung: APPROVED / CONDITIONAL / REJECTED (mit Begründung) — Voraussetzung:
-    kein BUG-NNNNNN mit Schweregrad BLOCKER in einem Status außer VERIFIZIERT
+    kein BUG-NNNNNN mit Schweregrad BLOCKER in einem Status außer VERIFIZIERT. Bei einem
+    scope-fremden BLOCKER (Schritt 6g) ist CONDITIONAL kein Enddauerzustand, sondern ein
+    Zwischenstand bis zur Nutzer-Entscheidung über die Scope-Frage.
 11. Falls `github.enabled: true`: `github-board-sync` im Modus `push` ausführen — legt neu
     erstellte BUG-NNNNNN als verknüpfte Issues an (inkl. Epic-Milestone, falls Schritt 6f
     ein Epic zugeordnet hat) und aktualisiert den Status bereits bestehender Bugs. Fehlt
@@ -260,6 +293,10 @@ Format nach `toolchain/protocols/handoff-protocol.md`:
 - [ ] Keine BLOCKER-Bugs in einem Status außer VERIFIZIERT
 - [ ] Jeder neue BUG-NNNNNN nutzt toolchain/templates/bug-report.md (Root-Cause bewusst offen gelassen)
 - [ ] Jeder wiedervorgelegte BUG-NNNNNN (Status BEHOBEN) wurde vor VERIFIZIERT erneut reproduziert
+- [ ] Jeder als Umgebungs-/Ressourcenkontention eingestufte Fehlschlag wurde isoliert re-verifiziert (PC-000009)
+- [ ] Jeder scope-fremde BLOCKER wurde dem Nutzer explizit zur Scope-Entscheidung vorgelegt (PC-000008)
+- [ ] Unit-/Integrationstests wurden nicht blind dupliziert — FE/BE-Übergabeprotokoll auf bereits dokumentierte, unveränderte Ergebnisse geprüft (PC-000010)
+- [ ] Bei einem lange im Hintergrund laufenden Playwright-Lauf: periodische Fortschrittsmeldung alle ~20 Testfälle im Chat (PC-000011)
 - [ ] Test-Coverage-Bericht erstellt
 - [ ] Testergebnis-Bericht (TR-NNNNNN) erstellt
 - [ ] Freigabe-Empfehlung dokumentiert
