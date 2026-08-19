@@ -52,6 +52,7 @@ function Get-ToolchainConfig([string] $ConfigPath) {
         AuthEnvVar          = (Get-Scalar 'auth-env-var') -replace '^~$', $null
         IterationLengthDays = (Get-Scalar 'iteration-length-days') -replace '^~$', '14'
         IterationStartDate  = (Get-Scalar 'iteration-start-date') -replace '^~$', $null
+        IterationStartSprint = (Get-Scalar 'iteration-start-sprint') -replace '^~$', '1'
     }
 }
 
@@ -68,7 +69,7 @@ function Test-GhReady([PSCustomObject] $Config) {
         $env:GH_TOKEN = (Get-Item "env:$($Config.AuthEnvVar)").Value
         return $true
     }
-    $status = & gh auth status --hostname github.com 2>&1
+    $status = (& gh auth status --hostname github.com 2>&1) -join "`n"
     if ($LASTEXITCODE -ne 0) {
         Write-SyncWarn "gh nicht authentifiziert — bitte 'gh auth login --scopes project,repo' selbst ausführen. Sync übersprungen."
         return $false
@@ -80,7 +81,7 @@ function Test-GhReady([PSCustomObject] $Config) {
     return $true
 }
 
-function Get-BoardStatus([string] $ArtifactType, [string] $ArtifactStatus, [string] $CurrentPhase) {
+function Get-BoardStatus([string] $ArtifactType, [string] $ArtifactStatus, [string] $CurrentPhase, [string] $StorySprint, [string] $CurrentSprint) {
     switch ($ArtifactType) {
         'BUG' {
             switch ($ArtifactStatus) {
@@ -108,7 +109,13 @@ function Get-BoardStatus([string] $ArtifactType, [string] $ArtifactStatus, [stri
             }
         }
         default {
-            # US-NNNNNN: kein eigener Fortschrittsstatus — abgeleitet aus Projektphase.
+            # US-NNNNNN: kein eigener Fortschrittsstatus — abgeleitet aus Projektphase, ABER
+            # nur für die Story, die tatsächlich im aktuell laufenden Sprint steckt. Ohne diese
+            # Eingrenzung würde JEDE Story beim nächsten Phasenwechsel (z. B. neues /refine)
+            # denselben global abgeleiteten Status erhalten — ein längst fertiges US-NNNNNN aus
+            # Sprint 1 würde durch einen späteren /refine-Aufruf fälschlich auf 'Backlog'
+            # zurückgesetzt, obwohl es nie wieder angefasst wurde.
+            if (-not $CurrentSprint -or $StorySprint -ne $CurrentSprint) { return $null }
             switch -Regex ($CurrentPhase) {
                 'REVIEW|DOCUMENTATION|DONE|RELEASED' { return 'Done' }
                 'IMPLEMENTATION|TESTING' { return 'In Progress' }
@@ -188,6 +195,20 @@ function Format-MetaFooter([PSCustomObject] $Fields, [string] $ArtifactType) {
     return ($lines -join "`n")
 }
 
+function Format-IssueTitle([string] $ArtifactType, [string] $Id, [string] $Title) {
+    # Issue-Titel tragen die Artefakt-ID (z. B. "US-000067: ..."), nicht nur den generischen
+    # Typ-Präfix ("US: ...") — sonst ist auf dem Board keine direkte Zuordnung zur Codebase
+    # (Dateiname/Frontmatter-ID) ohne Öffnen des Issues möglich.
+    $displayTitle = $Title
+    if ($ArtifactType -eq 'BUG' -and $displayTitle -match '^Bug\s*[—-]\s*(.+)$') {
+        # BUG-Frontmatter-Titel beginnen selbst mit "Bug — ..." (Bug-Report-Template) — das
+        # ist redundant, sobald die ID bereits "BUG-NNNNNN" im Titel-Präfix trägt.
+        $displayTitle = $Matches[1]
+    }
+    $prefix = if ($Id -and $Id -ne '—') { $Id } else { $ArtifactType }
+    return "$prefix`: $displayTitle"
+}
+
 function Format-IssueBody([string] $ArtifactType, [string] $FilePath, [PSCustomObject] $Fm) {
     $sections = Get-BodySections $Fm.FullText
     $parts = @("_Synchronisiert aus ``$FilePath`` — wird bei jedem Sync-Lauf überschrieben._", '')
@@ -226,6 +247,49 @@ function Format-IssueBody([string] $ArtifactType, [string] $FilePath, [PSCustomO
     return ($parts -join "`n")
 }
 
+# ── Relationships (Blocks/Blocked-by) ────────────────────────────────────
+# Best-effort über die GitHub-Issue-Dependencies-API (nicht auf jedem Plan/Repo verfügbar).
+# Garantierter Fallback ist der unveränderte "## Abhängigkeiten"-Tabellentext im Issue-Body
+# (siehe Format-IssueBody) — ein Fehlschlag hier ist erwartet und nie ein Fehler.
+
+function Resolve-ArtifactIssueNumber([string] $ArtifactId, [string] $ProjectPath) {
+    if (-not $ArtifactId -or $ArtifactId -match '^ADR-') { return $null }
+    foreach ($sub in @('requirements', 'testing', 'retros')) {
+        $f = Get-ChildItem -Path (Join-Path $ProjectPath "$sub/$ArtifactId*.md") -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($f) {
+            $fm = Get-Frontmatter $f.FullName
+            if ($fm -and $fm.Fields['github-issue'] -and $fm.Fields['github-issue'] -ne '—') {
+                return $fm.Fields['github-issue']
+            }
+        }
+    }
+    return $null
+}
+
+function Get-DependencyRows([string] $DependencySection) {
+    $rows = @()
+    if (-not $DependencySection) { return $rows }
+    foreach ($line in ($DependencySection -split "`n")) {
+        $m = [regex]::Match($line, '^\|\s*(Blockiert durch|Blockiert)\s*\|\s*([A-Z]+-\d+)\s*\|')
+        if ($m.Success) { $rows += [PSCustomObject]@{ Type = $m.Groups[1].Value; Ref = $m.Groups[2].Value } }
+    }
+    return $rows
+}
+
+function Sync-IssueDependencies {
+    param([string] $IssueNumber, [string] $DependencySection, [PSCustomObject] $Config, [string] $ProjectPath)
+    if (-not $IssueNumber -or -not $DependencySection) { return }
+    foreach ($row in (Get-DependencyRows $DependencySection)) {
+        $refIssue = Resolve-ArtifactIssueNumber $row.Ref $ProjectPath
+        if (-not $refIssue) { continue }
+        if ($row.Type -eq 'Blockiert durch') {
+            & gh api "repos/$($Config.Repo)/issues/$IssueNumber/dependencies/blocked_by" -f "issue_id=$refIssue" 2>$null | Out-Null
+        } else {
+            & gh api "repos/$($Config.Repo)/issues/$refIssue/dependencies/blocked_by" -f "issue_id=$IssueNumber" 2>$null | Out-Null
+        }
+    }
+}
+
 # ── Board-Feld-Auflösung ─────────────────────────────────────────────────
 # gh project item-edit verlangt GraphQL-Node-IDs für --id/--field-id/--single-select-option-id/
 # --iteration-id, keine Klartext-Namen und keine Issue-Nummer. Diese IDs werden einmal pro
@@ -239,6 +303,7 @@ function Get-BoardContext([PSCustomObject] $Config) {
         ItemsByIssue       = @{}
         MilestonesByTitle  = @{}
         MilestonesByNumber = @{}
+        IterationCycles    = @()
     }
     if (-not $Config.ProjectNumber) { return $ctx }
 
@@ -254,6 +319,27 @@ function Get-BoardContext([PSCustomObject] $Config) {
     foreach ($required in @('Status', 'Estimate', 'Size', 'Priority', 'Iteration', 'Start date', 'Target date')) {
         if (-not $ctx.FieldsByName.ContainsKey($required)) {
             Write-SyncWarn "Board-Feld '$required' nicht gefunden — zugehörige Updates werden für diesen Lauf übersprungen."
+        }
+    }
+
+    # `gh project field-list` liefert für ein ProjectV2IterationField KEINE
+    # `configuration.iterations`/`completedIterations` (anders als bei Single-Select-Feldern
+    # mit `.options`) — bestätigt gegen die reale API, nicht nur vermutet (IMPD-000001). Ohne
+    # diesen zusätzlichen GraphQL-Aufruf bleibt das Iteration-Feld für IMMER unbefüllt, egal
+    # welcher Wert in der Frontmatter steht — kein Board-Konfigurationsfehler, sondern eine
+    # `gh`-CLI-Lücke, die ein direkter `node(id:)`-Query auf die Feld-ID schließt.
+    $ctx.IterationCycles = @()
+    if ($ctx.FieldsByName.ContainsKey('Iteration')) {
+        $iterationFieldId = $ctx.FieldsByName['Iteration'].id
+        $query = 'query($fieldId: ID!) { node(id: $fieldId) { ... on ProjectV2IterationField { configuration { iterations { id title startDate duration } completedIterations { id title startDate duration } } } } }'
+        $iterResult = & gh api graphql -f query=$query -f fieldId=$iterationFieldId 2>$null
+        if ($LASTEXITCODE -eq 0 -and $iterResult) {
+            # NIE "$config" nennen — PowerShell-Variablennamen sind case-insensitiv, das würde
+            # den Funktionsparameter "$Config" (ProjectNumber/Repo/...) überschreiben und jeden
+            # nachfolgenden Aufruf in dieser Funktion (item-list, milestones) stillschweigend
+            # brechen (gefunden während IMPD-000001-Fix — exakt dieser Fehler trat live auf).
+            $iterConfiguration = ($iterResult | ConvertFrom-Json).data.node.configuration
+            $ctx.IterationCycles = @(@($iterConfiguration.iterations) + @($iterConfiguration.completedIterations) | Where-Object { $_ } | Sort-Object startDate)
         }
     }
 
@@ -282,22 +368,58 @@ function Resolve-SingleSelectOptionId([PSCustomObject] $Field, [string] $Value) 
     return $null
 }
 
-function Resolve-IterationId([PSCustomObject] $Field, [string] $IterationNumber) {
-    if (-not $Field -or -not $IterationNumber) { return $null }
-    $allIterations = @($Field.configuration.iterations) + @($Field.configuration.completedIterations)
-    $sorted = $allIterations | Where-Object { $_ } | Sort-Object startDate
-    if (-not $sorted -or $sorted.Count -eq 0) { return $null }
-    $idx = [int]$IterationNumber - 1
-    if ($idx -lt 0) { $idx = 0 }
-    if ($idx -ge $sorted.Count) {
-        Write-SyncWarn "Iteration $IterationNumber liegt außerhalb der auf dem Board materialisierten Zyklen — nächstliegende (letzte verfügbare) Iteration wird verwendet."
-        $idx = $sorted.Count - 1
+$StatusAliases = @{
+    'Backlog'     = @('Backlog', 'Todo', 'To Do', 'Open')
+    'In Progress' = @('In Progress', 'Doing', 'Active')
+    'In Review'   = @('In Review', 'Review', 'In Progress')
+    'Done'        = @('Done', 'Closed', 'Complete')
+}
+
+function Resolve-StatusOptionId([PSCustomObject] $Field, [string] $Value) {
+    # Boards mit den GitHub-Standardoptionen (Todo/In Progress/Done, keine Backlog/In Review)
+    # sollen trotzdem eine sinnvolle Zuordnung erhalten statt das Status-Update stumm zu
+    # überspringen — Alias-Kette in absteigender Präferenz, erster Treffer gewinnt.
+    if (-not $Field -or -not $Value -or -not $StatusAliases.ContainsKey($Value)) { return $null }
+    foreach ($alias in $StatusAliases[$Value]) {
+        $opt = $Field.options | Where-Object { $_.name -eq $alias } | Select-Object -First 1
+        if ($opt) { return $opt.id }
     }
-    return $sorted[$idx].id
+    return $null
+}
+
+function Resolve-IterationId {
+    param([PSCustomObject] $Board, [PSCustomObject] $Config, [string] $IterationNumber)
+    if (-not $IterationNumber) { return $null }
+    $sorted = $Board.IterationCycles
+    if (-not $sorted -or $sorted.Count -eq 0) { return $null }
+
+    # Board-Iteration-Zyklen sind datumsbasiert und laufen ab `iteration-start-date` (welches
+    # `iteration-start-sprint` entspricht) — NICHT ab Sprint 1 durchnummeriert. Ein Sprint auf
+    # dem Board, dessen Zyklen z. B. erst ab Sprint 16 provisioniert wurden, würde bei reiner
+    # 1-basierter Index-Zählung (Sprint 16 → 16. Zyklus) weit über die tatsächlich
+    # materialisierten Zyklen hinausgreifen. Stattdessen wird die Sprint-Nummer über die
+    # konfigurierte Kadenz in ein Zieldatum übersetzt und der Zyklus gesucht, dessen
+    # [startDate, startDate+duration)-Fenster dieses Datum enthält.
+    $anchorDate = if ($Config.IterationStartDate) { [datetime]::Parse($Config.IterationStartDate) } else { Get-Date }
+    $anchorSprint = [int]$Config.IterationStartSprint
+    $lengthDays = [int]$Config.IterationLengthDays
+    $offsetSprints = [int]$IterationNumber - $anchorSprint
+    $targetDate = $anchorDate.AddDays($offsetSprints * $lengthDays)
+
+    foreach ($cycle in $sorted) {
+        $cycleStart = [datetime]::Parse($cycle.startDate)
+        $cycleEnd = $cycleStart.AddDays([int]$cycle.duration)
+        if ($targetDate -ge $cycleStart -and $targetDate -lt $cycleEnd) {
+            return $cycle.id
+        }
+    }
+    Write-SyncWarn "Iteration $IterationNumber (Zieldatum $($targetDate.ToString('yyyy-MM-dd'))) liegt außerhalb der auf dem Board materialisierten Zyklen — nächstliegende Iteration wird verwendet."
+    $closest = $sorted | Sort-Object { [Math]::Abs(([datetime]::Parse($_.startDate) - $targetDate).TotalDays) } | Select-Object -First 1
+    return $closest.id
 }
 
 function Set-BoardFieldValue {
-    param([PSCustomObject] $Board, [string] $ItemId, [string] $FieldName, [string] $Value, [string] $ValueType)
+    param([PSCustomObject] $Board, [PSCustomObject] $Config, [string] $ItemId, [string] $FieldName, [string] $Value, [string] $ValueType)
     if (-not $ItemId -or -not $Value -or $Value -eq '—') { return }
     $field = $Board.FieldsByName[$FieldName]
     if (-not $field) { return }
@@ -307,7 +429,8 @@ function Set-BoardFieldValue {
         'Number' { $ghArgs += @('--number', $Value) }
         'Date' { $ghArgs += @('--date', $Value) }
         'SingleSelect' {
-            $optionId = Resolve-SingleSelectOptionId $field $Value
+            $optionId = if ($FieldName -eq 'Status') { Resolve-StatusOptionId $field $Value } else { $null }
+            if (-not $optionId) { $optionId = Resolve-SingleSelectOptionId $field $Value }
             if (-not $optionId) {
                 Write-SyncWarn "Keine passende Option '$Value' für Feld '$FieldName' gefunden — Update übersprungen."
                 return
@@ -315,7 +438,7 @@ function Set-BoardFieldValue {
             $ghArgs += @('--single-select-option-id', $optionId)
         }
         'Iteration' {
-            $iterationId = Resolve-IterationId $field $Value
+            $iterationId = Resolve-IterationId $Board $Config $Value
             if (-not $iterationId) { return }
             $ghArgs += @('--iteration-id', $iterationId)
         }
@@ -384,6 +507,7 @@ function Sync-Artifact {
         [PSCustomObject] $Config,
         [PSCustomObject] $Board,
         [string] $CurrentPhase,
+        [string] $CurrentSprint,
         [string] $Mode,
         [string] $ProjectPath
     )
@@ -394,7 +518,7 @@ function Sync-Artifact {
     $issueNumber = $fm.Fields['github-issue']
     $title = $fm.Fields['title']
     $artifactStatus = $fm.Fields['status']
-    $boardStatus = Get-BoardStatus -ArtifactType $ArtifactType -ArtifactStatus $artifactStatus -CurrentPhase $CurrentPhase
+    $boardStatus = Get-BoardStatus -ArtifactType $ArtifactType -ArtifactStatus $artifactStatus -CurrentPhase $CurrentPhase -StorySprint $fm.Fields['sprint'] -CurrentSprint $CurrentSprint
 
     if ($ArtifactType -eq 'IMPD' -and $artifactStatus -eq 'RESOLVED' -and (-not $issueNumber -or $issueNumber -eq '—')) {
         # Sofort gelöste Impediments erzeugen laut Protokoll kein Issue.
@@ -403,6 +527,7 @@ function Sync-Artifact {
 
     if ($Mode -eq 'reconcile') {
         if (-not $issueNumber -or $issueNumber -eq '—') { return }
+        if (-not $boardStatus) { return }
         $boardState = & gh issue view $issueNumber --repo $Config.Repo --json state,labels 2>$null | ConvertFrom-Json
         if (-not $boardState) { return }
         $expectedOpen = ($boardStatus -ne 'Done')
@@ -416,11 +541,12 @@ function Sync-Artifact {
     # Mode: push
     $issueUrl = $null
     $bodyText = Format-IssueBody -ArtifactType $ArtifactType -FilePath $FilePath -Fm $fm
+    $issueTitle = Format-IssueTitle -ArtifactType $ArtifactType -Id $fm.Fields['id'] -Title $title
 
     if (-not $issueNumber -or $issueNumber -eq '—') {
         $bodyFile = New-TemporaryFile
         Set-Content -LiteralPath $bodyFile -Value $bodyText -NoNewline
-        $created = & gh issue create --repo $Config.Repo --title "$ArtifactType`: $title" --body-file $bodyFile.FullName 2>&1
+        $created = & gh issue create --repo $Config.Repo --title $issueTitle --body-file $bodyFile.FullName 2>&1
         Remove-Item -LiteralPath $bodyFile -ErrorAction SilentlyContinue
         if ($LASTEXITCODE -ne 0) {
             Write-SyncWarn "Issue-Erstellung fehlgeschlagen für $FilePath`: $created"
@@ -433,7 +559,7 @@ function Sync-Artifact {
     } else {
         $bodyFile = New-TemporaryFile
         Set-Content -LiteralPath $bodyFile -Value $bodyText -NoNewline
-        & gh issue edit $issueNumber --repo $Config.Repo --body-file $bodyFile.FullName 2>$null | Out-Null
+        & gh issue edit $issueNumber --repo $Config.Repo --title $issueTitle --body-file $bodyFile.FullName 2>$null | Out-Null
         Remove-Item -LiteralPath $bodyFile -ErrorAction SilentlyContinue
     }
 
@@ -443,17 +569,23 @@ function Sync-Artifact {
         Set-FrontmatterField -FilePath $FilePath -Key 'github-milestone' -Value $epicRef.Number
     }
 
+    if ($ArtifactType -eq 'US') {
+        $depSection = Get-SectionByMarker (Get-BodySections $fm.FullText) '## Abhängigkeiten'
+        Sync-IssueDependencies -IssueNumber $issueNumber -DependencySection $depSection -Config $Config -ProjectPath $ProjectPath
+    }
+
     $itemId = Get-BoardItemId -Config $Config -Board $Board -IssueUrl $issueUrl -IssueNumber $issueNumber
     if ($itemId) {
-        Set-BoardFieldValue -Board $Board -ItemId $itemId -FieldName 'Status' -Value $boardStatus -ValueType 'SingleSelect'
-        Set-BoardFieldValue -Board $Board -ItemId $itemId -FieldName 'Estimate' -Value $fm.Fields['estimate'] -ValueType 'Number'
-        Set-BoardFieldValue -Board $Board -ItemId $itemId -FieldName 'Size' -Value $fm.Fields['size'] -ValueType 'SingleSelect'
-        Set-BoardFieldValue -Board $Board -ItemId $itemId -FieldName 'Priority' -Value (Get-BoardPriority $ArtifactType $fm.Fields) -ValueType 'SingleSelect'
-        Set-BoardFieldValue -Board $Board -ItemId $itemId -FieldName 'Iteration' -Value $fm.Fields['iteration'] -ValueType 'Iteration'
-        Set-BoardFieldValue -Board $Board -ItemId $itemId -FieldName 'Start date' -Value $fm.Fields['start-date'] -ValueType 'Date'
-        Set-BoardFieldValue -Board $Board -ItemId $itemId -FieldName 'Target date' -Value $fm.Fields['target-date'] -ValueType 'Date'
+        Set-BoardFieldValue -Board $Board -Config $Config -ItemId $itemId -FieldName 'Status' -Value $boardStatus -ValueType 'SingleSelect'
+        Set-BoardFieldValue -Board $Board -Config $Config -ItemId $itemId -FieldName 'Estimate' -Value $fm.Fields['estimate'] -ValueType 'Number'
+        Set-BoardFieldValue -Board $Board -Config $Config -ItemId $itemId -FieldName 'Size' -Value $fm.Fields['size'] -ValueType 'SingleSelect'
+        Set-BoardFieldValue -Board $Board -Config $Config -ItemId $itemId -FieldName 'Priority' -Value (Get-BoardPriority $ArtifactType $fm.Fields) -ValueType 'SingleSelect'
+        Set-BoardFieldValue -Board $Board -Config $Config -ItemId $itemId -FieldName 'Iteration' -Value $fm.Fields['iteration'] -ValueType 'Iteration'
+        Set-BoardFieldValue -Board $Board -Config $Config -ItemId $itemId -FieldName 'Start date' -Value $fm.Fields['start-date'] -ValueType 'Date'
+        Set-BoardFieldValue -Board $Board -Config $Config -ItemId $itemId -FieldName 'Target date' -Value $fm.Fields['target-date'] -ValueType 'Date'
     }
-    Write-SyncInfo "$FilePath → Issue #$issueNumber, Board-Status: $boardStatus"
+    $statusLabel = if ($boardStatus) { $boardStatus } else { 'unverändert (nicht im aktuellen Sprint)' }
+    Write-SyncInfo "$FilePath → Issue #$issueNumber, Board-Status: $statusLabel"
 }
 
 function Sync-DebtRegistry {
@@ -466,7 +598,10 @@ function Sync-DebtRegistry {
     )
 
     $lines = Get-Content -LiteralPath $FilePath
-    $headerMatch = $lines | Select-String -Pattern '^\|\s*ID\s*\|' | Select-Object -First 1
+    # Muss die aktiv getrackte Registry-Tabelle treffen (Spalte "Status"), nicht die separate
+    # "## Erledigte Schulden"-Verlaufstabelle (nur ID/Titel/Resolved in/Lösung, kein Status) —
+    # sonst werden für längst abgeschlossene historische Einträge neue Issues angelegt.
+    $headerMatch = $lines | Select-String -Pattern '^\|\s*ID\s*\|' | Where-Object { $_.Line -match '\|\s*Status\s*\|' } | Select-Object -First 1
     if (-not $headerMatch) { return }
     $headerIdx = $headerMatch.LineNumber - 1
     $columns = ($lines[$headerIdx] -split '\|') | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne '' }
@@ -505,11 +640,12 @@ function Sync-DebtRegistry {
             'start-date' = $row['Start']; 'target-date' = $row['Ziel']; epic = $row['Epic']
         }
         $bodyText = "_Synchronisiert aus ``$FilePath`` ($id) — wird bei jedem Sync-Lauf überschrieben._`n`n" + (Format-MetaFooter $detailFields 'DEBT')
+        $issueTitle = Format-IssueTitle -ArtifactType 'DEBT' -Id $id -Title $row['Titel']
 
         if (-not $issueNumber -or $issueNumber -eq '—') {
             $bodyFile = New-TemporaryFile
             Set-Content -LiteralPath $bodyFile -Value $bodyText -NoNewline
-            $created = & gh issue create --repo $Config.Repo --title "DEBT: $($row['Titel'])" --body-file $bodyFile.FullName 2>&1
+            $created = & gh issue create --repo $Config.Repo --title $issueTitle --body-file $bodyFile.FullName 2>&1
             Remove-Item -LiteralPath $bodyFile -ErrorAction SilentlyContinue
             if ($LASTEXITCODE -ne 0) {
                 Write-SyncWarn "Issue-Erstellung fehlgeschlagen für $id`: $created"
@@ -520,6 +656,11 @@ function Sync-DebtRegistry {
             $row['GitHub Issue'] = $issueNumber
             $changed = $true
             Write-SyncInfo "Issue #$issueNumber angelegt für $id"
+        } else {
+            $bodyFile = New-TemporaryFile
+            Set-Content -LiteralPath $bodyFile -Value $bodyText -NoNewline
+            & gh issue edit $issueNumber --repo $Config.Repo --title $issueTitle --body-file $bodyFile.FullName 2>$null | Out-Null
+            Remove-Item -LiteralPath $bodyFile -ErrorAction SilentlyContinue
         }
 
         $epicRef = Get-EpicMilestoneTitle -EpicId $row['Epic'] -ProjectPath $ProjectPath -Board $Board
@@ -530,12 +671,12 @@ function Sync-DebtRegistry {
 
         $itemId = Get-BoardItemId -Config $Config -Board $Board -IssueUrl $issueUrl -IssueNumber $issueNumber
         if ($itemId) {
-            Set-BoardFieldValue -Board $Board -ItemId $itemId -FieldName 'Status' -Value $boardStatus -ValueType 'SingleSelect'
-            Set-BoardFieldValue -Board $Board -ItemId $itemId -FieldName 'Estimate' -Value $row['Estimate'] -ValueType 'Number'
-            Set-BoardFieldValue -Board $Board -ItemId $itemId -FieldName 'Size' -Value $row['Size'] -ValueType 'SingleSelect'
-            Set-BoardFieldValue -Board $Board -ItemId $itemId -FieldName 'Iteration' -Value $row['Iteration'] -ValueType 'Iteration'
-            Set-BoardFieldValue -Board $Board -ItemId $itemId -FieldName 'Start date' -Value $row['Start'] -ValueType 'Date'
-            Set-BoardFieldValue -Board $Board -ItemId $itemId -FieldName 'Target date' -Value $row['Ziel'] -ValueType 'Date'
+            Set-BoardFieldValue -Board $Board -Config $Config -ItemId $itemId -FieldName 'Status' -Value $boardStatus -ValueType 'SingleSelect'
+            Set-BoardFieldValue -Board $Board -Config $Config -ItemId $itemId -FieldName 'Estimate' -Value $row['Estimate'] -ValueType 'Number'
+            Set-BoardFieldValue -Board $Board -Config $Config -ItemId $itemId -FieldName 'Size' -Value $row['Size'] -ValueType 'SingleSelect'
+            Set-BoardFieldValue -Board $Board -Config $Config -ItemId $itemId -FieldName 'Iteration' -Value $row['Iteration'] -ValueType 'Iteration'
+            Set-BoardFieldValue -Board $Board -Config $Config -ItemId $itemId -FieldName 'Start date' -Value $row['Start'] -ValueType 'Date'
+            Set-BoardFieldValue -Board $Board -Config $Config -ItemId $itemId -FieldName 'Target date' -Value $row['Ziel'] -ValueType 'Date'
         }
 
         if ($changed) {
@@ -569,10 +710,13 @@ $board = Get-BoardContext $config
 
 $phasePath = Join-Path $ProjectPath '.phase'
 $currentPhase = 'INIT'
+$currentSprint = $null
 if (Test-Path -LiteralPath $phasePath) {
     $phaseText = Get-Content -LiteralPath $phasePath -Raw
     $m = [regex]::Match($phaseText, '(?m)^current-phase:\s*(\S+)')
     if ($m.Success) { $currentPhase = $m.Groups[1].Value }
+    $ms = [regex]::Match($phaseText, '(?m)^sprint:\s*(\S+)')
+    if ($ms.Success) { $currentSprint = $ms.Groups[1].Value }
 }
 
 # Epics zuerst — Milestones müssen existieren, bevor Stories/Bugs/Schulden darauf verweisen.
@@ -592,7 +736,7 @@ $targets = @(
 foreach ($target in $targets) {
     $files = Get-ChildItem -Path (Join-Path $ProjectPath $target.Glob) -ErrorAction SilentlyContinue
     foreach ($file in $files) {
-        Sync-Artifact -FilePath $file.FullName -ArtifactType $target.Type -Config $config -Board $board -CurrentPhase $currentPhase -Mode $Mode -ProjectPath $ProjectPath
+        Sync-Artifact -FilePath $file.FullName -ArtifactType $target.Type -Config $config -Board $board -CurrentPhase $currentPhase -CurrentSprint $currentSprint -Mode $Mode -ProjectPath $ProjectPath
     }
 }
 

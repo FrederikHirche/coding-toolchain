@@ -9,6 +9,33 @@ Diese Datei wird in CLAUDE.md referenziert und ist Pflicht-Output bei Tool-Chain
 
 ---
 
+## v4.12 — 2026-08-19
+
+### Behoben
+
+**github-board-sync — Issue-Titel ohne Artefakt-ID**
+
+- Auslöser: direkter Nutzerauftrag (campaignworld, Board-Review) — Issue-Titel auf dem
+  GitHub-Project-Board zeigten nur den generischen Typ-Präfix ("US: ...", "BUG: Bug — ...",
+  "DEBT: ...") statt der konkreten Codebase-Kennung, wodurch ein Issue ohne Öffnen nicht auf
+  die zugehörige Datei/US-NNNNNN/BUG-NNNNNN/DEBT-NNNNNN rückführbar war. Für `BUG` zusätzlich
+  redundant, da das Bug-Report-Template selbst schon mit "Bug — ..." beginnt.
+- `toolchain/scripts/github-board-sync.ps1`, `toolchain/scripts/github-board-sync.sh`: neue
+  Funktion `Format-IssueTitle`/`format_issue_title` — baut den Issue-Titel als `"<ID>:
+  <Titel>"` (z. B. `US-000067: ...`, `BUG-000025: ...`, `DEBT-000012: ...`), entfernt bei `BUG`
+  das redundante `"Bug — "`-Präfix aus dem Frontmatter-Titel. In beiden Skripten zusätzlich in
+  den bisher fehlenden Issue-Titel-Update-Pfad beim Bearbeiten bereits existierender Issues
+  verdrahtet (vorher wurde der Titel nur beim allerersten Anlegen gesetzt, nie korrigiert).
+- Einmaliger Nachzieheffekt bei `DEBT-NNNNNN`: bereits aus der aktiven Registry-Tabelle in die
+  historische "Erledigte Schulden"-Sektion verschobene, längst geschlossene Einträge werden vom
+  Sync-Lauf absichtlich nicht mehr erneut angefasst (Schutz gegen versehentliches
+  Wiederaufleben alter Issues) — deren Titel wurden für campaignworld einmalig händisch per
+  `gh issue edit` nachgezogen, nicht durch das Skript.
+- Auswirkung: alle künftigen und bereits bestehenden Issue-Titel für US/BUG/DEBT tragen die
+  Artefakt-ID; gilt für jedes Projekt, das `github-board-sync` nutzt, nicht nur campaignworld.
+
+---
+
 ## v4.11 — 2026-08-18
 
 ### Neu

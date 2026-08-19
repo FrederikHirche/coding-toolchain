@@ -52,6 +52,11 @@ GH_PROJECT_NUMBER="$(get_scalar project-number)"
 GH_AUTH_MODE="$(get_scalar auth-mode)"
 GH_AUTH_ENV_VAR="$(get_scalar auth-env-var)"
 GH_AUTH_MODE="${GH_AUTH_MODE:-gh-cli}"
+GH_ITERATION_LENGTH_DAYS="$(get_scalar iteration-length-days)"
+GH_ITERATION_LENGTH_DAYS="${GH_ITERATION_LENGTH_DAYS:-14}"
+GH_ITERATION_START_DATE="$(get_scalar iteration-start-date)"
+GH_ITERATION_START_SPRINT="$(get_scalar iteration-start-sprint)"
+GH_ITERATION_START_SPRINT="${GH_ITERATION_START_SPRINT:-1}"
 
 if [[ -z "$GH_REPO" ]]; then
   log_warn "github.repo nicht gesetzt — Sync übersprungen."
@@ -84,13 +89,15 @@ else
 fi
 
 CURRENT_PHASE="INIT"
+CURRENT_SPRINT=""
 if [[ -f "$PROJECT_PATH/.phase" ]]; then
   CURRENT_PHASE="$(sed -n 's/^current-phase:[[:space:]]*\([^[:space:]]*\).*/\1/p' "$PROJECT_PATH/.phase" | head -n1)"
   CURRENT_PHASE="${CURRENT_PHASE:-INIT}"
+  CURRENT_SPRINT="$(sed -n 's/^sprint:[[:space:]]*\([^[:space:]]*\).*/\1/p' "$PROJECT_PATH/.phase" | head -n1)"
 fi
 
 board_status_for() {
-  # $1 = ArtifactType (US|BUG|DEBT|IMPD), $2 = ArtifactStatus
+  # $1 = ArtifactType (US|BUG|DEBT|IMPD), $2 = ArtifactStatus, $3 = Story-eigenes sprint-Feld (nur US)
   case "$1" in
     BUG)
       case "$2" in
@@ -115,6 +122,15 @@ board_status_for() {
         *) echo "Backlog" ;;
       esac ;;
     *)
+      # US-NNNNNN: kein eigener Fortschrittsstatus — abgeleitet aus Projektphase, ABER nur für
+      # die Story, die tatsächlich im aktuell laufenden Sprint steckt. Ohne diese Eingrenzung
+      # würde jede Story beim nächsten Phasenwechsel denselben global abgeleiteten Status
+      # erhalten — ein längst fertiges US-NNNNNN aus Sprint 1 würde durch einen späteren
+      # /refine-Aufruf fälschlich auf 'Backlog' zurückgesetzt.
+      if [[ -z "$CURRENT_SPRINT" || "$3" != "$CURRENT_SPRINT" ]]; then
+        echo ""
+        return 0
+      fi
       case "$CURRENT_PHASE" in
         REVIEW|DOCUMENTATION|DONE|RELEASED) echo "Done" ;;
         IMPLEMENTATION|TESTING) echo "In Progress" ;;
@@ -202,6 +218,43 @@ get_section_by_marker() {
   ' "$1"
 }
 
+# ── Relationships (Blocks/Blocked-by) ────────────────────────────────────
+# Best-effort über die GitHub-Issue-Dependencies-API (nicht auf jedem Plan/Repo verfügbar).
+# Garantierter Fallback ist der unveränderte "## Abhängigkeiten"-Tabellentext im Issue-Body
+# (siehe format_issue_body) — ein Fehlschlag hier ist erwartet und nie ein Fehler.
+
+resolve_artifact_issue_number() {
+  # $1 = Artefakt-ID (z. B. US-000005)
+  local id="$1" sub f num
+  [[ -z "$id" || "$id" =~ ^ADR- ]] && return 0
+  for sub in requirements testing retros; do
+    f="$(ls "$PROJECT_PATH/$sub/${id}"*.md 2>/dev/null | head -n1)"
+    if [[ -n "$f" ]]; then
+      num="$(get_frontmatter_field "$f" github-issue)"
+      if [[ -n "$num" && "$num" != "—" ]]; then echo "$num"; return 0; fi
+    fi
+  done
+}
+
+sync_issue_dependencies() {
+  # $1 = issue_number, $2 = "## Abhängigkeiten"-Abschnittstext
+  local issue_number="$1" section="$2" line dep_type dep_ref ref_issue
+  [[ -z "$issue_number" || -z "$section" ]] && return 0
+  while IFS= read -r line; do
+    if [[ "$line" =~ ^\|[[:space:]]*(Blockiert\ durch|Blockiert)[[:space:]]*\|[[:space:]]*([A-Z]+-[0-9]+)[[:space:]]*\| ]]; then
+      dep_type="${BASH_REMATCH[1]}"
+      dep_ref="${BASH_REMATCH[2]}"
+      ref_issue="$(resolve_artifact_issue_number "$dep_ref")"
+      [[ -z "$ref_issue" ]] && continue
+      if [[ "$dep_type" == "Blockiert durch" ]]; then
+        gh api "repos/$GH_REPO/issues/$issue_number/dependencies/blocked_by" -f "issue_id=$ref_issue" >/dev/null 2>&1
+      else
+        gh api "repos/$GH_REPO/issues/$ref_issue/dependencies/blocked_by" -f "issue_id=$issue_number" >/dev/null 2>&1
+      fi
+    fi
+  done <<< "$section"
+}
+
 format_meta_footer() {
   # $1=type $2=priority $3=estimate $4=size $5=iteration $6=start $7=target $8=epic
   echo ""
@@ -217,6 +270,21 @@ format_meta_footer() {
   [[ -n "$7" && "$7" != "—" ]] && echo "- Ziel: $7"
   [[ -n "$8" && "$8" != "—" ]] && echo "- Epic: $8"
   return 0
+}
+
+format_issue_title() {
+  # $1 = Typ (US|BUG|DEBT|IMPD), $2 = Artefakt-ID (z. B. US-000067), $3 = roher Titel.
+  # Issue-Titel tragen die Artefakt-ID statt nur des generischen Typ-Präfixes ("US: ..."),
+  # sonst ist auf dem Board keine direkte Zuordnung zur Codebase ohne Öffnen des Issues möglich.
+  local type="$1" id="$2" title="$3" prefix
+  if [[ "$type" == "BUG" ]]; then
+    # BUG-Frontmatter-Titel beginnen selbst mit "Bug — ..." (Bug-Report-Template) — redundant,
+    # sobald die ID bereits "BUG-NNNNNN" im Titel-Präfix trägt.
+    title="$(echo "$title" | sed -E 's/^Bug[[:space:]]*[—-][[:space:]]*//')"
+  fi
+  prefix="$type"
+  [[ -n "$id" && "$id" != "—" ]] && prefix="$id"
+  echo "${prefix}: ${title}"
 }
 
 format_issue_body() {
@@ -271,12 +339,43 @@ FIELD_ID_STARTDATE=""
 FIELD_ID_TARGETDATE=""
 ITEM_CACHE_FILE=""
 
+# Feld-/Options-Metadaten werden EINMAL pro Lauf per `gh project field-list` geholt und in
+# FIELD_LIST_JSON zwischengespeichert (PYTHON_BIN parst lokal daraus, kein weiterer Netzwerk-
+# Zugriff nötig) statt bei jeder einzelnen Feld-/Options-Auflösung erneut abzufragen. Ohne dieses
+# Caching erzeugt ein voller Backlog-Sync (dutzende Artefakte × mehrere Single-Select-Felder ×
+# Alias-Versuche) hunderte GraphQL-Aufrufe und erschöpft das Stunden-Kontingent noch innerhalb
+# eines einzelnen Laufs (beobachtet: 63 Artefakte → Kontingent vollständig verbraucht, spätere
+# Feld-Updates schlugen mit „keine passende Option" fehl, obwohl die Option existierte). Fällt
+# kein Python3/Python im PATH, degradiert der Sync automatisch auf die alte, unzwischengespeicherte
+# Auflösung (korrekt, nur langsamer/quota-hungriger) statt zu scheitern.
+PYTHON_BIN=""
+if command -v python3 >/dev/null 2>&1; then
+  PYTHON_BIN="python3"
+elif command -v python >/dev/null 2>&1; then
+  PYTHON_BIN="python"
+fi
+FIELD_LIST_JSON=""
+
 field_id_for() {
+  if [[ -n "$PYTHON_BIN" && -n "$FIELD_LIST_JSON" ]]; then
+    FIELD_LIST_JSON_STDIN="$FIELD_LIST_JSON" FIELD_NAME="$1" "$PYTHON_BIN" -c '
+import json, os
+data = json.loads(os.environ["FIELD_LIST_JSON_STDIN"])
+name = os.environ["FIELD_NAME"]
+for f in data.get("fields", []):
+    if f.get("name") == name:
+        print(f.get("id", ""))
+        break
+' 2>/dev/null
+    return 0
+  fi
   gh project field-list "$GH_PROJECT_NUMBER" --owner "$GH_OWNER" --format json --jq ".fields[] | select(.name==\"$1\") | .id" 2>/dev/null
 }
 
 if [[ -n "$GH_PROJECT_NUMBER" ]]; then
   GH_PROJECT_ID="$(gh project view "$GH_PROJECT_NUMBER" --owner "$GH_OWNER" --format json --jq '.id' 2>/dev/null)"
+  FIELD_LIST_JSON="$(gh project field-list "$GH_PROJECT_NUMBER" --owner "$GH_OWNER" --format json 2>/dev/null)"
+  [[ -z "$PYTHON_BIN" ]] && log_warn "Kein python3/python im PATH gefunden — Board-Feld-Auflösung läuft ungecacht (langsamer, höheres Risiko einer GraphQL-Quota-Erschöpfung bei großen Syncs)."
   FIELD_ID_STATUS="$(field_id_for Status)"
   FIELD_ID_ESTIMATE="$(field_id_for Estimate)"
   FIELD_ID_SIZE="$(field_id_for Size)"
@@ -298,32 +397,111 @@ if [[ -n "$GH_PROJECT_NUMBER" ]]; then
       >"$ITEM_CACHE_FILE" 2>/dev/null
     trap 'rm -f "$ITEM_CACHE_FILE"' EXIT
   fi
+
+  # `gh project field-list` liefert für ein ProjectV2IterationField KEINE
+  # `configuration.iterations`/`completedIterations` (anders als bei Single-Select-Feldern mit
+  # `.options`) — bestätigt gegen die reale API, nicht nur vermutet (IMPD-000001). Ohne diesen
+  # zusätzlichen GraphQL-Aufruf bleibt das Iteration-Feld für IMMER unbefüllt. Zyklen werden
+  # als "id|startDate|duration"-Zeilen zwischengespeichert, sortiert nach startDate.
+  ITERATION_CYCLES=""
+  if [[ -n "$FIELD_ID_ITERATION" ]]; then
+    ITERATION_CYCLES="$(gh api graphql -f query='
+      query($fieldId: ID!) {
+        node(id: $fieldId) {
+          ... on ProjectV2IterationField {
+            configuration {
+              iterations { id startDate duration }
+              completedIterations { id startDate duration }
+            }
+          }
+        }
+      }' -f fieldId="$FIELD_ID_ITERATION" \
+      --jq '(.data.node.configuration.iterations + .data.node.configuration.completedIterations) | sort_by(.startDate)[] | "\(.id)|\(.startDate)|\(.duration)"' 2>/dev/null)"
+  fi
 fi
 
 resolve_option_id() {
-  # $1 = Feldname (z. B. "Size"), $2 = Wert
+  # $1 = Feldname (z. B. "Size"), $2 = Wert — Groß-/Kleinschreibung wird ignoriert, da manche
+  # Boards Standardoptionen mit abweichender Schreibweise mitbringen (z. B. "In progress").
+  # Nutzt den einmalig geholten FIELD_LIST_JSON-Cache (siehe oben); nur ohne Python/ohne Cache
+  # wird pro Aufruf erneut live nachgeschlagen (Fallback, kein Fehler).
   [[ -z "$GH_PROJECT_NUMBER" ]] && return 0
+  if [[ -n "$PYTHON_BIN" && -n "$FIELD_LIST_JSON" ]]; then
+    FIELD_LIST_JSON_STDIN="$FIELD_LIST_JSON" FIELD_NAME="$1" FIELD_VALUE="$2" "$PYTHON_BIN" -c '
+import json, os
+data = json.loads(os.environ["FIELD_LIST_JSON_STDIN"])
+name = os.environ["FIELD_NAME"]
+value = os.environ["FIELD_VALUE"].lower()
+for f in data.get("fields", []):
+    if f.get("name") == name:
+        for opt in (f.get("options") or []):
+            if (opt.get("name") or "").lower() == value:
+                print(opt.get("id", ""))
+                break
+        break
+' 2>/dev/null
+    return 0
+  fi
+  local val_lc
+  val_lc="$(echo "$2" | tr '[:upper:]' '[:lower:]')"
   gh project field-list "$GH_PROJECT_NUMBER" --owner "$GH_OWNER" --format json \
-    --jq ".fields[] | select(.name==\"$1\") | .options[] | select(.name==\"$2\") | .id" 2>/dev/null
+    --jq ".fields[] | select(.name==\"$1\") | .options[] | select((.name | ascii_downcase)==\"$val_lc\") | .id" 2>/dev/null
+}
+
+resolve_status_option_id() {
+  # $1 = Wert (Backlog/In Progress/In Review/Done). Boards mit den GitHub-Standardoptionen
+  # (Todo/In Progress/Done, keine Backlog/In Review) sollen trotzdem eine sinnvolle Zuordnung
+  # erhalten statt das Status-Update stumm zu überspringen — Alias-Kette, erster Treffer gewinnt.
+  [[ -z "$GH_PROJECT_NUMBER" ]] && return 0
+  local aliases id
+  case "$1" in
+    Backlog) aliases=("Backlog" "Todo" "To Do" "Open") ;;
+    "In Progress") aliases=("In Progress" "Doing" "Active") ;;
+    "In Review") aliases=("In Review" "Review" "In Progress") ;;
+    Done) aliases=("Done" "Closed" "Complete") ;;
+    *) aliases=("$1") ;;
+  esac
+  for alias in "${aliases[@]}"; do
+    id="$(resolve_option_id "Status" "$alias")"
+    [[ -n "$id" ]] && { echo "$id"; return 0; }
+  done
 }
 
 resolve_iteration_id() {
-  # $1 = geplante Sprint-Nr. (1-basiert) — Zyklen chronologisch sortiert, N-ter Zyklus = Sprint N
-  [[ -z "$GH_PROJECT_NUMBER" || -z "$FIELD_ID_ITERATION" ]] && return 0
-  local ids idx count
-  ids="$(gh project field-list "$GH_PROJECT_NUMBER" --owner "$GH_OWNER" --format json \
-    --jq '.fields[] | select(.name=="Iteration") | (.configuration.iterations + .configuration.completedIterations) | sort_by(.startDate)[].id' 2>/dev/null)"
-  [[ -z "$ids" ]] && return 0
-  local arr=()
-  while IFS= read -r line; do arr+=("$line"); done <<< "$ids"
-  idx=$(( $1 - 1 ))
-  (( idx < 0 )) && idx=0
-  count=${#arr[@]}
-  if (( idx >= count )); then
-    log_warn "Iteration $1 liegt außerhalb der auf dem Board materialisierten Zyklen — letzte verfügbare Iteration wird verwendet."
-    idx=$((count - 1))
+  # $1 = geplante Sprint-Nr. Board-Iteration-Zyklen sind datumsbasiert und laufen ab
+  # iteration-start-date (welches iteration-start-sprint entspricht) — NICHT ab Sprint 1
+  # durchnummeriert. Die Sprint-Nr. wird über die konfigurierte Kadenz in ein Zieldatum
+  # übersetzt; gesucht wird der Zyklus, dessen [startDate, startDate+duration)-Fenster dieses
+  # Datum enthält (IMPD-000001 — reine Index-Zählung ab Sprint 1 griff bei einem erst später
+  # provisionierten Board weit über die materialisierten Zyklen hinaus).
+  [[ -z "$GH_PROJECT_NUMBER" || -z "$FIELD_ID_ITERATION" || -z "$ITERATION_CYCLES" ]] && return 0
+  local anchor_date="${GH_ITERATION_START_DATE:-$(date +%Y-%m-%d)}"
+  local offset_days=$(( ($1 - GH_ITERATION_START_SPRINT) * GH_ITERATION_LENGTH_DAYS ))
+  local target_epoch
+  target_epoch="$(date -d "$anchor_date +${offset_days} days" +%s 2>/dev/null)"
+  [[ -z "$target_epoch" ]] && return 0
+
+  local id start duration start_epoch end_epoch diff best_id="" best_diff=""
+  while IFS='|' read -r id start duration; do
+    [[ -z "$id" ]] && continue
+    start_epoch="$(date -d "$start" +%s 2>/dev/null)"
+    end_epoch="$(date -d "$start +${duration} days" +%s 2>/dev/null)"
+    [[ -z "$start_epoch" || -z "$end_epoch" ]] && continue
+    if (( target_epoch >= start_epoch && target_epoch < end_epoch )); then
+      echo "$id"
+      return 0
+    fi
+    diff=$(( target_epoch - start_epoch ))
+    (( diff < 0 )) && diff=$(( -diff ))
+    if [[ -z "$best_diff" || "$diff" -lt "$best_diff" ]]; then
+      best_diff="$diff"
+      best_id="$id"
+    fi
+  done <<< "$ITERATION_CYCLES"
+  if [[ -n "$best_id" ]]; then
+    log_warn "Iteration $1 liegt außerhalb der auf dem Board materialisierten Zyklen — nächstliegende Iteration wird verwendet."
+    echo "$best_id"
   fi
-  echo "${arr[$idx]}"
 }
 
 set_board_field_value() {
@@ -337,8 +515,9 @@ set_board_field_value() {
     Date)
       gh project item-edit --id "$item_id" --field-id "$field_id" --project-id "$GH_PROJECT_ID" --date "$value" >/dev/null 2>&1 ;;
     SingleSelect)
-      local option_id
-      option_id="$(resolve_option_id "$field_name" "$value")"
+      local option_id=""
+      if [[ "$field_name" == "Status" ]]; then option_id="$(resolve_status_option_id "$value")"; fi
+      [[ -z "$option_id" ]] && option_id="$(resolve_option_id "$field_name" "$value")"
       if [[ -z "$option_id" ]]; then
         log_warn "Keine passende Option '$value' für Feld '$field_name' gefunden — Update übersprungen."
         return 0
@@ -423,7 +602,7 @@ sync_artifact() {
   issue_number="$(get_frontmatter_field "$file" github-issue)"
   title="$(get_frontmatter_field "$file" title)"
   status="$(get_frontmatter_field "$file" status)"
-  board_status="$(board_status_for "$type" "$status")"
+  board_status="$(board_status_for "$type" "$status" "$(get_frontmatter_field "$file" sprint)")"
 
   if [[ "$type" == "IMPD" && "$status" == "RESOLVED" && ( -z "$issue_number" || "$issue_number" == "—" ) ]]; then
     return 0
@@ -431,6 +610,7 @@ sync_artifact() {
 
   if [[ "$mode" == "reconcile" ]]; then
     [[ -z "$issue_number" || "$issue_number" == "—" ]] && return 0
+    [[ -z "$board_status" ]] && return 0
     local state
     state="$(gh issue view "$issue_number" --repo "$GH_REPO" --json state --jq .state 2>/dev/null)"
     [[ -z "$state" ]] && return 0
@@ -445,12 +625,14 @@ sync_artifact() {
   fi
 
   # Mode: push
-  local issue_url="" body_file
+  local issue_url="" body_file issue_title artifact_id
   body_file="$(mktemp)"
   format_issue_body "$file" "$type" "$body_file"
+  artifact_id="$(get_frontmatter_field "$file" id)"
+  issue_title="$(format_issue_title "$type" "$artifact_id" "$title")"
 
   if [[ -z "$issue_number" || "$issue_number" == "—" ]]; then
-    issue_url="$(gh issue create --repo "$GH_REPO" --title "$type: $title" --body-file "$body_file" 2>/dev/null | tail -n1)"
+    issue_url="$(gh issue create --repo "$GH_REPO" --title "$issue_title" --body-file "$body_file" 2>/dev/null | tail -n1)"
     if [[ -z "$issue_url" ]]; then
       log_warn "Issue-Erstellung fehlgeschlagen für $file"
       rm -f "$body_file"
@@ -460,7 +642,7 @@ sync_artifact() {
     set_frontmatter_field "$file" github-issue "$issue_number"
     log_info "Issue #$issue_number angelegt für $file"
   else
-    gh issue edit "$issue_number" --repo "$GH_REPO" --body-file "$body_file" >/dev/null 2>&1
+    gh issue edit "$issue_number" --repo "$GH_REPO" --title "$issue_title" --body-file "$body_file" >/dev/null 2>&1
   fi
   rm -f "$body_file"
 
@@ -470,6 +652,10 @@ sync_artifact() {
   if [[ -n "$EPIC_MILESTONE_TITLE" ]]; then
     gh issue edit "$issue_number" --repo "$GH_REPO" --milestone "$EPIC_MILESTONE_TITLE" >/dev/null 2>&1
     set_frontmatter_field "$file" github-milestone "$EPIC_MILESTONE_NUMBER"
+  fi
+
+  if [[ "$type" == "US" ]]; then
+    sync_issue_dependencies "$issue_number" "$(get_section_by_marker "$file" "## Abhängigkeiten")"
   fi
 
   local item_id
@@ -485,7 +671,8 @@ sync_artifact() {
     set_board_field_value "$item_id" "$FIELD_ID_STARTDATE" Date "$(get_frontmatter_field "$file" start-date)" "Start date"
     set_board_field_value "$item_id" "$FIELD_ID_TARGETDATE" Date "$(get_frontmatter_field "$file" target-date)" "Target date"
   fi
-  log_info "$file → Issue #$issue_number, Board-Status: $board_status"
+  local status_label="${board_status:-unverändert (nicht im aktuellen Sprint)}"
+  log_info "$file → Issue #$issue_number, Board-Status: $status_label"
 }
 
 # Epics zuerst — Milestones müssen existieren, bevor Stories/Bugs/Schulden darauf verweisen.
@@ -510,7 +697,10 @@ done
 # Spalten (Epic/Estimate/Size/Iteration/Start/Ziel/GitHub Milestone) robust erkannt werden.
 for debt_file in "$PROJECT_PATH"/retros/DEBT-REGISTRY*.md; do
   [[ -f "$debt_file" ]] || continue
-  header_line="$(grep -n -m1 '^| *ID *|' "$debt_file" | cut -d: -f1)"
+  # Muss die aktiv getrackte Registry-Tabelle treffen (Spalte "Status"), nicht die separate
+  # "## Erledigte Schulden"-Verlaufstabelle (nur ID/Titel/Resolved in/Lösung, kein Status) —
+  # sonst werden für längst abgeschlossene historische Einträge neue Issues angelegt.
+  header_line="$(grep -n -m1 -E '^\| *ID *\|.*\| *Status *\|' "$debt_file" | cut -d: -f1)"
   [[ -z "$header_line" ]] && continue
   IFS='|' read -r -a col_cells < <(sed -n "${header_line}p" "$debt_file")
   columns=()
@@ -570,9 +760,10 @@ for debt_file in "$PROJECT_PATH"/retros/DEBT-REGISTRY*.md; do
       echo "_Synchronisiert aus \`$debt_file\` ($id) — wird bei jedem Sync-Lauf überschrieben._"
       format_meta_footer DEBT "" "${row[Estimate]:-}" "${row[Size]:-}" "${row[Iteration]:-}" "${row[Start]:-}" "${row[Ziel]:-}" "${row[Epic]:-}"
     } > "$body_file"
+    issue_title="$(format_issue_title DEBT "$id" "${row[Titel]:-}")"
 
     if [[ -z "$issue_number" || "$issue_number" == "—" ]]; then
-      issue_url="$(gh issue create --repo "$GH_REPO" --title "DEBT: ${row[Titel]:-}" --body-file "$body_file" 2>/dev/null | tail -n1)"
+      issue_url="$(gh issue create --repo "$GH_REPO" --title "$issue_title" --body-file "$body_file" 2>/dev/null | tail -n1)"
       if [[ -z "$issue_url" ]]; then
         log_warn "Issue-Erstellung fehlgeschlagen für $id"
         rm -f "$body_file"; unset row
@@ -582,6 +773,8 @@ for debt_file in "$PROJECT_PATH"/retros/DEBT-REGISTRY*.md; do
       row["GitHub Issue"]="$issue_number"
       changed=1
       log_info "Issue #$issue_number angelegt für $id"
+    else
+      gh issue edit "$issue_number" --repo "$GH_REPO" --title "$issue_title" --body-file "$body_file" >/dev/null 2>&1
     fi
     rm -f "$body_file"
 
